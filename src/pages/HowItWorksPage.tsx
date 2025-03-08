@@ -9,6 +9,15 @@ const HowItWorksPage = () => {
       <Navbar />
       <main className="flex-1">
         <div className="container mx-auto px-4 py-16">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              How NexTalent <span className="gradient-text">Lab</span> Works
+            </h1>
+            <p className="text-xl text-gray-600">
+              Our streamlined process makes it easy to find the perfect collaboration 
+              opportunities and bring your creative projects to life.
+            </p>
+          </div>
           <HowItWorks />
         </div>
       </main>

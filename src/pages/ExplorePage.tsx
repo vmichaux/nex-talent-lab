@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -63,11 +64,11 @@ const ExplorePage = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 container mx-auto px-6 py-12 md:py-16 max-w-6xl">
-        <div className="mb-12 md:mb-16 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-6 gradient-text">
-            Explore Projects
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            Explore <span className="gradient-text">Projects</span>
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600">
             Discover innovative projects seeking talented collaborators or find your next creative challenge.
           </p>
         </div>
