@@ -12,7 +12,7 @@ export function Hero() {
       <div className="container mx-auto px-4 py-24 md:py-32">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
           <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl">
-            Find Your Perfect <span className="gradient-text">Collaboration</span>
+            Connecting Talents with <span className="gradient-text">Opportunities</span>
           </h1>
           <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-2xl">
             NexTalent Lab connects creative talent with innovative projects through 
