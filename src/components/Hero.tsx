@@ -17,9 +17,9 @@ export function Hero() {
           </div>
           
           <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl">
-            <span className="text-[#6E59A5]">Connect </span>
-            <span className="text-[#3E8E7E]">Talent </span>
-            <span className="text-[#2ECC71]">with</span>
+            <span className="text-black">Connect </span>
+            <span className="text-black">Talent </span>
+            <span className="text-black">with</span>
             <br className="hidden sm:block" />
             <span className="opportunity-gradient">Opportunity</span>
           </h1>
