@@ -11,7 +11,7 @@ export default function AuthLayout() {
         <div className="mb-8">
           <Link to="/" className="flex items-center space-x-2">
             <span className="font-bold text-2xl">NexTalent</span>
-            <span className="bg-white text-primary text-xs px-2 py-1 rounded">Lab</span>
+            <span className="bg-white text-black text-xs px-2 py-1 rounded">Lab</span>
           </Link>
         </div>
         
