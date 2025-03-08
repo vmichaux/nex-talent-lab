@@ -9,14 +9,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Search, Filter, UserCircle, Calendar, Clock, Tag } from "lucide-react";
 
-// Category colors mapping
-const categoryColors = {
-  "Education": { bg: "bg-blue-100", text: "text-blue-800", border: "border-blue-200" },
-  "Health": { bg: "bg-green-100", text: "text-green-800", border: "border-green-200" },
-  "Fashion": { bg: "bg-purple-100", text: "text-purple-800", border: "border-purple-200" },
-  "Technology": { bg: "bg-amber-100", text: "text-amber-800", border: "border-amber-200" }
-};
-
 const ExplorePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   
@@ -69,65 +61,65 @@ const ExplorePage = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 container mx-auto px-6 py-16 md:py-24 max-w-6xl">
-        <div className="mb-16 md:mb-20 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-8 gradient-text">Explore Projects</h1>
+      <main className="flex-1 container mx-auto px-6 py-12 md:py-16 max-w-6xl">
+        <div className="mb-12 md:mb-16 text-center">
+          <h1 className="text-3xl md:text-5xl font-bold mb-6">Explore Projects</h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Discover innovative projects seeking talented collaborators or find your next creative challenge.
           </p>
         </div>
 
         {/* Search and Filter Section */}
-        <div className="mb-16">
-          <div className="flex flex-col md:flex-row gap-5 max-w-4xl mx-auto">
+        <div className="mb-12">
+          <div className="flex flex-col md:flex-row gap-4 max-w-4xl mx-auto">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary" size={18} />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
               <Input
                 type="text"
                 placeholder="Search projects by keyword, skill, or category..."
-                className="pl-12 h-14 rounded-full border-gray-200 shadow-sm"
+                className="pl-10 h-12"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <Button variant="outline" className="flex items-center gap-2 h-14 px-8 rounded-full border-2 border-primary/20 text-primary hover:bg-primary/5">
-              <Filter size={18} />
+            <Button variant="outline" className="flex items-center gap-2 h-12 px-6">
+              <Filter size={16} />
               Filters
             </Button>
           </div>
         </div>
 
         {/* Project Categories Tabs */}
-        <Tabs defaultValue="all" className="mb-12">
-          <TabsList className="mb-12 mx-auto flex justify-center space-x-4 bg-transparent h-auto p-1">
-            <TabsTrigger value="all" className="px-8 py-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-white">All Projects</TabsTrigger>
-            <TabsTrigger value="featured" className="px-8 py-3 rounded-full data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground">Featured</TabsTrigger>
-            <TabsTrigger value="recent" className="px-8 py-3 rounded-full data-[state=active]:bg-primary data-[state=active]:text-white">Recently Added</TabsTrigger>
-            <TabsTrigger value="closing" className="px-8 py-3 rounded-full data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground">Closing Soon</TabsTrigger>
+        <Tabs defaultValue="all" className="mb-8">
+          <TabsList className="mb-8 mx-auto flex justify-center">
+            <TabsTrigger value="all" className="px-6">All Projects</TabsTrigger>
+            <TabsTrigger value="featured" className="px-6">Featured</TabsTrigger>
+            <TabsTrigger value="recent" className="px-6">Recently Added</TabsTrigger>
+            <TabsTrigger value="closing" className="px-6">Closing Soon</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="all" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <TabsContent value="all" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </TabsContent>
           
-          <TabsContent value="featured" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <TabsContent value="featured" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.filter(p => p.featured).map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </TabsContent>
           
-          <TabsContent value="recent" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <TabsContent value="recent" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Show only the last 2 projects for "recent" tab */}
             {projects.slice(-2).map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
           </TabsContent>
           
-          <TabsContent value="closing" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <TabsContent value="closing" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Show only the first 2 projects for "closing soon" tab */}
             {projects.slice(0, 2).map((project) => (
               <ProjectCard key={project.id} project={project} />
@@ -142,55 +134,45 @@ const ExplorePage = () => {
 
 // Project Card Component
 const ProjectCard = ({ project }) => {
-  const categoryStyle = categoryColors[project.category] || { bg: "bg-gray-100", text: "text-gray-800", border: "border-gray-200" };
-  
   return (
-    <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-xl transition-all duration-300 border-t-4 rounded-xl" 
-          style={{ borderTopColor: project.category === "Education" ? "#3b82f6" : 
-                                    project.category === "Health" ? "#10b981" : 
-                                    project.category === "Fashion" ? "#8b5cf6" : 
-                                    project.category === "Technology" ? "#f59e0b" : "#9ca3af" }}>
-      <CardHeader className="pb-4 space-y-3">
+    <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
+      <CardHeader className="pb-4 space-y-2">
         <div className="flex justify-between items-start">
-          <CardTitle className="text-xl font-bold text-gray-800">{project.title}</CardTitle>
+          <CardTitle className="text-xl">{project.title}</CardTitle>
           {project.featured && (
-            <Badge variant="secondary" className="bg-purple-100 text-purple-800 border border-purple-200">
+            <Badge variant="secondary" className="bg-purple-100 text-purple-800">
               Featured
             </Badge>
           )}
         </div>
-        <CardDescription>
-          <Badge variant="outline" className={`${categoryStyle.bg} ${categoryStyle.text} ${categoryStyle.border} font-medium`}>
-            {project.category}
-          </Badge>
-        </CardDescription>
+        <CardDescription className="text-gray-600">{project.category}</CardDescription>
       </CardHeader>
-      <CardContent className="py-4 flex-1 space-y-6">
+      <CardContent className="py-4 flex-1 space-y-5">
         <p className="text-sm text-gray-700">{project.description}</p>
         <div className="flex flex-wrap gap-2">
           {project.skills.map((skill, index) => (
-            <Badge key={index} variant="outline" className="bg-blue-50 text-blue-600 border border-blue-100">
+            <Badge key={index} variant="outline" className="bg-gray-50">
               {skill}
             </Badge>
           ))}
         </div>
         <div className="space-y-3 text-sm text-gray-600">
           <div className="flex items-center gap-2">
-            <Calendar size={16} className="text-primary" />
-            <span>Deadline: <span className="font-medium text-gray-700">{project.deadline}</span></span>
+            <Calendar size={16} className="text-gray-400" />
+            <span>Deadline: {project.deadline}</span>
           </div>
           <div className="flex items-center gap-2">
-            <Clock size={16} className="text-secondary" />
-            <span>Duration: <span className="font-medium text-gray-700">{project.duration}</span></span>
+            <Clock size={16} className="text-gray-400" />
+            <span>Duration: {project.duration}</span>
           </div>
           <div className="flex items-center gap-2">
-            <UserCircle size={16} className="text-primary" />
-            <span>Posted by: <span className="font-medium text-gray-700">{project.owner}</span></span>
+            <UserCircle size={16} className="text-gray-400" />
+            <span>Posted by: {project.owner}</span>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="pt-5 border-t">
-        <Button className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity">View Details</Button>
+      <CardFooter className="pt-4 border-t">
+        <Button className="w-full">View Details</Button>
       </CardFooter>
     </Card>
   );
