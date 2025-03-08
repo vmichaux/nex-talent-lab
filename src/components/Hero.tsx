@@ -25,8 +25,8 @@ export function Hero() {
           </h1>
           
           <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-2xl">
-            NexTalent Lab connects creative talent with innovative projects through AI-powered matching.
-            Discover meaningful collaborations that elevate your career.
+            NexTalent Lab connects creative talent with innovative projects through AI-powered matching. Discover meaningful collaborations that elevate your
+            career.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mb-16">
             <Link to="/signup">
