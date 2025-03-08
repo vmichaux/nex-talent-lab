@@ -21,13 +21,13 @@ export function HowItWorks() {
       number: "03",
       title: "Connect & Collaborate",
       description: "Use our built-in tools to communicate, share files, and work together seamlessly on your project.",
-      color: "bg-blue-500"
+      color: "bg-primary/80"
     },
     {
       number: "04",
       title: "Grow Your Network",
       description: "Build lasting professional relationships and expand your career opportunities through successful collaborations.",
-      color: "bg-purple-500"
+      color: "bg-secondary/80"
     }
   ];
 
