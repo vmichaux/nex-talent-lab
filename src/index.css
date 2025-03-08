@@ -94,4 +94,8 @@
   .gradient-text {
     @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
   }
+  
+  .multi-color-text h1 {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-[#6E59A5] via-[#3E8E7E] to-[#2ECC71];
+  }
 }
