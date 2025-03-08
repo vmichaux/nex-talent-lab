@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -65,7 +64,7 @@ const ExplorePage = () => {
       <Navbar />
       <main className="flex-1 container mx-auto px-6 py-12 md:py-16 max-w-6xl">
         <div className="mb-12 md:mb-16 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-5xl font-bold mb-6 gradient-text">
             Explore Projects
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
