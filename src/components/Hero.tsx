@@ -41,8 +41,8 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Feature Cards - More spaced out */}
-        <div className="grid md:grid-cols-2 gap-10 mt-16">
+        {/* Feature Cards - Stacked vertically */}
+        <div className="flex flex-col gap-10 mt-16 max-w-5xl mx-auto">
           {/* Stats Card */}
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 shadow-lg">
             <h3 className="text-xl font-semibold mb-4 text-center">Our Impact</h3>
