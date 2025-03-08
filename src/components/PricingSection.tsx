@@ -94,7 +94,7 @@ export function PricingSection() {
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
                 <div className="flex items-baseline mb-4">
-                  <span className="text-4xl font-bold">${plan.price}</span>
+                  <span className="text-4xl font-bold">{plan.price === "0" ? "€0" : `€${plan.price}`}</span>
                   <span className="text-gray-500 ml-2">/month</span>
                 </div>
                 <p className="text-gray-600 mb-6">{plan.description}</p>
