@@ -15,9 +15,9 @@ export function Navbar() {
   return (
     <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-2">
+        <Link to="/" className="flex items-center">
           <span className="font-bold text-2xl gradient-text">NexTalent</span>
-          <span className="bg-white text-black text-xs px-2 py-1 rounded border border-gray-200">Lab</span>
+          <span className="text-black font-bold text-2xl">Lab</span>
         </Link>
 
         {/* Desktop Navigation */}
