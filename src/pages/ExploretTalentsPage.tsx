@@ -8,7 +8,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Filter, Search, MapPin, Briefcase, Star, Clock, MessageSquare } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ExploreCTA } from "@/components/ExploreCTA";
 
 const ExploreTalentsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -171,11 +170,6 @@ const ExploreTalentsPage = () => {
                 ))}
               </TabsContent>
             </Tabs>
-
-            {/* Call to Action Section */}
-            <div className="pt-16">
-              <ExploreCTA />
-            </div>
           </div>
         </div>
       </main>
