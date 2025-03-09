@@ -1,57 +1,63 @@
 
-import { User, Search, Code, BarChart3 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 export function HowItWorks() {
   const steps = [
     {
-      icon: User,
+      number: "01",
       title: "Create Your Profile",
-      description: "Set up your talent profile or startup project with all the essential details",
-      color: "bg-primary/10"
+      description: "Set up your professional profile highlighting your skills, experience, and portfolio to showcase your expertise.",
+      color: "bg-primary"
     },
     {
-      icon: Search,
+      number: "02",
       title: "Discover Opportunities",
-      description: "Browse projects or talents with our intelligent matching system",
-      color: "bg-primary/10"
+      description: "Browse projects that match your skill set or post your own project to find the perfect collaborators.",
+      color: "bg-secondary"
     },
     {
-      icon: Code,
-      title: "Collaborate Effectively",
-      description: "Use our built-in tools to manage projects and track progress",
-      color: "bg-primary/10"
+      number: "03",
+      title: "Connect & Collaborate",
+      description: "Use our built-in tools to communicate, share files, and work together seamlessly on your project.",
+      color: "bg-primary/80"
     },
     {
-      icon: BarChart3,
+      number: "04",
       title: "Grow Your Network",
-      description: "Build your portfolio and expand your professional connections",
-      color: "bg-primary/10"
+      description: "Build lasting professional relationships and expand your career opportunities through successful collaborations.",
+      color: "bg-secondary/80"
     }
   ];
 
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto mb-12">
+        <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl font-bold mb-4">
             <span className="block mb-1">How NexTalent Lab</span>
             <span className="block">Works</span>
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Our platform simplifies collaboration between emerging talent and innovative startups
+          <p className="text-gray-600">
+            Our streamlined process makes it easy to find the perfect collaboration 
+            opportunities and bring your creative projects to life.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
-            <div key={index} className="border rounded-lg p-6 transition-all duration-300 hover:shadow-md flex flex-col items-center text-center">
-              <div className={`${step.color} w-16 h-16 rounded-lg flex items-center justify-center mb-4`}>
-                <step.icon className="h-8 w-8 text-primary" />
+            <div key={index} className="relative">
+              <div className={`${step.color} text-white text-2xl font-bold w-14 h-14 rounded-full flex items-center justify-center mb-6`}>
+                {step.number}
               </div>
               
-              <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
+              {/* Connector line */}
+              {index < steps.length - 1 && (
+                <div className="hidden lg:block absolute h-0.5 bg-gray-200 w-full top-7 left-1/2 -z-10"></div>
+              )}
+              
+              <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
               <p className="text-gray-600">{step.description}</p>
             </div>
           ))}
@@ -60,7 +66,7 @@ export function HowItWorks() {
         <div className="text-center mt-12">
           <Link to="/signup">
             <Button size="lg" className="gap-2">
-              Get Started Today
+              Get Started Today <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </div>
