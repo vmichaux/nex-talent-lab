@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MessageSquare, Search, PaperclipIcon, Send } from "lucide-react";
 
@@ -184,13 +184,15 @@ const MessagesPage = () => {
         {/* Conversations List */}
         <div className="col-span-1 border rounded-lg overflow-hidden bg-white h-full flex flex-col">
           <div className="p-4 border-b">
-            <Input
-              placeholder="Search conversations..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full"
-              prefix={<Search className="h-4 w-4 text-gray-500" />}
-            />
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+              <Input
+                placeholder="Search conversations..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10"
+              />
+            </div>
           </div>
           
           <Tabs defaultValue="all" className="px-4 pt-4">
@@ -203,59 +205,11 @@ const MessagesPage = () => {
                 </Badge>
               </TabsTrigger>
             </TabsList>
-          </Tabs>
-          
-          <div className="overflow-y-auto flex-grow">
-            <TabsContent value="all" className="m-0">
-              {filteredConversations.length > 0 ? (
-                filteredConversations.map((conversation) => (
-                  <div
-                    key={conversation.id}
-                    className={`p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors flex items-start gap-3 ${
-                      activeConversation === conversation.id ? "bg-gray-100" : ""
-                    }`}
-                    onClick={() => setActiveConversation(conversation.id)}
-                  >
-                    <Avatar className="h-12 w-12">
-                      <img src={conversation.user.avatar} alt={conversation.user.name} />
-                    </Avatar>
-                    <div className="flex-grow min-w-0">
-                      <div className="flex justify-between items-center mb-1">
-                        <h3 className="font-medium truncate">
-                          {conversation.user.name}
-                        </h3>
-                        <span className="text-xs text-gray-500 whitespace-nowrap">
-                          {conversation.time}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 truncate">
-                        {conversation.lastMessage}
-                      </p>
-                      <div className="flex justify-between items-center mt-1">
-                        <span className="text-xs text-gray-500">
-                          {conversation.user.role}
-                        </span>
-                        {conversation.unread > 0 && (
-                          <Badge variant="default" className="text-xs">
-                            {conversation.unread}
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="p-4 text-center text-gray-500">
-                  No conversations found
-                </div>
-              )}
-            </TabsContent>
             
-            <TabsContent value="unread" className="m-0">
-              {filteredConversations.filter(c => c.unread > 0).length > 0 ? (
-                filteredConversations
-                  .filter(c => c.unread > 0)
-                  .map((conversation) => (
+            <TabsContent value="all" className="m-0">
+              <div className="overflow-y-auto max-h-[calc(70vh-120px)]">
+                {filteredConversations.length > 0 ? (
+                  filteredConversations.map((conversation) => (
                     <div
                       key={conversation.id}
                       className={`p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors flex items-start gap-3 ${
@@ -264,7 +218,7 @@ const MessagesPage = () => {
                       onClick={() => setActiveConversation(conversation.id)}
                     >
                       <Avatar className="h-12 w-12">
-                        <img src={conversation.user.avatar} alt={conversation.user.name} />
+                        <AvatarImage src={conversation.user.avatar} alt={conversation.user.name} />
                       </Avatar>
                       <div className="flex-grow min-w-0">
                         <div className="flex justify-between items-center mb-1">
@@ -282,20 +236,70 @@ const MessagesPage = () => {
                           <span className="text-xs text-gray-500">
                             {conversation.user.role}
                           </span>
-                          <Badge variant="default" className="text-xs">
-                            {conversation.unread}
-                          </Badge>
+                          {conversation.unread > 0 && (
+                            <Badge variant="default" className="text-xs">
+                              {conversation.unread}
+                            </Badge>
+                          )}
                         </div>
                       </div>
                     </div>
                   ))
-              ) : (
-                <div className="p-4 text-center text-gray-500">
-                  No unread messages
-                </div>
-              )}
+                ) : (
+                  <div className="p-4 text-center text-gray-500">
+                    No conversations found
+                  </div>
+                )}
+              </div>
             </TabsContent>
-          </div>
+            
+            <TabsContent value="unread" className="m-0">
+              <div className="overflow-y-auto max-h-[calc(70vh-120px)]">
+                {filteredConversations.filter(c => c.unread > 0).length > 0 ? (
+                  filteredConversations
+                    .filter(c => c.unread > 0)
+                    .map((conversation) => (
+                      <div
+                        key={conversation.id}
+                        className={`p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors flex items-start gap-3 ${
+                          activeConversation === conversation.id ? "bg-gray-100" : ""
+                        }`}
+                        onClick={() => setActiveConversation(conversation.id)}
+                      >
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage src={conversation.user.avatar} alt={conversation.user.name} />
+                        </Avatar>
+                        <div className="flex-grow min-w-0">
+                          <div className="flex justify-between items-center mb-1">
+                            <h3 className="font-medium truncate">
+                              {conversation.user.name}
+                            </h3>
+                            <span className="text-xs text-gray-500 whitespace-nowrap">
+                              {conversation.time}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600 truncate">
+                            {conversation.lastMessage}
+                          </p>
+                          <div className="flex justify-between items-center mt-1">
+                            <span className="text-xs text-gray-500">
+                              {conversation.user.role}
+                            </span>
+                            <Badge variant="default" className="text-xs">
+                              {conversation.unread}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                ) : (
+                  <div className="p-4 text-center text-gray-500">
+                    No unread messages
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
         
         {/* Active Conversation */}
@@ -306,7 +310,7 @@ const MessagesPage = () => {
               <div className="p-4 border-b flex justify-between items-center bg-white">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
-                    <img src={activeUser.avatar} alt={activeUser.name} />
+                    <AvatarImage src={activeUser.avatar} alt={activeUser.name} />
                   </Avatar>
                   <div>
                     <h3 className="font-medium">{activeUser.name}</h3>
