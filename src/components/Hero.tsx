@@ -90,6 +90,30 @@ export function Hero() {
             </div>
           </div>
         </div>
+        
+        {/* New CTA Box */}
+        <div className="mt-20 mb-8">
+          <div className="bg-primary rounded-2xl overflow-hidden shadow-xl">
+            <div className="p-8 md:p-12 text-center text-white">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Find Your Perfect Collaboration?</h2>
+              <p className="text-lg opacity-90 max-w-2xl mx-auto mb-8">
+                Join thousands of creative professionals and project owners already using NexTalent Lab to bring their ideas to life.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Link to="/signup">
+                  <Button size="lg" className="bg-white text-primary hover:bg-gray-100 w-full sm:w-auto">
+                    Get Started
+                  </Button>
+                </Link>
+                <Link to="/explore">
+                  <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10 w-full sm:w-auto gap-2">
+                    Explore Projects <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
