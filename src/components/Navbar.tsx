@@ -5,7 +5,8 @@ import {
   Menu, 
   X, 
   User,
-  LogIn
+  LogIn,
+  BookOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -33,6 +34,9 @@ export function Navbar() {
           </Link>
           <Link to="/pricing" className="font-medium hover:text-primary transition-colors">
             Pricing
+          </Link>
+          <Link to="/our-story" className="font-medium hover:text-primary transition-colors">
+            Our Story
           </Link>
         </nav>
 
@@ -97,6 +101,13 @@ export function Navbar() {
               onClick={() => setIsMenuOpen(false)}
             >
               Pricing
+            </Link>
+            <Link
+              to="/our-story"
+              className="block py-2 px-4 hover:bg-gray-50 rounded-md"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Our Story
             </Link>
             <div className="pt-4 flex flex-col space-y-2">
               <Link to="/login" onClick={() => setIsMenuOpen(false)}>
