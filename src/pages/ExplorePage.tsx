@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -59,6 +58,28 @@ const ExplorePage = () => {
       deadline: "August 5, 2025",
       duration: "3 months",
       owner: "David Wilson",
+      featured: false
+    },
+    {
+      id: 5,
+      title: "Community Garden Management Tool",
+      description: "Building a platform to help urban communities organize and manage shared garden spaces and resources.",
+      skills: ["Full Stack", "Mapping APIs", "Community Engagement"],
+      category: "Environment",
+      deadline: "September 15, 2025",
+      duration: "2 months",
+      owner: "Elena Rodriguez",
+      featured: true
+    },
+    {
+      id: 6,
+      title: "Accessible Gaming Experience",
+      description: "Designing an inclusive gaming platform with customizable interfaces for players with different abilities.",
+      skills: ["Game Development", "Accessibility", "UX Research"],
+      category: "Gaming",
+      deadline: "October 10, 2025",
+      duration: "5 months",
+      owner: "Michael Kim",
       featured: false
     }
   ];
