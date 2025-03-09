@@ -15,8 +15,7 @@ const HowItWorksPage = () => {
               <span className="block">Works</span>
             </h1>
             <p className="text-xl text-gray-600">
-              Our streamlined process makes it easy to find the perfect collaboration 
-              opportunities and bring your creative projects to life.
+              Our platform simplifies collaboration between emerging talent and innovative startups
             </p>
           </div>
           <HowItWorks />
