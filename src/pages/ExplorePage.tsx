@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -9,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, Filter, UserCircle, Calendar, Clock, Tag, MapPin, Briefcase, Star, MessageSquare } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { TestimonialSection } from "@/components/TestimonialSection";
+import { ExploreCTA } from "@/components/ExploreCTA";
 
 const ExplorePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -246,6 +248,11 @@ const ExplorePage = () => {
             {/* What Users Say Section */}
             <div className="pt-16">
               <TestimonialSection />
+            </div>
+
+            {/* Call to Action Section */}
+            <div className="pt-16">
+              <ExploreCTA />
             </div>
           </div>
         </div>
