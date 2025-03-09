@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { 
@@ -34,7 +33,7 @@ export function Navbar() {
           {isLoggedIn ? (
             // Navigation for logged-in users
             <>
-              <Link to="/explore-projects" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
+              <Link to="/explore" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
                 <Search className="h-4 w-4" />
                 Explore Projects
               </Link>
@@ -124,7 +123,7 @@ export function Navbar() {
               // Mobile navigation for logged-in users
               <>
                 <Link
-                  to="/explore-projects"
+                  to="/explore"
                   className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
