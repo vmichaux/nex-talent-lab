@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Search, Filter, UserCircle, Calendar, Clock, Tag, MapPin, Briefcase, Star, MessageSquare } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { TestimonialSection } from "@/components/TestimonialSection";
 
 const ExplorePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -240,6 +241,11 @@ const ExplorePage = () => {
                   ))}
                 </TabsContent>
               </Tabs>
+            </div>
+
+            {/* What Users Say Section */}
+            <div className="pt-16">
+              <TestimonialSection />
             </div>
           </div>
         </div>
