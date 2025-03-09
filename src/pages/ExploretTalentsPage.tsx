@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -89,6 +90,84 @@ const ExploreTalentsPage = () => {
       rating: 4.8,
       availability: "Open to full-time roles",
       bio: "DevOps engineer focused on building robust infrastructure and streamlining development workflows.",
+      image: "/placeholder.svg",
+      featured: false
+    },
+    {
+      id: 7,
+      name: "Olivia Martinez",
+      title: "Content Strategist",
+      location: "Miami, FL",
+      skills: ["Content Creation", "SEO", "Social Media", "Copywriting"],
+      experience: "5+ years",
+      rating: 4.7,
+      availability: "Available immediately",
+      bio: "Creative content strategist with a knack for storytelling and building brand narratives across multiple platforms and formats.",
+      image: "/placeholder.svg",
+      featured: true
+    },
+    {
+      id: 8,
+      name: "James Wilson",
+      title: "Mobile App Developer",
+      location: "Denver, CO",
+      skills: ["React Native", "Swift", "Kotlin", "Firebase"],
+      experience: "6+ years",
+      rating: 4.8,
+      availability: "Available for contract",
+      bio: "Specialized in creating native and cross-platform mobile experiences with a focus on performance and accessibility.",
+      image: "/placeholder.svg",
+      featured: false
+    },
+    {
+      id: 9,
+      name: "Aisha Patel",
+      title: "Data Scientist",
+      location: "Boston, MA",
+      skills: ["R", "Python", "Machine Learning", "Statistical Analysis"],
+      experience: "7+ years",
+      rating: 4.9,
+      availability: "Open to remote work",
+      bio: "Data scientist with expertise in turning complex datasets into actionable insights that drive business decisions.",
+      image: "/placeholder.svg",
+      featured: true
+    },
+    {
+      id: 10,
+      name: "Lucas Thompson",
+      title: "Blockchain Developer",
+      location: "San Diego, CA",
+      skills: ["Solidity", "Smart Contracts", "Web3.js", "Ethereum"],
+      experience: "4+ years",
+      rating: 4.6,
+      availability: "Available for project-based work",
+      bio: "Blockchain developer specializing in decentralized applications and smart contract development on multiple platforms.",
+      image: "/placeholder.svg",
+      featured: false
+    },
+    {
+      id: 11,
+      name: "Elena Rodriguez",
+      title: "Marketing Specialist",
+      location: "Portland, OR",
+      skills: ["Digital Marketing", "Campaign Management", "Analytics", "Brand Strategy"],
+      experience: "8+ years",
+      rating: 4.8,
+      availability: "Available for consulting",
+      bio: "Results-driven marketing specialist with experience across B2B and B2C sectors, focusing on growth and conversion optimization.",
+      image: "/placeholder.svg",
+      featured: true
+    },
+    {
+      id: 12,
+      name: "Ryan Kim",
+      title: "Game Developer",
+      location: "Austin, TX",
+      skills: ["Unity3D", "C#", "Game Design", "3D Modeling"],
+      experience: "5+ years",
+      rating: 4.7,
+      availability: "Looking for team projects",
+      bio: "Passionate game developer with experience in creating immersive experiences across mobile, PC, and console platforms.",
       image: "/placeholder.svg",
       featured: false
     }
