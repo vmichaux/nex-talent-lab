@@ -15,6 +15,7 @@ import HowItWorksPage from "./pages/HowItWorksPage";
 import PricingPage from "./pages/PricingPage";
 import OurStoryPage from "./pages/OurStoryPage";
 import DashboardPage from "./pages/DashboardPage";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -27,11 +28,44 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/explore" element={<ExplorePage />} />
-          <Route path="/explore-talents" element={<ExploreTalentsPage />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/our-story" element={<OurStoryPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          
+          {/* Protected Routes */}
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/explore-talents" 
+            element={
+              <ProtectedRoute>
+                <ExploreTalentsPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/messages" 
+            element={
+              <ProtectedRoute>
+                <div>Messages Page (Under Construction)</div>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/community" 
+            element={
+              <ProtectedRoute>
+                <div>Community Page (Under Construction)</div>
+              </ProtectedRoute>
+            } 
+          />
+          
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />

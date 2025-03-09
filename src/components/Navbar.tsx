@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { 
   Menu, 
@@ -16,9 +17,13 @@ import { Button } from "@/components/ui/button";
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   
-  // Check if user is on dashboard or other protected routes
-  const isLoggedIn = location.pathname.includes('/dashboard');
+  // Check login status when component mounts or location changes
+  useEffect(() => {
+    const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedInStatus || location.pathname.includes('/dashboard'));
+  }, [location]);
 
   return (
     <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">

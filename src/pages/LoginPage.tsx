@@ -19,16 +19,28 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate login API call
-    setTimeout(() => {
+    try {
+      // Simulate login API call
+      setTimeout(() => {
+        // Store user session in localStorage
+        localStorage.setItem("isLoggedIn", "true");
+        
+        toast({
+          title: "Login Successful",
+          description: "Welcome back to NexTalent Lab!",
+        });
+        setIsLoading(false);
+        // Redirect to dashboard after successful login
+        navigate("/dashboard", { replace: true });
+      }, 1500);
+    } catch (error) {
       toast({
-        title: "Login Successful",
-        description: "Welcome back to NexTalent Lab!",
+        title: "Login Failed",
+        description: "Please check your credentials and try again.",
+        variant: "destructive",
       });
       setIsLoading(false);
-      // Redirect to dashboard after successful login
-      navigate("/dashboard");
-    }, 1500);
+    }
   };
 
   return (
