@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -57,13 +58,7 @@ export function HowItWorks() {
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">How NexTalent Lab Works</h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Our streamlined process makes it easy to find collaboration opportunities 
-            and bring your creative projects to life.
-          </p>
-        </div>
+        {/* Removed duplicate title and description that were in this div */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
