@@ -20,28 +20,16 @@ export default function SignupPage() {
     e.preventDefault();
     setIsLoading(true);
     
-    try {
-      // Simulate signup API call
-      setTimeout(() => {
-        // Store user session in localStorage
-        localStorage.setItem("isLoggedIn", "true");
-        
-        toast({
-          title: "Account created successfully!",
-          description: "Welcome to NexTalent Lab. Let's set up your profile.",
-        });
-        setIsLoading(false);
-        // Redirect to dashboard after successful signup with replace to prevent going back
-        navigate("/dashboard", { replace: true });
-      }, 1500);
-    } catch (error) {
+    // Simulate signup API call
+    setTimeout(() => {
       toast({
-        title: "Signup Failed",
-        description: "Please try again.",
-        variant: "destructive",
+        title: "Account created successfully!",
+        description: "Welcome to NexTalent Lab. Let's set up your profile.",
       });
       setIsLoading(false);
-    }
+      // Redirect to dashboard after successful signup
+      navigate("/dashboard");
+    }, 1500);
   };
 
   return (
