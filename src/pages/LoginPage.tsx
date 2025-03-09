@@ -26,8 +26,8 @@ export default function LoginPage() {
         description: "Welcome back to NexTalent Lab!",
       });
       setIsLoading(false);
-      // Redirect to home page after successful login
-      navigate("/");
+      // Redirect to dashboard after successful login
+      navigate("/dashboard");
     }, 1500);
   };
 

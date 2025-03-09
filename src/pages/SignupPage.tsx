@@ -27,8 +27,8 @@ export default function SignupPage() {
         description: "Welcome to NexTalent Lab. Let's set up your profile.",
       });
       setIsLoading(false);
-      // Redirect to home page after successful signup
-      navigate("/");
+      // Redirect to dashboard after successful signup
+      navigate("/dashboard");
     }, 1500);
   };
 

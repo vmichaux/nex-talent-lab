@@ -13,6 +13,7 @@ import ExplorePage from "./pages/ExplorePage";
 import HowItWorksPage from "./pages/HowItWorksPage";
 import PricingPage from "./pages/PricingPage";
 import OurStoryPage from "./pages/OurStoryPage";
+import DashboardPage from "./pages/DashboardPage";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/our-story" element={<OurStoryPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
