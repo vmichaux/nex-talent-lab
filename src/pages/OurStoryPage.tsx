@@ -34,61 +34,65 @@ export default function OurStoryPage() {
           </div>
         </div>
 
-        {/* Mission section */}
+        {/* Mission section - Modified to be a standalone section */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
-                <p className="text-gray-700 mb-4">
-                  At NexTalent Lab, we believe everyone has unique talents that deserve the right platform to shine. 
-                  We started with a simple vision: to create a space where talented individuals can connect with 
-                  meaningful projects that challenge them and help them grow.
-                </p>
-                <p className="text-gray-700 mb-6">
-                  Our mission is to democratize access to opportunities, regardless of location, background, or 
-                  traditional credentials. We're building a future where skills and passion matter more than degrees.
-                </p>
-                <div className="flex items-center gap-4">
-                  <Target className="h-10 w-10 text-primary" />
-                  <p className="font-medium text-lg">Connecting talent with purpose since 2020</p>
-                </div>
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-3xl font-bold mb-6 text-center">Our Mission</h2>
+              <p className="text-gray-700 mb-4">
+                At NexTalent Lab, we believe everyone has unique talents that deserve the right platform to shine. 
+                We started with a simple vision: to create a space where talented individuals can connect with 
+                meaningful projects that challenge them and help them grow.
+              </p>
+              <p className="text-gray-700 mb-6">
+                Our mission is to democratize access to opportunities, regardless of location, background, or 
+                traditional credentials. We're building a future where skills and passion matter more than degrees.
+              </p>
+              <div className="flex items-center gap-4 justify-center">
+                <Target className="h-10 w-10 text-primary" />
+                <p className="font-medium text-lg">Connecting talent with purpose since 2020</p>
               </div>
-              <div className="bg-gray-100 rounded-lg p-8">
-                <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                  <Heart className="h-6 w-6 text-primary" />
-                  <span>Our Values</span>
-                </h3>
-                <ul className="space-y-4">
-                  <li className="flex gap-3">
-                    <Award className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                    <div>
-                      <h4 className="font-medium">Excellence</h4>
-                      <p className="text-gray-600">Setting high standards for every project and interaction</p>
-                    </div>
-                  </li>
-                  <li className="flex gap-3">
-                    <Users className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                    <div>
-                      <h4 className="font-medium">Inclusivity</h4>
-                      <p className="text-gray-600">Creating equal opportunities for talent everywhere</p>
-                    </div>
-                  </li>
-                  <li className="flex gap-3">
-                    <BookOpen className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                    <div>
-                      <h4 className="font-medium">Continuous Learning</h4>
-                      <p className="text-gray-600">Embracing growth and development in everything we do</p>
-                    </div>
-                  </li>
-                </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Values section - Now a separate section */}
+        <section className="py-12 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
+              <h3 className="text-2xl font-semibold mb-8 text-center flex items-center gap-2 justify-center">
+                <Heart className="h-6 w-6 text-primary" />
+                <span>Our Values</span>
+              </h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-white p-6 rounded-lg shadow-sm">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Award className="h-6 w-6 text-primary flex-shrink-0" />
+                    <h4 className="font-medium">Excellence</h4>
+                  </div>
+                  <p className="text-gray-600">Setting high standards for every project and interaction</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg shadow-sm">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Users className="h-6 w-6 text-primary flex-shrink-0" />
+                    <h4 className="font-medium">Inclusivity</h4>
+                  </div>
+                  <p className="text-gray-600">Creating equal opportunities for talent everywhere</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg shadow-sm">
+                  <div className="flex items-center gap-3 mb-3">
+                    <BookOpen className="h-6 w-6 text-primary flex-shrink-0" />
+                    <h4 className="font-medium">Continuous Learning</h4>
+                  </div>
+                  <p className="text-gray-600">Embracing growth and development in everything we do</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Timeline section */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-12 text-center">Our Journey</h2>
             <div className="space-y-12 max-w-4xl mx-auto">
@@ -140,7 +144,7 @@ export default function OurStoryPage() {
         </section>
 
         {/* Team section */}
-        <section className="py-16">
+        <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-12 text-center">Meet Our Team</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
