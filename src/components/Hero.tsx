@@ -21,7 +21,7 @@ export function Hero() {
             <span className="text-black">Talent </span>
             <span className="text-black">with</span>
             <br className="hidden sm:block" />
-            <span className="opportunity-gradient">Opportunity</span>
+            <span className="custom-gradient-text">Opportunity</span>
           </h1>
           
           <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal">

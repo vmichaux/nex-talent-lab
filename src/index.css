@@ -102,4 +102,12 @@
   .opportunity-gradient {
     @apply text-transparent bg-clip-text bg-gradient-to-r from-[#7D3C98] to-[#2ECC71];
   }
+  
+  .custom-gradient-text {
+    background: linear-gradient(to right, #6A0DAD, #2D5F9A, #00D4AA);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+  }
 }
