@@ -93,19 +93,19 @@ export default function OurStoryPage() {
               <span>The Story Behind NexTalent Lab</span>
             </h2>
             <div className="prose prose-lg max-w-2xl mx-auto text-gray-700 space-y-6">
-              <p>
+              <p className="leading-relaxed">
                 In the heart of Paris, four creatives came together with one goal: to build something extraordinary. 
                 A music producer, an artistic director, a fashion designer, and a communication strategist—all driven 
                 by a shared passion for innovation. What started as an idea quickly turned into a full-fledged mission: 
                 organizing an unforgettable fashion show, despite having no budget, no sponsors, and no guarantees.
               </p>
-              <p>
+              <p className="leading-relaxed">
                 But what they did have was determination, talent, and the power of collaboration. The team grew, 
                 with over 100 volunteers—some of the best in their fields—coming together to make the impossible happen. 
                 No money exchanged hands. Just skill, passion, and the belief that together, they could create something 
                 greater than themselves.
               </p>
-              <p>
+              <p className="leading-relaxed">
                 That moment was proof of something revolutionary: when driven people unite around an idea, they can 
                 defy all odds. The only thing missing in the world today isn't money, but the right people coming 
                 together at the right time.
