@@ -1,9 +1,8 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { BookOpen, Users, Heart, Target, Award } from "lucide-react";
+import { BookOpen, Users, Heart, Target, Award, Star } from "lucide-react";
 
 export default function OurStoryPage() {
   return (
@@ -11,14 +10,11 @@ export default function OurStoryPage() {
       <Navbar />
       
       <main className="flex-grow">
-        {/* Hero section with updated styling to match other pages */}
         <div className="relative overflow-hidden bg-white">
-          {/* Background Pattern - Purple Gradient - Same as other pages */}
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-24 md:py-32">
             <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
-              {/* New label above headline - similar to other pages */}
               <div className="mb-6 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
                 Our journey
               </div>
@@ -34,7 +30,6 @@ export default function OurStoryPage() {
           </div>
         </div>
 
-        {/* Mission section - Modified to be a standalone section */}
         <section className="py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
@@ -56,7 +51,6 @@ export default function OurStoryPage() {
           </div>
         </section>
 
-        {/* Values section - Now a separate section */}
         <section className="py-12 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
@@ -91,7 +85,6 @@ export default function OurStoryPage() {
           </div>
         </section>
 
-        {/* Timeline section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-12 text-center">Our Journey</h2>
@@ -143,7 +136,34 @@ export default function OurStoryPage() {
           </div>
         </section>
 
-        {/* Team section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold mb-8 text-center flex items-center gap-2 justify-center">
+              <Star className="h-6 w-6 text-primary" />
+              <span>The Story Behind NexTalent Lab</span>
+            </h2>
+            <div className="prose prose-lg mx-auto text-gray-700 space-y-6">
+              <p>
+                In the heart of Paris, four creatives came together with one goal: to build something extraordinary. 
+                A music producer, an artistic director, a fashion designer, and a communication strategist—all driven 
+                by a shared passion for innovation. What started as an idea quickly turned into a full-fledged mission: 
+                organizing an unforgettable fashion show, despite having no budget, no sponsors, and no guarantees.
+              </p>
+              <p>
+                But what they did have was determination, talent, and the power of collaboration. The team grew, 
+                with over 100 volunteers—some of the best in their fields—coming together to make the impossible happen. 
+                No money exchanged hands. Just skill, passion, and the belief that together, they could create something 
+                greater than themselves.
+              </p>
+              <p>
+                That moment was proof of something revolutionary: when driven people unite around an idea, they can 
+                defy all odds. The only thing missing in the world today isn't money, but the right people coming 
+                together at the right time.
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-12 text-center">Meet Our Team</h2>
@@ -167,7 +187,6 @@ export default function OurStoryPage() {
           </div>
         </section>
 
-        {/* CTA section */}
         <section className="bg-primary text-white py-16">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-6">Join Our Community</h2>
