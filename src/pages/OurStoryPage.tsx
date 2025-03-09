@@ -1,3 +1,4 @@
+
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,8 @@ export default function OurStoryPage() {
               </h1>
               
               <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal">
-                From a small idea to a platform that connects talent with meaningful projects around the world.
+                From a small idea to a platform that connects talent with<br />
+                meaningful projects around the world.
               </p>
             </div>
           </div>
