@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -9,7 +8,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Filter, Search, MapPin, Briefcase, Star, Clock, MessageSquare } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { TestimonialSection } from "@/components/TestimonialSection";
 import { ExploreCTA } from "@/components/ExploreCTA";
 
 const ExploreTalentsPage = () => {
@@ -173,11 +171,6 @@ const ExploreTalentsPage = () => {
                 ))}
               </TabsContent>
             </Tabs>
-
-            {/* Testimonials Section */}
-            <div className="pt-16">
-              <TestimonialSection />
-            </div>
 
             {/* Call to Action Section */}
             <div className="pt-16">
