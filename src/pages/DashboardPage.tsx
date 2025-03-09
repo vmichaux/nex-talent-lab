@@ -15,13 +15,17 @@ import { Badge } from "@/components/ui/badge";
 import { Bell, MessageSquare, Users, FileText, CheckCircle, Search, PlusCircle, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   
   const handleLogout = () => {
-    // In a real app, you would handle the actual logout logic here
-    // For now, we'll simulate logout with toast notification and redirect
+    // Use our auth context logout function
+    logout();
+    
+    // Show toast notification
     toast({
       title: "Logged out successfully",
       description: "You have been logged out of your account.",

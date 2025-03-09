@@ -13,14 +13,13 @@ import {
   Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { isLoggedIn } = useAuth();
   
-  // Check if user is on dashboard or other protected routes
-  const isLoggedIn = location.pathname.includes('/dashboard');
-
   return (
     <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">

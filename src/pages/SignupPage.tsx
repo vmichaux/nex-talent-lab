@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
@@ -15,6 +16,7 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,6 +28,10 @@ export default function SignupPage() {
         title: "Account created successfully!",
         description: "Welcome to NexTalent Lab. Let's set up your profile.",
       });
+      
+      // Use our auth context to set logged in state
+      login();
+      
       setIsLoading(false);
       // Redirect to dashboard after successful signup
       navigate("/dashboard");
