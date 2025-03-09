@@ -92,7 +92,7 @@ export default function OurStoryPage() {
               <Star className="h-6 w-6 text-primary" />
               <span>The Story Behind NexTalent Lab</span>
             </h2>
-            <div className="prose prose-lg mx-auto text-gray-700 space-y-6">
+            <div className="prose prose-lg max-w-2xl mx-auto text-gray-700 space-y-6">
               <p>
                 In the heart of Paris, four creatives came together with one goal: to build something extraordinary. 
                 A music producer, an artistic director, a fashion designer, and a communication strategist—all driven 
