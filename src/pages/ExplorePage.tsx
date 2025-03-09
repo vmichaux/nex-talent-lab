@@ -72,7 +72,7 @@ const ExplorePage = () => {
             <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
               {/* Updated text in the label */}
               <div className="mb-6 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                Find your collective intelligence
+                Find Your Next Crew
               </div>
               
               <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl custom-gradient-text">
@@ -194,3 +194,4 @@ const ProjectCard = ({ project }) => {
 };
 
 export default ExplorePage;
+
