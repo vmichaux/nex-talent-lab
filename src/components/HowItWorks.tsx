@@ -35,7 +35,10 @@ export function HowItWorks() {
     <section className="py-16">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl font-bold mb-4">How NexTalent Lab Works</h2>
+          <h2 className="text-3xl font-bold mb-4">
+            <span className="block mb-1">How</span>
+            <span className="block">NexTalent Lab Works</span>
+          </h2>
           <p className="text-gray-600">
             Our streamlined process makes it easy to find the perfect collaboration 
             opportunities and bring your creative projects to life.
