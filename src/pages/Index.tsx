@@ -2,12 +2,12 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { FeatureSection } from "@/components/FeatureSection";
+import { HowItWorks } from "@/components/HowItWorks";
 import { TestimonialSection } from "@/components/TestimonialSection";
 import { ImpactSection } from "@/components/ImpactSection";
 import { PricingSection } from "@/components/PricingSection";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
-import { ExploreCTA } from "@/components/ExploreCTA";
 
 const Index = () => {
   return (
@@ -18,7 +18,7 @@ const Index = () => {
         <div className="relative overflow-hidden bg-white">
           <div className="container mx-auto px-4">
             <FeatureSection />
-            <ExploreCTA />
+            <HowItWorks />
             <TestimonialSection />
             <ImpactSection />
             <PricingSection />
