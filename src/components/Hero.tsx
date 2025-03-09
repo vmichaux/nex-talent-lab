@@ -17,9 +17,9 @@ export function Hero() {
           </div>
           
           <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl custom-gradient-text">
-            Connecting Talent
+            Connect Talent with
             <br className="hidden sm:block" />
-            with Opportunity
+            Opportunity
           </h1>
           
           <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal">
