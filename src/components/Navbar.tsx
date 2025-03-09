@@ -1,17 +1,25 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { 
   Menu, 
   X, 
   User,
   LogIn,
-  BookOpen
+  Search,
+  Users,
+  MessageSquare,
+  BookOpen,
+  Globe
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  
+  // Check if user is on dashboard or other protected routes
+  const isLoggedIn = location.pathname.includes('/dashboard');
 
   return (
     <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">
@@ -23,37 +31,75 @@ export function Navbar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          <Link to="/" className="font-medium hover:text-primary transition-colors">
-            Home
-          </Link>
-          <Link to="/explore" className="font-medium hover:text-primary transition-colors">
-            Explore
-          </Link>
-          <Link to="/how-it-works" className="font-medium hover:text-primary transition-colors">
-            How It Works
-          </Link>
-          <Link to="/pricing" className="font-medium hover:text-primary transition-colors">
-            Pricing
-          </Link>
-          <Link to="/our-story" className="font-medium hover:text-primary transition-colors">
-            Our Story
-          </Link>
+          {isLoggedIn ? (
+            // Navigation for logged-in users
+            <>
+              <Link to="/explore-projects" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
+                <Search className="h-4 w-4" />
+                Explore Projects
+              </Link>
+              <Link to="/explore-talents" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
+                <User className="h-4 w-4" />
+                Explore Talents
+              </Link>
+              <Link to="/messages" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
+                <MessageSquare className="h-4 w-4" />
+                Messages
+              </Link>
+              <Link to="/community" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
+                <Users className="h-4 w-4" />
+                Community
+              </Link>
+            </>
+          ) : (
+            // Navigation for non-logged-in users
+            <>
+              <Link to="/" className="font-medium hover:text-primary transition-colors">
+                Home
+              </Link>
+              <Link to="/explore" className="font-medium hover:text-primary transition-colors">
+                Explore
+              </Link>
+              <Link to="/how-it-works" className="font-medium hover:text-primary transition-colors">
+                How It Works
+              </Link>
+              <Link to="/pricing" className="font-medium hover:text-primary transition-colors">
+                Pricing
+              </Link>
+              <Link to="/our-story" className="font-medium hover:text-primary transition-colors">
+                Our Story
+              </Link>
+            </>
+          )}
         </nav>
 
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center space-x-4">
-          <Link to="/login">
-            <Button variant="outline" size="sm" className="gap-2">
-              <LogIn className="h-4 w-4" />
-              Login
-            </Button>
-          </Link>
-          <Link to="/signup">
-            <Button size="sm" className="gap-2">
-              <User className="h-4 w-4" />
-              Sign Up
-            </Button>
-          </Link>
+          {isLoggedIn ? (
+            // User is logged in - show dashboard button
+            <Link to="/dashboard">
+              <Button variant="outline" size="sm" className="gap-2">
+                <User className="h-4 w-4" />
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            // User is not logged in - show auth buttons
+            <>
+              <Link to="/login">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <LogIn className="h-4 w-4" />
+                  Login
+                </Button>
+              </Link>
+              <Link to="/signup">
+                <Button size="sm" className="gap-2">
+                  <User className="h-4 w-4" />
+                  Sign Up
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -74,55 +120,104 @@ export function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden animate-fade-in">
           <div className="py-4 px-4 space-y-4 bg-white shadow-md">
-            <Link
-              to="/"
-              className="block py-2 px-4 hover:bg-gray-50 rounded-md"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              to="/explore"
-              className="block py-2 px-4 hover:bg-gray-50 rounded-md"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Explore
-            </Link>
-            <Link
-              to="/how-it-works"
-              className="block py-2 px-4 hover:bg-gray-50 rounded-md"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              How It Works
-            </Link>
-            <Link
-              to="/pricing"
-              className="block py-2 px-4 hover:bg-gray-50 rounded-md"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Pricing
-            </Link>
-            <Link
-              to="/our-story"
-              className="block py-2 px-4 hover:bg-gray-50 rounded-md"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Our Story
-            </Link>
-            <div className="pt-4 flex flex-col space-y-2">
-              <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="outline" className="w-full gap-2">
-                  <LogIn className="h-4 w-4" />
-                  Login
-                </Button>
-              </Link>
-              <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
-                <Button className="w-full gap-2">
+            {isLoggedIn ? (
+              // Mobile navigation for logged-in users
+              <>
+                <Link
+                  to="/explore-projects"
+                  className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Search className="h-4 w-4" />
+                  Explore Projects
+                </Link>
+                <Link
+                  to="/explore-talents"
+                  className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   <User className="h-4 w-4" />
-                  Sign Up
-                </Button>
-              </Link>
-            </div>
+                  Explore Talents
+                </Link>
+                <Link
+                  to="/messages"
+                  className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  Messages
+                </Link>
+                <Link
+                  to="/community"
+                  className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Users className="h-4 w-4" />
+                  Community
+                </Link>
+                <Link
+                  to="/dashboard"
+                  className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <User className="h-4 w-4" />
+                  Dashboard
+                </Link>
+              </>
+            ) : (
+              // Mobile navigation for non-logged-in users 
+              <>
+                <Link
+                  to="/"
+                  className="block py-2 px-4 hover:bg-gray-50 rounded-md"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/explore"
+                  className="block py-2 px-4 hover:bg-gray-50 rounded-md"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Explore
+                </Link>
+                <Link
+                  to="/how-it-works"
+                  className="block py-2 px-4 hover:bg-gray-50 rounded-md"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  How It Works
+                </Link>
+                <Link
+                  to="/pricing"
+                  className="block py-2 px-4 hover:bg-gray-50 rounded-md"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Pricing
+                </Link>
+                <Link
+                  to="/our-story"
+                  className="block py-2 px-4 hover:bg-gray-50 rounded-md"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Our Story
+                </Link>
+                <div className="pt-4 flex flex-col space-y-2">
+                  <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                    <Button variant="outline" className="w-full gap-2">
+                      <LogIn className="h-4 w-4" />
+                      Login
+                    </Button>
+                  </Link>
+                  <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
+                    <Button className="w-full gap-2">
+                      <User className="h-4 w-4" />
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
