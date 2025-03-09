@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 
 const DashboardPage = () => {
-  const { isLoggedIn, LogoutButton } = useAuth();
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -36,10 +36,6 @@ const DashboardPage = () => {
               <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
                 Track your projects, connections, and activities all in one place.
               </p>
-              
-              <div className="mt-6">
-                <LogoutButton />
-              </div>
             </div>
 
             {/* Dashboard content */}

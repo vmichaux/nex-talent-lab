@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -13,7 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const ExploreProjectsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { isLoggedIn, LogoutButton } = useAuth();
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   
   // Redirect to login if not logged in
@@ -203,10 +202,6 @@ const ExploreProjectsPage = () => {
               <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
                 Browse through exciting projects seeking your skills and expertise. Connect with like-minded innovators.
               </p>
-              
-              <div className="mt-6">
-                <LogoutButton />
-              </div>
             </div>
 
             {/* Search and Filter Section */}

@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const MessagesPage = () => {
-  const { isLoggedIn, LogoutButton } = useAuth();
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -37,10 +37,6 @@ const MessagesPage = () => {
               <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
                 Connect with collaborators and project owners through direct messaging.
               </p>
-              
-              <div className="mt-6">
-                <LogoutButton />
-              </div>
             </div>
 
             {/* Messages content */}

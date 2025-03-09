@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -14,7 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const ExploreTalentsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { isLoggedIn, LogoutButton } = useAuth();
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -204,10 +203,6 @@ const ExploreTalentsPage = () => {
               <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
                 Discover skilled professionals ready to collaborate on your next big idea or join your team.
               </p>
-              
-              <div className="mt-6">
-                <LogoutButton />
-              </div>
             </div>
 
             {/* Search and Filter Section */}
