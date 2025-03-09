@@ -65,8 +65,8 @@ const ExplorePage = () => {
       <Navbar />
       <main className="flex-1 container mx-auto px-6 py-12 md:py-16 max-w-6xl">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Explore <span className="gradient-text">Projects</span>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 custom-gradient-text">
+            Explore Projects
           </h1>
           <p className="text-xl text-gray-600">
             Discover innovative projects seeking talented collaborators or find your next creative challenge.
