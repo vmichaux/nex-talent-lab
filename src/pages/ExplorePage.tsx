@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, Filter, UserCircle, Calendar, Clock, Tag, MapPin, Briefcase, Star, MessageSquare } from "lucide-react";
+import { Search, Filter, UserCircle, Calendar, Clock, Tag, MapPin, Briefcase, Star, MessageSquare, ArrowRight } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { TestimonialSection } from "@/components/TestimonialSection";
+import { Link } from "react-router-dom";
 
 const ExplorePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -246,6 +247,46 @@ const ExplorePage = () => {
             {/* What Users Say Section */}
             <div className="pt-16">
               <TestimonialSection />
+            </div>
+
+            {/* New Call to Action Section */}
+            <div className="py-16 mt-8">
+              <div className="bg-gradient-to-r from-secondary to-purple-600 rounded-2xl shadow-xl overflow-hidden">
+                <div className="p-8 md:p-12 flex flex-col md:flex-row items-center">
+                  <div className="flex-1 text-white mb-8 md:mb-0 md:pr-8">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Showcase Your Talents?</h2>
+                    <p className="text-lg opacity-90 mb-6">
+                      Create your profile today and connect with innovative projects looking for your unique skills and experience.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <Link to="/signup">
+                        <Button size="lg" className="bg-white text-secondary hover:bg-gray-100 w-full sm:w-auto">
+                          Create Profile
+                        </Button>
+                      </Link>
+                      <Link to="/how-it-works">
+                        <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10 w-full sm:w-auto gap-2">
+                          Learn More <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <div className="relative w-64 h-64 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm flex items-center justify-center">
+                      <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-white/5 rounded-full"></div>
+                      <div className="relative z-10 grid grid-cols-2 gap-3 p-6">
+                        {/* Skill badges */}
+                        <Badge className="bg-white/90 text-secondary hover:bg-white">UX Design</Badge>
+                        <Badge className="bg-white/90 text-secondary hover:bg-white">React</Badge>
+                        <Badge className="bg-white/90 text-secondary hover:bg-white">Marketing</Badge>
+                        <Badge className="bg-white/90 text-secondary hover:bg-white">Python</Badge>
+                        <Badge className="bg-white/90 text-secondary hover:bg-white">Project Mgmt</Badge>
+                        <Badge className="bg-white/90 text-secondary hover:bg-white">Data Science</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
