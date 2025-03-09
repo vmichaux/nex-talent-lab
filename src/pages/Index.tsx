@@ -6,7 +6,6 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { TestimonialSection } from "@/components/TestimonialSection";
 import { ImpactSection } from "@/components/ImpactSection";
 import { PricingSection } from "@/components/PricingSection";
-import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
 
 const Index = () => {
@@ -22,7 +21,6 @@ const Index = () => {
             <TestimonialSection />
             <ImpactSection />
             <PricingSection />
-            <CTASection />
           </div>
         </div>
       </main>

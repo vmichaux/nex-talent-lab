@@ -91,9 +91,9 @@ export function Hero() {
           </div>
         </div>
         
-        {/* New CTA Box */}
+        {/* CTA Box matching the provided image */}
         <div className="mt-20 mb-8">
-          <div className="bg-primary rounded-2xl overflow-hidden shadow-xl">
+          <div className="bg-purple-700 rounded-2xl overflow-hidden shadow-xl">
             <div className="p-8 md:p-12 text-center text-white">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Find Your Perfect Collaboration?</h2>
               <p className="text-lg opacity-90 max-w-2xl mx-auto mb-8">
@@ -101,7 +101,7 @@ export function Hero() {
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Link to="/signup">
-                  <Button size="lg" className="bg-white text-primary hover:bg-gray-100 w-full sm:w-auto">
+                  <Button size="lg" className="bg-white text-purple-700 hover:bg-gray-100 w-full sm:w-auto">
                     Get Started
                   </Button>
                 </Link>
