@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -8,6 +9,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Filter, Search, MapPin, Briefcase, Star, Clock, MessageSquare } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { TestimonialSection } from "@/components/TestimonialSection";
+import { ExploreCTA } from "@/components/ExploreCTA";
 
 const ExploreTalentsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -91,84 +94,6 @@ const ExploreTalentsPage = () => {
       bio: "DevOps engineer focused on building robust infrastructure and streamlining development workflows.",
       image: "/placeholder.svg",
       featured: false
-    },
-    {
-      id: 7,
-      name: "Olivia Martinez",
-      title: "Content Strategist",
-      location: "Miami, FL",
-      skills: ["Content Creation", "SEO", "Social Media", "Copywriting"],
-      experience: "5+ years",
-      rating: 4.7,
-      availability: "Available immediately",
-      bio: "Creative content strategist with a knack for storytelling and building brand narratives across multiple platforms and formats.",
-      image: "/placeholder.svg",
-      featured: true
-    },
-    {
-      id: 8,
-      name: "James Wilson",
-      title: "Mobile App Developer",
-      location: "Denver, CO",
-      skills: ["React Native", "Swift", "Kotlin", "Firebase"],
-      experience: "6+ years",
-      rating: 4.8,
-      availability: "Available for contract",
-      bio: "Specialized in creating native and cross-platform mobile experiences with a focus on performance and accessibility.",
-      image: "/placeholder.svg",
-      featured: false
-    },
-    {
-      id: 9,
-      name: "Aisha Patel",
-      title: "Data Scientist",
-      location: "Boston, MA",
-      skills: ["R", "Python", "Machine Learning", "Statistical Analysis"],
-      experience: "7+ years",
-      rating: 4.9,
-      availability: "Open to remote work",
-      bio: "Data scientist with expertise in turning complex datasets into actionable insights that drive business decisions.",
-      image: "/placeholder.svg",
-      featured: true
-    },
-    {
-      id: 10,
-      name: "Lucas Thompson",
-      title: "Blockchain Developer",
-      location: "San Diego, CA",
-      skills: ["Solidity", "Smart Contracts", "Web3.js", "Ethereum"],
-      experience: "4+ years",
-      rating: 4.6,
-      availability: "Available for project-based work",
-      bio: "Blockchain developer specializing in decentralized applications and smart contract development on multiple platforms.",
-      image: "/placeholder.svg",
-      featured: false
-    },
-    {
-      id: 11,
-      name: "Elena Rodriguez",
-      title: "Marketing Specialist",
-      location: "Portland, OR",
-      skills: ["Digital Marketing", "Campaign Management", "Analytics", "Brand Strategy"],
-      experience: "8+ years",
-      rating: 4.8,
-      availability: "Available for consulting",
-      bio: "Results-driven marketing specialist with experience across B2B and B2C sectors, focusing on growth and conversion optimization.",
-      image: "/placeholder.svg",
-      featured: true
-    },
-    {
-      id: 12,
-      name: "Ryan Kim",
-      title: "Game Developer",
-      location: "Austin, TX",
-      skills: ["Unity3D", "C#", "Game Design", "3D Modeling"],
-      experience: "5+ years",
-      rating: 4.7,
-      availability: "Looking for team projects",
-      bio: "Passionate game developer with experience in creating immersive experiences across mobile, PC, and console platforms.",
-      image: "/placeholder.svg",
-      featured: false
     }
   ];
 
@@ -180,7 +105,21 @@ const ExploreTalentsPage = () => {
           {/* Background Pattern - Purple Gradient */}
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
-          <div className="container mx-auto px-4 py-12 md:py-16">
+          <div className="container mx-auto px-4 py-24 md:py-32">
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
+              <div className="mb-6 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
+                Find Your Collaborators
+              </div>
+              
+              <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl custom-gradient-text">
+                Explore Talents
+              </h1>
+              
+              <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal">
+                Connect with skilled professionals ready to bring your projects to life. Browse profiles and find the perfect match for your team.
+              </p>
+            </div>
+
             {/* Search and Filter Section */}
             <div className="mb-12">
               <div className="flex flex-col md:flex-row gap-4 max-w-4xl mx-auto">
@@ -234,6 +173,16 @@ const ExploreTalentsPage = () => {
                 ))}
               </TabsContent>
             </Tabs>
+
+            {/* Testimonials Section */}
+            <div className="pt-16">
+              <TestimonialSection />
+            </div>
+
+            {/* Call to Action Section */}
+            <div className="pt-16">
+              <ExploreCTA />
+            </div>
           </div>
         </div>
       </main>
@@ -305,4 +254,3 @@ const TalentCard = ({ talent }) => {
 };
 
 export default ExploreTalentsPage;
-
