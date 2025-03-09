@@ -32,7 +32,7 @@ export function Hero() {
               </Button>
             </Link>
             <Link to="/how-it-works">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto text-primary border-primary hover:bg-primary/10 hover:text-primary">
                 Learn More
               </Button>
             </Link>
