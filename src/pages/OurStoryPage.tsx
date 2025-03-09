@@ -1,3 +1,4 @@
+
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -87,6 +88,34 @@ export default function OurStoryPage() {
 
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold mb-8 text-center flex items-center gap-2 justify-center">
+              <Star className="h-6 w-6 text-primary" />
+              <span>The Story Behind NexTalent Lab</span>
+            </h2>
+            <div className="prose prose-lg mx-auto text-gray-700 space-y-6">
+              <p>
+                In the heart of Paris, four creatives came together with one goal: to build something extraordinary. 
+                A music producer, an artistic director, a fashion designer, and a communication strategist—all driven 
+                by a shared passion for innovation. What started as an idea quickly turned into a full-fledged mission: 
+                organizing an unforgettable fashion show, despite having no budget, no sponsors, and no guarantees.
+              </p>
+              <p>
+                But what they did have was determination, talent, and the power of collaboration. The team grew, 
+                with over 100 volunteers—some of the best in their fields—coming together to make the impossible happen. 
+                No money exchanged hands. Just skill, passion, and the belief that together, they could create something 
+                greater than themselves.
+              </p>
+              <p>
+                That moment was proof of something revolutionary: when driven people unite around an idea, they can 
+                defy all odds. The only thing missing in the world today isn't money, but the right people coming 
+                together at the right time.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-12 text-center">Our Journey</h2>
             <div className="space-y-12 max-w-4xl mx-auto">
               <div className="flex flex-col md:flex-row gap-4">
@@ -132,34 +161,6 @@ export default function OurStoryPage() {
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold mb-8 text-center flex items-center gap-2 justify-center">
-              <Star className="h-6 w-6 text-primary" />
-              <span>The Story Behind NexTalent Lab</span>
-            </h2>
-            <div className="prose prose-lg mx-auto text-gray-700 space-y-6">
-              <p>
-                In the heart of Paris, four creatives came together with one goal: to build something extraordinary. 
-                A music producer, an artistic director, a fashion designer, and a communication strategist—all driven 
-                by a shared passion for innovation. What started as an idea quickly turned into a full-fledged mission: 
-                organizing an unforgettable fashion show, despite having no budget, no sponsors, and no guarantees.
-              </p>
-              <p>
-                But what they did have was determination, talent, and the power of collaboration. The team grew, 
-                with over 100 volunteers—some of the best in their fields—coming together to make the impossible happen. 
-                No money exchanged hands. Just skill, passion, and the belief that together, they could create something 
-                greater than themselves.
-              </p>
-              <p>
-                That moment was proof of something revolutionary: when driven people unite around an idea, they can 
-                defy all odds. The only thing missing in the world today isn't money, but the right people coming 
-                together at the right time.
-              </p>
             </div>
           </div>
         </section>
