@@ -12,10 +12,25 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Bell, MessageSquare, Users, FileText, CheckCircle, Search, PlusCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Bell, MessageSquare, Users, FileText, CheckCircle, Search, PlusCircle, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast";
 
 export default function DashboardPage() {
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    // In a real app, you would handle the actual logout logic here
+    // For now, we'll simulate logout with toast notification and redirect
+    toast({
+      title: "Logged out successfully",
+      description: "You have been logged out of your account.",
+    });
+    
+    // Redirect to homepage after logout
+    navigate("/");
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -25,11 +40,21 @@ export default function DashboardPage() {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-16">
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold tracking-tight">Your Dashboard</h1>
-              <p className="text-xl text-muted-foreground mt-2">
-                Welcome to your NexTalent Lab dashboard
-              </p>
+            <div className="mb-8 flex flex-wrap justify-between items-center">
+              <div>
+                <h1 className="text-4xl font-bold tracking-tight">Your Dashboard</h1>
+                <p className="text-xl text-muted-foreground mt-2">
+                  Welcome to your NexTalent Lab dashboard
+                </p>
+              </div>
+              <Button 
+                variant="outline" 
+                className="mt-4 sm:mt-0 gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4" />
+                Log Out
+              </Button>
             </div>
 
             {/* User Profile Section */}
