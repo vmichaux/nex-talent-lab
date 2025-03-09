@@ -18,7 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, LogoutButton } = useAuth();
   
   return (
     <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">
@@ -75,13 +75,16 @@ export function Navbar() {
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center space-x-4">
           {isLoggedIn ? (
-            // User is logged in - show dashboard button
-            <Link to="/dashboard">
-              <Button variant="outline" size="sm" className="gap-2">
-                <User className="h-4 w-4" />
-                Dashboard
-              </Button>
-            </Link>
+            // User is logged in - show dashboard and logout buttons
+            <div className="flex items-center gap-3">
+              <Link to="/dashboard">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <User className="h-4 w-4" />
+                  Dashboard
+                </Button>
+              </Link>
+              <LogoutButton />
+            </div>
           ) : (
             // User is not logged in - show auth buttons
             <>
@@ -162,6 +165,9 @@ export function Navbar() {
                   <User className="h-4 w-4" />
                   Dashboard
                 </Link>
+                <div className="pt-4" onClick={() => setIsMenuOpen(false)}>
+                  <LogoutButton />
+                </div>
               </>
             ) : (
               // Mobile navigation for non-logged-in users 

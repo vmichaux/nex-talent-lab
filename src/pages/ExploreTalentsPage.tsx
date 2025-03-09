@@ -14,7 +14,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const ExploreTalentsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, LogoutButton } = useAuth();
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -191,23 +191,27 @@ const ExploreTalentsPage = () => {
           {/* Background Pattern - Purple Gradient */}
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
-          <div className="container mx-auto px-4 py-24 md:py-32">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
-              <div className="mb-6 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                Connect With Professionals
+          <div className="container mx-auto px-4 py-12">
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10">
+              <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
+                Explore Talents
               </div>
               
-              <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl custom-gradient-text">
-                Explore Talents
+              <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
+                Find Amazing Collaborators
               </h1>
               
-              <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal">
+              <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
                 Discover skilled professionals ready to collaborate on your next big idea or join your team.
               </p>
+              
+              <div className="mt-6">
+                <LogoutButton />
+              </div>
             </div>
 
             {/* Search and Filter Section */}
-            <div className="mb-12">
+            <div className="mb-10">
               <div className="flex flex-col md:flex-row gap-4 max-w-4xl mx-auto">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -227,7 +231,7 @@ const ExploreTalentsPage = () => {
             </div>
 
             {/* Talent Categories Tabs */}
-            <Tabs defaultValue="all" className="mb-24">
+            <Tabs defaultValue="all" className="mb-8">
               <TabsList className="mb-8 mx-auto flex justify-center">
                 <TabsTrigger value="all" className="px-6">All Talents</TabsTrigger>
                 <TabsTrigger value="featured" className="px-6">Featured</TabsTrigger>
