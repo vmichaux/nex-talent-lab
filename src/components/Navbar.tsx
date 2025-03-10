@@ -7,7 +7,6 @@ import {
   User,
   LogIn,
   Search,
-  Users,
   MessageSquare,
   BookOpen,
   Globe
@@ -44,10 +43,6 @@ export function Navbar() {
               <Link to="/messages" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
                 <MessageSquare className="h-4 w-4" />
                 Messages
-              </Link>
-              <Link to="/community" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
-                <Users className="h-4 w-4" />
-                Community
               </Link>
             </>
           ) : (
@@ -148,14 +143,6 @@ export function Navbar() {
                 >
                   <MessageSquare className="h-4 w-4" />
                   Messages
-                </Link>
-                <Link
-                  to="/community"
-                  className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Users className="h-4 w-4" />
-                  Community
                 </Link>
                 <Link
                   to="/dashboard"

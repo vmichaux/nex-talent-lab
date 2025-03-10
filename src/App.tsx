@@ -18,7 +18,6 @@ import PricingPage from "./pages/PricingPage";
 import OurStoryPage from "./pages/OurStoryPage";
 import DashboardPage from "./pages/DashboardPage";
 import MessagesPage from "./pages/MessagesPage";
-import CommunityPage from "./pages/CommunityPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
 
 const queryClient = new QueryClient();
@@ -41,7 +40,6 @@ const App = () => (
             <Route path="/our-story" element={<OurStoryPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/messages" element={<MessagesPage />} />
-            <Route path="/community" element={<CommunityPage />} />
             <Route element={<AuthLayout />}>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
