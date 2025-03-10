@@ -28,6 +28,27 @@ export function PricingSection() {
       popular: false
     },
     {
+      name: "Basic",
+      price: "10",
+      description: "Great for active individuals seeking more features",
+      features: [
+        "3 active projects",
+        "Enhanced AI matching",
+        "Standard profile",
+        "Email support",
+        "Full messaging access",
+        "Basic analytics"
+      ],
+      notIncluded: [
+        "Advanced project tools",
+        "Priority matching",
+        "Team collaboration tools"
+      ],
+      buttonText: "Choose Basic",
+      buttonVariant: "outline",
+      popular: false
+    },
+    {
       name: "Professional",
       price: "29",
       description: "For serious professionals and small teams",
@@ -93,7 +114,7 @@ export function PricingSection() {
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 max-w-7xl mx-auto">
           {plans.map((plan, index) => (
             <div 
               key={index} 
