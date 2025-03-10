@@ -60,8 +60,8 @@ export function Navbar() {
               <Link to="/pricing" className="font-medium hover:text-primary transition-colors">
                 Pricing
               </Link>
-              <Link to="/our-story" className="font-medium hover:text-primary transition-colors">
-                Our Story
+              <Link to="/about" className="font-medium hover:text-primary transition-colors">
+                About
               </Link>
             </>
           )}
@@ -188,11 +188,11 @@ export function Navbar() {
                   Pricing
                 </Link>
                 <Link
-                  to="/our-story"
+                  to="/about"
                   className="block py-2 px-4 hover:bg-gray-50 rounded-md"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Our Story
+                  About
                 </Link>
                 <div className="pt-4 flex flex-col space-y-2">
                   <Link to="/login" onClick={() => setIsMenuOpen(false)}>
