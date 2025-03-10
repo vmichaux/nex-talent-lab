@@ -15,26 +15,59 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, signInWithGoogle, signInWithGithub } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate login API call
-    setTimeout(() => {
+    try {
+      await login(email, password);
       toast({
         title: "Login Successful",
         description: "Welcome back to NexTalent Lab!",
       });
-      
-      // Use our auth context to set logged in state
-      login();
-      
-      setIsLoading(false);
-      // Redirect to dashboard after successful login
       navigate("/dashboard");
-    }, 1500);
+    } catch (error) {
+      // Error is already handled in the login function
+      console.error("Login error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    try {
+      await signInWithGoogle();
+      toast({
+        title: "Login Successful",
+        description: "Welcome back to NexTalent Lab!",
+      });
+      navigate("/dashboard");
+    } catch (error) {
+      // Error is already handled in the signInWithGoogle function
+      console.error("Google sign-in error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGithubSignIn = async () => {
+    setIsLoading(true);
+    try {
+      await signInWithGithub();
+      toast({
+        title: "Login Successful",
+        description: "Welcome back to NexTalent Lab!",
+      });
+      navigate("/dashboard");
+    } catch (error) {
+      // Error is already handled in the signInWithGithub function
+      console.error("GitHub sign-in error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -103,13 +136,25 @@ export default function LoginPage() {
         </div>
 
         <div className="mt-6 grid grid-cols-2 gap-4">
-          <Button variant="outline" type="button" className="gap-2">
+          <Button 
+            variant="outline" 
+            type="button" 
+            className="gap-2"
+            onClick={handleGithubSignIn}
+            disabled={isLoading}
+          >
             <Github className="h-4 w-4" />
             <span>GitHub</span>
           </Button>
-          <Button variant="outline" type="button" className="gap-2">
+          <Button 
+            variant="outline" 
+            type="button" 
+            className="gap-2"
+            onClick={handleGoogleSignIn}
+            disabled={isLoading}
+          >
             <Linkedin className="h-4 w-4" />
-            <span>LinkedIn</span>
+            <span>Google</span>
           </Button>
         </div>
       </div>

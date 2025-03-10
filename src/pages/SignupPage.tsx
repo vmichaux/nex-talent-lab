@@ -16,26 +16,59 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { signup, signInWithGoogle, signInWithGithub } = useAuth();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate signup API call
-    setTimeout(() => {
+    try {
+      await signup(email, password);
       toast({
         title: "Account created successfully!",
         description: "Welcome to NexTalent Lab. Let's set up your profile.",
       });
-      
-      // Use our auth context to set logged in state
-      login();
-      
-      setIsLoading(false);
-      // Redirect to dashboard after successful signup
       navigate("/dashboard");
-    }, 1500);
+    } catch (error) {
+      // Error is already handled in the signup function
+      console.error("Signup error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    try {
+      await signInWithGoogle();
+      toast({
+        title: "Account created successfully!",
+        description: "Welcome to NexTalent Lab. Let's set up your profile.",
+      });
+      navigate("/dashboard");
+    } catch (error) {
+      // Error is already handled in the signInWithGoogle function
+      console.error("Google sign-in error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGithubSignIn = async () => {
+    setIsLoading(true);
+    try {
+      await signInWithGithub();
+      toast({
+        title: "Account created successfully!",
+        description: "Welcome to NexTalent Lab. Let's set up your profile.",
+      });
+      navigate("/dashboard");
+    } catch (error) {
+      // Error is already handled in the signInWithGithub function
+      console.error("GitHub sign-in error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -127,13 +160,25 @@ export default function SignupPage() {
         </div>
 
         <div className="mt-6 grid grid-cols-2 gap-4">
-          <Button variant="outline" type="button" className="gap-2">
+          <Button 
+            variant="outline" 
+            type="button" 
+            className="gap-2"
+            onClick={handleGithubSignIn}
+            disabled={isLoading}
+          >
             <Github className="h-4 w-4" />
             <span>GitHub</span>
           </Button>
-          <Button variant="outline" type="button" className="gap-2">
+          <Button 
+            variant="outline" 
+            type="button" 
+            className="gap-2"
+            onClick={handleGoogleSignIn}
+            disabled={isLoading}
+          >
             <Linkedin className="h-4 w-4" />
-            <span>LinkedIn</span>
+            <span>Google</span>
           </Button>
         </div>
       </div>
