@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -268,6 +269,12 @@ const ExploreProjectsPage = () => {
 
 // Project Card Component
 const ProjectCard = ({ project }) => {
+  const navigate = useNavigate();
+  
+  const handleViewDetails = () => {
+    navigate(`/project/${project.id}`);
+  };
+  
   return (
     <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
       <CardHeader className="pb-4 space-y-2">
@@ -316,7 +323,7 @@ const ProjectCard = ({ project }) => {
       </CardContent>
       <CardFooter className="pt-4 border-t flex gap-2">
         <Button className="w-full">Apply Now</Button>
-        <Button variant="outline" className="w-full">Details</Button>
+        <Button variant="outline" className="w-full" onClick={handleViewDetails}>Details</Button>
       </CardFooter>
     </Card>
   );

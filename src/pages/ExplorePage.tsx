@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -285,6 +286,12 @@ const ExplorePage = () => {
 
 // Project Card Component
 const ProjectCard = ({ project }) => {
+  const navigate = useNavigate();
+  
+  const handleViewDetails = () => {
+    navigate(`/project/${project.id}`);
+  };
+  
   return (
     <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
       <CardHeader className="pb-4 space-y-2">
@@ -323,7 +330,7 @@ const ProjectCard = ({ project }) => {
         </div>
       </CardContent>
       <CardFooter className="pt-4 border-t">
-        <Button className="w-full">View Details</Button>
+        <Button className="w-full" onClick={handleViewDetails}>View Details</Button>
       </CardFooter>
     </Card>
   );
