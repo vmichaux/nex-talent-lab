@@ -30,7 +30,11 @@ export function DashboardOnboarding() {
       case 1:
         return (
           <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
-            <h1 className="text-4xl font-bold mb-6">Welcome to NexTalent Lab</h1>
+            <h1 className="text-4xl font-bold mb-6 flex">
+              <span className="text-purple-600">Nex</span>
+              <span className="text-green-600">Talent</span>
+              <span className="text-black">Lab</span>
+            </h1>
             <p className="text-lg mb-8">Let's get you started on your collaboration journey</p>
             
             <div className="mb-10 text-center max-w-prose">

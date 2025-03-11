@@ -9,9 +9,10 @@ export default function AuthLayout() {
       {/* Left sidebar with branding and illustration */}
       <div className="w-full md:w-1/2 bg-gradient-to-br from-primary to-purple-900 text-white p-8 md:p-12 flex flex-col">
         <div className="mb-8">
-          <Link to="/" className="flex items-center gap-1">
-            <span className="font-bold text-2xl">NexTalent</span>
-            <span className="text-white font-bold text-2xl">Lab</span>
+          <Link to="/" className="flex items-center">
+            <span className="font-bold text-2xl text-white">Nex</span>
+            <span className="font-bold text-2xl text-green-200">Talent</span>
+            <span className="font-bold text-2xl text-white">Lab</span>
           </Link>
         </div>
         
