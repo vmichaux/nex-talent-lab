@@ -17,10 +17,7 @@ export function Hero() {
             Opportunity
           </h1>
           
-          <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal">NexTalent Lab brings together fresh talents and project builders for meaningful collaborations that drive growth and create opportunities. 
-
-
-Discover meaningful collaborations that elevate your career.</p>
+          <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal">NexTalent Lab brings together fresh talents and project builders for meaningful collaborations that drive growth and elevate your career.</p>
           <div className="flex flex-col sm:flex-row gap-4 mb-16">
             <Link to="/signup">
               <Button size="lg" className="w-full sm:w-auto gap-2">
