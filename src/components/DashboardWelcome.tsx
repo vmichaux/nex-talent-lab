@@ -1,5 +1,5 @@
 
-import { ArrowRight, Check, UserPlus, LightBulb } from "lucide-react";
+import { ArrowRight, Check, UserPlus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -43,7 +43,7 @@ export function DashboardWelcome() {
       number: 2,
       title: "Explore Projects",
       description: "Discover projects that match your skills and interests.",
-      icon: <LightBulb className="h-4 w-4 text-primary" />,
+      icon: <Lightbulb className="h-4 w-4 text-primary" />,
       completed: false
     },
     {
