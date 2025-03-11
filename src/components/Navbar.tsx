@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, User, LogIn, Search, MessageSquare, BookOpen, Globe } from "lucide-react";
+import { Menu, X, User, LogIn, Search, MessageSquare, BookOpen, Globe, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -10,6 +11,7 @@ export function Navbar() {
     isLoggedIn,
     LogoutButton
   } = useAuth();
+  
   return <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-1">
@@ -22,6 +24,10 @@ export function Navbar() {
           {isLoggedIn ?
         // Navigation for logged-in users
         <>
+              <Link to="/dashboard" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
+                <Home className="h-4 w-4" />
+                Dashboard
+              </Link>
               <Link to="/explore-projects" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
                 <Search className="h-4 w-4" />
                 Explore Projects
@@ -97,6 +103,10 @@ export function Navbar() {
             {isLoggedIn ?
         // Mobile navigation for logged-in users
         <>
+                <Link to="/dashboard" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+                  <Home className="h-4 w-4" />
+                  Dashboard
+                </Link>
                 <Link to="/explore-projects" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                   <Search className="h-4 w-4" />
                   Explore Projects
@@ -108,10 +118,6 @@ export function Navbar() {
                 <Link to="/messages" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                   <MessageSquare className="h-4 w-4" />
                   Messages
-                </Link>
-                <Link to="/dashboard" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-                  <User className="h-4 w-4" />
-                  Dashboard
                 </Link>
                 <div className="pt-4" onClick={() => setIsMenuOpen(false)}>
                   <LogoutButton />
