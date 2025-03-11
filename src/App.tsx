@@ -15,7 +15,7 @@ import ExploreProjectsPage from "./pages/ExploreProjectsPage";
 import ExploreTalentsPage from "./pages/ExploreTalentsPage";
 import HowItWorksPage from "./pages/HowItWorksPage";
 import PricingPage from "./pages/PricingPage";
-import OurStoryPage from "./pages/OurStoryPage";
+import AboutPage from "./pages/AboutPage";
 import DashboardPage from "./pages/DashboardPage";
 import MessagesPage from "./pages/MessagesPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
@@ -37,7 +37,7 @@ const App = () => (
             <Route path="/project/:id" element={<ProjectDetailPage />} />
             <Route path="/how-it-works" element={<HowItWorksPage />} />
             <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/about" element={<OurStoryPage />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/messages" element={<MessagesPage />} />
             <Route element={<AuthLayout />}>
