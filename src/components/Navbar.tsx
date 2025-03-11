@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, User, LogIn, Search, MessageSquare, BookOpen, Globe, Home } from "lucide-react";
@@ -14,10 +15,9 @@ export function Navbar() {
   
   return <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center">
-          <span className="font-bold text-2xl text-purple-600">Nex</span>
-          <span className="font-bold text-2xl text-green-600">Talent</span>
-          <span className="font-bold text-2xl text-black">Lab</span>
+        <Link to="/" className="flex items-center gap-1">
+          <span className="font-bold text-2xl gradient-text">NexTalent</span>
+          <span className="font-bold text-2xl text-zinc-900">Lab</span>
         </Link>
 
         {/* Desktop Navigation */}

@@ -17,10 +17,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Logo and Contact */}
           <div className="space-y-4">
-            <Link to="/" className="flex items-center">
-              <span className="font-bold text-2xl text-purple-600">Nex</span>
-              <span className="font-bold text-2xl text-green-600">Talent</span>
-              <span className="font-bold text-2xl text-black">Lab</span>
+            <Link to="/" className="flex items-center gap-1">
+              <span className="font-bold text-2xl gradient-text">NexTalent</span>
+              <span className="text-black font-bold text-2xl">Lab</span>
             </Link>
             <p className="text-gray-600 text-sm mt-2">
               Connecting creative talents and project builders for meaningful collaborations.
