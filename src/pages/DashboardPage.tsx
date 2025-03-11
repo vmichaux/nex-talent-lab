@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Briefcase, MessageSquare, Calendar, ArrowRight, Clock, MapPin } from "lucide-react";
 import { DashboardWelcome } from "@/components/DashboardWelcome";
+import { DashboardOnboarding } from "@/components/DashboardOnboarding";
 
 // Sample data for projects
 const projects = [
@@ -115,10 +116,6 @@ const DashboardPage = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/login");
-    }
-    
     // In a real app, you would check if the user is new or has completed onboarding
     // For now, we're using a state to toggle between views
     // You could use localStorage or a database flag in production
@@ -127,7 +124,7 @@ const DashboardPage = () => {
     // if (currentUser?.hasCompletedProfile) {
     //   setShowWelcome(false);
     // }
-  }, [isLoggedIn, navigate, currentUser]);
+  }, [currentUser]);
 
   // Toggle function for demo purposes - in real app would be based on profile completion
   const handleCompleteOnboarding = () => {
@@ -138,7 +135,9 @@ const DashboardPage = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
-        {showWelcome ? (
+        {!isLoggedIn ? (
+          <DashboardOnboarding />
+        ) : showWelcome ? (
           <>
             <DashboardWelcome />
             {/* For demo purposes only - allows toggling between views */}
