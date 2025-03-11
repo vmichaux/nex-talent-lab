@@ -25,7 +25,7 @@ export function FeatureSection() {
     title: "Quality Assurance",
     description: "Verified profiles, skill assessments, and performance ratings to ensure high-quality collaborations."
   }];
-  return <section className="py-16 bg-gray-50">
+  return <section className="bg-gray-50 py-[46px]">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl font-bold mb-4">
