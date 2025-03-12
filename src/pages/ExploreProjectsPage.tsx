@@ -33,178 +33,6 @@ const ExploreProjectsPage = () => {
     project.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  // If there are no projects from Firebase, use our backup mock data
-  const projects = filteredProjects.length > 0 ? filteredProjects : [
-    {
-      id: "1",
-      title: "AI-Powered Educational Platform",
-      description: "Building an interactive learning platform with personalized AI tutoring for K-12 students.",
-      skills: ["React", "Machine Learning", "UI/UX Design"],
-      category: "Education",
-      deadline: "June 15, 2025",
-      duration: "3 months",
-      owner: "Alexandra Chen",
-      featured: true,
-      status: "Open" as "Open",
-      applicants: 7,
-      createdAt: new Date()
-    },
-    {
-      id: "2",
-      title: "Health and Wellness Mobile App",
-      description: "Creating a holistic wellness app that combines fitness tracking with mental health resources.",
-      skills: ["React Native", "Firebase", "Health APIs"],
-      category: "Health",
-      deadline: "May 20, 2025",
-      duration: "2 months",
-      owner: "Marcus Johnson",
-      featured: false,
-      status: "Open" as "Open",
-      applicants: 4,
-      createdAt: new Date()
-    },
-    {
-      id: "3",
-      title: "Sustainable Fashion Marketplace",
-      description: "Developing an e-commerce platform for eco-friendly fashion brands and second-hand clothing.",
-      skills: ["E-commerce", "Sustainability", "Branding"],
-      category: "Fashion",
-      deadline: "July 30, 2025",
-      duration: "4 months",
-      owner: "Sophia Patel",
-      featured: true,
-      status: "Open" as "Open",
-      applicants: 12,
-      createdAt: new Date()
-    },
-    {
-      id: "4",
-      title: "Smart Home Integration System",
-      description: "Creating a central hub to connect and control various smart home devices regardless of manufacturer.",
-      skills: ["IoT", "API Integration", "Embedded Systems"],
-      category: "Technology",
-      deadline: "August 5, 2025",
-      duration: "3 months",
-      owner: "David Wilson",
-      featured: false,
-      status: "Urgent" as "Urgent",
-      applicants: 3,
-      createdAt: new Date()
-    },
-    {
-      id: "5",
-      title: "Community Garden Management Tool",
-      description: "Building a platform to help urban communities organize and manage shared garden spaces and resources.",
-      skills: ["Full Stack", "Mapping APIs", "Community Engagement"],
-      category: "Environment",
-      deadline: "September 15, 2025",
-      duration: "2 months",
-      owner: "Elena Rodriguez",
-      featured: true,
-      status: "Open" as "Open",
-      applicants: 9,
-      createdAt: new Date()
-    },
-    {
-      id: "6",
-      title: "Accessible Gaming Experience",
-      description: "Designing an inclusive gaming platform with customizable interfaces for players with different abilities.",
-      skills: ["Game Development", "Accessibility", "UX Research"],
-      category: "Gaming",
-      deadline: "October 10, 2025",
-      duration: "5 months",
-      owner: "Michael Kim",
-      featured: false,
-      status: "Open" as "Open",
-      applicants: 6,
-      createdAt: new Date()
-    },
-    {
-      id: "7",
-      title: "Cloud-Based Data Analytics Platform",
-      description: "Developing a platform that helps small businesses leverage big data without requiring technical expertise.",
-      skills: ["Cloud Architecture", "Data Visualization", "Machine Learning"],
-      category: "Business",
-      deadline: "July 25, 2025",
-      duration: "4 months",
-      owner: "Sarah Thompson",
-      featured: true,
-      status: "Open" as "Open",
-      applicants: 8,
-      createdAt: new Date()
-    },
-    {
-      id: "8",
-      title: "Peer-to-Peer Language Learning App",
-      description: "Creating an application that connects language learners for real-time practice and cultural exchange.",
-      skills: ["Mobile Development", "WebRTC", "UX Design"],
-      category: "Education",
-      deadline: "August 30, 2025",
-      duration: "3 months",
-      owner: "Carlos Mendez",
-      featured: false,
-      status: "Urgent" as "Urgent",
-      applicants: 5,
-      createdAt: new Date()
-    },
-    {
-      id: "9",
-      title: "Renewable Energy Monitoring System",
-      description: "Building an IoT solution to track and optimize energy generation from solar and wind installations.",
-      skills: ["IoT", "Data Science", "Embedded Systems"],
-      category: "Energy",
-      deadline: "September 10, 2025",
-      duration: "4 months",
-      owner: "Liu Wei",
-      featured: true,
-      status: "Open" as "Open",
-      applicants: 10,
-      createdAt: new Date()
-    },
-    {
-      id: "10",
-      title: "Virtual Reality Therapy Platform",
-      description: "Developing therapeutic VR experiences for anxiety, PTSD, and phobia treatment in clinical settings.",
-      skills: ["Unity3D", "VR/AR", "Healthcare"],
-      category: "Healthcare",
-      deadline: "October 5, 2025",
-      duration: "6 months",
-      owner: "Emily Jacobs",
-      featured: false,
-      status: "Open" as "Open",
-      applicants: 7,
-      createdAt: new Date()
-    },
-    {
-      id: "11",
-      title: "Blockchain Supply Chain Tracker",
-      description: "Creating a transparent system to verify product origins and authenticity using blockchain technology.",
-      skills: ["Blockchain", "Smart Contracts", "Full Stack"],
-      category: "Technology",
-      deadline: "August 20, 2025",
-      duration: "5 months",
-      owner: "Hassan Ahmed",
-      featured: true,
-      status: "Open" as "Open",
-      applicants: 11,
-      createdAt: new Date()
-    },
-    {
-      id: "12",
-      title: "Urban Mobility Analytics Platform",
-      description: "Building a system to help cities optimize public transportation based on real-time movement data.",
-      skills: ["Data Science", "GIS", "Urban Planning"],
-      category: "Smart City",
-      deadline: "September 25, 2025",
-      duration: "4 months",
-      owner: "Priya Sharma",
-      featured: false,
-      status: "Urgent" as "Urgent",
-      applicants: 6,
-      createdAt: new Date()
-    }
-  ];
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -269,20 +97,43 @@ const ExploreProjectsPage = () => {
                 </TabsList>
                 
                 <TabsContent value="all" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {projects.map(project => <ProjectCard key={project.id} project={project} />)}
+                  {filteredProjects.length > 0 ? (
+                    filteredProjects.map(project => <ProjectCard key={project.id} project={project} />)
+                  ) : (
+                    <div className="col-span-3 text-center py-20">
+                      <p className="text-gray-500 mb-4">No projects found. Try adjusting your search criteria.</p>
+                    </div>
+                  )}
                 </TabsContent>
                 
                 <TabsContent value="featured" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {projects.filter(p => p.featured).map(project => <ProjectCard key={project.id} project={project} />)}
+                  {filteredProjects.filter(p => p.featured).length > 0 ? (
+                    filteredProjects.filter(p => p.featured).map(project => <ProjectCard key={project.id} project={project} />)
+                  ) : (
+                    <div className="col-span-3 text-center py-20">
+                      <p className="text-gray-500 mb-4">No featured projects found.</p>
+                    </div>
+                  )}
                 </TabsContent>
                 
                 <TabsContent value="recent" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {/* Show only the last 4 projects for "recent" tab */}
-                  {projects.slice(0, 4).map(project => <ProjectCard key={project.id} project={project} />)}
+                  {filteredProjects.length > 0 ? (
+                    filteredProjects.slice(0, 4).map(project => <ProjectCard key={project.id} project={project} />)
+                  ) : (
+                    <div className="col-span-3 text-center py-20">
+                      <p className="text-gray-500 mb-4">No recent projects found.</p>
+                    </div>
+                  )}
                 </TabsContent>
                 
                 <TabsContent value="urgent" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {projects.filter(p => p.status === "Urgent").map(project => <ProjectCard key={project.id} project={project} />)}
+                  {filteredProjects.filter(p => p.status === "Urgent").length > 0 ? (
+                    filteredProjects.filter(p => p.status === "Urgent").map(project => <ProjectCard key={project.id} project={project} />)
+                  ) : (
+                    <div className="col-span-3 text-center py-20">
+                      <p className="text-gray-500 mb-4">No urgent projects found.</p>
+                    </div>
+                  )}
                 </TabsContent>
               </Tabs>
             )}

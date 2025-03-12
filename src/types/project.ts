@@ -12,4 +12,5 @@ export interface Project {
   status: "Open" | "Urgent" | "Closed";
   applicants: number;
   createdAt: Date;
+  progress?: number; // Optional progress property
 }

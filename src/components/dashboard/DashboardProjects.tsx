@@ -152,8 +152,8 @@ export function DashboardProjects() {
                     Deadline: {project.deadline}
                   </div>
                   <Badge className={
-                    project.status === "In Progress" ? "bg-blue-100 text-blue-800 hover:bg-blue-100" :
-                    project.status === "Planning" ? "bg-purple-100 text-purple-800 hover:bg-purple-100" :
+                    project.status === "Urgent" ? "bg-red-100 text-red-800 hover:bg-red-100" :
+                    project.status === "Closed" ? "bg-gray-100 text-gray-800 hover:bg-gray-100" :
                     "bg-green-100 text-green-800 hover:bg-green-100"
                   }>
                     {project.status}
