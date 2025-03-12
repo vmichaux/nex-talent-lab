@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -34,7 +35,7 @@ export function ExploreCTA() {
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild className="bg-white text-secondary hover:bg-gray-100">
-                  <Link to="/signup">
+                  <Link to="/onboarding">
                     Create Your Profile
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>

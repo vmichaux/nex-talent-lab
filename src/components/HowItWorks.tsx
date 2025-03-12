@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -100,8 +101,8 @@ export function HowItWorks() {
         </div>
 
         <div className="text-center mt-12">
-          <Link to="/signup">
-            <Button size="lg" className="gap-2">
+          <Link to="/onboarding">
+            <Button size="lg" className="gap-2 bg-primary">
               Get Started Today <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
