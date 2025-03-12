@@ -108,11 +108,6 @@ export const ChatWidget = () => {
       // Get AI response
       const aiResponse = await sendMessageToOpenAI(userMessage.content);
       
-      // Check if response indicates an API error
-      if (aiResponse.includes("configuration API")) {
-        setApiError("La clé API OpenAI n'est pas configurée correctement. Veuillez contacter l'administrateur.");
-      }
-      
       // Remove loading message and add real response
       setMessages(prev => {
         const filteredMessages = prev.filter(msg => msg.content !== "...");
@@ -128,6 +123,10 @@ export const ChatWidget = () => {
       await saveMessage(aiResponse, "assistant");
     } catch (error) {
       console.error("Error in chat sequence:", error);
+      
+      // Update error state for user feedback
+      setApiError("Une erreur est survenue lors de la communication avec l'API. Veuillez réessayer.");
+      
       toast({
         title: "Erreur",
         description: "Impossible d'obtenir une réponse. Veuillez réessayer.",

@@ -73,15 +73,15 @@ export const sendMessageToOpenAI = async (message: string): Promise<string> => {
     // Obtenir l'historique des messages pour créer un contexte de conversation
     const chatHistory = await getUserChatHistory();
     
-    // Préparer les messages pour l'API OpenAI en format approprié avec les types corrects
+    // Préparer les messages pour l'API OpenAI en format approprié
     const formattedMessages = chatHistory.map(msg => ({
-      role: msg.role as "user" | "assistant",
+      role: msg.role,
       content: msg.content
     }));
     
     // Ajouter le nouveau message à la liste
     formattedMessages.push({
-      role: "user" as const,
+      role: "user",
       content: message
     });
 
@@ -95,7 +95,10 @@ export const sendMessageToOpenAI = async (message: string): Promise<string> => {
     // Appeler l'API OpenAI avec les types corrects
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: formattedMessages,
+      messages: formattedMessages.map(msg => ({
+        role: msg.role === "user" ? "user" : "assistant",
+        content: msg.content
+      })),
       max_tokens: 1000
     });
 
