@@ -139,7 +139,7 @@ export const ChatWidget = () => {
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className={`fixed bottom-4 right-4 p-0 w-80 md:w-96 rounded-lg shadow-xl border-0 max-w-none ${isMinimized ? "h-16" : "h-[550px]"} transition-all duration-300 overflow-hidden transform-none bg-white`}>
           {/* Chat header - More visible now */}
-          <div className="flex items-center justify-between bg-primary text-white p-3 sticky top-0 z-10 py-0">
+          <div className="flex items-center justify-between bg-primary text-white p-3 sticky top-0 z-10 py-0 px-[11px]">
             <div className="flex items-center gap-2">
               <Bot className="h-5 w-5" />
               <DialogTitle className="text-white text-lg font-semibold">Assistant IA</DialogTitle>
