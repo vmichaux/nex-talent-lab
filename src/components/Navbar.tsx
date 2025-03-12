@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, User, LogIn, Search, MessageSquare, UserCog, Globe, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -25,6 +26,7 @@ export function Navbar() {
       navigate("/onboarding");
     }
   };
+  
   return <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-1">
@@ -82,7 +84,7 @@ export function Navbar() {
           {isLoggedIn ?
         // User is logged in - show My Account and logout buttons
         <div className="flex items-center gap-3">
-              <Link to="/profile">
+              <Link to="/profile/edit">
                 <Button variant="outline" size="sm" className="gap-2">
                   <UserCog className="h-4 w-4" />
                   My Account
@@ -135,7 +137,7 @@ export function Navbar() {
                   <MessageSquare className="h-4 w-4" />
                   Messages
                 </Link>
-                <Link to="/profile" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/profile/edit" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                   <UserCog className="h-4 w-4" />
                   My Account
                 </Link>
