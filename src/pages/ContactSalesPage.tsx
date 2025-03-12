@@ -98,164 +98,174 @@ export default function ContactSalesPage() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       
-      <main className="flex-1 py-12 px-4 md:py-16">
-        <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-10">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Our Sales Team</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Have questions about our pricing, features, or need a custom solution? Our sales team is here to help.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <div className="lg:col-span-2">
-              <div className="bg-muted/50 p-6 rounded-lg h-full">
-                <h2 className="text-2xl font-semibold mb-4">Why Contact Sales?</h2>
-                <ul className="space-y-4">
-                  <li className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-full mt-1">
-                      <span className="text-primary text-lg">1</span>
-                    </div>
-                    <div>
-                      <h3 className="font-medium">Custom Pricing</h3>
-                      <p className="text-muted-foreground">Get custom pricing tailored to your organization's needs.</p>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-full mt-1">
-                      <span className="text-primary text-lg">2</span>
-                    </div>
-                    <div>
-                      <h3 className="font-medium">Enterprise Solutions</h3>
-                      <p className="text-muted-foreground">Learn about our enterprise-grade features and support.</p>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-full mt-1">
-                      <span className="text-primary text-lg">3</span>
-                    </div>
-                    <div>
-                      <h3 className="font-medium">Personalized Demo</h3>
-                      <p className="text-muted-foreground">Schedule a demo customized to your specific requirements.</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
+      <main className="flex-1">
+        <div className="relative overflow-hidden bg-white">
+          {/* Background Pattern - Purple Gradient */}
+          <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
+          
+          <div className="container mx-auto px-4 py-12">
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
+              <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Contact Sales</div>
+              
+              <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
+                Contact Our Sales Team
+              </h1>
+              
+              <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
+                Have questions about our pricing, features, or need a custom solution? Our sales team is here to help.
+              </p>
             </div>
 
-            <div className="lg:col-span-3">
-              <Card className="border-muted/40 shadow-md">
-                <CardHeader>
-                  <CardTitle>Get in Touch</CardTitle>
-                  <CardDescription>
-                    Fill out the form below and our sales team will get back to you within 24 hours.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Name <span className="text-destructive">*</span></Label>
-                        <Input 
-                          id="name" 
-                          name="name" 
-                          placeholder="Your full name" 
-                          value={formData.name}
-                          onChange={handleChange}
-                          required
-                        />
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+              <div className="lg:col-span-2">
+                <div className="bg-muted/50 p-6 rounded-lg h-full">
+                  <h2 className="text-2xl font-semibold mb-4">Why Contact Sales?</h2>
+                  <ul className="space-y-4">
+                    <li className="flex items-start gap-3">
+                      <div className="bg-primary/10 p-2 rounded-full mt-1">
+                        <span className="text-primary text-lg">1</span>
                       </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h3 className="font-medium">Custom Pricing</h3>
+                        <p className="text-muted-foreground">Get custom pricing tailored to your organization's needs.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="bg-primary/10 p-2 rounded-full mt-1">
+                        <span className="text-primary text-lg">2</span>
+                      </div>
+                      <div>
+                        <h3 className="font-medium">Enterprise Solutions</h3>
+                        <p className="text-muted-foreground">Learn about our enterprise-grade features and support.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="bg-primary/10 p-2 rounded-full mt-1">
+                        <span className="text-primary text-lg">3</span>
+                      </div>
+                      <div>
+                        <h3 className="font-medium">Personalized Demo</h3>
+                        <p className="text-muted-foreground">Schedule a demo customized to your specific requirements.</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="lg:col-span-3">
+                <Card className="border-muted/40 shadow-md">
+                  <CardHeader>
+                    <CardTitle>Get in Touch</CardTitle>
+                    <CardDescription>
+                      Fill out the form below and our sales team will get back to you within 24 hours.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                      <div className="grid gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="email">Email <span className="text-destructive">*</span></Label>
+                          <Label htmlFor="name">Name <span className="text-destructive">*</span></Label>
                           <Input 
-                            id="email" 
-                            name="email" 
-                            type="email" 
-                            placeholder="your.email@example.com" 
-                            value={formData.email}
+                            id="name" 
+                            name="name" 
+                            placeholder="Your full name" 
+                            value={formData.name}
                             onChange={handleChange}
                             required
                           />
                         </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="email">Email <span className="text-destructive">*</span></Label>
+                            <Input 
+                              id="email" 
+                              name="email" 
+                              type="email" 
+                              placeholder="your.email@example.com" 
+                              value={formData.email}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="phone">Phone Number</Label>
+                            <Input 
+                              id="phone" 
+                              name="phone" 
+                              type="tel" 
+                              placeholder="+1 (123) 456-7890" 
+                              value={formData.phone}
+                              onChange={handleChange}
+                            />
+                          </div>
+                        </div>
+                        
                         <div className="space-y-2">
-                          <Label htmlFor="phone">Phone Number</Label>
-                          <Input 
-                            id="phone" 
-                            name="phone" 
-                            type="tel" 
-                            placeholder="+1 (123) 456-7890" 
-                            value={formData.phone}
+                          <Label htmlFor="message">Message <span className="text-destructive">*</span></Label>
+                          <Textarea 
+                            id="message" 
+                            name="message" 
+                            placeholder="Tell us about your requirements or questions" 
+                            rows={5}
+                            value={formData.message}
                             onChange={handleChange}
+                            required
+                            className="resize-none"
                           />
                         </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="message">Message <span className="text-destructive">*</span></Label>
-                        <Textarea 
-                          id="message" 
-                          name="message" 
-                          placeholder="Tell us about your requirements or questions" 
-                          rows={5}
-                          value={formData.message}
-                          onChange={handleChange}
-                          required
-                          className="resize-none"
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label>Preferred Contact Method <span className="text-destructive">*</span></Label>
-                        <div className="flex flex-col md:flex-row gap-4">
-                          <div className="flex items-center space-x-2">
-                            <Checkbox 
-                              id="preferEmail" 
-                              checked={formData.preferEmail}
-                              onCheckedChange={(checked) => handleCheckboxChange("preferEmail", checked as boolean)}
-                            />
-                            <Label htmlFor="preferEmail" className="font-normal flex items-center gap-1.5">
-                              <Mail className="h-4 w-4" /> Email
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Checkbox 
-                              id="preferPhone" 
-                              checked={formData.preferPhone}
-                              onCheckedChange={(checked) => handleCheckboxChange("preferPhone", checked as boolean)}
-                            />
-                            <Label htmlFor="preferPhone" className="font-normal flex items-center gap-1.5">
-                              <Phone className="h-4 w-4" /> Phone
-                            </Label>
+                        
+                        <div className="space-y-2">
+                          <Label>Preferred Contact Method <span className="text-destructive">*</span></Label>
+                          <div className="flex flex-col md:flex-row gap-4">
+                            <div className="flex items-center space-x-2">
+                              <Checkbox 
+                                id="preferEmail" 
+                                checked={formData.preferEmail}
+                                onCheckedChange={(checked) => handleCheckboxChange("preferEmail", checked as boolean)}
+                              />
+                              <Label htmlFor="preferEmail" className="font-normal flex items-center gap-1.5">
+                                <Mail className="h-4 w-4" /> Email
+                              </Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Checkbox 
+                                id="preferPhone" 
+                                checked={formData.preferPhone}
+                                onCheckedChange={(checked) => handleCheckboxChange("preferPhone", checked as boolean)}
+                              />
+                              <Label htmlFor="preferPhone" className="font-normal flex items-center gap-1.5">
+                                <Phone className="h-4 w-4" /> Phone
+                              </Label>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </form>
-                </CardContent>
-                <CardFooter>
-                  <Button 
-                    type="submit" 
-                    size="lg"
-                    className="w-full md:w-auto"
-                    disabled={isSubmitting}
-                    onClick={handleSubmit}
-                  >
-                    {isSubmitting ? (
-                      <span className="flex items-center gap-2">
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                        Sending...
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-2">
-                        <Send className="h-4 w-4" />
-                        Send Message
-                      </span>
-                    )}
-                  </Button>
-                </CardFooter>
-              </Card>
+                    </form>
+                  </CardContent>
+                  <CardFooter>
+                    <Button 
+                      type="submit" 
+                      size="lg"
+                      className="w-full md:w-auto"
+                      disabled={isSubmitting}
+                      onClick={handleSubmit}
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center gap-2">
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                          Sending...
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2">
+                          <Send className="h-4 w-4" />
+                          Send Message
+                        </span>
+                      )}
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
             </div>
           </div>
         </div>
