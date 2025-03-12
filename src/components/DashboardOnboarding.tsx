@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Rocket } from "lucide-react";
@@ -55,29 +56,39 @@ export function DashboardOnboarding() {
             <p className="text-lg mb-8 text-zinc-400">Are you a talent looking for opportunities or a project builder ?</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-10">
-              {/* Talent Card */}
-              <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'talent' ? 'ring-2 ring-primary' : ''}`} onClick={() => setSelectedRole('talent')}>
-                <CardContent className="flex flex-col items-center p-6 bg-[#F2E8FF] bg-opacity-40 h-full">
-                  <div className="p-3 rounded-full bg-primary bg-opacity-10 mb-4">
-                    <GraduationCap className="h-8 w-8 text-primary" />
+              {/* Talent Card - Updated design */}
+              <Card 
+                className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'talent' ? 'ring-2 ring-primary' : ''}`} 
+                onClick={() => setSelectedRole('talent')}
+              >
+                <CardContent className="flex flex-col items-center p-6 bg-[#F5EEFF] h-full">
+                  <div className="flex justify-start w-full mb-10 mt-2">
+                    <GraduationCap className="h-10 w-10 text-[#9b87f5]" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Talent</h3>
-                  <p className="text-center text-muted-foreground">
-                    Young professional or freelancer looking for exciting projects and collaborations.
-                  </p>
+                  <div className="mt-auto text-center">
+                    <h3 className="text-xl font-semibold mb-2">Talent</h3>
+                    <p className="text-center text-muted-foreground">
+                      Young professional or freelancer looking for exciting projects and collaborations.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
               
-              {/* Entrepreneur Card */}
-              <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'entrepreneur' ? 'ring-2 ring-secondary' : ''}`} onClick={() => setSelectedRole('entrepreneur')}>
-                <CardContent className="flex flex-col items-center p-6 bg-[#F2FCE2] bg-opacity-40 h-full">
-                  <div className="p-3 rounded-full bg-secondary bg-opacity-10 mb-4">
-                    <Rocket className="h-8 w-8 text-secondary" />
+              {/* Entrepreneur Card - Updated design */}
+              <Card 
+                className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'entrepreneur' ? 'ring-2 ring-secondary' : ''}`} 
+                onClick={() => setSelectedRole('entrepreneur')}
+              >
+                <CardContent className="flex flex-col items-center p-6 bg-[#ECFDF3] h-full">
+                  <div className="flex justify-start w-full mb-10 mt-2">
+                    <Rocket className="h-10 w-10 text-[#10B981]" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Entrepreneur</h3>
-                  <p className="text-center text-muted-foreground">
-                    Startup founder or business owner looking for talented individuals to collaborate with.
-                  </p>
+                  <div className="mt-auto text-center">
+                    <h3 className="text-xl font-semibold mb-2">Entrepreneur</h3>
+                    <p className="text-center text-muted-foreground">
+                      Startup founder or business owner looking for talented individuals to collaborate with.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
