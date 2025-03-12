@@ -9,7 +9,7 @@ import { ArrowLeft, Save, UserPlus, Briefcase, GraduationCap, Globe } from "luci
 import { useToast } from "@/components/ui/use-toast";
 
 const ProfileEditPage = () => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, updateProfileCompletion } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -30,13 +30,28 @@ const ProfileEditPage = () => {
     }
   }, [isLoggedIn, navigate]);
 
-  const handleSaveProfile = () => {
-    // In a real application, you would save the profile to your backend here
-    toast({
-      title: "Profile saved",
-      description: "Your profile has been updated successfully.",
-    });
-    navigate("/dashboard");
+  const handleSaveProfile = async () => {
+    try {
+      // In a real application, you would save the profile to your backend here
+      
+      // Mark the profile as completed
+      await updateProfileCompletion(true);
+      
+      toast({
+        title: "Profil sauvegardé",
+        description: "Votre profil a été mis à jour avec succès.",
+      });
+      
+      // Navigate to dashboard
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'enregistrement du profil.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (

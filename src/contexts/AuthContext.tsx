@@ -20,6 +20,7 @@ interface UserData {
   email: string;
   createdAt: Date;
   lastLogin: Date;
+  hasCompletedProfile?: boolean;
 }
 
 type AuthContextType = {
@@ -31,6 +32,7 @@ type AuthContextType = {
   signInWithGithub: () => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  updateProfileCompletion: (completed: boolean) => Promise<void>;
   LogoutButton: React.FC;
 };
 
@@ -49,6 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       email: user.email,
       lastLogin: new Date(),
       createdAt: new Date(),
+      hasCompletedProfile: false,
     };
 
     try {
@@ -62,6 +65,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error("Error updating user data:", error);
+    }
+  };
+
+  const updateProfileCompletion = async (completed: boolean) => {
+    if (!currentUser) return;
+    
+    const userRef = doc(db, "users", currentUser.uid);
+    try {
+      await setDoc(userRef, { hasCompletedProfile: completed }, { merge: true });
+      setUserData(userData => userData ? { ...userData, hasCompletedProfile: completed } : null);
+      
+      if (completed) {
+        toast({
+          title: "Profil complété",
+          description: "Votre profil a été mis à jour avec succès",
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Erreur de mise à jour",
+        description: error.message,
+        variant: "destructive"
+      });
+      throw error;
     }
   };
 
@@ -186,6 +213,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signInWithGithub,
     signup,
     logout,
+    updateProfileCompletion,
     LogoutButton
   };
   

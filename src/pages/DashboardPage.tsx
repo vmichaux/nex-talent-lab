@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -13,7 +14,7 @@ import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
 import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
 
 const DashboardPage = () => {
-  const { isLoggedIn, currentUser } = useAuth();
+  const { isLoggedIn, currentUser, userData } = useAuth();
   const navigate = useNavigate();
   const [showWelcome, setShowWelcome] = useState(true);
   
@@ -24,17 +25,13 @@ const DashboardPage = () => {
       return;
     }
     
-    // In a real app, you would check if the user is new or has completed onboarding
-    // For now, we're using a state to toggle between views
-    // You could use localStorage or a database flag in production
-    
-    // Example: Check if user has a complete profile
-    // if (currentUser?.hasCompletedProfile) {
-    //   setShowWelcome(false);
-    // }
-  }, [isLoggedIn, navigate, currentUser]);
+    // Automatically show dashboard if the user has completed their profile
+    if (userData?.hasCompletedProfile) {
+      setShowWelcome(false);
+    }
+  }, [isLoggedIn, navigate, userData]);
 
-  // Toggle function for demo purposes - in real app would be based on profile completion
+  // Complete onboarding and show dashboard
   const handleCompleteOnboarding = () => {
     setShowWelcome(false);
   };
