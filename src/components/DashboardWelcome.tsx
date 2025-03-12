@@ -1,18 +1,20 @@
-
 import { ArrowRight, Check, UserPlus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-
 type StepProps = {
   number: number;
   title: string;
   description: string;
   icon: React.ReactNode;
   completed?: boolean;
-}
-
-const Step = ({ number, title, description, icon, completed = false }: StepProps) => (
-  <div className="flex items-start gap-4 bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100">
+};
+const Step = ({
+  number,
+  title,
+  description,
+  icon,
+  completed = false
+}: StepProps) => <div className="flex items-start gap-4 bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100">
     <div className={`flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center ${completed ? 'bg-green-100 text-green-600' : 'bg-primary/10 text-primary'}`}>
       {completed ? <Check className="h-5 w-5" /> : <span className="font-semibold">{number}</span>}
     </div>
@@ -25,38 +27,29 @@ const Step = ({ number, title, description, icon, completed = false }: StepProps
       </div>
       <p className="text-gray-600">{description}</p>
     </div>
-  </div>
-);
-
+  </div>;
 export function DashboardWelcome() {
   const navigate = useNavigate();
-  
-  const steps = [
-    {
-      number: 1,
-      title: "Complete Your Profile",
-      description: "Add your skills, experience, and portfolio items to showcase your talents.",
-      icon: <UserPlus className="h-4 w-4 text-primary" />,
-      completed: false
-    },
-    {
-      number: 2,
-      title: "Explore Projects",
-      description: "Discover projects that match your skills and interests.",
-      icon: <Lightbulb className="h-4 w-4 text-primary" />,
-      completed: false
-    },
-    {
-      number: 3,
-      title: "Connect with Teams",
-      description: "Reach out to project owners and start collaborating.",
-      icon: <ArrowRight className="h-4 w-4 text-primary" />,
-      completed: false
-    }
-  ];
-
-  return (
-    <div className="relative overflow-hidden bg-white">
+  const steps = [{
+    number: 1,
+    title: "Complete Your Profile",
+    description: "Add your skills, experience, and portfolio items to showcase your talents.",
+    icon: <UserPlus className="h-4 w-4 text-primary" />,
+    completed: false
+  }, {
+    number: 2,
+    title: "Explore Projects",
+    description: "Discover projects that match your skills and interests.",
+    icon: <Lightbulb className="h-4 w-4 text-primary" />,
+    completed: false
+  }, {
+    number: 3,
+    title: "Connect with Teams",
+    description: "Reach out to project owners and start collaborating.",
+    icon: <ArrowRight className="h-4 w-4 text-primary" />,
+    completed: false
+  }];
+  return <div className="relative overflow-hidden bg-white">
       {/* Background Pattern - Purple Gradient */}
       <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
       
@@ -71,14 +64,10 @@ export function DashboardWelcome() {
           </h1>
           
           <p className="text-lg text-gray-600 md:text-xl max-w-3xl mb-8">
-            NexTalent Lab connects emerging talents with startups and projects. 
-            Complete these steps to set up your profile and begin finding opportunities.
-          </p>
+        </p>
           
           <div className="w-full max-w-3xl space-y-4 mb-10">
-            {steps.map((step) => (
-              <Step key={step.number} {...step} />
-            ))}
+            {steps.map(step => <Step key={step.number} {...step} />)}
           </div>
           
           <Button size="lg" onClick={() => navigate('/profile/edit')} className="gap-2">
@@ -128,6 +117,5 @@ export function DashboardWelcome() {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
