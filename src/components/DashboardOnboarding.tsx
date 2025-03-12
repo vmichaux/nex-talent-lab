@@ -1,14 +1,17 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SimplifiedHeader } from "./SimplifiedHeader";
+
 export function DashboardOnboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"talent" | "entrepreneur" | null>(null);
   const totalSteps = 2;
   const navigate = useNavigate();
+
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
@@ -20,6 +23,7 @@ export function DashboardOnboarding() {
       navigate("/login");
     }
   };
+
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
@@ -27,6 +31,7 @@ export function DashboardOnboarding() {
       navigate("/");
     }
   };
+
   const getStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -46,19 +51,19 @@ export function DashboardOnboarding() {
             </Button>
           </div>;
       case 2:
-        return <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
+        return <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
             <h1 className="text-4xl font-bold mb-6">Choose Your Role</h1>
-            <p className="text-lg mb-8 text-zinc-400">Are you a talent looking for opportunities or a project builder ?</p>
+            <p className="text-lg mb-8 text-zinc-400">Are you a talent looking for opportunities or a project builder?</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-10">
-              {/* Talent Card - Updated design */}
+              {/* Talent Card - Updated dimensions and spacing */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'talent' ? 'ring-2 ring-primary' : ''}`} onClick={() => setSelectedRole('talent')}>
-                <CardContent className="flex flex-col items-center p-6 bg-[#F5EEFF] h-full px-[10px] py-[22px] rounded-none mx-0 my-[2px]">
-                  <div className="flex justify-start w-full mb-10 mt-2">
-                    <GraduationCap className="h-10 w-10 text-[#9b87f5]" />
+                <CardContent className="flex flex-col items-center bg-[#F5EEFF] h-[150px] px-6 py-4">
+                  <div className="flex justify-start w-full mb-4">
+                    <GraduationCap className="h-8 w-8 text-[#9b87f5]" />
                   </div>
-                  <div className="mt-auto text-center">
-                    <h3 className="text-xl font-semibold mb-2">Talent</h3>
+                  <div className="text-center">
+                    <h3 className="text-xl font-semibold mb-1">Talent</h3>
                     <p className="text-center text-muted-foreground">
                       Young professional or freelancer looking for exciting projects and collaborations.
                     </p>
@@ -66,14 +71,14 @@ export function DashboardOnboarding() {
                 </CardContent>
               </Card>
               
-              {/* Entrepreneur Card - Updated design */}
+              {/* Entrepreneur Card - Updated dimensions and spacing */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'entrepreneur' ? 'ring-2 ring-secondary' : ''}`} onClick={() => setSelectedRole('entrepreneur')}>
-                <CardContent className="flex flex-col items-center p-6 bg-[#ECFDF3] h-full">
-                  <div className="flex justify-start w-full mb-10 mt-2">
-                    <Rocket className="h-10 w-10 text-[#10B981]" />
+                <CardContent className="flex flex-col items-center bg-[#ECFDF3] h-[150px] px-6 py-4">
+                  <div className="flex justify-start w-full mb-4">
+                    <Rocket className="h-8 w-8 text-[#10B981]" />
                   </div>
-                  <div className="mt-auto text-center">
-                    <h3 className="text-xl font-semibold mb-2">Entrepreneur</h3>
+                  <div className="text-center">
+                    <h3 className="text-xl font-semibold mb-1">Entrepreneur</h3>
                     <p className="text-center text-muted-foreground">
                       Startup founder or business owner looking for talented individuals to collaborate with.
                     </p>
@@ -90,6 +95,7 @@ export function DashboardOnboarding() {
         return null;
     }
   };
+
   return <>
       <SimplifiedHeader currentStep={currentStep} totalSteps={totalSteps} onBackClick={handleBack} />
       <div className="min-h-[calc(100vh-75px)] flex flex-col justify-center items-center p-6 py-16 bg-white">
