@@ -227,7 +227,7 @@ const ExplorePage = () => {
             </div>
 
             {/* What Users Say Section */}
-            <div className="pt-16">
+            <div className="pt-16 py-[16px]">
               <TestimonialSection />
             </div>
 
