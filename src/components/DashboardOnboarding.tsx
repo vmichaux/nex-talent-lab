@@ -71,7 +71,7 @@ export function DashboardOnboarding() {
                     <Rocket className="h-8 w-8 text-[#10B981]" />
                   </div>
                   <div className="mt-auto text-center">
-                    <h3 className="text-xl font-semibold mb-1">Builders</h3>
+                    <h3 className="text-xl font-semibold mb-1">Builder</h3>
                     <p className="text-center text-muted-foreground">Project builder, startup founder, business owner or just someone with an idea, looking for talented individuals to collaborate with.</p>
                   </div>
                 </CardContent>
