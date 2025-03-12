@@ -4,13 +4,11 @@ import { GraduationCap, Rocket, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SimplifiedHeader } from "./SimplifiedHeader";
-
 export function DashboardOnboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"talent" | "entrepreneur" | "both" | null>(null);
   const totalSteps = 2;
   const navigate = useNavigate();
-
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
@@ -18,12 +16,10 @@ export function DashboardOnboarding() {
       // Save the selected role before navigating away
       if (selectedRole) {
         localStorage.setItem("userRole", selectedRole);
-        // Navigate to signup with a query parameter to indicate coming from onboarding
-        navigate(`/signup?from=onboarding&role=${selectedRole}`);
       }
+      navigate("/login");
     }
   };
-
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
@@ -31,7 +27,6 @@ export function DashboardOnboarding() {
       navigate("/");
     }
   };
-
   const getStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -104,7 +99,6 @@ export function DashboardOnboarding() {
         return null;
     }
   };
-
   return <>
       <SimplifiedHeader currentStep={currentStep} totalSteps={totalSteps} onBackClick={handleBack} />
       <div className="min-h-[calc(100vh-75px)] flex flex-col justify-center items-center p-6 py-16 bg-white">

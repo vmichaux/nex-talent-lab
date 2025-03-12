@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Github, LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,18 +34,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const location = useLocation();
   const { login, signInWithGoogle, signInWithGithub } = useAuth();
-  
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const fromOnboarding = queryParams.get('from') === 'onboarding';
-    const role = queryParams.get('role');
-    
-    if (fromOnboarding && role) {
-      navigate(`/signup?from=onboarding&role=${role}`);
-    }
-  }, [location, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

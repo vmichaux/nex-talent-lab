@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, User, Github, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,28 +16,7 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const location = useLocation();
   const { signup, signInWithGoogle, signInWithGithub } = useAuth();
-  
-  const queryParams = new URLSearchParams(location.search);
-  const fromOnboarding = queryParams.get('from') === 'onboarding';
-  const selectedRole = queryParams.get('role');
-
-  const getWelcomeMessage = () => {
-    if (fromOnboarding && selectedRole) {
-      switch (selectedRole) {
-        case 'talent':
-          return "Welcome, Talent! Create your profile to showcase your skills.";
-        case 'entrepreneur':
-          return "Welcome, Builder! Create your profile to find the talent you need.";
-        case 'both':
-          return "Welcome, Creative Builder! Create your profile to connect and collaborate.";
-        default:
-          return "Create your account to join NexTalent Lab";
-      }
-    }
-    return "Start your journey with NexTalent Lab";
-  };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,9 +26,7 @@ export default function SignupPage() {
       await signup(email, password);
       toast({
         title: "Account created successfully!",
-        description: fromOnboarding 
-          ? "Let's set up your profile based on your selected role." 
-          : "Welcome to NexTalent Lab. Let's set up your profile.",
+        description: "Welcome to NexTalent Lab. Let's set up your profile.",
       });
       navigate("/dashboard");
     } catch (error) {
@@ -65,9 +43,7 @@ export default function SignupPage() {
       await signInWithGoogle();
       toast({
         title: "Account created successfully!",
-        description: fromOnboarding 
-          ? "Let's set up your profile based on your selected role." 
-          : "Welcome to NexTalent Lab. Let's set up your profile.",
+        description: "Welcome to NexTalent Lab. Let's set up your profile.",
       });
       navigate("/dashboard");
     } catch (error) {
@@ -84,9 +60,7 @@ export default function SignupPage() {
       await signInWithGithub();
       toast({
         title: "Account created successfully!",
-        description: fromOnboarding 
-          ? "Let's set up your profile based on your selected role." 
-          : "Welcome to NexTalent Lab. Let's set up your profile.",
+        description: "Welcome to NexTalent Lab. Let's set up your profile.",
       });
       navigate("/dashboard");
     } catch (error) {
@@ -101,7 +75,7 @@ export default function SignupPage() {
     <div>
       <div className="mb-8 text-center">
         <h1 className="text-2xl font-bold">Create your account</h1>
-        <p className="text-gray-500 mt-1">{getWelcomeMessage()}</p>
+        <p className="text-gray-500 mt-1">Start your journey with NexTalent Lab</p>
       </div>
 
       <form onSubmit={handleSignup} className="space-y-4">
@@ -210,14 +184,10 @@ export default function SignupPage() {
       </div>
 
       <p className="mt-8 text-center text-sm text-gray-500">
-        {!fromOnboarding && (
-          <>
-            Already have an account?{" "}
-            <Link to="/login" className="font-medium text-primary hover:underline">
-              Log in
-            </Link>
-          </>
-        )}
+        Already have an account?{" "}
+        <Link to="/login" className="font-medium text-primary hover:underline">
+          Log in
+        </Link>
       </p>
     </div>
   );
