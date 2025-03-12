@@ -21,7 +21,7 @@ import MessagesPage from "./pages/MessagesPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
 import ProfileEditPage from "./pages/ProfileEditPage";
 import { DashboardOnboarding } from "./components/DashboardOnboarding";
-import ChatbotPage from "./pages/ChatbotPage";
+import { ChatWidget } from "./components/ChatWidget";
 
 const queryClient = new QueryClient();
 
@@ -45,7 +45,6 @@ const App = () => (
             {/* Special route for onboarding without Navbar */}
             <Route path="/onboarding" element={<DashboardOnboarding />} />
             <Route path="/messages" element={<MessagesPage />} />
-            <Route path="/chat" element={<ChatbotPage />} />
             <Route path="/profile/edit" element={<ProfileEditPage />} />
             <Route element={<AuthLayout />}>
               <Route path="/login" element={<LoginPage />} />
@@ -53,6 +52,7 @@ const App = () => (
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <ChatWidget />
         </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>
