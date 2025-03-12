@@ -182,7 +182,7 @@ export default function ContactSalesPage() {
                         </div>
                         
                         <div className="space-y-2">
-                          <Label className="px-[4px]">Preferred Contact Method <span className="text-destructive">*</span></Label>
+                          <Label className="px-[2px]">Preferred Contact Method <span className="text-destructive">*</span></Label>
                           <div className="flex flex-col md:flex-row gap-4">
                             <div className="flex items-center space-x-2">
                               <Checkbox id="preferEmail" checked={formData.preferEmail} onCheckedChange={checked => handleCheckboxChange("preferEmail", checked as boolean)} />
