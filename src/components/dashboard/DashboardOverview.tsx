@@ -18,12 +18,12 @@ export function DashboardOverview() {
             <div className="bg-primary/20 p-2 rounded-full">
               <Briefcase className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle className="text-lg">Projets</CardTitle>
+            <CardTitle className="text-lg">Projects</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">{stats.projects}</div>
-          <p className="text-sm text-muted-foreground">Projets actifs</p>
+          <p className="text-sm text-muted-foreground">Active Projects</p>
         </CardContent>
       </Card>
       
@@ -38,7 +38,7 @@ export function DashboardOverview() {
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">{stats.unreadMessages}</div>
-          <p className="text-sm text-muted-foreground">Messages non lus</p>
+          <p className="text-sm text-muted-foreground">Unread Messages</p>
         </CardContent>
       </Card>
       
@@ -48,12 +48,12 @@ export function DashboardOverview() {
             <div className="bg-primary/20 p-2 rounded-full">
               <Calendar className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle className="text-lg">Événements</CardTitle>
+            <CardTitle className="text-lg">Events</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
           <div className="text-3xl font-bold">{stats.upcomingEvents}</div>
-          <p className="text-sm text-muted-foreground">Événements à venir</p>
+          <p className="text-sm text-muted-foreground">Upcoming Events</p>
         </CardContent>
       </Card>
     </div>

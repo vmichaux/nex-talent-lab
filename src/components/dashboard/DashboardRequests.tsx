@@ -1,4 +1,3 @@
-
 import { UserPlus, ArrowRight, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -6,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 
-// Sample data for collaboration requests - in a real app, this would come from Firebase
 const requests = [
   {
     id: 1,
@@ -17,32 +15,32 @@ const requests = [
       initials: "TL"
     },
     project: "Eco-Friendly Mobile App",
-    message: "Je souhaite rejoindre votre équipe en tant que designer UX. J'ai 5 ans d'expérience dans la conception d'applications durables.",
-    createdAt: "Il y a 1 jour"
+    message: "I'd like to join your team as a UX designer. I have 5 years of experience in designing sustainable applications.",
+    createdAt: "1 day ago"
   },
   {
     id: 2,
     user: {
       name: "Marie Dubois",
-      role: "Développeur Frontend",
+      role: "Frontend Developer",
       avatar: "/placeholder.svg",
       initials: "MD"
     },
     project: "Community Garden Platform",
-    message: "Passionnée de jardinage urbain et développeuse React, je serais ravie de contribuer à ce projet.",
-    createdAt: "Il y a 3 jours"
+    message: "Passionate about urban gardening and React development, I'd love to contribute to this project.",
+    createdAt: "3 days ago"
   },
   {
     id: 3,
     user: {
       name: "Alexandre Martin",
-      role: "Spécialiste VR",
+      role: "VR Specialist",
       avatar: "/placeholder.svg",
       initials: "AM"
     },
     project: "Educational VR Experience",
-    message: "Expert en réalité virtuelle éducative avec un background en pédagogie. Disponible immédiatement.",
-    createdAt: "Il y a 1 semaine"
+    message: "Expert in educational virtual reality with a background in pedagogy. Available immediately.",
+    createdAt: "1 week ago"
   }
 ];
 
@@ -54,10 +52,10 @@ export function DashboardRequests() {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold flex items-center gap-2">
           <UserPlus className="h-5 w-5 text-primary" />
-          Demandes de collaboration
+          Collaboration Requests
         </h2>
         <Button variant="outline" className="gap-1" onClick={() => navigate('/requests')}>
-          Voir tout <ArrowRight className="h-4 w-4" />
+          View All <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
       
@@ -91,11 +89,11 @@ export function DashboardRequests() {
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" className="gap-1">
                         <X className="h-4 w-4" />
-                        Refuser
+                        Decline
                       </Button>
                       <Button size="sm" className="gap-1">
                         <Check className="h-4 w-4" />
-                        Accepter
+                        Accept
                       </Button>
                     </div>
                   </div>

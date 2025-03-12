@@ -1,11 +1,10 @@
-
 import { MessageSquare, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 
-// Sample data for messages - in a real app, this would come from Firebase
+// Update the sample data
 const messages = [
   {
     id: 1,
@@ -14,8 +13,8 @@ const messages = [
       avatar: "/placeholder.svg",
       initials: "EW"
     },
-    preview: "J'ai téléchargé les fichiers de conception pour l'application éco. Dites-moi ce que vous en pensez !",
-    timestamp: "Il y a 2 heures",
+    preview: "I've uploaded the design files for the eco app. Let me know what you think!",
+    timestamp: "2 hours ago",
     unread: true,
     project: "Eco-Friendly Mobile App"
   },
@@ -26,8 +25,8 @@ const messages = [
       avatar: "/placeholder.svg",
       initials: "MR"
     },
-    preview: "Pouvons-nous planifier un appel pour discuter du calendrier de la plateforme de jardinage ?",
-    timestamp: "Hier",
+    preview: "Can we schedule a call to discuss the garden platform timeline?",
+    timestamp: "Yesterday",
     unread: false,
     project: "Community Garden Platform"
   },
@@ -38,8 +37,8 @@ const messages = [
       avatar: "/placeholder.svg",
       initials: "SC"
     },
-    preview: "Les simulations VR sont prêtes à être testées. Voulez-vous les essayer ?",
-    timestamp: "Il y a 2 jours",
+    preview: "The VR simulations are ready for testing. Would you like to try them?",
+    timestamp: "2 days ago",
     unread: true,
     project: "Educational VR Experience"
   }
@@ -53,10 +52,10 @@ export function DashboardMessages() {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-primary" />
-          Messages récents
+          Recent Messages
         </h2>
         <Button variant="outline" className="gap-1" onClick={() => navigate('/messages')}>
-          Voir tout <ArrowRight className="h-4 w-4" />
+          View All <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
       

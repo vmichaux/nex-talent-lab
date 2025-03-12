@@ -1,4 +1,3 @@
-
 import { Briefcase, ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -44,10 +43,10 @@ export function DashboardProjects() {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold flex items-center gap-2">
           <Briefcase className="h-5 w-5 text-primary" />
-          Projets actifs
+          Active Projects
         </h2>
         <Button variant="outline" className="gap-1" onClick={() => navigate('/explore-projects')}>
-          Voir tout <ArrowRight className="h-4 w-4" />
+          View All <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
       
@@ -61,7 +60,7 @@ export function DashboardProjects() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Avancement</span>
+                  <span className="text-gray-600">Progress</span>
                   <span className="font-medium">{project.progress}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
@@ -75,7 +74,7 @@ export function DashboardProjects() {
               <div className="flex justify-between items-center">
                 <div className="text-xs text-gray-600">
                   <Clock className="inline-block h-3 w-3 mr-1" />
-                  Date limite: {project.deadline}
+                  Deadline: {project.deadline}
                 </div>
                 <Badge className={
                   project.status === "In Progress" ? "bg-blue-100 text-blue-800 hover:bg-blue-100" :
@@ -87,7 +86,7 @@ export function DashboardProjects() {
               </div>
             </CardContent>
             <CardFooter className="border-t pt-4">
-              <Button variant="default" className="w-full">Voir les détails</Button>
+              <Button variant="default" className="w-full">View Details</Button>
             </CardFooter>
           </Card>
         ))}
