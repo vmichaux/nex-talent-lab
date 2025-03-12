@@ -3,12 +3,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBwoCsgaPMLwfuXiIYclx5B4Hn0FwZAqqE",
-  authDomain: "upstart-a47be.firebaseapp.com",
-  projectId: "upstart-a47be",
-  storageBucket: "upstart-a47be.firebasestorage.app",
-  messagingSenderId: "111399919141",
-  appId: "1:111399919141:web:0ee8ce76694cd33f11e9cc"
+  apiKey: "AIzaSyAaDgZe8xVVwANQfkRoGcBW9fSuhieQ2nw",
+  authDomain: "nextalent-lab-final.firebaseapp.com",
+  projectId: "nextalent-lab-final",
+  storageBucket: "nextalent-lab-final.firebasestorage.app",
+  messagingSenderId: "409548241234",
+  appId: "1:409548241234:web:d7610e10f1a77e7663e28b"
 };
 
 // Initialize Firebase
