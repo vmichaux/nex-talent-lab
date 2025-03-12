@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -9,77 +8,70 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 // Fake message data
-const fakeMessages = [
-  {
-    id: 1,
-    sender: {
-      name: "Sarah Johnson",
-      avatar: "/placeholder.svg",
-      initials: "SJ",
-    },
-    unread: true,
-    lastMessage: "Hi there! I saw your profile and I'm interested in collaborating on your eco-friendly app project.",
-    timestamp: "10:30 AM",
-    project: "Eco App",
+const fakeMessages = [{
+  id: 1,
+  sender: {
+    name: "Sarah Johnson",
+    avatar: "/placeholder.svg",
+    initials: "SJ"
   },
-  {
-    id: 2,
-    sender: {
-      name: "Michael Chen",
-      avatar: "/placeholder.svg",
-      initials: "MC",
-    },
-    unread: false,
-    lastMessage: "Thanks for your feedback on the design. I've made the changes you suggested.",
-    timestamp: "Yesterday",
-    project: "Portfolio Website",
+  unread: true,
+  lastMessage: "Hi there! I saw your profile and I'm interested in collaborating on your eco-friendly app project.",
+  timestamp: "10:30 AM",
+  project: "Eco App"
+}, {
+  id: 2,
+  sender: {
+    name: "Michael Chen",
+    avatar: "/placeholder.svg",
+    initials: "MC"
   },
-  {
-    id: 3,
-    sender: {
-      name: "Alex Rodriguez",
-      avatar: "/placeholder.svg",
-      initials: "AR",
-    },
-    unread: true,
-    lastMessage: "When are you available for a quick call to discuss the project timeline?",
-    timestamp: "Monday",
-    project: "Mobile App",
+  unread: false,
+  lastMessage: "Thanks for your feedback on the design. I've made the changes you suggested.",
+  timestamp: "Yesterday",
+  project: "Portfolio Website"
+}, {
+  id: 3,
+  sender: {
+    name: "Alex Rodriguez",
+    avatar: "/placeholder.svg",
+    initials: "AR"
   },
-  {
-    id: 4,
-    sender: {
-      name: "Emma Wilson",
-      avatar: "/placeholder.svg",
-      initials: "EW",
-    },
-    unread: false,
-    lastMessage: "I've shared the project files with you. Let me know if you have any questions!",
-    timestamp: "Last week",
-    project: "Logo Design",
+  unread: true,
+  lastMessage: "When are you available for a quick call to discuss the project timeline?",
+  timestamp: "Monday",
+  project: "Mobile App"
+}, {
+  id: 4,
+  sender: {
+    name: "Emma Wilson",
+    avatar: "/placeholder.svg",
+    initials: "EW"
   },
-];
+  unread: false,
+  lastMessage: "I've shared the project files with you. Let me know if you have any questions!",
+  timestamp: "Last week",
+  project: "Logo Design"
+}];
 
 // Filtered message lists
 const unreadMessages = fakeMessages.filter(message => message.unread);
 const projectMessages = fakeMessages.filter(message => message.project);
-const archivedMessages = [
-  {
-    id: 5,
-    sender: {
-      name: "David Lee",
-      avatar: "/placeholder.svg",
-      initials: "DL",
-    },
-    unread: false,
-    lastMessage: "Project completed successfully. Thanks for your collaboration!",
-    timestamp: "March 15",
-    project: "Website Redesign",
+const archivedMessages = [{
+  id: 5,
+  sender: {
+    name: "David Lee",
+    avatar: "/placeholder.svg",
+    initials: "DL"
   },
-];
-
-const MessageItem = ({ message }) => (
-  <div className={`p-4 border-b hover:bg-gray-50 cursor-pointer transition-colors ${message.unread ? 'bg-primary/5' : ''}`}>
+  unread: false,
+  lastMessage: "Project completed successfully. Thanks for your collaboration!",
+  timestamp: "March 15",
+  project: "Website Redesign"
+}];
+const MessageItem = ({
+  message
+}) => <div className={`p-4 border-b hover:bg-gray-50 cursor-pointer transition-colors ${message.unread ? 'bg-primary/5' : ''}`}>
     <div className="flex items-start gap-3">
       <Avatar className="h-10 w-10">
         <AvatarImage src={message.sender.avatar} alt={message.sender.name} />
@@ -94,36 +86,30 @@ const MessageItem = ({ message }) => (
           <span className="text-xs text-gray-500">{message.timestamp}</span>
         </div>
         <p className="text-sm text-gray-600 truncate">{message.lastMessage}</p>
-        {message.project && (
-          <div className="mt-1">
+        {message.project && <div className="mt-1">
             <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20">
               {message.project}
             </Badge>
-          </div>
-        )}
+          </div>}
       </div>
     </div>
-  </div>
-);
-
-const EmptyState = ({ message }) => (
-  <div className="text-center py-12">
+  </div>;
+const EmptyState = ({
+  message
+}) => <div className="text-center py-12">
     <p className="text-gray-600">{message}</p>
-  </div>
-);
-
+  </div>;
 const MessagesPage = () => {
-  const { isLoggedIn } = useAuth();
+  const {
+    isLoggedIn
+  } = useAuth();
   const navigate = useNavigate();
-  
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");
     }
   }, [isLoggedIn, navigate]);
-
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
         <div className="relative overflow-hidden bg-white">
@@ -131,7 +117,7 @@ const MessagesPage = () => {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10">
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
               <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
                 Messages
               </div>
@@ -173,46 +159,26 @@ const MessagesPage = () => {
 
                 <TabsContent value="all" className="max-h-[600px] overflow-y-auto">
                   <div className="divide-y">
-                    {fakeMessages.map(message => (
-                      <MessageItem key={message.id} message={message} />
-                    ))}
+                    {fakeMessages.map(message => <MessageItem key={message.id} message={message} />)}
                   </div>
                 </TabsContent>
                 
                 <TabsContent value="unread" className="max-h-[600px] overflow-y-auto">
-                  {unreadMessages.length > 0 ? (
-                    <div className="divide-y">
-                      {unreadMessages.map(message => (
-                        <MessageItem key={message.id} message={message} />
-                      ))}
-                    </div>
-                  ) : (
-                    <EmptyState message="No unread messages." />
-                  )}
+                  {unreadMessages.length > 0 ? <div className="divide-y">
+                      {unreadMessages.map(message => <MessageItem key={message.id} message={message} />)}
+                    </div> : <EmptyState message="No unread messages." />}
                 </TabsContent>
                 
                 <TabsContent value="projects" className="max-h-[600px] overflow-y-auto">
-                  {projectMessages.length > 0 ? (
-                    <div className="divide-y">
-                      {projectMessages.map(message => (
-                        <MessageItem key={message.id} message={message} />
-                      ))}
-                    </div>
-                  ) : (
-                    <EmptyState message="No project messages." />
-                  )}
+                  {projectMessages.length > 0 ? <div className="divide-y">
+                      {projectMessages.map(message => <MessageItem key={message.id} message={message} />)}
+                    </div> : <EmptyState message="No project messages." />}
                 </TabsContent>
                 
                 <TabsContent value="archived" className="max-h-[600px] overflow-y-auto">
-                  {archivedMessages.length > 0 ? (
-                    <div className="divide-y">
-                      {archivedMessages.map(message => (
-                        <MessageItem key={message.id} message={message} />
-                      ))}
-                    </div>
-                  ) : (
-                    <EmptyState message="No archived messages." />
-                  )}
+                  {archivedMessages.length > 0 ? <div className="divide-y">
+                      {archivedMessages.map(message => <MessageItem key={message.id} message={message} />)}
+                    </div> : <EmptyState message="No archived messages." />}
                 </TabsContent>
               </Tabs>
             </div>
@@ -220,8 +186,6 @@ const MessagesPage = () => {
         </div>
       </main>
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default MessagesPage;
