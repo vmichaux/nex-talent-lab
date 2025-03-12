@@ -2,6 +2,7 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+
 export function CTASection() {
   return <section className="py-16">
       <div className="container mx-auto px-4">
@@ -12,7 +13,7 @@ export function CTASection() {
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link to="/onboarding">
                 <Button size="lg" className="bg-primary text-white hover:bg-primary/90 w-full sm:w-auto">
-                  Get Started
+                  Get Started Today
                 </Button>
               </Link>
               <Link to="/explore">
