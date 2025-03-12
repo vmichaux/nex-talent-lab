@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAaDgZe8xVVwANQfkRoGcBW9fSuhieQ2nw",
@@ -16,4 +16,30 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+// Helper functions for Firebase operations
+export const getProjects = async () => {
+  const projectsCollection = collection(db, "projects");
+  const projectsQuery = query(projectsCollection, orderBy("createdAt", "desc"));
+  const projectsSnapshot = await getDocs(projectsQuery);
+  return projectsSnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+};
+
+export const getUserProjects = async (userId: string) => {
+  const projectsCollection = collection(db, "projects");
+  const projectsQuery = query(
+    projectsCollection, 
+    where("userId", "==", userId),
+    orderBy("createdAt", "desc")
+  );
+  const projectsSnapshot = await getDocs(projectsQuery);
+  return projectsSnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+};
+
 export default app;

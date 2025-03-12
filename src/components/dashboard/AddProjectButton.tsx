@@ -15,28 +15,83 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function AddProjectButton() {
   const [open, setOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
+  const [projectCategory, setProjectCategory] = useState("Technology");
+  const [projectDuration, setProjectDuration] = useState("3 months");
+  const [projectDeadline, setProjectDeadline] = useState("");
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Set default deadline to 3 months from now
+  useState(() => {
+    const date = new Date();
+    date.setMonth(date.getMonth() + 3);
+    setProjectDeadline(date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Here you would typically save the project to Firebase
-    console.log("Creating project:", { name: projectName, description: projectDescription });
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "You must be logged in to create a project.",
+        variant: "destructive"
+      });
+      return;
+    }
     
-    toast({
-      title: "Project created",
-      description: "Your new project has been successfully created.",
-    });
-    
-    // Reset form and close dialog
-    setProjectName("");
-    setProjectDescription("");
-    setOpen(false);
+    try {
+      setLoading(true);
+      
+      // Create new project in Firestore
+      const projectRef = await addDoc(collection(db, "projects"), {
+        title: projectName,
+        description: projectDescription,
+        category: projectCategory,
+        skills: ["React", "UI/UX Design", "Firebase"],
+        deadline: projectDeadline,
+        duration: projectDuration,
+        owner: user.displayName || user.email,
+        featured: false,
+        status: "Open",
+        applicants: 0,
+        createdAt: serverTimestamp()
+      });
+      
+      toast({
+        title: "Project created",
+        description: "Your new project has been successfully created."
+      });
+      
+      // Reset form and close dialog
+      setProjectName("");
+      setProjectDescription("");
+      setOpen(false);
+      
+      // Navigate to explore projects page to see the new project
+      navigate("/explore-projects");
+      
+    } catch (error) {
+      console.error("Error creating project:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create project. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -67,6 +122,26 @@ export function AddProjectButton() {
               />
             </div>
             <div className="grid gap-2">
+              <Label htmlFor="project-category">Category</Label>
+              <Input
+                id="project-category"
+                value={projectCategory}
+                onChange={(e) => setProjectCategory(e.target.value)}
+                placeholder="e.g., Technology, Education, Health"
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="project-duration">Duration</Label>
+              <Input
+                id="project-duration"
+                value={projectDuration}
+                onChange={(e) => setProjectDuration(e.target.value)}
+                placeholder="e.g., 3 months, 6 weeks"
+                required
+              />
+            </div>
+            <div className="grid gap-2">
               <Label htmlFor="project-description">Project description</Label>
               <Textarea
                 id="project-description"
@@ -82,7 +157,9 @@ export function AddProjectButton() {
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit">Create project</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Creating..." : "Create project"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
