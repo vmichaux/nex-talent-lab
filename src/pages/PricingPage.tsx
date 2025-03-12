@@ -2,6 +2,9 @@
 import { Navbar } from "@/components/Navbar";
 import { PricingSection } from "@/components/PricingSection";
 import { Footer } from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
 const PricingPage = () => {
   return (
@@ -28,6 +31,19 @@ const PricingPage = () => {
               </p>
             </div>
             <PricingSection />
+            
+            {/* New CTA section after pricing */}
+            <div className="mt-20 text-center">
+              <h2 className="text-2xl md:text-3xl font-bold mb-6">Ready to start your journey?</h2>
+              <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+                Create your profile today and connect with talented professionals or find exciting projects.
+              </p>
+              <Link to="/onboarding">
+                <Button size="lg" className="px-8 gap-2">
+                  Get Started <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </main>
