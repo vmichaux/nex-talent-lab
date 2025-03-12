@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { 
   User,
@@ -78,13 +79,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (completed) {
         toast({
-          title: "Profil complété",
-          description: "Votre profil a été mis à jour avec succès",
+          title: "Profile completed",
+          description: "Your profile has been successfully updated",
         });
       }
     } catch (error: any) {
       toast({
-        title: "Erreur de mise à jour",
+        title: "Update error",
         description: error.message,
         variant: "destructive"
       });
@@ -111,16 +112,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       await updateUserData(result.user);
-      toast({
-        title: "Compte créé avec succès",
-        description: "Bienvenue sur NexTalent Lab!",
-      });
+      // Toast will be handled by the component
     } catch (error: any) {
-      toast({
-        title: "Erreur d'inscription",
-        description: error.message,
-        variant: "destructive"
-      });
+      // Let the component handle the error and toast
       throw error;
     }
   };
@@ -128,12 +122,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      // Toast will be handled by the component
     } catch (error: any) {
-      toast({
-        title: "Login failed",
-        description: error.message,
-        variant: "destructive"
-      });
+      // Let the component handle the error and toast
       throw error;
     }
   };
@@ -142,12 +133,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
+      // Toast will be handled by the component
     } catch (error: any) {
-      toast({
-        title: "Google sign-in failed",
-        description: error.message,
-        variant: "destructive"
-      });
+      // Let the component handle the error and toast
       throw error;
     }
   };
@@ -156,12 +144,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const provider = new GithubAuthProvider();
       await signInWithPopup(auth, provider);
+      // Toast will be handled by the component
     } catch (error: any) {
-      toast({
-        title: "GitHub sign-in failed",
-        description: error.message,
-        variant: "destructive"
-      });
+      // Let the component handle the error and toast
       throw error;
     }
   };
@@ -171,12 +156,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await signOut(auth);
       setUserData(null);
       toast({
-        title: "Déconnexion réussie",
-        description: "Vous avez été déconnecté de votre compte",
+        title: "Logged out successfully",
+        description: "You have been logged out of your account",
       });
     } catch (error: any) {
       toast({
-        title: "Erreur de déconnexion",
+        title: "Logout error",
         description: error.message,
         variant: "destructive"
       });
