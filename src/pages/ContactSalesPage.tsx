@@ -1,16 +1,8 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription, 
-  CardContent, 
-  CardFooter 
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast";
 import { Mail, Phone, Send } from "lucide-react";
-
 export default function ContactSalesPage() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,26 +21,26 @@ export default function ContactSalesPage() {
     preferEmail: true,
     preferPhone: false
   });
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
+    const {
+      name,
+      value
+    } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
   };
-
   const handleCheckboxChange = (field: string, checked: boolean) => {
     setFormData(prev => ({
       ...prev,
       [field]: checked
     }));
   };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Form validation
     if (!formData.name || !formData.email || !formData.message) {
       toast({
@@ -78,10 +69,10 @@ export default function ContactSalesPage() {
       console.log("Form submitted:", formData);
       toast({
         title: "Message sent!",
-        description: "Our sales team will contact you shortly.",
+        description: "Our sales team will contact you shortly."
       });
       setIsSubmitting(false);
-      
+
       // Reset form
       setFormData({
         name: "",
@@ -93,9 +84,7 @@ export default function ContactSalesPage() {
       });
     }, 1500);
   };
-
-  return (
-    <div className="flex flex-col min-h-screen">
+  return <div className="flex flex-col min-h-screen">
       <Navbar />
       
       <main className="flex-1">
@@ -105,7 +94,7 @@ export default function ContactSalesPage() {
           
           <div className="container mx-auto px-4 py-12">
             <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
-              <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Contact Sales</div>
+              <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Curious about our Solution? </div>
               
               <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
                 Contact Our Sales Team
@@ -165,75 +154,36 @@ export default function ContactSalesPage() {
                       <div className="grid gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="name">Name <span className="text-destructive">*</span></Label>
-                          <Input 
-                            id="name" 
-                            name="name" 
-                            placeholder="Your full name" 
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                          />
+                          <Input id="name" name="name" placeholder="Your full name" value={formData.name} onChange={handleChange} required />
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="email">Email <span className="text-destructive">*</span></Label>
-                            <Input 
-                              id="email" 
-                              name="email" 
-                              type="email" 
-                              placeholder="your.email@example.com" 
-                              value={formData.email}
-                              onChange={handleChange}
-                              required
-                            />
+                            <Input id="email" name="email" type="email" placeholder="your.email@example.com" value={formData.email} onChange={handleChange} required />
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="phone">Phone Number</Label>
-                            <Input 
-                              id="phone" 
-                              name="phone" 
-                              type="tel" 
-                              placeholder="+1 (123) 456-7890" 
-                              value={formData.phone}
-                              onChange={handleChange}
-                            />
+                            <Input id="phone" name="phone" type="tel" placeholder="+1 (123) 456-7890" value={formData.phone} onChange={handleChange} />
                           </div>
                         </div>
                         
                         <div className="space-y-2">
                           <Label htmlFor="message">Message <span className="text-destructive">*</span></Label>
-                          <Textarea 
-                            id="message" 
-                            name="message" 
-                            placeholder="Tell us about your requirements or questions" 
-                            rows={5}
-                            value={formData.message}
-                            onChange={handleChange}
-                            required
-                            className="resize-none"
-                          />
+                          <Textarea id="message" name="message" placeholder="Tell us about your requirements or questions" rows={5} value={formData.message} onChange={handleChange} required className="resize-none" />
                         </div>
                         
                         <div className="space-y-2">
                           <Label>Preferred Contact Method <span className="text-destructive">*</span></Label>
                           <div className="flex flex-col md:flex-row gap-4">
                             <div className="flex items-center space-x-2">
-                              <Checkbox 
-                                id="preferEmail" 
-                                checked={formData.preferEmail}
-                                onCheckedChange={(checked) => handleCheckboxChange("preferEmail", checked as boolean)}
-                              />
+                              <Checkbox id="preferEmail" checked={formData.preferEmail} onCheckedChange={checked => handleCheckboxChange("preferEmail", checked as boolean)} />
                               <Label htmlFor="preferEmail" className="font-normal flex items-center gap-1.5">
                                 <Mail className="h-4 w-4" /> Email
                               </Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                              <Checkbox 
-                                id="preferPhone" 
-                                checked={formData.preferPhone}
-                                onCheckedChange={(checked) => handleCheckboxChange("preferPhone", checked as boolean)}
-                              />
+                              <Checkbox id="preferPhone" checked={formData.preferPhone} onCheckedChange={checked => handleCheckboxChange("preferPhone", checked as boolean)} />
                               <Label htmlFor="preferPhone" className="font-normal flex items-center gap-1.5">
                                 <Phone className="h-4 w-4" /> Phone
                               </Label>
@@ -244,24 +194,14 @@ export default function ContactSalesPage() {
                     </form>
                   </CardContent>
                   <CardFooter>
-                    <Button 
-                      type="submit" 
-                      size="lg"
-                      className="w-full md:w-auto"
-                      disabled={isSubmitting}
-                      onClick={handleSubmit}
-                    >
-                      {isSubmitting ? (
-                        <span className="flex items-center gap-2">
+                    <Button type="submit" size="lg" className="w-full md:w-auto" disabled={isSubmitting} onClick={handleSubmit}>
+                      {isSubmitting ? <span className="flex items-center gap-2">
                           <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
                           Sending...
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-2">
+                        </span> : <span className="flex items-center gap-2">
                           <Send className="h-4 w-4" />
                           Send Message
-                        </span>
-                      )}
+                        </span>}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -272,6 +212,5 @@ export default function ContactSalesPage() {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 }
