@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, User, LogIn, Search, MessageSquare, UserCog, Globe, Home } from "lucide-react";
+import { Menu, X, User, LogIn, Search, MessageSquare, UserCog, Globe, Home, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -54,6 +54,10 @@ export function Navbar() {
               <Link to="/messages" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
                 <MessageSquare className="h-4 w-4" />
                 Messages
+              </Link>
+              <Link to="/chat" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
+                <Bot className="h-4 w-4" />
+                AI Chat
               </Link>
             </> :
         // Navigation for non-logged-in users
@@ -136,6 +140,10 @@ export function Navbar() {
                 <Link to="/messages" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                   <MessageSquare className="h-4 w-4" />
                   Messages
+                </Link>
+                <Link to="/chat" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+                  <Bot className="h-4 w-4" />
+                  AI Chat
                 </Link>
                 <Link to="/profile/edit" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                   <UserCog className="h-4 w-4" />
