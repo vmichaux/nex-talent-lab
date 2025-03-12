@@ -167,14 +167,14 @@ export const ChatWidget = () => {
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent
           className={`fixed bottom-4 right-4 p-0 w-80 md:w-96 rounded-lg shadow-xl border-0 max-w-none ${
-            isMinimized ? "h-16" : "h-[500px]"
+            isMinimized ? "h-16" : "h-[550px]"
           } transition-all duration-300 overflow-hidden transform-none bg-white`}
         >
-          {/* Chat header */}
-          <div className="flex items-center justify-between bg-primary text-white p-3">
+          {/* Chat header - More visible now */}
+          <div className="flex items-center justify-between bg-primary text-white p-3 sticky top-0 z-10">
             <div className="flex items-center gap-2">
               <Bot className="h-5 w-5" />
-              <DialogTitle className="text-white text-lg">Assistant IA</DialogTitle>
+              <DialogTitle className="text-white text-lg font-semibold">Assistant IA</DialogTitle>
             </div>
             <div className="flex items-center gap-1">
               <Button
@@ -207,7 +207,7 @@ export const ChatWidget = () => {
               )}
               
               {/* Messages area - reduced height to give more room to input */}
-              <div className="h-[320px] overflow-y-auto p-4 space-y-4">
+              <div className="h-[380px] overflow-y-auto p-4 space-y-4">
                 {messages.map((message, index) => (
                   <div 
                     key={message.id || index}
@@ -234,15 +234,15 @@ export const ChatWidget = () => {
                 <div ref={messagesEndRef} />
               </div>
               
-              {/* Input area - improved spacing and padding for better button visibility */}
-              <div className="border-t pt-3 pb-6 px-3">
+              {/* Input area - improved spacing and padding for better visibility */}
+              <div className="border-t pt-3 pb-4 px-3 mb-2">
                 <div className="flex items-start space-x-2">
                   <Textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Tapez votre message..."
-                    className="flex-1 min-h-[80px] max-h-[120px] resize-none focus:outline-none text-sm p-2 border rounded-md"
+                    className="flex-1 min-h-[60px] max-h-[120px] resize-none focus:outline-none text-sm p-2 border rounded-md"
                     disabled={isLoading}
                   />
                   <Button 
