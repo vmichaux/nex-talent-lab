@@ -17,21 +17,21 @@ const ExploreProjectsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
-  const { projects: firebaseProjects, loading, error } = useProjects();
+  const { projects, loading, error } = useProjects();
+
+  // Filter projects based on search query
+  const filteredProjects = projects.filter(project => 
+    project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    project.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    project.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
 
   // Redirect to login if not logged in
   if (!isLoggedIn) {
     navigate("/login");
     return null;
   }
-
-  // Filter projects based on search query
-  const filteredProjects = firebaseProjects.filter(project => 
-    project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    project.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    project.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -61,7 +61,13 @@ const ExploreProjectsPage = () => {
               <div className="flex flex-col md:flex-row gap-4 max-w-4xl mx-auto">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                  <Input type="text" placeholder="Search projects by keyword, skill, or category..." className="pl-10 h-12" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
+                  <Input 
+                    type="text" 
+                    placeholder="Search projects by keyword, skill, or category..." 
+                    className="pl-10 h-12" 
+                    value={searchQuery} 
+                    onChange={e => setSearchQuery(e.target.value)} 
+                  />
                 </div>
                 <Button variant="outline" className="flex items-center gap-2 h-12 px-6">
                   <Filter size={16} />
@@ -90,10 +96,10 @@ const ExploreProjectsPage = () => {
             {!loading && !error && (
               <Tabs defaultValue="all" className="mb-8">
                 <TabsList className="mb-8 mx-auto flex justify-center">
-                  <TabsTrigger value="all" className="px-6">All Projects</TabsTrigger>
-                  <TabsTrigger value="featured" className="px-6">Featured</TabsTrigger>
-                  <TabsTrigger value="recent" className="px-6">Recently Added</TabsTrigger>
-                  <TabsTrigger value="urgent" className="px-6">Urgent Needs</TabsTrigger>
+                  <TabsTrigger value="all">All Projects ({filteredProjects.length})</TabsTrigger>
+                  <TabsTrigger value="featured">Featured ({filteredProjects.filter(p => p.featured).length})</TabsTrigger>
+                  <TabsTrigger value="recent">Recently Added ({Math.min(filteredProjects.length, 4)})</TabsTrigger>
+                  <TabsTrigger value="urgent">Urgent Needs ({filteredProjects.filter(p => p.status === "Urgent").length})</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="all" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
