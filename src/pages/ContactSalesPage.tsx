@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -14,7 +15,8 @@ export default function ContactSalesPage() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
     message: "",
@@ -42,7 +44,7 @@ export default function ContactSalesPage() {
     setIsSubmitting(true);
 
     // Form validation
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
       toast({
         title: "Missing information",
         description: "Please fill out all required fields.",
@@ -75,7 +77,8 @@ export default function ContactSalesPage() {
 
       // Reset form
       setFormData({
-        name: "",
+        firstName: "",
+        lastName: "",
         email: "",
         phone: "",
         message: "",
@@ -152,9 +155,15 @@ export default function ContactSalesPage() {
                   <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="grid gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="name">Name <span className="text-destructive">*</span></Label>
-                          <Input id="name" name="name" placeholder="Your full name" value={formData.name} onChange={handleChange} required />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="firstName">First Name <span className="text-destructive">*</span></Label>
+                            <Input id="firstName" name="firstName" placeholder="John" value={formData.firstName} onChange={handleChange} required />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="lastName">Last Name <span className="text-destructive">*</span></Label>
+                            <Input id="lastName" name="lastName" placeholder="Doe" value={formData.lastName} onChange={handleChange} required />
+                          </div>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
