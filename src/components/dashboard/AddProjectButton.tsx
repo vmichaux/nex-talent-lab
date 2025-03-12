@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,7 +28,7 @@ export function AddProjectButton() {
   const [projectDeadline, setProjectDeadline] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   // Set default deadline to 3 months from now
@@ -42,7 +41,7 @@ export function AddProjectButton() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!user) {
+    if (!currentUser) {
       toast({
         title: "Authentication required",
         description: "You must be logged in to create a project.",
@@ -62,7 +61,7 @@ export function AddProjectButton() {
         skills: ["React", "UI/UX Design", "Firebase"],
         deadline: projectDeadline,
         duration: projectDuration,
-        owner: user.displayName || user.email,
+        owner: currentUser.displayName || currentUser.email,
         featured: false,
         status: "Open",
         applicants: 0,

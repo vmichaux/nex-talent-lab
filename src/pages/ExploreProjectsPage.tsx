@@ -35,7 +35,7 @@ const ExploreProjectsPage = () => {
   // If there are no projects from Firebase, use our backup mock data
   const projects = filteredProjects.length > 0 ? filteredProjects : [
     {
-      id: 1,
+      id: "1",
       title: "AI-Powered Educational Platform",
       description: "Building an interactive learning platform with personalized AI tutoring for K-12 students.",
       skills: ["React", "Machine Learning", "UI/UX Design"],
@@ -47,8 +47,9 @@ const ExploreProjectsPage = () => {
       status: "Open",
       applicants: 7,
       createdAt: new Date()
-    }, {
-      id: 2,
+    },
+    {
+      id: "2",
       title: "Health and Wellness Mobile App",
       description: "Creating a holistic wellness app that combines fitness tracking with mental health resources.",
       skills: ["React Native", "Firebase", "Health APIs"],
@@ -60,8 +61,9 @@ const ExploreProjectsPage = () => {
       status: "Open",
       applicants: 4,
       createdAt: new Date()
-    }, {
-      id: 3,
+    },
+    {
+      id: "3",
       title: "Sustainable Fashion Marketplace",
       description: "Developing an e-commerce platform for eco-friendly fashion brands and second-hand clothing.",
       skills: ["E-commerce", "Sustainability", "Branding"],
@@ -73,8 +75,9 @@ const ExploreProjectsPage = () => {
       status: "Open",
       applicants: 12,
       createdAt: new Date()
-    }, {
-      id: 4,
+    },
+    {
+      id: "4",
       title: "Smart Home Integration System",
       description: "Creating a central hub to connect and control various smart home devices regardless of manufacturer.",
       skills: ["IoT", "API Integration", "Embedded Systems"],
@@ -86,8 +89,9 @@ const ExploreProjectsPage = () => {
       status: "Urgent",
       applicants: 3,
       createdAt: new Date()
-    }, {
-      id: 5,
+    },
+    {
+      id: "5",
       title: "Community Garden Management Tool",
       description: "Building a platform to help urban communities organize and manage shared garden spaces and resources.",
       skills: ["Full Stack", "Mapping APIs", "Community Engagement"],
@@ -99,8 +103,9 @@ const ExploreProjectsPage = () => {
       status: "Open",
       applicants: 9,
       createdAt: new Date()
-    }, {
-      id: 6,
+    },
+    {
+      id: "6",
       title: "Accessible Gaming Experience",
       description: "Designing an inclusive gaming platform with customizable interfaces for players with different abilities.",
       skills: ["Game Development", "Accessibility", "UX Research"],
@@ -112,8 +117,9 @@ const ExploreProjectsPage = () => {
       status: "Open",
       applicants: 6,
       createdAt: new Date()
-    }, {
-      id: 7,
+    },
+    {
+      id: "7",
       title: "Cloud-Based Data Analytics Platform",
       description: "Developing a platform that helps small businesses leverage big data without requiring technical expertise.",
       skills: ["Cloud Architecture", "Data Visualization", "Machine Learning"],
@@ -125,8 +131,9 @@ const ExploreProjectsPage = () => {
       status: "Open",
       applicants: 8,
       createdAt: new Date()
-    }, {
-      id: 8,
+    },
+    {
+      id: "8",
       title: "Peer-to-Peer Language Learning App",
       description: "Creating an application that connects language learners for real-time practice and cultural exchange.",
       skills: ["Mobile Development", "WebRTC", "UX Design"],
@@ -138,8 +145,9 @@ const ExploreProjectsPage = () => {
       status: "Urgent",
       applicants: 5,
       createdAt: new Date()
-    }, {
-      id: 9,
+    },
+    {
+      id: "9",
       title: "Renewable Energy Monitoring System",
       description: "Building an IoT solution to track and optimize energy generation from solar and wind installations.",
       skills: ["IoT", "Data Science", "Embedded Systems"],
@@ -151,8 +159,9 @@ const ExploreProjectsPage = () => {
       status: "Open",
       applicants: 10,
       createdAt: new Date()
-    }, {
-      id: 10,
+    },
+    {
+      id: "10",
       title: "Virtual Reality Therapy Platform",
       description: "Developing therapeutic VR experiences for anxiety, PTSD, and phobia treatment in clinical settings.",
       skills: ["Unity3D", "VR/AR", "Healthcare"],
@@ -164,8 +173,9 @@ const ExploreProjectsPage = () => {
       status: "Open",
       applicants: 7,
       createdAt: new Date()
-    }, {
-      id: 11,
+    },
+    {
+      id: "11",
       title: "Blockchain Supply Chain Tracker",
       description: "Creating a transparent system to verify product origins and authenticity using blockchain technology.",
       skills: ["Blockchain", "Smart Contracts", "Full Stack"],
@@ -177,8 +187,9 @@ const ExploreProjectsPage = () => {
       status: "Open",
       applicants: 11,
       createdAt: new Date()
-    }, {
-      id: 12,
+    },
+    {
+      id: "12",
       title: "Urban Mobility Analytics Platform",
       description: "Building a system to help cities optimize public transportation based on real-time movement data.",
       skills: ["Data Science", "GIS", "Urban Planning"],

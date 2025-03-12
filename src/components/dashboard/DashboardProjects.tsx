@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Briefcase, ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,18 +12,18 @@ export function DashboardProjects() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { currentUser } = useAuth();
   
   useEffect(() => {
     const fetchProjects = async () => {
-      if (!user) return;
+      if (!currentUser) return;
       
       try {
         setLoading(true);
         // Get projects created by the current user, limited to 3
         const projectsQuery = query(
           collection(db, "projects"),
-          where("owner", "==", user.displayName || user.email),
+          where("owner", "==", currentUser.displayName || currentUser.email),
           orderBy("createdAt", "desc"),
           limit(3)
         );
@@ -77,7 +76,7 @@ export function DashboardProjects() {
     };
     
     fetchProjects();
-  }, [user]);
+  }, [currentUser]);
   
   return (
     <div className="mb-12">
