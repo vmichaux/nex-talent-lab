@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -10,7 +9,6 @@ import { TalentDashboard } from "@/components/dashboard/TalentDashboard";
 import { BuilderDashboard } from "@/components/dashboard/BuilderDashboard";
 import { DualRoleDashboard } from "@/components/dashboard/DualRoleDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 const DashboardPage = () => {
   const {
     isLoggedIn,
@@ -20,7 +18,6 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const [showWelcome, setShowWelcome] = useState(true);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "both">("talent");
-
   useEffect(() => {
     // Redirect non-logged-in users to the onboarding route
     if (!isLoggedIn) {
@@ -44,12 +41,10 @@ const DashboardPage = () => {
   const handleCompleteOnboarding = () => {
     setShowWelcome(false);
   };
-
   const handleRoleChange = (role: "talent" | "builder" | "both") => {
     setActiveRole(role);
     localStorage.setItem("userRole", role === "builder" ? "entrepreneur" : role);
   };
-
   return <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
@@ -66,7 +61,7 @@ const DashboardPage = () => {
             <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
             
             <div className="container mx-auto px-4 py-12">
-              <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-6">
+              <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-6 py-[64px]">
                 <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Dashboard</div>
                 
                 <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">My Activities</h1>
@@ -78,11 +73,7 @@ const DashboardPage = () => {
 
               {/* Role switcher tabs */}
               <div className="flex justify-center mb-8">
-                <Tabs 
-                  value={activeRole} 
-                  onValueChange={(value) => handleRoleChange(value as "talent" | "builder" | "both")}
-                  className="w-full max-w-3xl"
-                >
+                <Tabs value={activeRole} onValueChange={value => handleRoleChange(value as "talent" | "builder" | "both")} className="w-full max-w-3xl">
                   <TabsList className="grid grid-cols-3 w-full">
                     <TabsTrigger value="talent" className="flex items-center gap-2">
                       <span className="hidden md:inline">Talent Dashboard</span>
@@ -117,5 +108,4 @@ const DashboardPage = () => {
       <Footer />
     </div>;
 };
-
 export default DashboardPage;
