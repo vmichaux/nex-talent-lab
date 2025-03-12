@@ -20,6 +20,7 @@ import DashboardPage from "./pages/DashboardPage";
 import MessagesPage from "./pages/MessagesPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
 import ProfileEditPage from "./pages/ProfileEditPage";
+import ContactSalesPage from "./pages/ContactSalesPage";
 import { DashboardOnboarding } from "./components/DashboardOnboarding";
 import { ChatWidget } from "./components/ChatWidget";
 
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/how-it-works" element={<HowItWorksPage />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/about" element={<OurStoryPage />} />
+            <Route path="/contact-sales" element={<ContactSalesPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             {/* Special route for onboarding without Navbar */}
             <Route path="/onboarding" element={<DashboardOnboarding />} />

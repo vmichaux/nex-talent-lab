@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, User, LogIn, Search, MessageSquare, UserCog, Home, Briefcase, GraduationCap, Lightbulb } from "lucide-react";
+import { Menu, X, User, LogIn, Search, MessageSquare, UserCog, Home, Briefcase, GraduationCap, Lightbulb, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { Badge } from "@/components/ui/badge";
@@ -118,6 +118,10 @@ export function Navbar() {
               <Link to="/about" className="font-medium hover:text-primary transition-colors">
                 About
               </Link>
+              <Link to="/contact-sales" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
+                <Phone className="h-4 w-4" />
+                Contact Sales
+              </Link>
             </>}
         </nav>
 
@@ -212,6 +216,10 @@ export function Navbar() {
                 </Link>
                 <Link to="/about" className="block py-2 px-4 hover:bg-gray-50 rounded-md" onClick={() => setIsMenuOpen(false)}>
                   About
+                </Link>
+                <Link to="/contact-sales" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+                  <Phone className="h-4 w-4" />
+                  Contact Sales
                 </Link>
                 <div className="pt-4 flex flex-col space-y-2">
                   <Link to="/login" onClick={() => setIsMenuOpen(false)}>
