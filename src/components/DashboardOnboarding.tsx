@@ -68,15 +68,13 @@ export function DashboardOnboarding() {
               
               {/* Entrepreneur Card - Updated dimensions */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'entrepreneur' ? 'ring-2 ring-secondary' : ''}`} onClick={() => setSelectedRole('entrepreneur')}>
-                <CardContent className="flex flex-col items-center p-4 bg-[#ECFDF3] h-[180px]">
+                <CardContent className="flex flex-col items-center p-4 bg-[#ECFDF3] h-[180px] py-[9px]">
                   <div className="flex justify-start w-full mb-4 mt-2">
                     <Rocket className="h-8 w-8 text-[#10B981]" />
                   </div>
                   <div className="mt-auto text-center">
                     <h3 className="text-xl font-semibold mb-1">Builders</h3>
-                    <p className="text-center text-muted-foreground">
-                      Startup founder or business owner looking for talented individuals to collaborate with.
-                    </p>
+                    <p className="text-center text-muted-foreground">Project builder, startup founder, business owner or just someone with an idea, looking for talented individuals to collaborate with.</p>
                   </div>
                 </CardContent>
               </Card>
