@@ -206,8 +206,8 @@ export const ChatWidget = () => {
                 </div>
               )}
               
-              {/* Messages area - reduced height to give more room to input */}
-              <div className="h-[380px] overflow-y-auto p-4 space-y-4">
+              {/* Messages area - REDUCED height from 380px to 340px */}
+              <div className="h-[340px] overflow-y-auto p-4 space-y-4">
                 {messages.map((message, index) => (
                   <div 
                     key={message.id || index}
@@ -234,8 +234,8 @@ export const ChatWidget = () => {
                 <div ref={messagesEndRef} />
               </div>
               
-              {/* Input area - improved spacing and padding for better visibility */}
-              <div className="border-t pt-3 pb-4 px-3 mb-2">
+              {/* Input area - Increased padding for better visibility */}
+              <div className="border-t pt-3 pb-5 px-3 mb-3">
                 <div className="flex items-start space-x-2">
                   <Textarea
                     value={input}
