@@ -1,7 +1,13 @@
-import { Outlet } from "react-router-dom";
+
+import { Outlet, useLocation } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+
 export default function AuthLayout() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const fromOnboarding = searchParams.get('fromOnboarding') === 'true';
+  
   return <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left sidebar with branding and illustration */}
       <div className="w-full md:w-1/2 bg-gradient-to-br from-primary to-purple-900 text-white p-8 md:p-12 flex flex-col bg-[#ce8aef]/[0.17]">
