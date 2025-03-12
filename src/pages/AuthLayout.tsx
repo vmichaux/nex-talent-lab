@@ -1,13 +1,10 @@
-
 import { Outlet } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-
 export default function AuthLayout() {
-  return (
-    <div className="min-h-screen flex flex-col md:flex-row">
+  return <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left sidebar with branding and illustration */}
-      <div className="w-full md:w-1/2 bg-gradient-to-br from-primary to-purple-900 text-white p-8 md:p-12 flex flex-col">
+      <div className="w-full md:w-1/2 bg-gradient-to-br from-primary to-purple-900 text-white p-8 md:p-12 flex flex-col bg-[#ce8aef]/[0.17]">
         <div className="mb-8">
           <Link to="/" className="flex items-center gap-1">
             <span className="font-bold text-2xl">NexTalent</span>
@@ -71,6 +68,5 @@ export default function AuthLayout() {
           <Outlet />
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
