@@ -144,7 +144,7 @@ export default function ContactSalesPage() {
               <div className="lg:col-span-3">
                 <Card className="border-muted/40 shadow-md">
                   <CardHeader>
-                    <CardTitle>Get in Touch</CardTitle>
+                    <CardTitle className="my-0 py-[25px]">Get in Touch</CardTitle>
                     <CardDescription>
                       Fill out the form below and our sales team will get back to you within 24 hours.
                     </CardDescription>
