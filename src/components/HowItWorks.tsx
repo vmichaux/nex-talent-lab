@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -43,7 +44,12 @@ export function HowItWorks() {
               <p className="text-gray-600 mb-4">{step.description}</p>
               
               <ul className="space-y-2 text-sm text-gray-600">
-                {step.details.map((detail, i) => {})}
+                {step.details.map((detail, i) => (
+                  <li key={i} className="flex items-start">
+                    <span className="text-primary font-bold mr-2">•</span>
+                    <span>{detail}</span>
+                  </li>
+                ))}
               </ul>
             </div>)}
         </div>
