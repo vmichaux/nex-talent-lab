@@ -1,4 +1,3 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -195,7 +194,7 @@ export default function OurStoryPage() {
             <p className="text-xl mb-8 max-w-2xl mx-auto">
               Be part of our growing network of talented individuals and exciting projects.
             </p>
-            <Link to="/signup">
+            <Link to="/onboarding">
               <Button size="lg" variant="secondary" className="font-semibold">
                 Get Started Today
               </Button>
