@@ -1,18 +1,28 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, User, LogIn, Search, MessageSquare, UserCog, Globe, Home } from "lucide-react";
+import { Menu, X, User, LogIn, Search, MessageSquare, UserCog, Home, Briefcase, GraduationCap, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { Badge } from "@/components/ui/badge";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userRole, setUserRole] = useState<"talent" | "entrepreneur" | "both" | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const {
     isLoggedIn,
     LogoutButton
   } = useAuth();
+
+  useEffect(() => {
+    // Get user role from localStorage
+    const savedRole = localStorage.getItem("userRole");
+    if (savedRole) {
+      setUserRole(savedRole as "talent" | "entrepreneur" | "both");
+    }
+  }, []);
 
   // Hide navbar on the onboarding route
   if (location.pathname === "/onboarding") {
@@ -27,11 +37,43 @@ export function Navbar() {
     }
   };
   
+  // Get role badge styling
+  const getRoleBadge = () => {
+    if (!isLoggedIn || !userRole) return null;
+    
+    switch(userRole) {
+      case 'talent':
+        return (
+          <Badge className="ml-2 bg-primary/20 text-primary hover:bg-primary/30">
+            <GraduationCap className="h-3 w-3 mr-1" />
+            Talent
+          </Badge>
+        );
+      case 'entrepreneur':
+        return (
+          <Badge className="ml-2 bg-secondary/20 text-secondary hover:bg-secondary/30">
+            <Briefcase className="h-3 w-3 mr-1" />
+            Builder
+          </Badge>
+        );
+      case 'both':
+        return (
+          <Badge className="ml-2 bg-purple-200 text-purple-700 hover:bg-purple-300">
+            <Lightbulb className="h-3 w-3 mr-1" />
+            Dual Role
+          </Badge>
+        );
+      default:
+        return null;
+    }
+  };
+  
   return <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-1">
           <span className="font-bold text-2xl gradient-text">NexTalent</span>
           <span className="font-bold text-2xl text-zinc-700">Lab</span>
+          {getRoleBadge()}
         </Link>
 
         {/* Desktop Navigation */}

@@ -6,12 +6,10 @@ import { Footer } from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { DashboardWelcome } from "@/components/DashboardWelcome";
-import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
-import { DashboardProjects } from "@/components/dashboard/DashboardProjects";
-import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
-import { DashboardRequests } from "@/components/dashboard/DashboardRequests";
-import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
-import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
+import { TalentDashboard } from "@/components/dashboard/TalentDashboard";
+import { BuilderDashboard } from "@/components/dashboard/BuilderDashboard";
+import { DualRoleDashboard } from "@/components/dashboard/DualRoleDashboard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const DashboardPage = () => {
   const {
@@ -21,12 +19,19 @@ const DashboardPage = () => {
   } = useAuth();
   const navigate = useNavigate();
   const [showWelcome, setShowWelcome] = useState(true);
+  const [activeRole, setActiveRole] = useState<"talent" | "builder" | "both">("talent");
 
   useEffect(() => {
     // Redirect non-logged-in users to the onboarding route
     if (!isLoggedIn) {
       navigate("/onboarding");
       return;
+    }
+
+    // Get saved role preference from localStorage
+    const savedRole = localStorage.getItem("userRole");
+    if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
+      setActiveRole(savedRole === "entrepreneur" ? "builder" : savedRole);
     }
 
     // Automatically show dashboard if the user has completed their profile
@@ -38,6 +43,11 @@ const DashboardPage = () => {
   // Complete onboarding and show dashboard
   const handleCompleteOnboarding = () => {
     setShowWelcome(false);
+  };
+
+  const handleRoleChange = (role: "talent" | "builder" | "both") => {
+    setActiveRole(role);
+    localStorage.setItem("userRole", role === "builder" ? "entrepreneur" : role);
   };
 
   return <div className="min-h-screen flex flex-col">
@@ -56,7 +66,7 @@ const DashboardPage = () => {
             <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
             
             <div className="container mx-auto px-4 py-12">
-              <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10">
+              <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-6">
                 <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Dashboard</div>
                 
                 <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">My Activities</h1>
@@ -66,25 +76,41 @@ const DashboardPage = () => {
                 </p>
               </div>
 
-              {/* Action buttons */}
-              <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
-                <AddProjectButton />
-                <div className="md:w-1/2 lg:w-1/3">
-                  <ProjectSearch />
-                </div>
+              {/* Role switcher tabs */}
+              <div className="flex justify-center mb-8">
+                <Tabs 
+                  value={activeRole} 
+                  onValueChange={(value) => handleRoleChange(value as "talent" | "builder" | "both")}
+                  className="w-full max-w-3xl"
+                >
+                  <TabsList className="grid grid-cols-3 w-full">
+                    <TabsTrigger value="talent" className="flex items-center gap-2">
+                      <span className="hidden md:inline">Talent Dashboard</span>
+                      <span className="md:hidden">Talent</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="builder" className="flex items-center gap-2">
+                      <span className="hidden md:inline">Builder Dashboard</span>
+                      <span className="md:hidden">Builder</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="both" className="flex items-center gap-2">
+                      <span className="hidden md:inline">Dual Role Dashboard</span>
+                      <span className="md:hidden">Dual Role</span>
+                    </TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="talent" className="mt-6">
+                    <TalentDashboard />
+                  </TabsContent>
+                  
+                  <TabsContent value="builder" className="mt-6">
+                    <BuilderDashboard />
+                  </TabsContent>
+                  
+                  <TabsContent value="both" className="mt-6">
+                    <DualRoleDashboard />
+                  </TabsContent>
+                </Tabs>
               </div>
-
-              {/* Dashboard overview stats */}
-              <DashboardOverview />
-
-              {/* Projects section */}
-              <DashboardProjects />
-              
-              {/* Messages section */}
-              <DashboardMessages />
-              
-              {/* Requests section */}
-              <DashboardRequests />
             </div>
           </div>}
       </main>
