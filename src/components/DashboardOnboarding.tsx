@@ -53,7 +53,7 @@ export function DashboardOnboarding() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-10">
               {/* Talent Card - Updated design */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'talent' ? 'ring-2 ring-primary' : ''}`} onClick={() => setSelectedRole('talent')}>
-                <CardContent className="flex flex-col items-center p-6 bg-[#F5EEFF] h-full px-[10px] py-[22px] rounded-none">
+                <CardContent className="flex flex-col items-center p-6 bg-[#F5EEFF] h-full px-[10px] py-[22px] rounded-none mx-0 my-[2px]">
                   <div className="flex justify-start w-full mb-10 mt-2">
                     <GraduationCap className="h-10 w-10 text-[#9b87f5]" />
                   </div>
