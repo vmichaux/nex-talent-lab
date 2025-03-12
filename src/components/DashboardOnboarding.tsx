@@ -1,17 +1,14 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SimplifiedHeader } from "./SimplifiedHeader";
-
 export function DashboardOnboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"talent" | "entrepreneur" | null>(null);
   const totalSteps = 2;
   const navigate = useNavigate();
-
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
@@ -23,7 +20,6 @@ export function DashboardOnboarding() {
       navigate("/login");
     }
   };
-
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
@@ -31,7 +27,6 @@ export function DashboardOnboarding() {
       navigate("/");
     }
   };
-
   const getStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -57,11 +52,8 @@ export function DashboardOnboarding() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-10">
               {/* Talent Card - Updated design */}
-              <Card 
-                className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'talent' ? 'ring-2 ring-primary' : ''}`} 
-                onClick={() => setSelectedRole('talent')}
-              >
-                <CardContent className="flex flex-col items-center p-6 bg-[#F5EEFF] h-full">
+              <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'talent' ? 'ring-2 ring-primary' : ''}`} onClick={() => setSelectedRole('talent')}>
+                <CardContent className="flex flex-col items-center p-6 bg-[#F5EEFF] h-full px-[10px] py-[22px] rounded-none">
                   <div className="flex justify-start w-full mb-10 mt-2">
                     <GraduationCap className="h-10 w-10 text-[#9b87f5]" />
                   </div>
@@ -75,10 +67,7 @@ export function DashboardOnboarding() {
               </Card>
               
               {/* Entrepreneur Card - Updated design */}
-              <Card 
-                className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'entrepreneur' ? 'ring-2 ring-secondary' : ''}`} 
-                onClick={() => setSelectedRole('entrepreneur')}
-              >
+              <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'entrepreneur' ? 'ring-2 ring-secondary' : ''}`} onClick={() => setSelectedRole('entrepreneur')}>
                 <CardContent className="flex flex-col items-center p-6 bg-[#ECFDF3] h-full">
                   <div className="flex justify-start w-full mb-10 mt-2">
                     <Rocket className="h-10 w-10 text-[#10B981]" />
@@ -101,17 +90,10 @@ export function DashboardOnboarding() {
         return null;
     }
   };
-
-  return (
-    <>
-      <SimplifiedHeader 
-        currentStep={currentStep} 
-        totalSteps={totalSteps} 
-        onBackClick={handleBack} 
-      />
+  return <>
+      <SimplifiedHeader currentStep={currentStep} totalSteps={totalSteps} onBackClick={handleBack} />
       <div className="min-h-[calc(100vh-75px)] flex flex-col justify-center items-center p-6 py-16 bg-white">
         {getStepContent()}
       </div>
-    </>
-  );
+    </>;
 }
