@@ -207,7 +207,7 @@ export const ChatWidget = () => {
               )}
               
               {/* Messages area - reduced height to give more room to input */}
-              <div className="h-[340px] overflow-y-auto p-4 space-y-4">
+              <div className="h-[320px] overflow-y-auto p-4 space-y-4">
                 {messages.map((message, index) => (
                   <div 
                     key={message.id || index}
@@ -234,9 +234,9 @@ export const ChatWidget = () => {
                 <div ref={messagesEndRef} />
               </div>
               
-              {/* Input area - improved spacing and padding */}
-              <div className="border-t pt-3 pb-4 px-3">
-                <div className="flex items-end space-x-2">
+              {/* Input area - improved spacing and padding for better button visibility */}
+              <div className="border-t pt-3 pb-6 px-3">
+                <div className="flex items-start space-x-2">
                   <Textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -249,7 +249,7 @@ export const ChatWidget = () => {
                     onClick={handleSendMessage} 
                     disabled={!input.trim() || isLoading}
                     size="icon"
-                    className="mb-1 h-10 w-10"
+                    className="mt-1 h-10 w-10"
                   >
                     {isLoading ? (
                       <Loader className="h-4 w-4 animate-spin" />
