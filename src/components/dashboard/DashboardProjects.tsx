@@ -70,7 +70,8 @@ export function DashboardProjects() {
               collaboratorsNeeded: 2,
               projectGoal: "Help users reduce their environmental impact",
               targetAudience: "Environmentally conscious individuals",
-              location: "Remote"
+              location: "Remote",
+              desiredProfiles: ["Mobile Developer", "UI/UX Designer", "Environmental Enthusiast"]
             },
             {
               id: "2",
@@ -103,7 +104,8 @@ export function DashboardProjects() {
               projectGoal: "Connect urban gardeners with available resources",
               targetAudience: "Urban gardeners and landowners",
               location: "Hybrid",
-              budget: "$2000-$5000"
+              budget: "$2000-$5000",
+              desiredProfiles: ["Web Developer", "UX Designer", "Community Manager"]
             },
             {
               id: "3", 
