@@ -54,7 +54,23 @@ export function DashboardProjects() {
               owner: currentUser.displayName || currentUser.email || "You",
               featured: false,
               applicants: 3,
-              createdAt: new Date()
+              createdAt: new Date(),
+              // New required fields
+              projectType: "Short-term",
+              skillsWithLevel: [
+                { skill: "Mobile Development", level: "Intermediate" },
+                { skill: "React Native", level: "Intermediate" },
+                { skill: "UI/UX", level: "Beginner" }
+              ],
+              deliverables: ["Wireframes", "MVP", "Final App"],
+              timeline: "3 months",
+              compensation: "Volunteer",
+              perks: ["Portfolio piece", "Environmental impact"],
+              tools: ["React Native", "Firebase"],
+              collaboratorsNeeded: 2,
+              projectGoal: "Help users reduce their environmental impact",
+              targetAudience: "Environmentally conscious individuals",
+              location: "Remote"
             },
             {
               id: "2",
@@ -69,7 +85,25 @@ export function DashboardProjects() {
               owner: currentUser.displayName || currentUser.email || "You",
               featured: false,
               applicants: 5,
-              createdAt: new Date()
+              createdAt: new Date(),
+              // New required fields
+              projectType: "Long-term mission",
+              skillsWithLevel: [
+                { skill: "Web Development", level: "Advanced" },
+                { skill: "React", level: "Intermediate" },
+                { skill: "Firebase", level: "Beginner" }
+              ],
+              deliverables: ["Website", "User Dashboard", "Interactive Map"],
+              timeline: "4 months",
+              compensation: "Fixed payment",
+              compensationDetails: "Based on milestones",
+              perks: ["Networking", "Community impact"],
+              tools: ["React", "Firebase", "MapBox"],
+              collaboratorsNeeded: 3,
+              projectGoal: "Connect urban gardeners with available resources",
+              targetAudience: "Urban gardeners and landowners",
+              location: "Hybrid",
+              budget: "$2000-$5000"
             },
             {
               id: "3", 
@@ -84,7 +118,25 @@ export function DashboardProjects() {
               owner: currentUser.displayName || currentUser.email || "You",
               featured: true,
               applicants: 4,
-              createdAt: new Date()
+              createdAt: new Date(),
+              // New required fields
+              projectType: "Portfolio-building",
+              skillsWithLevel: [
+                { skill: "VR Development", level: "Expert" },
+                { skill: "Unity3D", level: "Advanced" },
+                { skill: "Education", level: "Intermediate" }
+              ],
+              deliverables: ["VR Modules", "Documentation", "Teacher Training Materials"],
+              timeline: "2 months",
+              compensation: "Revenue share",
+              perks: ["Educational impact", "Portfolio piece", "Mentorship"],
+              tools: ["Unity3D", "Oculus SDK", "Blender"],
+              collaboratorsNeeded: 2,
+              projectGoal: "Create immersive learning experiences for science education",
+              targetAudience: "High school students and educators",
+              location: "In-person",
+              legalConstraints: "Educational content licensing",
+              desiredProfiles: ["VR Developer", "3D Artist", "Educational Content Writer"]
             }
           ]);
         }
