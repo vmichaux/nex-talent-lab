@@ -20,6 +20,7 @@ import DashboardPage from "./pages/DashboardPage";
 import MessagesPage from "./pages/MessagesPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
 import ProfileEditPage from "./pages/ProfileEditPage";
+import { DashboardOnboarding } from "./components/DashboardOnboarding";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,8 @@ const App = () => (
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/about" element={<OurStoryPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            {/* Special route for onboarding without Navbar */}
+            <Route path="/onboarding" element={<DashboardOnboarding />} />
             <Route path="/messages" element={<MessagesPage />} />
             <Route path="/profile/edit" element={<ProfileEditPage />} />
             <Route element={<AuthLayout />}>

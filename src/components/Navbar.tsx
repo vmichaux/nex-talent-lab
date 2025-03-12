@@ -13,6 +13,11 @@ export function Navbar() {
     LogoutButton
   } = useAuth();
   
+  // Hide navbar on the onboarding route
+  if (location.pathname === "/onboarding") {
+    return null;
+  }
+  
   return <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-1">
