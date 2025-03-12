@@ -64,9 +64,9 @@ export const sendMessageToOpenAI = async (message: string): Promise<string> => {
       throw new Error("User not authenticated");
     }
 
-    // Créer une instance du client OpenAI
+    // Créer une instance du client OpenAI avec la clé API correcte
     const openai = new OpenAI({
-      apiKey: "sk-...", // Remplacez par votre clé API OpenAI ou utilisez une variable d'environnement
+      apiKey: process.env.OPENAI_API_KEY || "YOUR_OPENAI_API_KEY", // Remplacer par votre clé API
       dangerouslyAllowBrowser: true // Note: Ce paramètre est nécessaire pour l'utilisation côté client, mais n'est pas recommandé en production
     });
 
@@ -85,6 +85,13 @@ export const sendMessageToOpenAI = async (message: string): Promise<string> => {
       content: message
     });
 
+    // Vérifier si la configuration OpenAI est valide
+    console.log("OpenAI config:", { 
+      apiKeyDefined: !!openai.apiKey, 
+      apiKeyLength: openai.apiKey ? openai.apiKey.length : 0,
+      messagesCount: formattedMessages.length
+    });
+
     // Appeler l'API OpenAI avec les types corrects
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -92,10 +99,12 @@ export const sendMessageToOpenAI = async (message: string): Promise<string> => {
       max_tokens: 1000
     });
 
+    console.log("OpenAI response:", completion.choices[0]);
+
     // Extraire et retourner la réponse
     return completion.choices[0].message.content || "Désolé, je n'ai pas pu générer une réponse.";
   } catch (error) {
     console.error("Error sending message to AI:", error);
-    return "Désolé, j'ai rencontré une erreur lors du traitement de votre demande. Veuillez réessayer.";
+    return "Désolé, j'ai rencontré une erreur lors du traitement de votre demande. Veuillez vérifier votre configuration API.";
   }
 };

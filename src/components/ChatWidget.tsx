@@ -33,6 +33,7 @@ export const ChatWidget = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -50,6 +51,7 @@ export const ChatWidget = () => {
 
   const loadChatHistory = async () => {
     setIsLoading(true);
+    setApiError(null);
     try {
       const history = await getUserChatHistory();
       if (history.length === 0) {
@@ -89,6 +91,7 @@ export const ChatWidget = () => {
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
+    setApiError(null);
 
     try {
       // Save user message to Firebase
@@ -104,6 +107,11 @@ export const ChatWidget = () => {
 
       // Get AI response
       const aiResponse = await sendMessageToOpenAI(userMessage.content);
+      
+      // Check if response indicates an API error
+      if (aiResponse.includes("configuration API")) {
+        setApiError("La clé API OpenAI n'est pas configurée correctement. Veuillez contacter l'administrateur.");
+      }
       
       // Remove loading message and add real response
       setMessages(prev => {
@@ -192,6 +200,13 @@ export const ChatWidget = () => {
           {/* Chat content - only shown when not minimized */}
           {!isMinimized && (
             <>
+              {/* API Error Message if needed */}
+              {apiError && (
+                <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-2">
+                  <p className="text-sm">{apiError}</p>
+                </div>
+              )}
+              
               {/* Messages area */}
               <div className="h-[370px] overflow-y-auto p-4 space-y-4">
                 {messages.map((message, index) => (
