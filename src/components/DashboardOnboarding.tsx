@@ -1,17 +1,14 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SimplifiedHeader } from "./SimplifiedHeader";
-
 export function DashboardOnboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"talent" | "entrepreneur" | null>(null);
   const totalSteps = 2;
   const navigate = useNavigate();
-
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
@@ -23,7 +20,6 @@ export function DashboardOnboarding() {
       navigate("/login");
     }
   };
-
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
@@ -31,7 +27,6 @@ export function DashboardOnboarding() {
       navigate("/");
     }
   };
-
   const getStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -53,12 +48,12 @@ export function DashboardOnboarding() {
       case 2:
         return <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
             <h1 className="text-4xl font-bold mb-6">Choose Your Role</h1>
-            <p className="text-lg mb-8 text-zinc-400">Are you a talent looking for opportunities or a project builder ?</p>
+            <p className="text-lg mb-8 text-zinc-400">Are you a talent looking for opportunities or a project builder ? Maybe both ? </p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-10">
               {/* Talent Card - Updated dimensions */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'talent' ? 'ring-2 ring-primary' : ''}`} onClick={() => setSelectedRole('talent')}>
-                <CardContent className="flex flex-col items-center p-4 bg-[#F5EEFF] h-[180px]">
+                <CardContent className="flex flex-col items-center p-4 bg-[#F5EEFF] h-[180px] py-[23px]">
                   <div className="flex justify-start w-full mb-4 mt-2">
                     <GraduationCap className="h-8 w-8 text-[#9b87f5]" />
                   </div>
@@ -95,7 +90,6 @@ export function DashboardOnboarding() {
         return null;
     }
   };
-
   return <>
       <SimplifiedHeader currentStep={currentStep} totalSteps={totalSteps} onBackClick={handleBack} />
       <div className="min-h-[calc(100vh-75px)] flex flex-col justify-center items-center p-6 py-16 bg-white">
