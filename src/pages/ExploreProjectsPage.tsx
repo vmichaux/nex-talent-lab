@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -44,7 +45,7 @@ const ExploreProjectsPage = () => {
       duration: "3 months",
       owner: "Alexandra Chen",
       featured: true,
-      status: "Open",
+      status: "Open" as "Open",
       applicants: 7,
       createdAt: new Date()
     },
@@ -58,7 +59,7 @@ const ExploreProjectsPage = () => {
       duration: "2 months",
       owner: "Marcus Johnson",
       featured: false,
-      status: "Open",
+      status: "Open" as "Open",
       applicants: 4,
       createdAt: new Date()
     },
@@ -72,7 +73,7 @@ const ExploreProjectsPage = () => {
       duration: "4 months",
       owner: "Sophia Patel",
       featured: true,
-      status: "Open",
+      status: "Open" as "Open",
       applicants: 12,
       createdAt: new Date()
     },
@@ -86,7 +87,7 @@ const ExploreProjectsPage = () => {
       duration: "3 months",
       owner: "David Wilson",
       featured: false,
-      status: "Urgent",
+      status: "Urgent" as "Urgent",
       applicants: 3,
       createdAt: new Date()
     },
@@ -100,7 +101,7 @@ const ExploreProjectsPage = () => {
       duration: "2 months",
       owner: "Elena Rodriguez",
       featured: true,
-      status: "Open",
+      status: "Open" as "Open",
       applicants: 9,
       createdAt: new Date()
     },
@@ -114,7 +115,7 @@ const ExploreProjectsPage = () => {
       duration: "5 months",
       owner: "Michael Kim",
       featured: false,
-      status: "Open",
+      status: "Open" as "Open",
       applicants: 6,
       createdAt: new Date()
     },
@@ -128,7 +129,7 @@ const ExploreProjectsPage = () => {
       duration: "4 months",
       owner: "Sarah Thompson",
       featured: true,
-      status: "Open",
+      status: "Open" as "Open",
       applicants: 8,
       createdAt: new Date()
     },
@@ -142,7 +143,7 @@ const ExploreProjectsPage = () => {
       duration: "3 months",
       owner: "Carlos Mendez",
       featured: false,
-      status: "Urgent",
+      status: "Urgent" as "Urgent",
       applicants: 5,
       createdAt: new Date()
     },
@@ -156,7 +157,7 @@ const ExploreProjectsPage = () => {
       duration: "4 months",
       owner: "Liu Wei",
       featured: true,
-      status: "Open",
+      status: "Open" as "Open",
       applicants: 10,
       createdAt: new Date()
     },
@@ -170,7 +171,7 @@ const ExploreProjectsPage = () => {
       duration: "6 months",
       owner: "Emily Jacobs",
       featured: false,
-      status: "Open",
+      status: "Open" as "Open",
       applicants: 7,
       createdAt: new Date()
     },
@@ -184,7 +185,7 @@ const ExploreProjectsPage = () => {
       duration: "5 months",
       owner: "Hassan Ahmed",
       featured: true,
-      status: "Open",
+      status: "Open" as "Open",
       applicants: 11,
       createdAt: new Date()
     },
@@ -198,7 +199,7 @@ const ExploreProjectsPage = () => {
       duration: "4 months",
       owner: "Priya Sharma",
       featured: false,
-      status: "Urgent",
+      status: "Urgent" as "Urgent",
       applicants: 6,
       createdAt: new Date()
     }

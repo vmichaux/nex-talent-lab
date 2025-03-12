@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -63,7 +64,7 @@ export function AddProjectButton() {
         duration: projectDuration,
         owner: currentUser.displayName || currentUser.email,
         featured: false,
-        status: "Open",
+        status: "Open" as "Open", // Explicitly type as "Open"
         applicants: 0,
         createdAt: serverTimestamp()
       });

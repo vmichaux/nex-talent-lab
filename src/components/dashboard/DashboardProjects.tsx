@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Briefcase, ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,10 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { collection, query, where, orderBy, limit, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
+import { Project } from "@/types/project"; // Import Project type
 
 export function DashboardProjects() {
   const navigate = useNavigate();
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
   
@@ -35,36 +37,54 @@ export function DashboardProjects() {
         }));
         
         if (fetchedProjects.length > 0) {
-          setProjects(fetchedProjects);
+          setProjects(fetchedProjects as Project[]);
         } else {
           // Fallback to sample data if no projects yet
           setProjects([
             {
-              id: 1,
+              id: "1",
               title: "Eco-Friendly Mobile App",
               description: "A mobile application that helps users track and reduce their carbon footprint.",
               progress: 65,
               deadline: "June 15, 2025",
-              status: "In Progress",
-              collaborators: 3
+              duration: "3 months",
+              status: "Open" as "Open",
+              skills: ["Mobile Development", "React Native", "UI/UX"],
+              category: "Environment",
+              owner: currentUser.displayName || currentUser.email || "You",
+              featured: false,
+              applicants: 3,
+              createdAt: new Date()
             },
             {
-              id: 2,
+              id: "2",
               title: "Community Garden Platform",
               description: "Web platform connecting urban gardeners with available land and resources.",
               progress: 30,
               deadline: "August 20, 2025",
-              status: "Planning",
-              collaborators: 5
+              duration: "4 months",
+              status: "Open" as "Open",
+              skills: ["Web Development", "React", "Firebase"],
+              category: "Community",
+              owner: currentUser.displayName || currentUser.email || "You",
+              featured: false,
+              applicants: 5,
+              createdAt: new Date()
             },
             {
-              id: 3,
+              id: "3", 
               title: "Educational VR Experience",
               description: "Virtual reality modules for high school science curriculum.",
               progress: 85,
               deadline: "May 10, 2025",
-              status: "Final Review",
-              collaborators: 4
+              duration: "2 months",
+              status: "Urgent" as "Urgent",
+              skills: ["VR Development", "Unity3D", "Education"],
+              category: "Education",
+              owner: currentUser.displayName || currentUser.email || "You",
+              featured: true,
+              applicants: 4,
+              createdAt: new Date()
             }
           ]);
         }
