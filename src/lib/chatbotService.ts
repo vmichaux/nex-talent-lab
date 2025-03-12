@@ -55,26 +55,33 @@ export const saveMessage = async (content: string, role: "user" | "assistant"): 
   }
 };
 
-// Send a message to OpenAI API and get a response
-// Note: This function should be implemented in a Firebase Cloud Function
-// for security reasons. This is a placeholder for the client-side implementation.
+// Send a message to OpenAI API
 export const sendMessageToOpenAI = async (message: string): Promise<string> => {
   try {
-    // In a real implementation, this should call a Firebase Cloud Function
-    // that securely accesses the OpenAI API with the API key stored in 
-    // Firebase Functions Config.
-    
-    // For now, we'll return a placeholder response
-    return "This is a placeholder response. In a production environment, this would be a response from the OpenAI API via a Firebase Cloud Function.";
-    
-    /* 
-    // Example Firebase Function call:
-    const functionRef = httpsCallable(functions, 'sendMessageToOpenAI');
-    const result = await functionRef({ message });
-    return result.data as string;
-    */
+    // Récupérer l'idToken de l'utilisateur actuel pour l'authentification
+    const idToken = await auth.currentUser?.getIdToken();
+    if (!idToken) {
+      throw new Error("User not authenticated");
+    }
+
+    // Appeler notre fonction Edge Firebase qui contient la clé API sécurisée
+    const response = await fetch("https://nextalent-lab-final.web.app/api/openai", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${idToken}`
+      },
+      body: JSON.stringify({ message })
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.response;
   } catch (error) {
     console.error("Error sending message to AI:", error);
-    return "Sorry, I encountered an error while processing your request.";
+    return "Désolé, j'ai rencontré une erreur lors du traitement de votre demande. Veuillez réessayer.";
   }
 };

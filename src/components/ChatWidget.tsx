@@ -55,7 +55,7 @@ export const ChatWidget = () => {
       if (history.length === 0) {
         // Add welcome message if no history exists
         const welcomeMessage: ChatMessage = {
-          content: "Hello! I'm your AI assistant. How can I help you today?",
+          content: "Bonjour ! Je suis votre assistant IA. Comment puis-je vous aider aujourd'hui ?",
           role: "assistant",
           timestamp: new Date(),
         };
@@ -67,8 +67,8 @@ export const ChatWidget = () => {
     } catch (error) {
       console.error("Failed to load chat history:", error);
       toast({
-        title: "Error",
-        description: "Failed to load your chat history. Please try again.",
+        title: "Erreur",
+        description: "Impossible de charger votre historique de conversation. Veuillez réessayer.",
         variant: "destructive",
       });
     } finally {
@@ -121,8 +121,8 @@ export const ChatWidget = () => {
     } catch (error) {
       console.error("Error in chat sequence:", error);
       toast({
-        title: "Error",
-        description: "Failed to get a response. Please try again.",
+        title: "Erreur",
+        description: "Impossible d'obtenir une réponse. Veuillez réessayer.",
         variant: "destructive",
       });
       
@@ -167,7 +167,7 @@ export const ChatWidget = () => {
           <div className="flex items-center justify-between bg-primary text-white p-3">
             <div className="flex items-center gap-2">
               <Bot className="h-5 w-5" />
-              <DialogTitle className="text-white text-lg">AI Assistant</DialogTitle>
+              <DialogTitle className="text-white text-lg">Assistant IA</DialogTitle>
             </div>
             <div className="flex items-center gap-1">
               <Button
@@ -209,7 +209,7 @@ export const ChatWidget = () => {
                       {message.content === "..." ? (
                         <div className="flex items-center space-x-2">
                           <Loader className="h-4 w-4 animate-spin" />
-                          <span>Thinking...</span>
+                          <span>Réflexion en cours...</span>
                         </div>
                       ) : (
                         <p className="whitespace-pre-wrap text-sm">{message.content}</p>
@@ -227,7 +227,7 @@ export const ChatWidget = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Type your message..."
+                    placeholder="Tapez votre message..."
                     className="flex-1 min-h-[60px] max-h-[120px] resize-none focus:outline-none text-sm p-2"
                     disabled={isLoading}
                   />
