@@ -21,13 +21,13 @@ export function ProjectSearch() {
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
         <Input
           type="text"
-          placeholder="Rechercher des projets..."
+          placeholder="Search for projects..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="pl-9"
         />
       </div>
-      <Button type="submit">Rechercher</Button>
+      <Button type="submit">Search</Button>
     </form>
   );
 }

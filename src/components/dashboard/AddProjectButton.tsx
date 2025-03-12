@@ -29,8 +29,8 @@ export function AddProjectButton() {
     console.log("Creating project:", { name: projectName, description: projectDescription });
     
     toast({
-      title: "Projet créé",
-      description: "Votre nouveau projet a été créé avec succès.",
+      title: "Project created",
+      description: "Your new project has been successfully created.",
     });
     
     // Reset form and close dialog
@@ -44,35 +44,35 @@ export function AddProjectButton() {
       <DialogTrigger asChild>
         <Button className="gap-2">
           <Plus className="h-4 w-4" />
-          Nouveau Projet
+          New Project
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Créer un nouveau projet</DialogTitle>
+          <DialogTitle>Create a new project</DialogTitle>
           <DialogDescription>
-            Décrivez votre projet et ce dont vous avez besoin pour le réaliser.
+            Describe your project and what you need to accomplish it.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="project-name">Nom du projet</Label>
+              <Label htmlFor="project-name">Project name</Label>
               <Input
                 id="project-name"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
-                placeholder="ex: Application de fitness personnalisé"
+                placeholder="e.g., Custom fitness application"
                 required
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="project-description">Description du projet</Label>
+              <Label htmlFor="project-description">Project description</Label>
               <Textarea
                 id="project-description"
                 value={projectDescription}
                 onChange={(e) => setProjectDescription(e.target.value)}
-                placeholder="Décrivez brièvement le projet, ses objectifs et le type de collaborateurs que vous recherchez..."
+                placeholder="Briefly describe the project, its goals, and the type of collaborators you're looking for..."
                 className="min-h-[120px]"
                 required
               />
@@ -80,9 +80,9 @@ export function AddProjectButton() {
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-              Annuler
+              Cancel
             </Button>
-            <Button type="submit">Créer le projet</Button>
+            <Button type="submit">Create project</Button>
           </DialogFooter>
         </form>
       </DialogContent>

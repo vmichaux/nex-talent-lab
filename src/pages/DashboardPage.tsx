@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -11,6 +12,7 @@ import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
 import { DashboardRequests } from "@/components/dashboard/DashboardRequests";
 import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
 import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
+
 const DashboardPage = () => {
   const {
     isLoggedIn,
@@ -19,6 +21,7 @@ const DashboardPage = () => {
   } = useAuth();
   const navigate = useNavigate();
   const [showWelcome, setShowWelcome] = useState(true);
+
   useEffect(() => {
     // Redirect non-logged-in users to the onboarding route
     if (!isLoggedIn) {
@@ -36,6 +39,7 @@ const DashboardPage = () => {
   const handleCompleteOnboarding = () => {
     setShowWelcome(false);
   };
+
   return <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
@@ -44,7 +48,7 @@ const DashboardPage = () => {
             {/* For demo purposes only - allows toggling between views */}
             <div className="text-center mb-10">
               <Button variant="outline" onClick={handleCompleteOnboarding} className="mx-auto">
-                Passer au tableau de bord
+                Go to Dashboard
               </Button>
             </div>
           </> : <div className="relative overflow-hidden bg-white">
@@ -58,7 +62,7 @@ const DashboardPage = () => {
                 <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">My Activities</h1>
                 
                 <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
-                  Suivez vos projets, vos connexions et vos activités en un seul endroit.
+                  Track your projects, connections, and activities all in one place.
                 </p>
               </div>
 
@@ -87,4 +91,5 @@ const DashboardPage = () => {
       <Footer />
     </div>;
 };
+
 export default DashboardPage;
