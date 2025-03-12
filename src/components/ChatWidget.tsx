@@ -206,8 +206,8 @@ export const ChatWidget = () => {
                 </div>
               )}
               
-              {/* Messages area */}
-              <div className="h-[370px] overflow-y-auto p-4 space-y-4">
+              {/* Messages area - reduced height to give more room to input */}
+              <div className="h-[340px] overflow-y-auto p-4 space-y-4">
                 {messages.map((message, index) => (
                   <div 
                     key={message.id || index}
@@ -234,22 +234,22 @@ export const ChatWidget = () => {
                 <div ref={messagesEndRef} />
               </div>
               
-              {/* Input area */}
-              <div className="border-t p-3">
+              {/* Input area - improved spacing and padding */}
+              <div className="border-t pt-3 pb-4 px-3">
                 <div className="flex items-end space-x-2">
                   <Textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Tapez votre message..."
-                    className="flex-1 min-h-[60px] max-h-[120px] resize-none focus:outline-none text-sm p-2"
+                    className="flex-1 min-h-[80px] max-h-[120px] resize-none focus:outline-none text-sm p-2 border rounded-md"
                     disabled={isLoading}
                   />
                   <Button 
                     onClick={handleSendMessage} 
                     disabled={!input.trim() || isLoading}
                     size="icon"
-                    className="mb-1 h-8 w-8"
+                    className="mb-1 h-10 w-10"
                   >
                     {isLoading ? (
                       <Loader className="h-4 w-4 animate-spin" />
