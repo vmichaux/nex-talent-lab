@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, User, LogIn, Search, MessageSquare, BookOpen, Globe, Home } from "lucide-react";
+import { Menu, X, User, LogIn, Search, MessageSquare, UserCog, Globe, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 export function Navbar() {
@@ -79,12 +80,12 @@ export function Navbar() {
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center space-x-4">
           {isLoggedIn ?
-        // User is logged in - show dashboard and logout buttons
+        // User is logged in - show My Account and logout buttons
         <div className="flex items-center gap-3">
-              <Link to="/dashboard">
+              <Link to="/profile">
                 <Button variant="outline" size="sm" className="gap-2">
-                  <User className="h-4 w-4" />
-                  Dashboard
+                  <UserCog className="h-4 w-4" />
+                  My Account
                 </Button>
               </Link>
               <LogoutButton />
@@ -133,6 +134,10 @@ export function Navbar() {
                 <Link to="/messages" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                   <MessageSquare className="h-4 w-4" />
                   Messages
+                </Link>
+                <Link to="/profile" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+                  <UserCog className="h-4 w-4" />
+                  My Account
                 </Link>
                 <div className="pt-4" onClick={() => setIsMenuOpen(false)}>
                   <LogoutButton />
