@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Rocket, Lightbulb } from "lucide-react";
@@ -60,7 +59,7 @@ export function DashboardOnboarding() {
                   </div>
                   <div className="mt-auto text-center">
                     <h3 className="text-xl font-semibold mb-1 py-0">Talent</h3>
-                    <p className="text-center text-muted-foreground py-0">Young professional or freelancer looking for exciting projects, meaningful collaborations or grow experience.</p>
+                    <p className="text-center text-muted-foreground py-0 text-sm">Young professional or freelancer looking for exciting projects, meaningful collaborations or grow experience.</p>
                   </div>
                 </CardContent>
               </Card>
@@ -73,7 +72,7 @@ export function DashboardOnboarding() {
                   </div>
                   <div className="mt-auto text-center">
                     <h3 className="text-xl font-semibold mb-1">Builder</h3>
-                    <p className="text-center text-muted-foreground">Project builder, startup founder, business owner or just someone with an idea, looking for talented individuals to collaborate with.</p>
+                    <p className="text-center text-muted-foreground text-sm">Project builder, startup founder, business owner or just someone with an idea, looking for talented individuals to collaborate with.</p>
                   </div>
                 </CardContent>
               </Card>
@@ -86,7 +85,7 @@ export function DashboardOnboarding() {
                   </div>
                   <div className="mt-auto text-center">
                     <h3 className="text-xl font-semibold mb-1">Talent & Builder</h3>
-                    <p className="text-center text-muted-foreground">Skilled professional interested in both contributing to projects and building your own ventures. The perfect dual role for ambitious creators.</p>
+                    <p className="text-center text-muted-foreground text-sm">The perfect dual role for ambitious creators interested in both contributing to projects and building your own ventures.</p>
                   </div>
                 </CardContent>
               </Card>
