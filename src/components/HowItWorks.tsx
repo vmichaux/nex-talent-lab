@@ -1,51 +1,89 @@
+
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+
 export function HowItWorks() {
-  const steps = [{
-    number: "01",
-    title: "Create Your Profile",
-    description: "Set up your professional profile highlighting your skills, experience, and portfolio to showcase your expertise.",
-    details: ["Build a comprehensive profile with your skills, education, and work history", "Upload portfolio samples to showcase your previous work", "Set your availability and preferred project types", "Get verified to increase your visibility and trustworthiness"],
-    color: "bg-primary"
-  }, {
-    number: "02",
-    title: "Discover Opportunities",
-    description: "Browse projects that match your skill set or post your own project to find the perfect collaborators.",
-    details: ["Use AI-powered matching to find projects suited to your skills", "Filter opportunities by industry, duration, and compensation", "Save interesting projects to review later", "Create project listings when you need to find collaborators"],
-    color: "bg-secondary"
-  }, {
-    number: "03",
-    title: "Connect & Collaborate",
-    description: "Use our built-in tools to communicate, share files, and work together seamlessly on your project.",
-    details: ["Direct messaging with potential collaborators", "Virtual meeting spaces for team discussions", "Secure file sharing and version control", "Collaborative project management tools"],
-    color: "bg-primary/80"
-  }, {
-    number: "04",
-    title: "Grow Your Network",
-    description: "Build lasting professional relationships and expand your career opportunities through successful collaborations.",
-    details: ["Receive and give feedback after project completion", "Build a reputation through ratings and reviews", "Join industry-specific communities", "Access career development resources and mentorship"],
-    color: "bg-secondary/80"
-  }];
-  return <section className="py-16">
+  const steps = [
+    {
+      number: "01",
+      title: "Create Your Profile",
+      description: "Set up your professional profile highlighting your skills, experience, and portfolio to showcase your expertise.",
+      details: [
+        "Build a comprehensive profile with your skills, education, and work history",
+        "Upload portfolio samples to showcase your previous work",
+        "Set your availability and preferred project types",
+        "Get verified to increase your visibility and trustworthiness"
+      ],
+      color: "bg-primary"
+    },
+    {
+      number: "02",
+      title: "Discover Opportunities",
+      description: "Browse projects that match your skill set or post your own project to find the perfect collaborators.",
+      details: [
+        "Use AI-powered matching to find projects suited to your skills",
+        "Filter opportunities by industry, duration, and compensation",
+        "Save interesting projects to review later",
+        "Create project listings when you need to find collaborators"
+      ],
+      color: "bg-secondary"
+    },
+    {
+      number: "03",
+      title: "Connect & Collaborate",
+      description: "Use our built-in tools to communicate, share files, and work together seamlessly on your project.",
+      details: [
+        "Direct messaging with potential collaborators",
+        "Virtual meeting spaces for team discussions",
+        "Secure file sharing and version control",
+        "Collaborative project management tools"
+      ],
+      color: "bg-primary/80"
+    },
+    {
+      number: "04",
+      title: "Grow Your Network",
+      description: "Build lasting professional relationships and expand your career opportunities through successful collaborations.",
+      details: [
+        "Receive and give feedback after project completion",
+        "Build a reputation through ratings and reviews",
+        "Join industry-specific communities",
+        "Access career development resources and mentorship"
+      ],
+      color: "bg-secondary/80"
+    }
+  ];
+
+  return (
+    <section className="py-16">
       <div className="container mx-auto px-4">
         {/* Removed duplicate title and description that were in this div */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step, index) => <div key={index} className="relative">
+          {steps.map((step, index) => (
+            <div key={index} className="relative">
               <div className={`${step.color} text-white text-2xl font-bold w-14 h-14 rounded-full flex items-center justify-center mb-6`}>
                 {step.number}
               </div>
               
-              {index < steps.length - 1 && <div className="hidden lg:block absolute h-0.5 bg-gray-200 w-full top-7 left-1/2 -z-10"></div>}
+              {index < steps.length - 1 && (
+                <div className="hidden lg:block absolute h-0.5 bg-gray-200 w-full top-7 left-1/2 -z-10"></div>
+              )}
               
               <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
               <p className="text-gray-600 mb-4">{step.description}</p>
               
               <ul className="space-y-2 text-sm text-gray-600">
-                {step.details.map((detail, i) => {})}
+                {step.details.map((detail, i) => (
+                  <li key={i} className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    <span>{detail}</span>
+                  </li>
+                ))}
               </ul>
-            </div>)}
+            </div>
+          ))}
         </div>
 
         <div className="mt-16 bg-gray-50 p-8 rounded-lg border border-gray-100">
@@ -104,5 +142,6 @@ export function HowItWorks() {
           </Link>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 }
