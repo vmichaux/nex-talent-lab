@@ -1,6 +1,7 @@
 
 import { collection, addDoc, query, where, orderBy, getDocs, serverTimestamp, DocumentData } from "firebase/firestore";
 import { db, auth } from "./firebase";
+import OpenAI from "openai";
 
 // Types for messages
 export interface ChatMessage {
@@ -58,28 +59,41 @@ export const saveMessage = async (content: string, role: "user" | "assistant"): 
 // Send a message to OpenAI API
 export const sendMessageToOpenAI = async (message: string): Promise<string> => {
   try {
-    // Récupérer l'idToken de l'utilisateur actuel pour l'authentification
-    const idToken = await auth.currentUser?.getIdToken();
-    if (!idToken) {
+    // Vérifier si l'utilisateur est authentifié
+    if (!auth.currentUser) {
       throw new Error("User not authenticated");
     }
 
-    // Appeler notre fonction Edge Firebase qui contient la clé API sécurisée
-    const response = await fetch("https://nextalent-lab-final.web.app/api/openai", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${idToken}`
-      },
-      body: JSON.stringify({ message })
+    // Créer une instance du client OpenAI
+    const openai = new OpenAI({
+      apiKey: "sk-...", // Remplacez par votre clé API OpenAI ou utilisez une variable d'environnement
+      dangerouslyAllowBrowser: true // Note: Ce paramètre est nécessaire pour l'utilisation côté client, mais n'est pas recommandé en production
     });
 
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
+    // Obtenir l'historique des messages pour créer un contexte de conversation
+    const chatHistory = await getUserChatHistory();
+    
+    // Préparer les messages pour l'API OpenAI en format approprié
+    const formattedMessages = chatHistory.map(msg => ({
+      role: msg.role === "user" ? "user" : "assistant",
+      content: msg.content
+    }));
+    
+    // Ajouter le nouveau message à la liste
+    formattedMessages.push({
+      role: "user",
+      content: message
+    });
 
-    const data = await response.json();
-    return data.response;
+    // Appeler l'API OpenAI
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: formattedMessages,
+      max_tokens: 1000
+    });
+
+    // Extraire et retourner la réponse
+    return completion.choices[0].message.content || "Désolé, je n'ai pas pu générer une réponse.";
   } catch (error) {
     console.error("Error sending message to AI:", error);
     return "Désolé, j'ai rencontré une erreur lors du traitement de votre demande. Veuillez réessayer.";
