@@ -108,7 +108,7 @@ export default function ContactSalesPage() {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
               <div className="lg:col-span-2">
                 <div className="bg-muted/50 p-6 rounded-lg h-full">
-                  <h2 className="text-2xl font-semibold mb-4">Why Contact Sales?</h2>
+                  <h2 className="text-2xl font-semibold mb-4 py-[26px]">Why Contact Sales?</h2>
                   <ul className="space-y-4">
                     <li className="flex items-start gap-3">
                       <div className="bg-primary/10 p-2 rounded-full mt-1">
