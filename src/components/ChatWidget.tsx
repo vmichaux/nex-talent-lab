@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { getUserChatHistory, saveMessage, sendMessageToOpenAI, ChatMessage } from "@/lib/chatbotService";
+
 export const ChatWidget = () => {
   const {
     isLoggedIn
@@ -129,6 +130,7 @@ export const ChatWidget = () => {
 
   // Don't render anything if user is not logged in
   if (!isLoggedIn) return null;
+  
   return <>
       {/* Chat button fixed in the bottom right */}
       {!isOpen && <Button onClick={() => setIsOpen(true)} className="fixed bottom-4 right-4 z-50 rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all duration-300" size="icon">
@@ -161,8 +163,8 @@ export const ChatWidget = () => {
                   <p className="text-sm">{apiError}</p>
                 </div>}
               
-              {/* Messages area - REDUCED height from 380px to 340px */}
-              <div className="h-[340px] overflow-y-auto p-4 space-y-4 py-0 px-[12px]">
+              {/* Messages area - Adjusted height for 120px input area */}
+              <div className="h-[380px] overflow-y-auto p-4 space-y-4 py-0 px-[12px]">
                 {messages.map((message, index) => <div key={message.id || index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div className={`max-w-[85%] rounded-lg px-4 py-2 ${message.role === "user" ? "bg-primary text-white" : "bg-gray-100 text-gray-800"}`}>
                       {message.content === "..." ? <div className="flex items-center space-x-2">
@@ -174,10 +176,17 @@ export const ChatWidget = () => {
                 <div ref={messagesEndRef} />
               </div>
               
-              {/* Input area - Increased padding for better visibility */}
-              <div className="border-t pt-3 pb-5 px-3 mb-3">
+              {/* Input area - Set to exact 120px height */}
+              <div className="border-t pt-2 px-3 mb-0">
                 <div className="flex items-start space-x-2">
-                  <Textarea value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="Tapez votre message..." className="flex-1 min-h-[60px] max-h-[120px] resize-none focus:outline-none text-sm p-2 border rounded-md" disabled={isLoading} />
+                  <Textarea 
+                    value={input} 
+                    onChange={e => setInput(e.target.value)} 
+                    onKeyDown={handleKeyDown} 
+                    placeholder="Tapez votre message..." 
+                    className="flex-1 h-[120px] resize-none focus:outline-none text-sm p-2 border rounded-md" 
+                    disabled={isLoading} 
+                  />
                   <Button onClick={handleSendMessage} disabled={!input.trim() || isLoading} size="icon" className="mt-1 h-10 w-10">
                     {isLoading ? <Loader className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                   </Button>
