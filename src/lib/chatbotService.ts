@@ -64,9 +64,9 @@ export const sendMessageToOpenAI = async (message: string): Promise<string> => {
       throw new Error("User not authenticated");
     }
 
-    // Créer une instance du client OpenAI avec la clé API correcte
+    // Créer une instance du client OpenAI avec la clé API fournie
     const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY || "YOUR_OPENAI_API_KEY", // Remplacer par votre clé API
+      apiKey: "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",
       dangerouslyAllowBrowser: true // Note: Ce paramètre est nécessaire pour l'utilisation côté client, mais n'est pas recommandé en production
     });
 
