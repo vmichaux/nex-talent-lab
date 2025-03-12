@@ -10,30 +10,47 @@ export default function PricingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
+      
       <main className="flex-1">
-        <div className="container mx-auto py-16 px-4">
-          <div className="text-center mb-16">
-            <h1 className="text-5xl font-bold mb-4">Pricing Plans</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-              Choose the right plan for your business or project. Need a custom solution?
-            </p>
-            <Link to="/contact-sales">
-              <Button variant="outline" className="gap-2">
-                <Phone className="h-4 w-4" />
-                Contact Sales for Custom Options
-              </Button>
-            </Link>
-          </div>
-          <PricingSection />
-          <div className="mt-20 text-center">
-            <Link to="/onboarding">
-              <Button size="lg" className="px-8">
-                Get Started
-              </Button>
-            </Link>
+        <div className="relative overflow-hidden bg-white">
+          {/* Background Pattern - Purple Gradient */}
+          <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
+          
+          <div className="container mx-auto px-4 py-12">
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
+              <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Find the Perfect Plan</div>
+              
+              <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
+                Pricing Plans
+              </h1>
+              
+              <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
+                Choose the right plan for your business or project. Need a custom solution?
+              </p>
+              
+              <div className="mt-6">
+                <Link to="/contact-sales">
+                  <Button variant="outline" className="gap-2">
+                    <Phone className="h-4 w-4" />
+                    Contact Sales for Custom Options
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <PricingSection />
+            
+            <div className="mt-20 text-center">
+              <Link to="/onboarding">
+                <Button size="lg" className="px-8">
+                  Get Started
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </main>
+      
       <Footer />
     </div>
   );
