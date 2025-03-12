@@ -1,13 +1,17 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronRight, GraduationCap, Rocket } from "lucide-react";
+import { GraduationCap, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { SimplifiedHeader } from "./SimplifiedHeader";
+
 export function DashboardOnboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"talent" | "entrepreneur" | null>(null);
   const totalSteps = 2;
   const navigate = useNavigate();
+
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
@@ -19,6 +23,7 @@ export function DashboardOnboarding() {
       navigate("/login");
     }
   };
+
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
@@ -26,6 +31,7 @@ export function DashboardOnboarding() {
       navigate("/");
     }
   };
+
   const getStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -47,7 +53,7 @@ export function DashboardOnboarding() {
       case 2:
         return <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
             <h1 className="text-4xl font-bold mb-6">Choose Your Role</h1>
-            <p className="text-lg mb-8 text-zinc-400">Are you a talent looking for opportunities or a project builder ?</p>
+            <p className="text-lg mb-8 text-zinc-400">Are you a talent looking for opportunities or a project builder ?</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-10">
               {/* Talent Card */}
@@ -85,22 +91,17 @@ export function DashboardOnboarding() {
         return null;
     }
   };
-  return <div className="min-h-[calc(100vh-200px)] flex flex-col justify-center items-center p-4 py-12">
-      <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8 relative">
-        {/* Step indicator */}
-        <div className="absolute top-4 right-4 text-sm text-gray-500">
-          Step {currentStep} of {totalSteps}
-        </div>
-        
-        {/* Back button */}
-        <button onClick={handleBack} className="absolute top-4 left-4 p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Go back">
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        
-        {/* Step content */}
-        <div className="py-12">
-          {getStepContent()}
-        </div>
+
+  return (
+    <>
+      <SimplifiedHeader 
+        currentStep={currentStep} 
+        totalSteps={totalSteps} 
+        onBackClick={handleBack} 
+      />
+      <div className="min-h-[calc(100vh-75px)] flex flex-col justify-center items-center p-6 py-16 bg-white">
+        {getStepContent()}
       </div>
-    </div>;
+    </>
+  );
 }
