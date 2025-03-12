@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, User, LogIn, Search, MessageSquare, BookOpen, Globe, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const {
     isLoggedIn,
     LogoutButton
@@ -17,6 +18,14 @@ export function Navbar() {
   if (location.pathname === "/onboarding") {
     return null;
   }
+  
+  // Function to handle dashboard link click
+  const handleDashboardClick = (e: React.MouseEvent) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      navigate("/onboarding");
+    }
+  };
   
   return <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -55,7 +64,7 @@ export function Navbar() {
               <Link to="/explore" className="font-medium hover:text-primary transition-colors">
                 Explore
               </Link>
-              <Link to="/dashboard" className="font-medium hover:text-primary transition-colors">
+              <Link to="/onboarding" className="font-medium hover:text-primary transition-colors" onClick={handleDashboardClick}>
                 Dashboard
               </Link>
               <Link to="/how-it-works" className="font-medium hover:text-primary transition-colors">
@@ -140,7 +149,13 @@ export function Navbar() {
                 <Link to="/explore" className="block py-2 px-4 hover:bg-gray-50 rounded-md" onClick={() => setIsMenuOpen(false)}>
                   Explore
                 </Link>
-                <Link to="/dashboard" className="block py-2 px-4 hover:bg-gray-50 rounded-md" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/onboarding" className="block py-2 px-4 hover:bg-gray-50 rounded-md" onClick={(e) => {
+                  setIsMenuOpen(false);
+                  if (!isLoggedIn) {
+                    e.preventDefault();
+                    navigate("/onboarding");
+                  }
+                }}>
                   Dashboard
                 </Link>
                 <Link to="/how-it-works" className="block py-2 px-4 hover:bg-gray-50 rounded-md" onClick={() => setIsMenuOpen(false)}>
