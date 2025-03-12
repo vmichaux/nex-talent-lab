@@ -53,15 +53,13 @@ export function DashboardOnboarding() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mb-10">
               {/* Talent Card - Updated dimensions */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'talent' ? 'ring-2 ring-primary' : ''}`} onClick={() => setSelectedRole('talent')}>
-                <CardContent className="flex flex-col items-center p-4 bg-[#F5EEFF] h-[180px] py-[23px]">
+                <CardContent className="flex flex-col items-center p-4 bg-[#F5EEFF] h-[180px] py-[9px]">
                   <div className="flex justify-start w-full mb-4 mt-2">
                     <GraduationCap className="h-8 w-8 text-[#9b87f5]" />
                   </div>
                   <div className="mt-auto text-center">
-                    <h3 className="text-xl font-semibold mb-1">Talent</h3>
-                    <p className="text-center text-muted-foreground">
-                      Young professional or freelancer looking for exciting projects and collaborations.
-                    </p>
+                    <h3 className="text-xl font-semibold mb-1 py-0">Talent</h3>
+                    <p className="text-center text-muted-foreground py-0">Young professional or freelancer looking for exciting projects, meaningful collaborations or grow experience.</p>
                   </div>
                 </CardContent>
               </Card>
