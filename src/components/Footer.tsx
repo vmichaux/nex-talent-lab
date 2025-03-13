@@ -31,25 +31,25 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold mb-4 mx-[50px] px-[40px]">Quick Links</h3>
+            <h3 className="text-lg font-bold mb-4 mx-[50px] px-[50px]">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/about" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[40px]">
+                <Link to="/about" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[50px]">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/explore" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[41px]">
+                <Link to="/explore" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[50px]">
                   Explore Projects
                 </Link>
               </li>
               <li>
-                <Link to="/how-it-works" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[40px]">
+                <Link to="/how-it-works" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[50px]">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[40px]">
+                <Link to="/pricing" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[50px]">
                   Pricing
                 </Link>
               </li>
