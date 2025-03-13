@@ -13,6 +13,7 @@ export interface Project {
   applicants: number;
   createdAt: Date;
   progress?: number;
+  matchPercentage?: number;
   
   // New fields
   projectType: string;

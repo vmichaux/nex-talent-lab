@@ -27,7 +27,7 @@ export function RecommendedOpportunities({ filter, setFilter }: RecommendedOppor
           ...project,
           matchPercentage: Math.floor(Math.random() * (99 - 70) + 70) // Random match between 70-99%
         }))
-        .sort((a, b) => (b.matchPercentage || 0) - (a.matchPercentage || 0))
+        .sort((a, b) => ((b.matchPercentage || 0) - (a.matchPercentage || 0)))
         .slice(0, 6); // Limit to top 6 matches
         
       setRecommendations(openProjects);
