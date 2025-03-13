@@ -1,3 +1,4 @@
+
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -154,7 +155,7 @@ export default function OurStoryPage() {
           </div>
         </section>
 
-        <section className="py-16 rounded-xl bg-gradient-to-r from-[#c8b6f8] to-[#a7f3d0] my-8 mx-auto max-w-[calc(5xl+6px)]">
+        <section className="py-16 rounded-xl bg-gradient-to-r from-[#c8b6f8] to-[#a7f3d0] my-8 mx-auto max-w-5xl">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold mb-6 text-black">Ready to Start Your Journey?</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-black">
@@ -180,3 +181,4 @@ export default function OurStoryPage() {
       <Footer />
     </div>;
 }
+
