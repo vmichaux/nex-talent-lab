@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { collection, query, where, getDocs, Timestamp, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { ExternalLink } from "lucide-react";
 

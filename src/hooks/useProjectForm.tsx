@@ -1,14 +1,12 @@
-
 import { useState } from "react";
 import { Project } from "@/types/project";
 import { ProjectFormData } from "@/components/dashboard/AddProjectButton";
 import { useProjects } from "@/hooks/useProjects";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 export function useProjectForm(project?: Project) {
   const [loading, setLoading] = useState(false);
   const { updateProject } = useProjects();
-  const { toast } = useToast();
   
   // Convert project to form data format if provided
   const initialFormData: ProjectFormData = project ? {
@@ -70,9 +68,8 @@ export function useProjectForm(project?: Project) {
       const result = await updateProject(project.id, updatedProjectData);
       
       if (result.success) {
-        toast({
-          title: "Project updated",
-          description: "Your project has been successfully updated."
+        toast.success("Project updated. Your project has been successfully updated.", {
+          duration: 4000,
         });
         return { success: true, project: { ...project, ...updatedProjectData } };
       } else {
@@ -80,10 +77,8 @@ export function useProjectForm(project?: Project) {
       }
     } catch (error) {
       console.error("Error updating project:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update the project. Please try again.",
-        variant: "destructive"
+      toast.error("Failed to update the project. Please try again.", {
+        duration: 4000,
       });
       return { success: false, error };
     } finally {

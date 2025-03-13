@@ -1,14 +1,12 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { collection, query, where, getDocs, doc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { ApplicationSummary } from "@/components/dashboard/applications/ApplicationTypes";
 
 export function useApplicationsData() {
   const { currentUser } = useAuth();
-  const { toast } = useToast();
   const [applications, setApplications] = useState<ApplicationSummary[]>([]);
   const [filteredApplications, setFilteredApplications] = useState<ApplicationSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -133,21 +131,21 @@ export function useApplicationsData() {
         )
       );
       
-      toast({
-        title: `Application ${newStatus}`,
-        description: newStatus === 'accepted' 
-          ? "You have accepted the application. The applicant will be notified." 
-          : "You have rejected the application. The applicant will be notified.",
-        variant: newStatus === 'accepted' ? "default" : "destructive"
-      });
+      if (newStatus === 'accepted') {
+        toast.success("Application accepted. The applicant will be notified.", {
+          duration: 4000,
+        });
+      } else {
+        toast.error("Application rejected. The applicant will be notified.", {
+          duration: 4000,
+        });
+      }
       
       return;
     } catch (error) {
       console.error("Error updating application status:", error);
-      toast({
-        title: "Update failed",
-        description: "Failed to update application status. Please try again.",
-        variant: "destructive"
+      toast.error("Failed to update application status. Please try again.", {
+        duration: 4000,
       });
       throw error;
     } finally {

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { FileText, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { ApplicationModal } from "./ApplicationModal";
 import { ApplicationSummary } from "./applications/ApplicationTypes";
 import { ApplicationsList } from "./applications/ApplicationsList";

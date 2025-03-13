@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
@@ -18,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 import { Project } from "@/types/project";
 import { getUserFullName } from "@/lib/firebase";
 
-// Form data type
 export interface ProjectFormData {
   projectName: string;
   projectDescription: string;
@@ -50,20 +48,16 @@ interface AddProjectButtonProps {
 export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButtonProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   
-  // Use either provided state management or internal state
   const isOpen = open !== undefined ? open : internalOpen;
   const setIsOpen = setOpenProp || setInternalOpen;
   
   const handleSubmit = async (formData: ProjectFormData) => {
     if (!currentUser) {
-      toast({
-        title: "Authentication required",
-        description: "You must be logged in to create a project.",
-        variant: "destructive"
+      toast.error("Authentication required. You must be logged in to create a project.", {
+        duration: 4000,
       });
       return;
     }
@@ -71,13 +65,10 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
     try {
       setLoading(true);
       
-      // Get user's full name
       const userFullName = await getUserFullName(currentUser.uid);
       
-      // Extract skills for backward compatibility
       const skills = formData.skillsWithLevel.map(item => item.skill);
       
-      // Create project object that matches the Project type
       const newProject: Omit<Project, 'id' | 'createdAt'> = {
         title: formData.projectName,
         description: formData.projectDescription,
@@ -91,11 +82,10 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
         applicants: 0,
         progress: 0,
         
-        // New fields
         projectType: formData.projectType,
         skillsWithLevel: formData.skillsWithLevel,
         deliverables: formData.deliverables,
-        timeline: formData.projectDuration, // For now, using the same value as duration
+        timeline: formData.projectDuration,
         compensation: formData.compensation,
         compensationDetails: formData.compensationDetails,
         perks: formData.perks,
@@ -107,10 +97,9 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
         legalConstraints: formData.legalConstraints,
         budget: formData.budget,
         desiredProfiles: formData.desiredProfiles,
-        userId: currentUser.uid // Add the user ID to link project to user
+        userId: currentUser.uid
       };
       
-      // Create new project in Firestore
       const projectRef = await addDoc(collection(db, "projects"), {
         ...newProject,
         createdAt: serverTimestamp()
@@ -118,23 +107,18 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
       
       console.log("Project added with ID: ", projectRef.id);
       
-      toast({
-        title: "Project created",
-        description: "Your new project has been successfully added to your dashboard."
+      toast.success("Project created. Your new project has been successfully added to your dashboard.", {
+        duration: 4000,
       });
       
-      // Close dialog
       setIsOpen(false);
       
-      // Navigate back to dashboard to see the new project
       navigate("/dashboard");
       
     } catch (error) {
       console.error("Error creating project:", error);
-      toast({
-        title: "Error",
-        description: "Failed to create project. Please try again.",
-        variant: "destructive"
+      toast.error("Failed to create project. Please try again.", {
+        duration: 4000,
       });
     } finally {
       setLoading(false);
@@ -162,5 +146,4 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
   );
 }
 
-// Import the ProjectForm component
 import { ProjectForm } from "./ProjectForm";
