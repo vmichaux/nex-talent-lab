@@ -159,7 +159,7 @@ export default function OurStoryPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4"></div>
-                <h3 className="font-semibold text-xl">Alex Johnson</h3>
+                <h3 className="font-semibold text-xl">Victoria Michaux</h3>
                 <p className="text-gray-600">Founder & CEO</p>
               </div>
               <div className="text-center">
