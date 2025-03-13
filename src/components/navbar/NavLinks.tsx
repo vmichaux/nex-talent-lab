@@ -12,7 +12,7 @@ interface NavLinksProps {
 export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, onItemClick }: NavLinksProps) {
   const linkClass = isMobile 
     ? "block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2"
-    : "font-medium hover:text-primary transition-colors flex items-center gap-2";
+    : "font-medium hover:text-primary transition-colors flex items-center gap-1";
 
   const handleClick = () => {
     if (onItemClick) onItemClick();
@@ -66,7 +66,7 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
       <Link to="/about" className={linkClass} onClick={handleClick}>
         About
       </Link>
-      <Link to="/contact-sales" className={isMobile ? linkClass : `${linkClass} flex items-center gap-2`} onClick={handleClick}>
+      <Link to="/contact-sales" className={isMobile ? linkClass : `${linkClass} flex items-center gap-1`} onClick={handleClick}>
         <Phone className="h-4 w-4" />
         Contact Sales
       </Link>

@@ -45,7 +45,7 @@ export function Navbar() {
         <NavbarBrand userRole={userRole} isLoggedIn={isLoggedIn} />
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden md:flex items-center space-x-8">
           <NavLinks isLoggedIn={isLoggedIn} handleDashboardClick={handleDashboardClick} />
         </nav>
 
