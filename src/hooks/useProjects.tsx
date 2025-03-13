@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { collection, query, orderBy, getDocs, Timestamp, doc, updateDoc, getDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Project } from "@/types/project";
@@ -15,7 +15,7 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
   const [error, setError] = useState<string | null>(null);
   const { excludeCurrentUser = false, userId = null } = options;
 
-  const fetchProjects = useCallback(async () => {
+  const fetchProjects = async () => {
     try {
       setLoading(true);
       const projectsQuery = query(
@@ -57,16 +57,13 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
       if (excludeCurrentUser && userId) {
         console.log("Excluding projects from user:", userId);
       }
-      
-      return filteredProjects;
     } catch (err) {
       console.error("Error fetching projects:", err);
       setError("Failed to load projects. Please try again later.");
-      return [];
     } finally {
       setLoading(false);
     }
-  }, [excludeCurrentUser, userId]);
+  };
 
   // Function to update a project in Firestore
   const updateProject = async (projectId: string, updatedData: Partial<Project>) => {
@@ -96,9 +93,6 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
         )
       );
       
-      // Refresh projects for immediate UI update
-      await fetchProjects();
-      
       return { success: true };
     } catch (err) {
       console.error("Error updating project:", err);
@@ -109,7 +103,7 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
     }
   };
 
-  const getUserProjects = useCallback(async (userId: string) => {
+  const getUserProjects = async (userId: string) => {
     try {
       setLoading(true);
       console.log("Fetching projects for user:", userId);
@@ -145,11 +139,11 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
     fetchProjects();
-  }, [fetchProjects]); // Re-fetch when these dependencies change
+  }, [userId, excludeCurrentUser]); // Re-fetch when these dependencies change
 
   return { 
     projects, 

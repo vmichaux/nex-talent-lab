@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 export function useProjectForm(project?: Project) {
   const [loading, setLoading] = useState(false);
-  const { updateProject, refetchProjects } = useProjects();
+  const { updateProject } = useProjects();
   
   // Convert project to form data format if provided
   const initialFormData: ProjectFormData = project ? {
@@ -69,12 +69,9 @@ export function useProjectForm(project?: Project) {
       const result = await updateProject(project.id, updatedProjectData);
       
       if (result.success) {
-        // Refresh projects to ensure UI is updated
-        await refetchProjects();
-        
         toast.success("Project updated", {
           description: "Your project has been successfully updated.",
-          duration: 10000,
+          duration: 4000,
         });
         return { success: true, project: { ...project, ...updatedProjectData } };
       } else {
@@ -84,7 +81,7 @@ export function useProjectForm(project?: Project) {
       console.error("Error updating project:", error);
       toast.error("Failed to update the project", {
         description: "Please try again.",
-        duration: 10000,
+        duration: 4000,
       });
       return { success: false, error };
     } finally {

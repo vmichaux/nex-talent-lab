@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "react-router-dom";
 import { Project } from "@/types/project";
 import { getUserFullName } from "@/lib/firebase";
-import { useProjects } from "@/hooks/useProjects";
 
 export interface ProjectFormData {
   projectName: string;
@@ -52,7 +50,6 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
   const [loading, setLoading] = useState(false);
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  const { refetchProjects } = useProjects();
   
   const isOpen = open !== undefined ? open : internalOpen;
   const setIsOpen = setOpenProp || setInternalOpen;
@@ -60,7 +57,7 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
   const handleSubmit = async (formData: ProjectFormData) => {
     if (!currentUser) {
       toast.error("Authentication required. You must be logged in to create a project.", {
-        duration: 10000,
+        duration: 4000,
       });
       return;
     }
@@ -110,24 +107,18 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
       
       console.log("Project added with ID: ", projectRef.id);
       
-      // Immediately refetch projects to update dashboard
-      await refetchProjects();
-      
-      toast.success("Project created", {
-        description: "Your new project has been successfully added to your dashboard.",
-        duration: 10000,
+      toast.success("Project created. Your new project has been successfully added to your dashboard.", {
+        duration: 4000,
       });
       
       setIsOpen(false);
       
-      // Stay on dashboard page without navigation
-      // navigate("/dashboard");
+      navigate("/dashboard");
       
     } catch (error) {
       console.error("Error creating project:", error);
-      toast.error("Failed to create project", {
-        description: "Please try again.",
-        duration: 10000,
+      toast.error("Failed to create project. Please try again.", {
+        duration: 4000,
       });
     } finally {
       setLoading(false);
