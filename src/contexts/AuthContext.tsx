@@ -10,7 +10,7 @@ import {
   GithubAuthProvider,
   signInWithPopup
 } from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, getDocs, query, where, addDoc } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +24,15 @@ interface UserData {
   hasCompletedProfile?: boolean;
 }
 
+interface TestProfile {
+  id: string;
+  name: string;
+  email: string;
+  isActive: boolean;
+  createdAt: Date;
+  parentUserId: string;
+}
+
 type AuthContextType = {
   currentUser: User | null;
   userData: UserData | null;
@@ -35,6 +44,11 @@ type AuthContextType = {
   logout: () => Promise<void>;
   updateProfileCompletion: (completed: boolean) => Promise<void>;
   LogoutButton: React.FC;
+  testProfiles: TestProfile[];
+  activeTestProfile: TestProfile | null;
+  createTestProfile: (name: string) => Promise<void>;
+  switchToTestProfile: (profileId: string) => Promise<void>;
+  switchToMainProfile: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -44,6 +58,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
+  const [testProfiles, setTestProfiles] = useState<TestProfile[]>([]);
+  const [activeTestProfile, setActiveTestProfile] = useState<TestProfile | null>(null);
   const { toast } = useToast();
   
   const updateUserData = async (user: User) => {
@@ -77,6 +93,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const fetchTestProfiles = async (userId: string) => {
+    try {
+      const testProfilesQuery = query(
+        collection(db, "testProfiles"), 
+        where("parentUserId", "==", userId)
+      );
+      const querySnapshot = await getDocs(testProfilesQuery);
+      
+      const profiles: TestProfile[] = [];
+      querySnapshot.forEach((doc) => {
+        profiles.push({ id: doc.id, ...doc.data() } as TestProfile);
+      });
+      
+      setTestProfiles(profiles);
+      
+      // Check if any profile is active
+      const activeProfile = profiles.find(profile => profile.isActive);
+      if (activeProfile) {
+        setActiveTestProfile(activeProfile);
+      } else {
+        setActiveTestProfile(null);
+      }
+    } catch (error) {
+      console.error("Error fetching test profiles:", error);
+      setTestProfiles([]);
+      setActiveTestProfile(null);
+    }
+  };
+
   const updateProfileCompletion = async (completed: boolean) => {
     if (!currentUser) return;
     
@@ -107,8 +152,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoggedIn(!!user);
       if (user) {
         await updateUserData(user);
+        await fetchTestProfiles(user.uid);
       } else {
         setUserData(null);
+        setTestProfiles([]);
+        setActiveTestProfile(null);
       }
       setLoading(false);
     });
@@ -161,8 +209,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   
   const logout = async () => {
     try {
+      // Clear test profile if active
+      if (activeTestProfile) {
+        await switchToMainProfile();
+      }
+      
       await signOut(auth);
       setUserData(null);
+      setTestProfiles([]);
+      setActiveTestProfile(null);
+      
       toast({
         title: "Logged out successfully",
         description: "You have been logged out of your account",
@@ -174,6 +230,135 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         variant: "destructive"
       });
       throw error;
+    }
+  };
+
+  const createTestProfile = async (name: string) => {
+    if (!currentUser) {
+      toast({
+        title: "Authentication required",
+        description: "You must be logged in to create a test profile.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      // Set existing profiles to inactive
+      if (activeTestProfile) {
+        const activeProfileRef = doc(db, "testProfiles", activeTestProfile.id);
+        await setDoc(activeProfileRef, { isActive: false }, { merge: true });
+      }
+      
+      // Create new test profile
+      const testProfileData: Omit<TestProfile, 'id'> = {
+        name,
+        email: currentUser.email || '',
+        isActive: true,
+        createdAt: new Date(),
+        parentUserId: currentUser.uid
+      };
+      
+      const testProfileRef = await addDoc(collection(db, "testProfiles"), testProfileData);
+      
+      const newProfile = {
+        id: testProfileRef.id,
+        ...testProfileData
+      };
+      
+      // Update local state
+      setTestProfiles(prev => [...prev, newProfile]);
+      setActiveTestProfile(newProfile);
+      
+      toast({
+        title: "Test profile created",
+        description: `You are now using the test profile "${name}"`
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error creating test profile",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const switchToTestProfile = async (profileId: string) => {
+    const profileToSwitch = testProfiles.find(profile => profile.id === profileId);
+    
+    if (!profileToSwitch) {
+      toast({
+        title: "Profile not found",
+        description: "The selected test profile could not be found.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    try {
+      // Set all profiles to inactive
+      const updatePromises = testProfiles.map(profile => {
+        const profileRef = doc(db, "testProfiles", profile.id);
+        return setDoc(profileRef, { isActive: profile.id === profileId }, { merge: true });
+      });
+      
+      await Promise.all(updatePromises);
+      
+      // Update local state
+      setTestProfiles(prev => 
+        prev.map(profile => ({
+          ...profile,
+          isActive: profile.id === profileId
+        }))
+      );
+      
+      setActiveTestProfile(profileToSwitch);
+      
+      toast({
+        title: "Profile switched",
+        description: `You are now using the test profile "${profileToSwitch.name}"`
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error switching profiles",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const switchToMainProfile = async () => {
+    if (!activeTestProfile) return;
+    
+    try {
+      // Update all test profiles to inactive
+      const updatePromises = testProfiles.map(profile => {
+        const profileRef = doc(db, "testProfiles", profile.id);
+        return setDoc(profileRef, { isActive: false }, { merge: true });
+      });
+      
+      await Promise.all(updatePromises);
+      
+      // Update local state
+      setTestProfiles(prev => 
+        prev.map(profile => ({
+          ...profile,
+          isActive: false
+        }))
+      );
+      
+      setActiveTestProfile(null);
+      
+      toast({
+        title: "Main profile activated",
+        description: "You have switched back to your main profile"
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error switching profiles",
+        description: error.message,
+        variant: "destructive"
+      });
     }
   };
 
@@ -207,7 +392,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signup,
     logout,
     updateProfileCompletion,
-    LogoutButton
+    LogoutButton,
+    testProfiles,
+    activeTestProfile,
+    createTestProfile,
+    switchToTestProfile,
+    switchToMainProfile
   };
   
   return (
