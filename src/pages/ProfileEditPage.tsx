@@ -202,7 +202,6 @@ const ProfileEditPage = () => {
               }
             }
             
-            // Only set edit mode to false for completed profiles
             setIsEditing(!isProfileCompleted);
             
             toast({
@@ -218,7 +217,6 @@ const ProfileEditPage = () => {
               }));
             }
             
-            // If no profile, start in edit mode
             setIsEditing(true);
             
             console.log("No profile data found, using empty profile");
@@ -454,7 +452,6 @@ const ProfileEditPage = () => {
         description: "Your profile has been updated successfully.",
       });
       
-      // Switch to view mode after saving
       setIsEditing(false);
     } catch (error) {
       console.error("Error saving profile:", error);
@@ -466,7 +463,6 @@ const ProfileEditPage = () => {
     }
   };
 
-  // View Mode Components
   const renderProfileView = () => {
     return (
       <div className="space-y-8">
@@ -987,3 +983,448 @@ const ProfileEditPage = () => {
           <Textarea
             id="bio"
             value={profile.bio}
+            onChange={(e) => handleInputChange("bio", e.target.value)}
+            placeholder="Tell us about yourself, your skills, and what you're looking for..."
+            className="h-32 resize-none"
+          />
+        </div>
+      </div>
+      
+      {renderInterests()}
+    </div>
+  );
+
+  const renderSkillsSection = () => (
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <UserPlus className="h-5 w-5 text-primary" />
+        Skills & Expertise
+      </h3>
+      
+      <div className="space-y-4">
+        {profile.skills.map((skill, index) => (
+          <div key={`skill-${index}`} className="flex items-center gap-4">
+            <div className="flex-1">
+              <Input
+                placeholder="Skill (e.g., JavaScript, Project Management, Graphic Design)"
+                value={skill.name}
+                onChange={(e) => handleSkillNameChange(index, e.target.value)}
+              />
+            </div>
+            <div className="w-40">
+              <Select
+                value={skill.level}
+                onValueChange={(value: SkillLevel) => handleSkillLevelChange(index, value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Beginner">Beginner</SelectItem>
+                  <SelectItem value="Intermediate">Intermediate</SelectItem>
+                  <SelectItem value="Advanced">Advanced</SelectItem>
+                  <SelectItem value="Expert">Expert</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {profile.skills.length > 1 && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => removeSkill(index)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        ))}
+        
+        <Button
+          type="button"
+          variant="outline"
+          className="gap-2"
+          onClick={addSkill}
+        >
+          <Plus className="h-4 w-4" />
+          Add Skill
+        </Button>
+      </div>
+    </div>
+  );
+
+  const renderEducationSection = () => (
+    <div className="space-y-6 mt-8">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <GraduationCap className="h-5 w-5 text-primary" />
+        Education
+      </h3>
+      
+      <div className="space-y-6">
+        {profile.education.map((edu, index) => (
+          <div key={`education-${index}`} className="space-y-4 p-4 border border-gray-100 rounded-md">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor={`school-${index}`}>School / University</Label>
+                <Input
+                  id={`school-${index}`}
+                  value={edu.school}
+                  onChange={(e) => handleEducationChange(index, "school", e.target.value)}
+                  placeholder="University name"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor={`degree-${index}`}>Degree / Field of Study</Label>
+                <Input
+                  id={`degree-${index}`}
+                  value={edu.degree}
+                  onChange={(e) => handleEducationChange(index, "degree", e.target.value)}
+                  placeholder="Bachelor of Science in Computer Science"
+                />
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <div className="flex-1 space-y-2">
+                <Label htmlFor={`year-${index}`}>Year</Label>
+                <Input
+                  id={`year-${index}`}
+                  value={edu.year}
+                  onChange={(e) => handleEducationChange(index, "year", e.target.value)}
+                  placeholder="2018 - 2022"
+                />
+              </div>
+              
+              {profile.education.length > 1 && (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="icon"
+                  className="mt-6"
+                  onClick={() => {
+                    const updatedEducation = [...profile.education];
+                    updatedEducation.splice(index, 1);
+                    setProfile({
+                      ...profile,
+                      education: updatedEducation.length ? updatedEducation : [{ school: "", degree: "", year: "" }]
+                    });
+                  }}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+        ))}
+        
+        <Button
+          type="button"
+          variant="outline"
+          className="gap-2"
+          onClick={addEducation}
+        >
+          <Plus className="h-4 w-4" />
+          Add Education
+        </Button>
+      </div>
+    </div>
+  );
+
+  const renderExperienceSection = () => (
+    <div className="space-y-6 mt-8">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <Briefcase className="h-5 w-5 text-primary" />
+        Work Experience
+      </h3>
+      
+      <div className="space-y-6">
+        {profile.experience.map((exp, index) => (
+          <div key={`experience-${index}`} className="space-y-4 p-4 border border-gray-100 rounded-md">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor={`company-${index}`}>Company</Label>
+                <Input
+                  id={`company-${index}`}
+                  value={exp.company}
+                  onChange={(e) => handleExperienceChange(index, "company", e.target.value)}
+                  placeholder="Company name"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor={`position-${index}`}>Position</Label>
+                <Input
+                  id={`position-${index}`}
+                  value={exp.position}
+                  onChange={(e) => handleExperienceChange(index, "position", e.target.value)}
+                  placeholder="Senior Developer"
+                />
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <div className="flex-1 space-y-2">
+                <Label htmlFor={`duration-${index}`}>Duration</Label>
+                <Input
+                  id={`duration-${index}`}
+                  value={exp.duration}
+                  onChange={(e) => handleExperienceChange(index, "duration", e.target.value)}
+                  placeholder="Jan 2020 - Present"
+                />
+              </div>
+              
+              {profile.experience.length > 1 && (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="icon"
+                  className="mt-6"
+                  onClick={() => {
+                    const updatedExperience = [...profile.experience];
+                    updatedExperience.splice(index, 1);
+                    setProfile({
+                      ...profile,
+                      experience: updatedExperience.length ? updatedExperience : [{ company: "", position: "", duration: "" }]
+                    });
+                  }}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+        ))}
+        
+        <Button
+          type="button"
+          variant="outline"
+          className="gap-2"
+          onClick={addExperience}
+        >
+          <Plus className="h-4 w-4" />
+          Add Experience
+        </Button>
+      </div>
+    </div>
+  );
+
+  const renderBusinessSection = () => (
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <Building className="h-5 w-5 text-primary" />
+        Business Information
+      </h3>
+      
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="companyName">Company Name</Label>
+            <Input
+              id="companyName"
+              value={profile.business.companyName}
+              onChange={(e) => handleBusinessChange("companyName", e.target.value)}
+              placeholder="Acme Inc."
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="foundedYear">Founded Year</Label>
+            <Input
+              id="foundedYear"
+              value={profile.business.foundedYear}
+              onChange={(e) => handleBusinessChange("foundedYear", e.target.value)}
+              placeholder="2020"
+            />
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="industry">Industry</Label>
+            <Input
+              id="industry"
+              value={profile.business.industry}
+              onChange={(e) => handleBusinessChange("industry", e.target.value)}
+              placeholder="Technology, Healthcare, etc."
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="employees">Number of Employees</Label>
+            <Input
+              id="employees"
+              value={profile.business.employees}
+              onChange={(e) => handleBusinessChange("employees", e.target.value)}
+              placeholder="1-10"
+            />
+          </div>
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="description">Company Description</Label>
+          <Textarea
+            id="description"
+            value={profile.business.description}
+            onChange={(e) => handleBusinessChange("description", e.target.value)}
+            placeholder="Tell us about your company, its mission, and vision..."
+            className="h-24 resize-none"
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="projectNeeds">Project Needs</Label>
+          <Textarea
+            id="projectNeeds"
+            value={profile.business.projectNeeds}
+            onChange={(e) => handleBusinessChange("projectNeeds", e.target.value)}
+            placeholder="Describe the type of talent or projects you're looking for..."
+            className="h-24 resize-none"
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="billingDetails">Billing Details (Optional)</Label>
+          <Textarea
+            id="billingDetails"
+            value={profile.business.billingDetails}
+            onChange={(e) => handleBusinessChange("billingDetails", e.target.value)}
+            placeholder="Billing address, tax ID, preferred payment methods, etc."
+            className="h-24 resize-none"
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      
+      <main className="container max-w-4xl py-8 px-4 sm:px-6 lg:px-8 mx-auto">
+        <div className="flex flex-col gap-6">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold">
+              {isEditing ? "Edit Profile" : "My Profile"}
+            </h1>
+            {isEditing && (
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="ghost"
+                  onClick={() => navigate('/dashboard')}
+                  className="gap-2"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={handleSaveProfile}
+                  className="gap-2"
+                >
+                  <Save className="h-4 w-4" />
+                  Save Profile
+                </Button>
+              </div>
+            )}
+          </div>
+          
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto"></div>
+                <p className="mt-4 text-muted-foreground">Loading your profile...</p>
+              </div>
+            </div>
+          ) : isEditing ? (
+            <>
+              <div className="flex flex-wrap gap-2 mb-6">
+                <Button
+                  type="button"
+                  variant={activeRole === "talent" ? "default" : "outline"}
+                  size="sm"
+                  className="gap-2 rounded-full"
+                  onClick={() => handleRoleChange("talent")}
+                >
+                  <UserPlus className="h-4 w-4" />
+                  Talent
+                </Button>
+                <Button
+                  type="button"
+                  variant={activeRole === "builder" ? "default" : "outline"}
+                  size="sm"
+                  className="gap-2 rounded-full"
+                  onClick={() => handleRoleChange("builder")}
+                >
+                  <Building className="h-4 w-4" />
+                  Project Builder
+                </Button>
+                <Button
+                  type="button"
+                  variant={activeRole === "dual" ? "default" : "outline"}
+                  size="sm"
+                  className="gap-2 rounded-full"
+                  onClick={() => handleRoleChange("dual")}
+                >
+                  <Users className="h-4 w-4" />
+                  Both
+                </Button>
+              </div>
+              
+              <Card>
+                <CardContent className="p-6">
+                  {renderBasicInfo()}
+                </CardContent>
+              </Card>
+              
+              {/* Role-specific sections */}
+              {(activeRole === "talent" || activeRole === "dual") && (
+                <>
+                  <Card>
+                    <CardContent className="p-6">
+                      {renderSkillsSection()}
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="p-6">
+                      {renderEducationSection()}
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="p-6">
+                      {renderExperienceSection()}
+                    </CardContent>
+                  </Card>
+                </>
+              )}
+              
+              {(activeRole === "builder" || activeRole === "dual") && (
+                <Card>
+                  <CardContent className="p-6">
+                    {renderBusinessSection()}
+                  </CardContent>
+                </Card>
+              )}
+              
+              <div className="flex justify-end mt-6">
+                <Button 
+                  onClick={handleSaveProfile}
+                  className="gap-2"
+                >
+                  <Save className="h-4 w-4" />
+                  Save Profile
+                </Button>
+              </div>
+            </>
+          ) : (
+            renderProfileView()
+          )}
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default ProfileEditPage;
