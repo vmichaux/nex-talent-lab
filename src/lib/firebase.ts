@@ -71,59 +71,6 @@ export const getUserProfile = async (userId: string) => {
         userData.interests = [];
       }
       
-      // Ensure new fields exist and have proper defaults
-      if (!userData.resume) userData.resume = null;
-      if (!userData.portfolios || !Array.isArray(userData.portfolios)) userData.portfolios = [];
-      if (!userData.availability) {
-        userData.availability = {
-          status: "seeking",
-          noticePeriod: "",
-          startDate: null,
-          fullTime: true,
-          partTime: false,
-          contractWork: false,
-          hoursPerWeek: "40"
-        };
-      }
-      if (!userData.desiredRole) {
-        userData.desiredRole = {
-          title: "",
-          contractType: ["full-time"],
-          minSalary: "",
-          maxSalary: "",
-          location: "",
-          remote: true,
-          hybrid: true,
-          onsite: true
-        };
-      }
-      if (!userData.employmentStatus) userData.employmentStatus = "seeking";
-      if (!userData.noticePeriod) userData.noticePeriod = "";
-      if (!userData.industrySectors || !Array.isArray(userData.industrySectors)) userData.industrySectors = [];
-      if (!userData.remoteWorkSetup) {
-        userData.remoteWorkSetup = {
-          hasWorkspace: false,
-          hasHighSpeedInternet: false,
-          hasWebcamMic: false,
-          hasMultipleMonitors: false,
-          timezone: "",
-          workingHours: "",
-          remoteExperience: ""
-        };
-      }
-      if (!userData.languages || !Array.isArray(userData.languages)) {
-        userData.languages = [{ name: "", proficiency: "Intermediate" }];
-      }
-      if (!userData.certifications || !Array.isArray(userData.certifications)) userData.certifications = [];
-      if (!userData.projectPreferences) {
-        userData.projectPreferences = {
-          teamSize: "",
-          companyStage: "Any",
-          projectDuration: "",
-          roleLevel: ""
-        };
-      }
-      
       return {
         id: docSnap.id,
         ...userData
