@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/Icons";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { Badge } from "@/components/ui/badge";
 
 export function UploadButton() {
   const { toast } = useToast();
