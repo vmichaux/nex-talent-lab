@@ -10,6 +10,9 @@ import {
   X,
   Check,
   UserCog,
+  UserPlus,
+  ArrowRight,
+  CircleCheck,
 } from "lucide-react";
 
 export const Icons = {
@@ -23,4 +26,7 @@ export const Icons = {
   close: X,
   check: Check,
   userCog: UserCog,
+  userPlus: UserPlus,
+  arrowRight: ArrowRight,
+  circleCheck: CircleCheck,
 };
