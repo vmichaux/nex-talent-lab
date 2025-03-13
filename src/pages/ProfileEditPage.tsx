@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Save, UserPlus, Briefcase, GraduationCap, Globe } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 const ProfileEditPage = () => {
