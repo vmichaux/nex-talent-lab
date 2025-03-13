@@ -1,3 +1,4 @@
+
 import { Outlet, useLocation } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -17,7 +18,7 @@ export default function AuthLayout() {
         
         <div className="flex-1 flex flex-col justify-center">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Connect, Collaborate, Create</h1>
-          <p className="text-lg md:text-xl mb-8 opacity-90 px-0 py-0">
+          <p className="text-md md:text-lg mb-8 opacity-90 px-0 py-0">
             Join a community of creative professionals and innovative project builders.
           </p>
           
