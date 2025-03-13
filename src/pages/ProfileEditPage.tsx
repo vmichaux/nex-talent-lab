@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -7,7 +6,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Save, UserPlus, Briefcase, GraduationCap, Globe } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeft, Save, UserPlus, Briefcase, GraduationCap, Globe, Building, Calendar, Users } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -26,6 +26,12 @@ const ProfileEditPage = () => {
     title: "",
     location: "",
     bio: "",
+    business: {
+      companyName: "",
+      foundedYear: "",
+      description: "",
+      employees: ""
+    },
     skills: [""],
     education: [{ school: "", degree: "", year: "" }],
     experience: [{ company: "", position: "", duration: "" }]
@@ -45,7 +51,6 @@ const ProfileEditPage = () => {
             const profileData = docSnap.data();
             console.log("Raw profile data:", profileData);
             
-            // Handle converting fullName to firstName and lastName if needed
             let firstName = "";
             let lastName = "";
             
@@ -53,19 +58,25 @@ const ProfileEditPage = () => {
               firstName = profileData.firstName;
               lastName = profileData.lastName;
             } else if (profileData.fullName) {
-              // Split the full name into first and last name
               const nameParts = profileData.fullName.split(" ");
               firstName = nameParts[0] || "";
               lastName = nameParts.slice(1).join(" ") || "";
             }
             
-            // Create a properly structured profile object with fallbacks
+            const business = {
+              companyName: profileData.business?.companyName || "",
+              foundedYear: profileData.business?.foundedYear || "",
+              description: profileData.business?.description || "",
+              employees: profileData.business?.employees || ""
+            };
+            
             const loadedProfile = {
               firstName,
               lastName,
               title: profileData.title || "",
               location: profileData.location || "",
               bio: profileData.bio || "",
+              business,
               skills: Array.isArray(profileData.skills) && profileData.skills.length > 0 
                 ? profileData.skills 
                 : [""],
@@ -88,7 +99,6 @@ const ProfileEditPage = () => {
             console.log("Structured profile data:", loadedProfile);
             setProfile(loadedProfile);
             
-            // Notify the user that their profile data has loaded
             toast({
               title: "Profile loaded",
               description: "Your profile information has been loaded successfully.",
@@ -127,6 +137,16 @@ const ProfileEditPage = () => {
     setProfile({
       ...profile,
       [field]: value
+    });
+  };
+
+  const handleBusinessChange = (field, value) => {
+    setProfile({
+      ...profile,
+      business: {
+        ...profile.business,
+        [field]: value
+      }
     });
   };
 
@@ -187,14 +207,13 @@ const ProfileEditPage = () => {
   const handleSaveProfile = async () => {
     try {
       if (currentUser?.uid) {
-        // Combine first and last name for backward compatibility
         const fullName = `${profile.firstName} ${profile.lastName}`.trim();
         
         const userProfileRef = doc(db, "userProfiles", currentUser.uid);
         console.log("Saving profile data:", { ...profile, fullName });
         await setDoc(userProfileRef, {
           ...profile,
-          fullName, // Include fullName for backward compatibility
+          fullName,
           lastUpdated: new Date()
         });
       }
@@ -313,14 +332,85 @@ const ProfileEditPage = () => {
                       <Label htmlFor="bio" className="text-sm font-medium">
                         Bio
                       </Label>
-                      <textarea
+                      <Textarea
                         id="bio"
                         value={profile.bio}
                         onChange={(e) => handleInputChange("bio", e.target.value)}
                         placeholder="Tell us about yourself..."
                         rows={5}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                      ></textarea>
+                        className="min-h-[120px]"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-gray-200 pt-6 mt-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Building className="h-5 w-5 text-primary" />
+                    Business Information
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="companyName" className="text-sm font-medium">
+                          Company Name
+                        </Label>
+                        <Input
+                          id="companyName"
+                          type="text"
+                          value={profile.business.companyName}
+                          onChange={(e) => handleBusinessChange("companyName", e.target.value)}
+                          placeholder="Acme Inc."
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="foundedYear" className="text-sm font-medium">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="h-4 w-4" />
+                            Year Founded
+                          </div>
+                        </Label>
+                        <Input
+                          id="foundedYear"
+                          type="text"
+                          value={profile.business.foundedYear}
+                          onChange={(e) => handleBusinessChange("foundedYear", e.target.value)}
+                          placeholder="2015"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="employees" className="text-sm font-medium">
+                          <div className="flex items-center gap-2">
+                            <Users className="h-4 w-4" />
+                            Number of Employees
+                          </div>
+                        </Label>
+                        <Input
+                          id="employees"
+                          type="text"
+                          value={profile.business.employees}
+                          onChange={(e) => handleBusinessChange("employees", e.target.value)}
+                          placeholder="1-10"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="businessDescription" className="text-sm font-medium">
+                          Company Description
+                        </Label>
+                        <Textarea
+                          id="businessDescription"
+                          value={profile.business.description}
+                          onChange={(e) => handleBusinessChange("description", e.target.value)}
+                          placeholder="Tell us about your business..."
+                          rows={5}
+                          className="min-h-[120px]"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
