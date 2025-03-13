@@ -41,20 +41,20 @@ export function HowItWorks({
               
               {index < steps.length - 1 && <div className="hidden lg:block absolute h-0.5 bg-gray-200 w-full top-7 left-1/2 -z-10"></div>}
               
-              <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-              <p className="text-gray-600 mb-4 my-[27px]">{step.description}</p>
+              <h3 className="text-xl font-semibold mb-2 py-[8px]">{step.title}</h3>
+              <p className="text-gray-600 mb-4 my-[36px]">{step.description}</p>
               
               {/* Only show details on the dedicated page */}
               {showDetails && <ul className="space-y-2 text-sm text-gray-600">
                   {step.details.map((detail, i) => <li key={i} className="flex items-start">
-                      <span className="text-primary font-bold mr-2">•</span>
-                      <span className="py-0 my-0">{detail}</span>
+                      <span className="text-primary font-bold mr-2 my-[2px]">•</span>
+                      <span className="py-0 my-[3px]">{detail}</span>
                     </li>)}
                 </ul>}
             </div>)}
         </div>
 
-        {showDetails && <div className="mt-16 bg-gray-50 p-8 rounded-lg border border-gray-100">
+        {showDetails && <div className="mt-16 bg-gray-50 p-8 rounded-lg border border-gray-100 py-[85px]">
             <h3 className="text-2xl font-bold mb-4 text-center">Why Our Process Works</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
