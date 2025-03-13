@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,7 @@ export function ExploreCTA() {
       <div className="container mx-auto px-4">
         <div className="rounded-xl overflow-hidden relative">
           {/* Gradient background */}
-          <div className="bg-gradient-to-br from-secondary to-purple-600 p-8 md:p-12 lg:p-16 relative z-10 px-[98px] py-[35px]">
+          <div className="bg-gradient-to-br from-secondary to-purple-600 p-8 md:p-12 lg:p-16 relative z-10 px-[98px] py-[33px]">
             {/* Decorative circles */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/3 -translate-x-1/4" />
