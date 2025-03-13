@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { collection, query, orderBy, getDocs, Timestamp, doc, updateDoc, getDoc, where } from "firebase/firestore";
+import { collection, query, orderBy, getDocs, Timestamp, doc, updateDoc, getDoc, where, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Project } from "@/types/project";
 
@@ -65,6 +65,11 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
     }
   };
 
+  // Function to add a new project to the local state
+  const addProjectToState = (project: Project) => {
+    setProjects(prev => [project, ...prev]);
+  };
+
   // Function to update a project in Firestore
   const updateProject = async (projectId: string, updatedData: Partial<Project>) => {
     try {
@@ -97,6 +102,40 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
     } catch (err) {
       console.error("Error updating project:", err);
       setError("Failed to update project. Please try again later.");
+      return { success: false, error: err };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to create a new project and update local state
+  const createProject = async (projectData: Omit<Project, 'id' | 'createdAt'>) => {
+    try {
+      setLoading(true);
+      console.log("Creating new project:", projectData);
+      
+      // Add the document to Firestore
+      const projectRef = await addDoc(collection(db, "projects"), {
+        ...projectData,
+        createdAt: serverTimestamp()
+      });
+      
+      console.log("Project created successfully with ID:", projectRef.id);
+      
+      // Create a complete project object with the new ID
+      const newProject: Project = {
+        id: projectRef.id,
+        ...projectData,
+        createdAt: new Date()
+      };
+      
+      // Add the new project to the local state
+      addProjectToState(newProject);
+      
+      return { success: true, projectId: projectRef.id, project: newProject };
+    } catch (err) {
+      console.error("Error creating project:", err);
+      setError("Failed to create project. Please try again later.");
       return { success: false, error: err };
     } finally {
       setLoading(false);
@@ -151,6 +190,8 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
     error, 
     refetchProjects: fetchProjects,
     updateProject,
-    getUserProjects
+    getUserProjects,
+    createProject,
+    addProjectToState
   };
 };

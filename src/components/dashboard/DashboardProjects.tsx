@@ -1,81 +1,25 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Briefcase, ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
-import { Project } from "@/types/project";
-import { collection, query, where, getDocs, Timestamp } from "firebase/firestore";
+import { useProjects } from "@/hooks/useProjects";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function DashboardProjects() {
   const navigate = useNavigate();
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
+  const { projects, loading } = useProjects({
+    excludeCurrentUser: false,
+    userId: currentUser?.uid
+  });
   
-  useEffect(() => {
-    const fetchProjects = async () => {
-      if (!currentUser) return;
-      
-      try {
-        setLoading(true);
-        console.log("Fetching projects for user:", currentUser.uid);
-        
-        // Directly fetch projects from Firestore
-        const projectsCollection = collection(db, "projects");
-        const projectsQuery = query(
-          projectsCollection,
-          where("userId", "==", currentUser.uid)
-        );
-        
-        const projectsSnapshot = await getDocs(projectsQuery);
-        console.log("Query snapshot size:", projectsSnapshot.size);
-        
-        const fetchedProjects = projectsSnapshot.docs.map(doc => {
-          const data = doc.data();
-          // Handle various timestamp formats
-          let createdAt;
-          if (data.createdAt instanceof Timestamp) {
-            createdAt = data.createdAt.toDate();
-          } else if (data.createdAt && typeof data.createdAt.toDate === 'function') {
-            createdAt = data.createdAt.toDate();
-          } else {
-            createdAt = new Date();
-          }
-          
-          return {
-            id: doc.id,
-            ...data,
-            createdAt
-          } as Project;
-        });
-        
-        console.log("Raw fetched projects:", fetchedProjects);
-        
-        // Sort projects by creation date (newest first)
-        const sortedProjects = fetchedProjects.sort((a, b) => {
-          const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt);
-          const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);
-          return dateB.getTime() - dateA.getTime();
-        });
-        
-        console.log("Sorted user projects:", sortedProjects);
-        setProjects(sortedProjects);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-        setProjects([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchProjects();
-  }, [currentUser]);
+  // Filter projects to only show the current user's projects
+  const userProjects = projects.filter(project => project.userId === currentUser?.uid);
   
   return (
     <div className="mb-12">
@@ -106,8 +50,8 @@ export function DashboardProjects() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {projects.length > 0 ? (
-            projects.map((project) => (
+          {userProjects.length > 0 ? (
+            userProjects.map((project) => (
               <Card key={project.id} className="overflow-hidden shadow-md hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <CardTitle className="text-xl">{project.title}</CardTitle>

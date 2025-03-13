@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,12 +11,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "react-router-dom";
 import { Project } from "@/types/project";
 import { getUserFullName } from "@/lib/firebase";
+import { useProjects } from "@/hooks/useProjects";
 
 export interface ProjectFormData {
   projectName: string;
@@ -50,6 +50,7 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
   const [loading, setLoading] = useState(false);
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const { createProject } = useProjects();
   
   const isOpen = open !== undefined ? open : internalOpen;
   const setIsOpen = setOpenProp || setInternalOpen;
@@ -57,7 +58,7 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
   const handleSubmit = async (formData: ProjectFormData) => {
     if (!currentUser) {
       toast.error("Authentication required. You must be logged in to create a project.", {
-        duration: 4000,
+        duration: 10000,
       });
       return;
     }
@@ -100,25 +101,25 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
         userId: currentUser.uid
       };
       
-      const projectRef = await addDoc(collection(db, "projects"), {
-        ...newProject,
-        createdAt: serverTimestamp()
-      });
+      // Use the createProject function from useProjects hook
+      const result = await createProject(newProject);
       
-      console.log("Project added with ID: ", projectRef.id);
-      
-      toast.success("Project created. Your new project has been successfully added to your dashboard.", {
-        duration: 4000,
-      });
-      
-      setIsOpen(false);
-      
-      navigate("/dashboard");
+      if (result.success) {
+        console.log("Project added with ID: ", result.projectId);
+        
+        toast.success("Project created. Your new project has been successfully added to your dashboard.", {
+          duration: 10000,
+        });
+        
+        setIsOpen(false);
+      } else {
+        throw new Error("Failed to create project");
+      }
       
     } catch (error) {
       console.error("Error creating project:", error);
       toast.error("Failed to create project. Please try again.", {
-        duration: 4000,
+        duration: 10000,
       });
     } finally {
       setLoading(false);
