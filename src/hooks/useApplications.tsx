@@ -1,11 +1,9 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { collection, query, where, getDocs, Timestamp, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { ExternalLink } from "lucide-react";
 
 export interface Application {
   id: string;
@@ -30,7 +28,7 @@ export const useApplications = () => {
   const [error, setError] = useState<string | null>(null);
   const { currentUser } = useAuth();
 
-  const fetchUserApplications = async (userId?: string) => {
+  const fetchUserApplications = useCallback(async (userId?: string) => {
     if (!userId && !currentUser?.uid) {
       console.log("No user ID provided for fetching applications");
       setLoading(false);
@@ -81,13 +79,13 @@ export const useApplications = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentUser?.uid]);
 
   useEffect(() => {
     if (currentUser?.uid) {
       fetchUserApplications(currentUser.uid);
     }
-  }, [currentUser?.uid]);
+  }, [currentUser?.uid, fetchUserApplications]);
 
   return { 
     applications, 
