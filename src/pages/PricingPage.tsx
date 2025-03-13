@@ -1,3 +1,4 @@
+
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PricingSection } from "@/components/PricingSection";
@@ -14,10 +15,10 @@ export default function PricingPage() {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[126px]">
-              <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Find the Perfect Plan</div>
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px] md:py-32">
+              <div className="mb-6 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Find the Perfect Plan</div>
               
-              <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
+              <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl custom-gradient-text">
                 Pricing Plans
               </h1>
               
