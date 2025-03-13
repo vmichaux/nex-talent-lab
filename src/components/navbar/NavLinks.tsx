@@ -60,9 +60,6 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
       <Link to="/how-it-works" className={linkClass} onClick={handleClick}>
         How It Works
       </Link>
-      <Link to="/pricing" className={linkClass} onClick={handleClick}>
-        <DollarSign className="h-4 w-4" />
-      </Link>
       <Link to="/about" className={linkClass} onClick={handleClick}>
         About
       </Link>
