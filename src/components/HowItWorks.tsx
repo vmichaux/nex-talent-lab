@@ -1,9 +1,9 @@
-
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
-export function HowItWorks({ showDetails = false }) {
+export function HowItWorks({
+  showDetails = false
+}) {
   const steps = [{
     number: "01",
     title: "Create Your Profile",
@@ -29,7 +29,6 @@ export function HowItWorks({ showDetails = false }) {
     details: ["Receive and give feedback after project completion", "Build a reputation through ratings and reviews", "Join industry-specific communities", "Access career development resources and mentorship"],
     color: "bg-secondary/80"
   }];
-
   return <section className="py-16">
       <div className="container mx-auto px-4">
         {/* Removed duplicate title and description that were in this div */}
@@ -46,19 +45,16 @@ export function HowItWorks({ showDetails = false }) {
               <p className="text-gray-600 mb-4">{step.description}</p>
               
               {/* Only show details on the dedicated page */}
-              {showDetails && (
-                <ul className="space-y-2 text-sm text-gray-600">
+              {showDetails && <ul className="space-y-2 text-sm text-gray-600">
                   {step.details.map((detail, i) => <li key={i} className="flex items-start">
                       <span className="text-primary font-bold mr-2">•</span>
                       <span className="py-0 my-[3px]">{detail}</span>
                     </li>)}
-                </ul>
-              )}
+                </ul>}
             </div>)}
         </div>
 
-        {showDetails && (
-          <div className="mt-16 bg-gray-50 p-8 rounded-lg border border-gray-100">
+        {showDetails && <div className="mt-16 bg-gray-50 p-8 rounded-lg border border-gray-100">
             <h3 className="text-2xl font-bold mb-4 text-center">Why Our Process Works</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
@@ -104,12 +100,11 @@ export function HowItWorks({ showDetails = false }) {
                 </ul>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
         <div className="text-center mt-12">
           <Link to="/onboarding">
-            <Button size="lg" className="gap-2 bg-primary">
+            <Button size="lg" className="gap-2 bg-primary py-[8px] my-[48px]">
               Get Started Today <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
