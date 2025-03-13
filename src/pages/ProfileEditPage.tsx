@@ -166,6 +166,7 @@ const ProfileEditPage = () => {
               email: profileData.email || currentUser.email || "",
               phoneNumber: profileData.phoneNumber || "",
               sex: profileData.sex || "",
+              interests: Array.isArray(profileData.interests) ? profileData.interests : [],
               business,
               skills,
               education: Array.isArray(profileData.education) && profileData.education.length > 0 
@@ -1197,3 +1198,4 @@ const ProfileEditPage = () => {
 };
 
 export default ProfileEditPage;
+
