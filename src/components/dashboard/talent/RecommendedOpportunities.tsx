@@ -8,6 +8,7 @@ import { ProjectCard } from "./ProjectCard";
 import { OpportunitiesLoading } from "./OpportunitiesLoading";
 import { OpportunitiesEmpty } from "./OpportunitiesEmpty";
 import { OpportunitiesError } from "./OpportunitiesError";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface RecommendedOpportunitiesProps {
   filter: string;
@@ -17,6 +18,7 @@ interface RecommendedOpportunitiesProps {
 export function RecommendedOpportunities({ filter, setFilter }: RecommendedOpportunitiesProps) {
   const { projects, loading, error } = useProjects();
   const [recommendations, setRecommendations] = useState<Project[]>([]);
+  const { currentUser } = useAuth(); // Get the current user to filter their projects
   
   // Process projects to get recommendations
   useEffect(() => {
@@ -24,7 +26,7 @@ export function RecommendedOpportunities({ filter, setFilter }: RecommendedOppor
       // Here we could implement a more sophisticated recommendation algorithm
       // For now, just filter open projects and add a match percentage
       const openProjects = projects
-        .filter(project => project.status === "Open")
+        .filter(project => project.status === "Open" && project.userId !== currentUser?.uid)
         .map(project => ({
           ...project,
           matchPercentage: Math.floor(Math.random() * (99 - 70) + 70) // Random match between 70-99%
@@ -34,7 +36,7 @@ export function RecommendedOpportunities({ filter, setFilter }: RecommendedOppor
         
       setRecommendations(openProjects);
     }
-  }, [projects]);
+  }, [projects, currentUser?.uid]); // Add currentUser.uid as a dependency
 
   // Filter the recommendations based on location type
   const filteredRecommendations = recommendations.filter(project => {
