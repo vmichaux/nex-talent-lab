@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, User, LogIn, Search, MessageSquare, UserCog, Home, Briefcase, GraduationCap, Lightbulb, Phone } from "lucide-react";
@@ -82,7 +83,6 @@ export function Navbar() {
         <>
               <Link to="/dashboard" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
                 <Home className="h-4 w-4" />
-                Dashboard
               </Link>
               <Link to="/explore-projects" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
                 <Search className="h-4 w-4" />
@@ -106,7 +106,7 @@ export function Navbar() {
                 Explore
               </Link>
               <Link to="/onboarding" className="font-medium hover:text-primary transition-colors" onClick={handleDashboardClick}>
-                Dashboard
+                
               </Link>
               <Link to="/how-it-works" className="font-medium hover:text-primary transition-colors">
                 How It Works
@@ -168,7 +168,7 @@ export function Navbar() {
         <>
                 <Link to="/dashboard" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                   <Home className="h-4 w-4" />
-                  Dashboard
+                  
                 </Link>
                 <Link to="/explore-projects" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                   <Search className="h-4 w-4" />
@@ -205,7 +205,7 @@ export function Navbar() {
               navigate("/onboarding");
             }
           }}>
-                  Dashboard
+                  
                 </Link>
                 <Link to="/how-it-works" className="block py-2 px-4 hover:bg-gray-50 rounded-md" onClick={() => setIsMenuOpen(false)}>
                   How It Works
