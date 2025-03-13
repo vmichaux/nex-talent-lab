@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/table";
 import { useApplications, Application } from "@/hooks/useApplications";
 import { format } from "date-fns";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 export function AppliedProjects() {
-  const { applications, loading, error, FirestoreIndexError } = useApplications();
+  const { applications, loading, error } = useApplications();
   const navigate = useNavigate();
 
   const getStatusBadge = (status: Application['status']) => {
@@ -40,6 +41,19 @@ export function AppliedProjects() {
       default:
         return <Clock className="h-4 w-4 text-yellow-600" />;
     }
+  };
+
+  // Display a message about Firestore index issues if encountered
+  const FirestoreIndexAlert = () => {
+    return (
+      <Alert className="mb-4">
+        <AlertTitle>Firestore Index Notice</AlertTitle>
+        <AlertDescription>
+          If you're seeing incomplete data, it may be due to Firestore indexes still being created. 
+          This can take a few minutes after the first query.
+        </AlertDescription>
+      </Alert>
+    );
   };
 
   if (loading) {
@@ -68,7 +82,7 @@ export function AppliedProjects() {
             My Applications
           </h2>
         </div>
-        <FirestoreIndexError />
+        <FirestoreIndexAlert />
         <Card>
           <CardContent className="py-6">
             <p className="text-red-600">Error loading applications: {error}</p>
@@ -87,7 +101,7 @@ export function AppliedProjects() {
             My Applications
           </h2>
         </div>
-        <FirestoreIndexError />
+        <FirestoreIndexAlert />
         <Card>
           <CardContent className="py-8 text-center">
             <ClipboardCheck className="h-10 w-10 text-gray-400 mx-auto mb-4" />
@@ -113,7 +127,7 @@ export function AppliedProjects() {
         </h2>
       </div>
 
-      <FirestoreIndexError />
+      <FirestoreIndexAlert />
       
       <Card>
         <CardHeader className="pb-0">
