@@ -1,13 +1,10 @@
-
 import { Outlet, useLocation } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-
 export default function AuthLayout() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const fromOnboarding = searchParams.get('fromOnboarding') === 'true';
-  
   return <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left sidebar with branding and illustration */}
       <div className="w-full md:w-1/2 bg-gradient-to-br from-primary to-purple-900 text-white p-8 md:p-12 flex flex-col bg-[#ce8aef]/[0.17]">
@@ -20,7 +17,7 @@ export default function AuthLayout() {
         
         <div className="flex-1 flex flex-col justify-center">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Connect, Collaborate, Create</h1>
-          <p className="text-lg md:text-xl mb-8 opacity-90">
+          <p className="text-lg md:text-xl mb-8 opacity-90 px-0 py-0">
             Join a community of creative professionals and innovative project builders.
           </p>
           
@@ -28,31 +25,31 @@ export default function AuthLayout() {
           <div className="rounded-lg bg-white/10 p-6 backdrop-blur-sm">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center my-[8px]">
                   <span className="text-lg font-semibold">01</span>
                 </div>
                 <div>
-                  <p className="font-medium">Create your profile</p>
+                  <p className="font-medium my-0 py-px">Create your profile</p>
                   <p className="text-sm opacity-80">Showcase your skills and experience</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center py-[6px] my-[8px]">
                   <span className="text-lg font-semibold">02</span>
                 </div>
                 <div>
-                  <p className="font-medium">Find perfect matches</p>
+                  <p className="font-medium py-[2px]">Find perfect matches</p>
                   <p className="text-sm opacity-80">AI-powered matching for your skills</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center py-0 my-[8px]">
                   <span className="text-lg font-semibold">03</span>
                 </div>
                 <div>
-                  <p className="font-medium">Collaborate seamlessly</p>
+                  <p className="font-medium my-px">Collaborate seamlessly</p>
                   <p className="text-sm opacity-80">Work together using built-in tools</p>
                 </div>
               </div>
