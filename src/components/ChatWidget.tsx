@@ -122,12 +122,12 @@ export const ChatWidget = () => {
 
   if (!isLoggedIn) return null;
   return <>
-      {!isOpen && <Button onClick={() => setIsOpen(true)} className="fixed bottom-4 right-4 z-50 rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all duration-300" size="icon">
+      {!isOpen && <Button onClick={() => setIsOpen(true)} className="fixed bottom-4 right-20 z-50 rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all duration-300" size="icon">
           <Bot className="h-6 w-6" />
         </Button>}
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className={`fixed bottom-4 right-4 p-0 w-80 md:w-96 rounded-lg shadow-xl border-0 max-w-none ${isMinimized ? "h-16" : "h-[550px]"} transition-all duration-300 overflow-hidden transform-none bg-white`}>
+        <DialogContent className={`fixed bottom-4 right-20 p-0 w-80 md:w-96 rounded-lg shadow-xl border-0 max-w-none ${isMinimized ? "h-16" : "h-[550px]"} transition-all duration-300 overflow-hidden transform-none bg-white`}>
           <div className="flex items-center justify-between bg-primary text-white p-3 sticky top-0 z-10 py-0 px-[11px]">
             <div className="flex items-center gap-2">
               <Bot className="h-5 w-5" />
