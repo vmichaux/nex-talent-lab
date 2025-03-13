@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { MessageSquare, X, Minimize2, Maximize2, Send, Loader, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,8 +24,18 @@ export const ChatWidget = () => {
   } = useToast();
 
   useEffect(() => {
-    if (isOpen && isLoggedIn) {
-      loadChatHistory();
+    if (isOpen) {
+      if (isLoggedIn) {
+        loadChatHistory();
+      } else {
+        // Add welcome message for logged out users
+        const welcomeMessage: ChatMessage = {
+          content: "Bonjour ! Je suis votre assistant IA. Comment puis-je vous aider aujourd'hui ?",
+          role: "assistant",
+          timestamp: new Date()
+        };
+        setMessages([welcomeMessage]);
+      }
     }
   }, [isOpen, isLoggedIn]);
 
@@ -74,8 +85,12 @@ export const ChatWidget = () => {
     setInput("");
     setIsLoading(true);
     setApiError(null);
+    
     try {
-      await saveMessage(userMessage.content, userMessage.role);
+      // Only save messages to database if logged in
+      if (isLoggedIn) {
+        await saveMessage(userMessage.content, userMessage.role);
+      }
 
       const loadingMessage: ChatMessage = {
         content: "...",
@@ -96,7 +111,10 @@ export const ChatWidget = () => {
         return [...filteredMessages, assistantMessage];
       });
 
-      await saveMessage(aiResponse, "assistant");
+      // Only save messages to database if logged in
+      if (isLoggedIn) {
+        await saveMessage(aiResponse, "assistant");
+      }
     } catch (error) {
       console.error("Error in chat sequence:", error);
 
@@ -120,7 +138,7 @@ export const ChatWidget = () => {
     }
   };
 
-  if (!isLoggedIn) return null;
+  // Remove the condition that was hiding the chat widget for logged out users
   return <>
       {!isOpen && <Button onClick={() => setIsOpen(true)} className="fixed bottom-4 right-20 z-50 rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all duration-300" size="icon">
           <Bot className="h-6 w-6" />
