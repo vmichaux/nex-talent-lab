@@ -53,6 +53,7 @@ function AppContent() {
           <Route path="/explore-projects" element={<ExploreProjectsPage />} />
           <Route path="/explore-talents" element={<ExploreTalentsPage />} />
           <Route path="/project/:id" element={<ProjectDetailPage />} />
+          <Route path="/project/edit/:id" element={<ProjectDetailPage isEditing={true} />} />
           <Route path="/apply-project/:id" element={<ApplyProjectPage />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/pricing" element={<PricingPage />} />

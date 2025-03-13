@@ -6,22 +6,41 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, Clock, Tag, UserCircle, MessageSquare, ArrowLeft, Star, MapPin, Briefcase, Share2 } from "lucide-react";
+import { Calendar, Clock, Tag, UserCircle, MessageSquare, ArrowLeft, MapPin, Share2, Pencil, Trash2 } from "lucide-react";
 import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { Project } from "@/types/project";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getUserProfile } from "@/lib/firebase";
+import { useAuth } from "@/contexts/AuthContext";
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-const ProjectDetailPage = () => {
+interface ProjectDetailPageProps {
+  isEditing?: boolean;
+}
+
+const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [owner, setOwner] = useState<any>(null);
+  const [isOwner, setIsOwner] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { toast } = useToast();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const fetchProjectDetails = async () => {
@@ -39,6 +58,10 @@ const ProjectDetailPage = () => {
           } as Project;
           
           setProject(projectData);
+          
+          if (currentUser && projectData.userId === currentUser.uid) {
+            setIsOwner(true);
+          }
           
           if (projectData.userId) {
             const ownerProfile = await getUserProfile(projectData.userId);
@@ -65,7 +88,41 @@ const ProjectDetailPage = () => {
     };
 
     fetchProjectDetails();
-  }, [id, toast]);
+  }, [id, toast, currentUser]);
+
+  const handleEditClick = () => {
+    navigate(`/project/edit/${id}`);
+  };
+
+  const handleDeleteProject = async () => {
+    if (!id || !isOwner) return;
+    
+    try {
+      setLoading(true);
+      await deleteDoc(doc(db, "projects", id));
+      
+      toast({
+        title: "Project deleted",
+        description: "Your project has been successfully deleted.",
+      });
+      
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete the project. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+      setDeleteDialogOpen(false);
+    }
+  };
+
+  const handleApplyClick = () => {
+    navigate(`/apply-project/${id}`);
+  };
 
   if (loading) {
     return (
@@ -101,10 +158,6 @@ const ProjectDetailPage = () => {
     );
   }
 
-  const handleApplyClick = () => {
-    navigate(`/apply-project/${id}`);
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -124,12 +177,53 @@ const ProjectDetailPage = () => {
               </Button>
               
               <div className="flex gap-3">
-                <Button 
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
-                  onClick={handleApplyClick}
-                >
-                  Apply to Collaborate
-                </Button>
+                {isOwner ? (
+                  <>
+                    <Button 
+                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                      onClick={handleEditClick}
+                    >
+                      <Pencil size={16} className="mr-2" />
+                      Edit Project
+                    </Button>
+                    
+                    <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                      <AlertDialogTrigger asChild>
+                        <Button 
+                          variant="destructive"
+                        >
+                          <Trash2 size={16} className="mr-2" />
+                          Delete Project
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete your project.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction 
+                            onClick={handleDeleteProject}
+                            className="bg-red-600 hover:bg-red-700"
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </>
+                ) : (
+                  <Button 
+                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                    onClick={handleApplyClick}
+                  >
+                    Apply to Collaborate
+                  </Button>
+                )}
+                
                 <Button 
                   variant="outline" 
                   className="border-purple-600 text-purple-600 hover:bg-purple-50"
@@ -434,3 +528,4 @@ const ProjectDetailPage = () => {
 };
 
 export default ProjectDetailPage;
+
