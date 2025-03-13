@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { 
   User,
@@ -15,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { auth, db } from "@/lib/firebase";
+import { auth, db, googleProvider } from "@/lib/firebase";
 
 interface UserData {
   email: string;
@@ -64,7 +63,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await setDoc(userRef, userData);
         setUserData(userData);
         
-        // Create a basic user profile with email to ensure all new accounts have one
         const userProfileRef = doc(db, "userProfiles", user.uid);
         await setDoc(userProfileRef, {
           email: user.email,
@@ -120,9 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       await updateUserData(result.user);
-      // Toast will be handled by the component
     } catch (error: any) {
-      // Let the component handle the error and toast
       throw error;
     }
   };
@@ -130,20 +126,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // Toast will be handled by the component
     } catch (error: any) {
-      // Let the component handle the error and toast
       throw error;
     }
   };
 
   const signInWithGoogle = async () => {
     try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      // Toast will be handled by the component
+      await signInWithPopup(auth, googleProvider);
     } catch (error: any) {
-      // Let the component handle the error and toast
       throw error;
     }
   };
@@ -152,9 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const provider = new GithubAuthProvider();
       await signInWithPopup(auth, provider);
-      // Toast will be handled by the component
     } catch (error: any) {
-      // Let the component handle the error and toast
       throw error;
     }
   };
