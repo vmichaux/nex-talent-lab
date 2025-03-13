@@ -1,9 +1,12 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { ArrowLeft, Save, UserPlus, Briefcase, GraduationCap, Globe } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -18,7 +21,8 @@ const ProfileEditPage = () => {
   const [loading, setLoading] = useState(true);
   
   const [profile, setProfile] = useState({
-    fullName: "",
+    firstName: "",
+    lastName: "",
     title: "",
     location: "",
     bio: "",
@@ -41,9 +45,24 @@ const ProfileEditPage = () => {
             const profileData = docSnap.data();
             console.log("Raw profile data:", profileData);
             
+            // Handle converting fullName to firstName and lastName if needed
+            let firstName = "";
+            let lastName = "";
+            
+            if (profileData.firstName && profileData.lastName) {
+              firstName = profileData.firstName;
+              lastName = profileData.lastName;
+            } else if (profileData.fullName) {
+              // Split the full name into first and last name
+              const nameParts = profileData.fullName.split(" ");
+              firstName = nameParts[0] || "";
+              lastName = nameParts.slice(1).join(" ") || "";
+            }
+            
             // Create a properly structured profile object with fallbacks
             const loadedProfile = {
-              fullName: profileData.fullName || "",
+              firstName,
+              lastName,
               title: profileData.title || "",
               location: profileData.location || "",
               bio: profileData.bio || "",
@@ -168,10 +187,14 @@ const ProfileEditPage = () => {
   const handleSaveProfile = async () => {
     try {
       if (currentUser?.uid) {
+        // Combine first and last name for backward compatibility
+        const fullName = `${profile.firstName} ${profile.lastName}`.trim();
+        
         const userProfileRef = doc(db, "userProfiles", currentUser.uid);
-        console.log("Saving profile data:", profile);
+        console.log("Saving profile data:", { ...profile, fullName });
         await setDoc(userProfileRef, {
           ...profile,
+          fullName, // Include fullName for backward compatibility
           lastUpdated: new Date()
         });
       }
@@ -231,54 +254,65 @@ const ProfileEditPage = () => {
               <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8 border border-gray-100">
                 <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <div className="space-y-2">
-                      <label htmlFor="fullName" className="text-sm font-medium">
-                        Full Name
-                      </label>
-                      <input
-                        id="fullName"
-                        type="text"
-                        value={profile.fullName}
-                        onChange={(e) => handleInputChange("fullName", e.target.value)}
-                        placeholder="Jane Doe"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="firstName" className="text-sm font-medium">
+                          First Name
+                        </Label>
+                        <Input
+                          id="firstName"
+                          type="text"
+                          value={profile.firstName}
+                          onChange={(e) => handleInputChange("firstName", e.target.value)}
+                          placeholder="Jane"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="lastName" className="text-sm font-medium">
+                          Last Name
+                        </Label>
+                        <Input
+                          id="lastName"
+                          type="text"
+                          value={profile.lastName}
+                          onChange={(e) => handleInputChange("lastName", e.target.value)}
+                          placeholder="Doe"
+                        />
+                      </div>
                     </div>
 
                     <div className="space-y-2">
-                      <label htmlFor="title" className="text-sm font-medium">
+                      <Label htmlFor="title" className="text-sm font-medium">
                         Professional Title
-                      </label>
-                      <input
+                      </Label>
+                      <Input
                         id="title"
                         type="text"
                         value={profile.title}
                         onChange={(e) => handleInputChange("title", e.target.value)}
                         placeholder="UX Designer"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <label htmlFor="location" className="text-sm font-medium">
+                      <Label htmlFor="location" className="text-sm font-medium">
                         Location
-                      </label>
-                      <input
+                      </Label>
+                      <Input
                         id="location"
                         type="text"
                         value={profile.location}
                         onChange={(e) => handleInputChange("location", e.target.value)}
                         placeholder="San Francisco, CA"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <label htmlFor="bio" className="text-sm font-medium">
+                      <Label htmlFor="bio" className="text-sm font-medium">
                         Bio
-                      </label>
+                      </Label>
                       <textarea
                         id="bio"
                         value={profile.bio}
