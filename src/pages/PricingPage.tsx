@@ -17,7 +17,7 @@ export default function PricingPage() {
             <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[126px]">
               <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Find the Perfect Plan</div>
               
-              <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
+              <h1 className="mb-4 text-3xl font-bold tracking-tight custom-gradient-text md:text-6xl">
                 Pricing Plans
               </h1>
               
