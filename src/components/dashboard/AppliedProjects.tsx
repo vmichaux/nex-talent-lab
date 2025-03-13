@@ -43,19 +43,6 @@ export function AppliedProjects() {
     }
   };
 
-  // Display a message about Firestore index issues if encountered
-  const FirestoreIndexAlert = () => {
-    return (
-      <Alert className="mb-4">
-        <AlertTitle>Firestore Index Notice</AlertTitle>
-        <AlertDescription>
-          If you're seeing incomplete data, it may be due to Firestore indexes still being created. 
-          This can take a few minutes after the first query.
-        </AlertDescription>
-      </Alert>
-    );
-  };
-
   if (loading) {
     return (
       <div className="space-y-4">
@@ -82,7 +69,6 @@ export function AppliedProjects() {
             My Applications
           </h2>
         </div>
-        <FirestoreIndexAlert />
         <Card>
           <CardContent className="py-6">
             <p className="text-red-600">Error loading applications: {error}</p>
@@ -101,7 +87,6 @@ export function AppliedProjects() {
             My Applications
           </h2>
         </div>
-        <FirestoreIndexAlert />
         <Card>
           <CardContent className="py-8 text-center">
             <ClipboardCheck className="h-10 w-10 text-gray-400 mx-auto mb-4" />
@@ -126,8 +111,6 @@ export function AppliedProjects() {
           My Applications
         </h2>
       </div>
-
-      <FirestoreIndexAlert />
       
       <Card>
         <CardHeader className="pb-0">
