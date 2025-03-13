@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Project } from "@/types/project";
 import { ProjectForm } from "./ProjectForm";
 import { useNavigate } from "react-router-dom";
@@ -82,8 +82,8 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
           description: "Your project has been successfully updated."
         });
         
-        // Navigate back to the project detail page
-        navigate(`/project/${project.id}`);
+        // Force refresh the page to show updated data
+        window.location.href = `/project/${project.id}`;
       } else {
         throw new Error("Failed to update project");
       }

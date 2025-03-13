@@ -782,4 +782,3 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
 };
 
 export default ProjectDetailPage;
-
