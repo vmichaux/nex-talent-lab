@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { Project } from "@/types/project";
-import { getUserProjects } from "@/lib/firebase";
+import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import { Progress } from "@/components/ui/progress";
 
 export function DashboardProjects() {
@@ -23,12 +23,31 @@ export function DashboardProjects() {
       
       try {
         setLoading(true);
-        // Use the getUserProjects helper function to get user's projects
-        const fetchedProjects = await getUserProjects(currentUser.uid);
         
-        if (fetchedProjects.length > 0) {
-          setProjects(fetchedProjects as Project[]);
-          console.log("Fetched user projects:", fetchedProjects);
+        // Directly fetch projects from Firestore to bypass composite index requirement
+        const projectsCollection = collection(db, "projects");
+        const projectsQuery = query(
+          projectsCollection,
+          where("userId", "==", currentUser.uid)
+        );
+        
+        const projectsSnapshot = await getDocs(projectsQuery);
+        const fetchedProjects = projectsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as Project[];
+        
+        // Sort projects manually to avoid needing a composite index
+        const sortedProjects = fetchedProjects.sort((a, b) => {
+          // Convert timestamps to dates if needed
+          const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt);
+          const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);
+          return dateB.getTime() - dateA.getTime();
+        });
+        
+        if (sortedProjects.length > 0) {
+          setProjects(sortedProjects);
+          console.log("Fetched user projects:", sortedProjects);
         } else {
           // Fallback to empty array if no projects yet
           setProjects([]);

@@ -51,17 +51,26 @@ export const getProjects = async () => {
 };
 
 export const getUserProjects = async (userId: string) => {
-  const projectsCollection = collection(db, "projects");
-  const projectsQuery = query(
-    projectsCollection, 
-    where("userId", "==", userId),
-    orderBy("createdAt", "desc")
-  );
-  const projectsSnapshot = await getDocs(projectsQuery);
-  return projectsSnapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  }));
+  if (!userId) return [];
+  
+  try {
+    const projectsCollection = collection(db, "projects");
+    const projectsQuery = query(
+      projectsCollection, 
+      where("userId", "==", userId)
+    );
+    
+    const projectsSnapshot = await getDocs(projectsQuery);
+    const projects = projectsSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    
+    return projects;
+  } catch (error) {
+    console.error("Error in getUserProjects:", error);
+    return [];
+  }
 };
 
 // Helper function to get user profile data
@@ -79,7 +88,7 @@ export const getUserProfile = async (userId: string): Promise<UserProfile | null
       if (userData.skills && Array.isArray(userData.skills)) {
         // Check if skills are in old format (strings)
         if (userData.skills.length > 0 && typeof userData.skills[0] === 'string') {
-          // Convert string skills to object format correctly
+          // Convert string skills to object format
           userData.skills = (userData.skills as unknown as string[]).map(skill => ({
             name: skill,
             level: "Intermediate"
