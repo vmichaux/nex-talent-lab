@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
@@ -29,7 +28,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
+import { useProjects } from "@/hooks/useProjects";
 
 interface ProjectDetailPageProps {
   isEditing?: boolean;
@@ -46,6 +46,7 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { toast } = useToast();
   const { currentUser } = useAuth();
+  const { updateProject } = useProjects();
   
   // Edit form state
   const [editedProject, setEditedProject] = useState<Partial<Project>>({});
@@ -164,24 +165,27 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
     
     try {
       setSaving(true);
-      const projectRef = doc(db, "projects", id);
       
-      // Only update fields that are in the editedProject object
-      await updateDoc(projectRef, editedProject);
+      // Use the updateProject function from useProjects hook
+      const result = await updateProject(id, editedProject);
       
-      toast({
-        title: "Project updated",
-        description: "Your project has been successfully updated."
-      });
-      
-      // Update the local project state with the edited values
-      setProject({
-        ...project,
-        ...editedProject
-      });
-      
-      // Navigate back to view mode
-      navigate(`/project/${id}`);
+      if (result.success) {
+        toast({
+          title: "Project updated",
+          description: "Your project has been successfully updated."
+        });
+        
+        // Update the local project state with the edited values
+        setProject({
+          ...project,
+          ...editedProject
+        });
+        
+        // Navigate back to view mode
+        navigate(`/project/${id}`);
+      } else {
+        throw new Error("Failed to update project");
+      }
     } catch (error) {
       console.error("Error updating project:", error);
       toast({
@@ -335,7 +339,7 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
                   {isEditing ? (
                     <div className="space-y-4 max-w-2xl">
                       <div>
-                        <FormLabel htmlFor="title">Project Title</FormLabel>
+                        <Label htmlFor="title">Project Title</Label>
                         <Input 
                           id="title" 
                           name="title"
@@ -345,7 +349,7 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
                         />
                       </div>
                       <div>
-                        <FormLabel htmlFor="category">Category</FormLabel>
+                        <Label htmlFor="category">Category</Label>
                         <select
                           id="category"
                           name="category"
@@ -397,7 +401,7 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
               
               {isEditing ? (
                 <div className="mb-4">
-                  <FormLabel htmlFor="status">Status</FormLabel>
+                  <Label htmlFor="status">Status</Label>
                   <select
                     id="status"
                     name="status"
@@ -430,7 +434,7 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
                   <CardContent className="space-y-6">
                     {isEditing ? (
                       <div>
-                        <FormLabel htmlFor="description">Project Description</FormLabel>
+                        <Label htmlFor="description">Project Description</Label>
                         <Textarea
                           id="description"
                           name="description"
@@ -446,7 +450,7 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
                     
                     {isEditing ? (
                       <div>
-                        <FormLabel htmlFor="projectGoal">Project Goal</FormLabel>
+                        <Label htmlFor="projectGoal">Project Goal</Label>
                         <Textarea
                           id="projectGoal"
                           name="projectGoal"
@@ -476,7 +480,7 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
                     
                     {isEditing ? (
                       <div>
-                        <FormLabel htmlFor="duration">Timeline</FormLabel>
+                        <Label htmlFor="duration">Timeline</Label>
                         <Input
                           id="duration"
                           name="duration"
@@ -595,7 +599,7 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div>
-                        <FormLabel htmlFor="compensation">Compensation Type</FormLabel>
+                        <Label htmlFor="compensation">Compensation Type</Label>
                         <select
                           id="compensation"
                           name="compensation"
@@ -613,7 +617,7 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
                       </div>
                       
                       <div>
-                        <FormLabel htmlFor="compensationDetails">Compensation Details</FormLabel>
+                        <Label htmlFor="compensationDetails">Compensation Details</Label>
                         <Textarea
                           id="compensationDetails"
                           name="compensationDetails"
@@ -625,7 +629,7 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
                       </div>
                       
                       <div>
-                        <FormLabel htmlFor="budget">Budget</FormLabel>
+                        <Label htmlFor="budget">Budget</Label>
                         <Input
                           id="budget"
                           name="budget"
@@ -798,3 +802,4 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
 };
 
 export default ProjectDetailPage;
+
