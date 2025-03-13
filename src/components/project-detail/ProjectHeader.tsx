@@ -1,8 +1,7 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Pencil, Trash2, Share2 } from "lucide-react";
+import { ArrowLeft, Pencil, Trash2, Share2, Tag } from "lucide-react";
 import { Project } from "@/types/project";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
@@ -197,9 +196,4 @@ export function ProjectHeader({
       )}
     </div>
   );
-}
-
-// Fix for missing import
-function Tag(props: any) {
-  return <span {...props}></span>;
 }
