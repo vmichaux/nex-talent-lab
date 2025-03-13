@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
@@ -41,7 +40,6 @@ const ProjectDetailPage = () => {
           
           setProject(projectData);
           
-          // If there's a userId, fetch owner info
           if (projectData.userId) {
             const ownerProfile = await getUserProfile(projectData.userId);
             setOwner(ownerProfile);
@@ -103,16 +101,18 @@ const ProjectDetailPage = () => {
     );
   }
 
+  const handleApplyClick = () => {
+    navigate(`/apply-project/${id}`);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
         <div className="relative overflow-hidden bg-white">
-          {/* Background Pattern */}
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
-            {/* Top section with back button and action buttons */}
             <div className="flex justify-between items-center mb-8">
               <Button 
                 variant="ghost" 
@@ -123,10 +123,10 @@ const ProjectDetailPage = () => {
                 Back to Dashboard
               </Button>
               
-              {/* Action buttons at top right */}
               <div className="flex gap-3">
                 <Button 
-                  className="bg-purple-600 hover:bg-purple-700 text-white" 
+                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  onClick={handleApplyClick}
                 >
                   Apply to Collaborate
                 </Button>
@@ -140,7 +140,6 @@ const ProjectDetailPage = () => {
               </div>
             </div>
 
-            {/* Project Header */}
             <div className="mb-12">
               <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
                 <div>
@@ -179,11 +178,8 @@ const ProjectDetailPage = () => {
               </Badge>
             </div>
 
-            {/* Main Content Area - Two Column Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-              {/* Project Details - Left Column (2/3) */}
               <div className="lg:col-span-2 space-y-10">
-                {/* Project Description */}
                 <Card>
                   <CardHeader>
                     <CardTitle>Project Overview</CardTitle>
@@ -220,7 +216,6 @@ const ProjectDetailPage = () => {
                   </CardContent>
                 </Card>
                 
-                {/* Skills and Requirements */}
                 {(project.skills || project.desiredProfiles) && (
                   <Card>
                     <CardHeader>
@@ -276,7 +271,6 @@ const ProjectDetailPage = () => {
                   </Card>
                 )}
                 
-                {/* Compensation and Benefits */}
                 {(project.compensation || project.perks) && (
                   <Card>
                     <CardHeader>
@@ -315,9 +309,7 @@ const ProjectDetailPage = () => {
                 )}
               </div>
 
-              {/* Project Owner - Right Column (1/3) */}
               <div className="space-y-6">
-                {/* Project Key Details Card */}
                 <Card>
                   <CardHeader>
                     <CardTitle>Key Details</CardTitle>
@@ -365,7 +357,6 @@ const ProjectDetailPage = () => {
                   </CardContent>
                 </Card>
                 
-                {/* Project Owner Card */}
                 {owner ? (
                   <Card>
                     <CardHeader>
@@ -432,8 +423,6 @@ const ProjectDetailPage = () => {
                     </CardContent>
                   </Card>
                 )}
-                
-                {/* Actions Card removed from here */}
               </div>
             </div>
           </div>
