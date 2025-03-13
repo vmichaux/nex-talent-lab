@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription }
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, orderBy, limit, getDocs } from "firebase/firestore";
-import { db, getUserFullName } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { Project } from "@/types/project"; // Import Project type
 
@@ -126,7 +126,7 @@ export function DashboardProjects() {
           ) : (
             <div className="col-span-3 text-center py-10 bg-gray-50 rounded-md">
               <p className="text-gray-600 mb-4">You haven't created any projects yet.</p>
-              <Button onClick={() => document.querySelector('button:has(.h-4.w-4)')?.click()}>
+              <Button onClick={() => navigate('/explore-projects')}>
                 Create Your First Project
               </Button>
             </div>

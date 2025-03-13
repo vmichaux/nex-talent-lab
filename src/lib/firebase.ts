@@ -79,7 +79,8 @@ export const getUserProfile = async (userId: string): Promise<UserProfile | null
       if (userData.skills && Array.isArray(userData.skills)) {
         // Check if skills are in old format (strings)
         if (userData.skills.length > 0 && typeof userData.skills[0] === 'string') {
-          userData.skills = userData.skills.map(skill => ({
+          // Convert string skills to object format correctly
+          userData.skills = (userData.skills as unknown as string[]).map(skill => ({
             name: skill,
             level: "Intermediate"
           }));
