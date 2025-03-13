@@ -52,7 +52,7 @@ export function useProjects(options: UseProjectsOptions = {}) {
         fetchedProjects.push({
           id: doc.id,
           ...projectData,
-          createdAt: projectData.createdAt ? projectData.createdAt.toDate() : new Date()
+          createdAt: projectData.createdAt instanceof Timestamp ? projectData.createdAt.toDate() : new Date()
         });
       });
       
