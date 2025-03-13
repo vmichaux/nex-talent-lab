@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -369,8 +370,8 @@ const ProfileEditPage = () => {
   };
 
   const renderProfilePicture = () => (
-    <div className="flex flex-col items-center h-full justify-center">
-      <Card className="p-6 w-full max-w-md text-center">
+    <div className="flex flex-col items-center justify-center h-full">
+      <Card className="p-6 w-full max-w-md">
         <div className="flex flex-col items-center gap-6">
           <div className="relative group cursor-pointer" onClick={handleProfilePictureClick}>
             <Avatar className="h-32 w-32 border-4 border-white shadow-lg">
@@ -424,6 +425,7 @@ const ProfileEditPage = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
+          {/* Contact information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName" className="text-sm font-medium">
@@ -478,57 +480,6 @@ const ProfileEditPage = () => {
               placeholder="+1 (555) 123-4567"
             />
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="sex" className="text-sm font-medium">
-              Sex
-            </Label>
-            <Select
-              value={profile.sex}
-              onValueChange={(value) => handleInputChange("sex", value)}
-            >
-              <SelectTrigger id="sex" className="w-full">
-                <SelectValue placeholder="Select your sex" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="male">Male</SelectItem>
-                <SelectItem value="female">Female</SelectItem>
-                <SelectItem value="nonbinary">Non-binary</SelectItem>
-                <SelectItem value="preferNotToSay">Prefer not to say</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="dateOfBirth" className="text-sm font-medium flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              Date of Birth
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !profile.dateOfBirth && "text-muted-foreground"
-                  )}
-                >
-                  <Calendar className="mr-2 h-4 w-4" />
-                  {profile.dateOfBirth ? format(profile.dateOfBirth, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <CalendarComponent
-                  mode="single"
-                  selected={profile.dateOfBirth || undefined}
-                  onSelect={(date) => handleInputChange("dateOfBirth", date)}
-                  initialFocus
-                  disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                  className={cn("p-3 pointer-events-auto")}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
         </div>
         
         <div className="flex items-center justify-center">
@@ -536,6 +487,7 @@ const ProfileEditPage = () => {
         </div>
       </div>
       
+      {/* Additional profile information - below the photo */}
       <div className="space-y-4 pt-4 border-t border-gray-100">
         <div className="space-y-2">
           <Label htmlFor="title" className="text-sm font-medium">
@@ -561,6 +513,57 @@ const ProfileEditPage = () => {
             onChange={(e) => handleInputChange("location", e.target.value)}
             placeholder="San Francisco, CA"
           />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="dateOfBirth" className="text-sm font-medium flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            Date of Birth
+          </Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !profile.dateOfBirth && "text-muted-foreground"
+                )}
+              >
+                <Calendar className="mr-2 h-4 w-4" />
+                {profile.dateOfBirth ? format(profile.dateOfBirth, "PPP") : <span>Pick a date</span>}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <CalendarComponent
+                mode="single"
+                selected={profile.dateOfBirth || undefined}
+                onSelect={(date) => handleInputChange("dateOfBirth", date)}
+                initialFocus
+                disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                className={cn("p-3 pointer-events-auto")}
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="sex" className="text-sm font-medium">
+            Sex
+          </Label>
+          <Select
+            value={profile.sex}
+            onValueChange={(value) => handleInputChange("sex", value)}
+          >
+            <SelectTrigger id="sex" className="w-full">
+              <SelectValue placeholder="Select your sex" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="male">Male</SelectItem>
+              <SelectItem value="female">Female</SelectItem>
+              <SelectItem value="nonbinary">Non-binary</SelectItem>
+              <SelectItem value="preferNotToSay">Prefer not to say</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
