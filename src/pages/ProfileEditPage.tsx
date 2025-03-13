@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -20,11 +20,15 @@ import {
   Users, 
   Tag, 
   FileText, 
-  CreditCard 
+  CreditCard,
+  Camera,
+  Upload,
+  ImagePlus
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, storage } from "@/lib/firebase";
 import {
   Select,
   SelectContent,
@@ -33,14 +37,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
 
 const ProfileEditPage = () => {
   const { isLoggedIn, updateProfileCompletion, userData, currentUser } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const isProfileCompleted = userData?.hasCompletedProfile || false;
   const [loading, setLoading] = useState(true);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "dual">("talent");
   
   const [profile, setProfile] = useState({
@@ -49,6 +57,7 @@ const ProfileEditPage = () => {
     title: "",
     location: "",
     bio: "",
+    profilePicture: "",
     business: {
       companyName: "",
       foundedYear: "",
@@ -105,6 +114,7 @@ const ProfileEditPage = () => {
               title: profileData.title || "",
               location: profileData.location || "",
               bio: profileData.bio || "",
+              profilePicture: profileData.profilePicture || "",
               business,
               skills: Array.isArray(profileData.skills) && profileData.skills.length > 0 
                 ? profileData.skills 
@@ -251,6 +261,66 @@ const ProfileEditPage = () => {
     localStorage.setItem("userRole", role === "builder" ? "entrepreneur" : role === "dual" ? "both" : "talent");
   };
 
+  const handleProfilePictureClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !currentUser) return;
+
+    // Basic validation
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      toast({
+        title: "File too large",
+        description: "Please select an image smaller than 5MB.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setUploadingImage(true);
+    try {
+      // Create a reference to the file in Firebase Storage
+      const storageRef = ref(storage, `profilePictures/${currentUser.uid}/${Date.now()}_${file.name}`);
+      
+      // Upload the file
+      const snapshot = await uploadBytes(storageRef, file);
+      
+      // Get download URL
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      
+      // Update profile state
+      setProfile(prev => ({
+        ...prev,
+        profilePicture: downloadURL
+      }));
+      
+      toast({
+        title: "Image uploaded",
+        description: "Your profile picture has been uploaded successfully.",
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast({
+        title: "Upload error",
+        description: "Failed to upload profile picture. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   const handleSaveProfile = async () => {
     try {
       if (currentUser?.uid) {
@@ -282,6 +352,59 @@ const ProfileEditPage = () => {
       });
     }
   };
+
+  // Render the profile picture section
+  const renderProfilePicture = () => (
+    <div className="mb-8 flex flex-col items-center">
+      <Card className="p-6 w-full max-w-md mx-auto text-center">
+        <div className="flex flex-col items-center gap-6">
+          <div className="relative group cursor-pointer" onClick={handleProfilePictureClick}>
+            <Avatar className="h-32 w-32 border-4 border-white shadow-lg">
+              {profile.profilePicture ? (
+                <AvatarImage src={profile.profilePicture} alt={`${profile.firstName} ${profile.lastName}`} />
+              ) : (
+                <AvatarFallback className="bg-primary/10 text-primary text-4xl">
+                  {profile.firstName && profile.lastName 
+                    ? `${profile.firstName[0]}${profile.lastName[0]}`
+                    : "?"}
+                </AvatarFallback>
+              )}
+            </Avatar>
+            <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+              <Camera className="h-8 w-8 text-white" />
+            </div>
+          </div>
+          
+          <div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="gap-2"
+              onClick={handleProfilePictureClick}
+              disabled={uploadingImage}
+            >
+              {uploadingImage ? (
+                <div className="animate-pulse">Uploading...</div>
+              ) : (
+                <>
+                  <ImagePlus className="h-4 w-4" />
+                  {profile.profilePicture ? "Change Picture" : "Add Picture"}
+                </>
+              )}
+            </Button>
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              className="hidden" 
+              accept="image/*" 
+              onChange={handleFileChange}
+              disabled={uploadingImage}
+            />
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
 
   // Render the basic information section (common to all roles)
   const renderBasicInfo = () => (
@@ -659,6 +782,7 @@ const ProfileEditPage = () => {
                   
                   <TabsContent value="talent" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
+                      {renderProfilePicture()}
                       {renderBasicInfo()}
                       {renderSkills()}
                       {renderEducation()}
@@ -686,6 +810,7 @@ const ProfileEditPage = () => {
                   
                   <TabsContent value="builder" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
+                      {renderProfilePicture()}
                       {renderBasicInfo()}
                       {renderBusinessInfo()}
                       
@@ -711,6 +836,7 @@ const ProfileEditPage = () => {
                   
                   <TabsContent value="dual" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
+                      {renderProfilePicture()}
                       {renderBasicInfo()}
                       {renderBusinessInfo()}
                       {renderSkills()}
