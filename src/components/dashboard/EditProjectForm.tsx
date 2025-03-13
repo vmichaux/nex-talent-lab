@@ -22,7 +22,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
     projectName: project.title,
     projectDescription: project.description,
     projectCategory: project.category,
-    projectType: project.projectType,
+    projectType: project.projectType || "Short-term",
     projectStatus: project.status,
     skillsWithLevel: project.skillsWithLevel || [],
     deliverables: project.deliverables || [],
@@ -70,6 +70,8 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
         budget: formData.budget,
         desiredProfiles: formData.desiredProfiles
       };
+      
+      console.log("Submitting updated project data:", updatedProjectData);
       
       // Use the updateProject function from useProjects hook
       const result = await updateProject(project.id, updatedProjectData);

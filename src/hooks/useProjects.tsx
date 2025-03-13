@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { collection, query, orderBy, getDocs, Timestamp, doc, updateDoc } from "firebase/firestore";
+import { collection, query, orderBy, getDocs, Timestamp, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Project } from "@/types/project";
 
@@ -50,12 +50,24 @@ export const useProjects = () => {
     }
   };
 
-  // New function to update a project in Firestore
+  // Function to update a project in Firestore
   const updateProject = async (projectId: string, updatedData: Partial<Project>) => {
     try {
       setLoading(true);
+      console.log("Updating project with ID:", projectId);
+      console.log("Update data:", updatedData);
+      
       const projectRef = doc(db, "projects", projectId);
+      
+      // First get the current project data
+      const projectSnap = await getDoc(projectRef);
+      if (!projectSnap.exists()) {
+        throw new Error("Project not found");
+      }
+      
+      // Update the document in Firestore
       await updateDoc(projectRef, updatedData);
+      console.log("Project updated successfully in Firestore");
       
       // Update the local state
       setProjects(prevProjects => 

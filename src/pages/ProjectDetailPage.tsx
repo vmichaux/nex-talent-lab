@@ -27,9 +27,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { EditProjectForm } from "@/components/dashboard/EditProjectForm";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { useProjects } from "@/hooks/useProjects";
 
 interface ProjectDetailPageProps {
@@ -49,27 +49,7 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
   const { currentUser } = useAuth();
   const { updateProject } = useProjects();
   
-  // Edit form state
   const [editedProject, setEditedProject] = useState<Partial<Project>>({});
-  
-  // Initialize editedProject when project data is loaded
-  useEffect(() => {
-    if (project) {
-      setEditedProject({
-        title: project.title,
-        description: project.description,
-        category: project.category,
-        status: project.status,
-        projectGoal: project.projectGoal,
-        duration: project.duration,
-        deadline: project.deadline,
-        location: project.location,
-        compensation: project.compensation,
-        compensationDetails: project.compensationDetails,
-        budget: project.budget
-      });
-    }
-  }, [project]);
 
   useEffect(() => {
     const fetchProjectDetails = async () => {
@@ -167,7 +147,6 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
     try {
       setSaving(true);
       
-      // Use the updateProject function from useProjects hook
       const result = await updateProject(id, editedProject);
       
       if (result.success) {
@@ -176,13 +155,11 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
           description: "Your project has been successfully updated."
         });
         
-        // Update the local project state with the edited values
         setProject({
           ...project,
           ...editedProject
         });
         
-        // Navigate back to view mode
         navigate(`/project/${id}`);
       } else {
         throw new Error("Failed to update project");
@@ -200,7 +177,6 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
   };
   
   const handleCancelEdit = () => {
-    // Return to view mode without saving changes
     navigate(`/project/${id}`);
   };
 
@@ -238,7 +214,6 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
     );
   }
 
-  // If we're in editing mode and we have a project, render the edit form
   if (isEditing && project) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -262,7 +237,6 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
     );
   }
 
-  // Regular view mode
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -808,3 +782,4 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
 };
 
 export default ProjectDetailPage;
+
