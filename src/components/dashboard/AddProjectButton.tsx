@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Plus, Briefcase, Award, Users, Calendar, Clock, DollarSign, Target, MapPin, Scale, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db, getUserFullName } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Project } from "@/types/project";

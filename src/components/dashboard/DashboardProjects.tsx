@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription }
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, orderBy, limit, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db, getUserFullName } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { Project } from "@/types/project"; // Import Project type
 
