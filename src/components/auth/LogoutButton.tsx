@@ -3,27 +3,26 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { auth } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
 
 export const LogoutButton: React.FC = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      toast({
-        title: "Logged out successfully",
+      toast("Logged out successfully", {
         description: "You have been logged out of your account",
+        duration: 10000,
       });
       navigate('/');
     } catch (error: any) {
-      toast({
-        title: "Logout error",
+      toast("Logout error", {
         description: error.message,
-        variant: "destructive"
+        variant: "destructive",
+        duration: 10000,
       });
     }
   };

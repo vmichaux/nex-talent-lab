@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { useProjects } from "@/hooks/useProjects";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/explore/PageHeader";
 import { SearchBar } from "@/components/explore/SearchBar";
 import { ProjectTabs } from "@/components/explore/ProjectTabs";
@@ -15,19 +15,18 @@ const ExploreProjectsPage = () => {
   const { isLoggedIn, currentUser } = useAuth();
   const navigate = useNavigate();
   const { projects, loading, error } = useProjects();
-  const { toast } = useToast();
 
   useEffect(() => {
     // Redirect to login if not logged in
     if (!isLoggedIn) {
-      toast({
-        title: "Authentication required",
+      toast("Authentication required", {
         description: "Please sign in to explore projects",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 10000,
       });
       navigate("/login");
     }
-  }, [isLoggedIn, navigate, toast]);
+  }, [isLoggedIn, navigate]);
 
   // Filter projects based on search query
   const filteredProjects = projects.filter(project => 
@@ -70,7 +69,7 @@ const ExploreProjectsPage = () => {
             {/* Error state */}
             {error && (
               <div className="text-center py-20">
-                <p className="text-red-500 mb-4">{error}</p>
+                <p className="text-red-500 mb-4">{error instanceof Error ? error.message : String(error)}</p>
                 <button onClick={() => window.location.reload()} className="px-4 py-2 bg-primary text-white rounded">Try Again</button>
               </div>
             )}

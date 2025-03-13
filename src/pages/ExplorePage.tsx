@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -83,7 +82,7 @@ const ExplorePage = () => {
             <ProjectsSection 
               projects={projects} 
               loading={loading} 
-              error={error} 
+              error={error instanceof Error ? error.message : String(error)} 
               searchQuery={searchQuery} 
             />
             <TalentsSection talents={talents} />

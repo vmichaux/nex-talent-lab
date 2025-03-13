@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, UserCircle, MessageSquare } from "lucide-react";
 import { Project } from "@/types/project";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface ProjectCardProps {
   project: Project;
@@ -22,7 +21,6 @@ export const ProjectCard = ({
   showActions = false
 }: ProjectCardProps) => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   
   const handleViewDetails = () => {
     if (onClick) {
@@ -35,10 +33,10 @@ export const ProjectCard = ({
   const handleApplyNow = () => {
     // Prevent applying to your own project
     if (project.userId === currentUserId) {
-      toast({
-        title: "Cannot apply to your own project",
+      toast("Cannot apply to your own project", {
         description: "You cannot apply to projects you've created.",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 10000,
       });
       return;
     }

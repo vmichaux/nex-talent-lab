@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
@@ -62,13 +62,17 @@ export function ApplicationModal({ application, isOpen, onClose, onRefresh }: Ap
       
       await updateDoc(applicationRef, updateData);
       
-      toast({
-        title: `Application ${newStatus}`,
-        description: newStatus === 'accepted' 
-          ? "You have accepted the application. The applicant will be notified." 
-          : "You have rejected the application. The applicant will be notified.",
-        variant: newStatus === 'accepted' ? "default" : "destructive"
-      });
+      toast(
+        newStatus === 'accepted' 
+          ? "Application accepted" 
+          : "Application rejected", 
+        {
+          description: newStatus === 'accepted' 
+            ? "You have accepted the application. The applicant will be notified." 
+            : "You have rejected the application. The applicant will be notified.",
+          duration: 10000,
+        }
+      );
       
       // Close dialogs
       setMessageDialogOpen(false);
@@ -77,10 +81,9 @@ export function ApplicationModal({ application, isOpen, onClose, onRefresh }: Ap
       onClose();
     } catch (error) {
       console.error("Error updating application status:", error);
-      toast({
-        title: "Update failed",
+      toast("Update failed", {
         description: "Failed to update application status. Please try again.",
-        variant: "destructive"
+        duration: 10000,
       });
     } finally {
       setIsSubmitting(false);

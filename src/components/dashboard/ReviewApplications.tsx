@@ -105,7 +105,7 @@ export function ReviewApplications() {
       if (allApplications.length > 0) {
         toast.success("Applications Loaded", {
           description: `Found ${allApplications.length} application(s) for your projects`,
-          duration: 3000,
+          duration: 10000,
         });
       }
     } catch (error) {
