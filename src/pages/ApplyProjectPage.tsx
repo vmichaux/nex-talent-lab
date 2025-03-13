@@ -101,8 +101,8 @@ const ApplyProjectPage = () => {
         projectId: id,
         projectTitle: project.title,
         userId: currentUser.uid,
-        userName: currentUser.displayName,
-        userEmail: currentUser.email,
+        userName: currentUser.displayName || "Anonymous User",
+        userEmail: currentUser.email || "No email provided",
         ...application,
         status: "pending",
         createdAt: serverTimestamp()
