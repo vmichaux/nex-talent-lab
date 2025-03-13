@@ -3,6 +3,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Project } from "@/types/project";
+import { Progress } from "@/components/ui/progress";
 
 interface ProjectCardProps {
   project: Project;
@@ -24,6 +25,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 </span>
               ))}
             </div>
+            
+            {project.progress !== undefined && (
+              <div className="mb-3 space-y-1">
+                <div className="flex justify-between text-xs">
+                  <span className="text-gray-600">Progress</span>
+                  <span className="font-medium">{project.progress || 0}%</span>
+                </div>
+                <Progress value={project.progress || 0} className="h-2" />
+              </div>
+            )}
             
             <div className="text-sm text-gray-600">
               Duration: {project.duration || "Not specified"}
