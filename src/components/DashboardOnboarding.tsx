@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Rocket, Lightbulb } from "lucide-react";
@@ -47,12 +48,12 @@ export function DashboardOnboarding() {
       case 2:
         return <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
             <h1 className="font-bold mb-6 custom-gradient-text text-5xl py-0">Choose Your Role</h1>
-            <p className="text-lg mb-8 text-zinc-900 my-0 py-[16px]">Are you a talent looking for opportunities or an entrepreneur? Why not both?</p>
+            <p className="text-lg mb-8 text-zinc-900 my-0 py-[16px]">Are you a talent looking for opportunities or an entrepreneur? Why not both?</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-10">
               {/* Talent Card */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'talent' ? 'ring-2 ring-primary' : ''}`} onClick={() => setSelectedRole('talent')}>
-                <CardContent className="flex flex-col items-center p-4 bg-[#F5EEFF] h-[180px] py-[9px]">
+                <CardContent className="flex flex-col items-center p-4 bg-[#EAE5FA] h-[180px] py-[9px]">
                   <div className="flex justify-start w-full mb-4 mt-2">
                     <GraduationCap className="h-8 w-8 text-[#9b87f5]" />
                   </div>
@@ -65,7 +66,7 @@ export function DashboardOnboarding() {
               
               {/* Entrepreneur Card */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'entrepreneur' ? 'ring-2 ring-secondary' : ''}`} onClick={() => setSelectedRole('entrepreneur')}>
-                <CardContent className="flex flex-col items-center p-4 bg-[#ECFDF3] h-[180px] py-[9px]">
+                <CardContent className="flex flex-col items-center p-4 bg-[#D9F7E8] h-[180px] py-[9px]">
                   <div className="flex justify-start w-full mb-4 mt-2">
                     <Rocket className="h-8 w-8 text-[#10B981]" />
                   </div>
@@ -78,7 +79,7 @@ export function DashboardOnboarding() {
               
               {/* Talent & Builder Card */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'both' ? 'ring-2 ring-[#7C6ED9]' : ''}`} onClick={() => setSelectedRole('both')}>
-                <CardContent className="flex flex-col items-center p-4 bg-[#F3F1FF] h-[180px] py-[9px]">
+                <CardContent className="flex flex-col items-center p-4 bg-[#E9E6FF] h-[180px] py-[9px]">
                   <div className="flex justify-start w-full mb-4 mt-2">
                     <Lightbulb className="h-8 w-8 text-[#7C6ED9]" />
                   </div>
