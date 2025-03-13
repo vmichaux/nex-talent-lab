@@ -580,8 +580,8 @@ const ProfileEditPage = () => {
             value={profile.bio}
             onChange={(e) => handleInputChange("bio", e.target.value)}
             placeholder="Tell us about yourself..."
-            rows={8}
-            className="min-h-[200px] w-full"
+            rows={4}
+            className="min-h-[100px] w-full"
           />
         </div>
       </div>
