@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Home, Search, User, MessageSquare, Phone } from "lucide-react";
+import { Home, Search, User, MessageSquare, Phone, DollarSign } from "lucide-react";
 
 interface NavLinksProps {
   isLoggedIn: boolean;
@@ -61,7 +61,7 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
         How It Works
       </Link>
       <Link to="/pricing" className={linkClass} onClick={handleClick}>
-        Pricing
+        <DollarSign className="h-4 w-4" />
       </Link>
       <Link to="/about" className={linkClass} onClick={handleClick}>
         About
