@@ -30,4 +30,7 @@ export interface Project {
   legalConstraints?: string;
   budget?: string;
   desiredProfiles: string[];
+  
+  // User reference
+  userId?: string;
 }

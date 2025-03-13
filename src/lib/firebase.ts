@@ -19,6 +19,26 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
+// Define UserProfile interface
+export interface UserProfile {
+  id: string;
+  firstName?: string;
+  lastName?: string;
+  bio?: string;
+  skills?: Array<{name: string, level: string}>;
+  interests?: string[];
+  email?: string;
+  displayName?: string;
+  photoURL?: string;
+  location?: string;
+  website?: string;
+  social?: {
+    twitter?: string;
+    linkedin?: string;
+    github?: string;
+  };
+}
+
 // Helper functions for Firebase operations
 export const getProjects = async () => {
   const projectsCollection = collection(db, "projects");
@@ -45,7 +65,7 @@ export const getUserProjects = async (userId: string) => {
 };
 
 // Helper function to get user profile data
-export const getUserProfile = async (userId: string) => {
+export const getUserProfile = async (userId: string): Promise<UserProfile | null> => {
   if (!userId) return null;
   
   try {
@@ -53,7 +73,7 @@ export const getUserProfile = async (userId: string) => {
     const docSnap = await getDoc(userProfileRef);
     
     if (docSnap.exists()) {
-      const userData = docSnap.data();
+      const userData = docSnap.data() as Omit<UserProfile, 'id'>;
       
       // Handle potential old skills format (strings) vs new format (objects with name and level)
       if (userData.skills && Array.isArray(userData.skills)) {
@@ -81,6 +101,20 @@ export const getUserProfile = async (userId: string) => {
   } catch (error) {
     console.error("Error fetching user profile:", error);
     return null;
+  }
+};
+
+// Helper function to get the user's full name
+export const getUserFullName = async (userId: string): Promise<string> => {
+  const userProfile = await getUserProfile(userId);
+  
+  if (userProfile && userProfile.firstName && userProfile.lastName) {
+    return `${userProfile.firstName} ${userProfile.lastName}`;
+  } else if (userProfile && userProfile.displayName) {
+    return userProfile.displayName;
+  } else {
+    const user = auth.currentUser;
+    return user?.displayName || user?.email || "Anonymous";
   }
 };
 
