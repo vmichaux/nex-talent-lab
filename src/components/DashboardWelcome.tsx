@@ -1,6 +1,7 @@
+
 import { ArrowRight, Check, UserPlus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 type StepProps = {
   number: number;
   title: string;
@@ -64,6 +65,7 @@ export function DashboardWelcome() {
           </h1>
           
           <p className="text-lg text-gray-600 md:text-xl max-w-3xl mb-8">
+            Need a custom solution? <Link to="/contact-sales" className="text-primary hover:underline font-medium">Contact our sales team</Link>
         </p>
           
           <div className="w-full max-w-3xl space-y-4 mb-10">
