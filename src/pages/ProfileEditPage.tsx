@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -108,14 +109,14 @@ const ProfileEditPage = () => {
               if (profileData.skills.length > 0) {
                 const firstSkill = profileData.skills[0];
                 if (typeof firstSkill === 'string') {
-                  const stringSkills = profileData.skills as string[];
-                  skills = stringSkills.map(skill => ({
+                  // Use type assertion to handle string array
+                  skills = (profileData.skills as unknown as string[]).map(skill => ({
                     name: skill,
                     level: "Intermediate" as SkillLevel
                   }));
                 } else {
-                  const objectSkills = profileData.skills as Skill[];
-                  skills = objectSkills.map(skill => ({
+                  // Use type assertion for object array
+                  skills = (profileData.skills as unknown as Array<{name?: string, level?: SkillLevel}>).map(skill => ({
                     name: skill.name || "",
                     level: skill.level || "Intermediate"
                   }));
