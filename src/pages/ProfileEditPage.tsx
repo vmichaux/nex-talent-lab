@@ -1107,10 +1107,10 @@ const ProfileEditPage = () => {
                   <TabsContent value="talent" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
                       {renderBasicInfo()}
-                      {renderInterests()}
                       {renderSkills()}
                       {renderEducation()}
                       {renderExperience()}
+                      {renderInterests()}
                       
                       <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
                         <Button 
@@ -1135,8 +1135,8 @@ const ProfileEditPage = () => {
                   <TabsContent value="builder" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
                       {renderBasicInfo()}
-                      {renderInterests()}
                       {renderBusinessInfo()}
+                      {renderInterests()}
                       
                       <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
                         <Button 
@@ -1161,11 +1161,11 @@ const ProfileEditPage = () => {
                   <TabsContent value="dual" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
                       {renderBasicInfo()}
-                      {renderInterests()}
                       {renderBusinessInfo()}
                       {renderSkills()}
                       {renderEducation()}
                       {renderExperience()}
+                      {renderInterests()}
                       
                       <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
                         <Button 
@@ -1198,4 +1198,3 @@ const ProfileEditPage = () => {
 };
 
 export default ProfileEditPage;
-
