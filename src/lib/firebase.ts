@@ -19,17 +19,6 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// Define UserProfile type
-interface UserProfile {
-  id: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  skills?: Array<{name: string, level: string}> | string[];
-  interests?: string[];
-  [key: string]: any; // Allow additional properties
-}
-
 // Helper functions for Firebase operations
 export const getProjects = async () => {
   const projectsCollection = collection(db, "projects");
@@ -55,38 +44,8 @@ export const getUserProjects = async (userId: string) => {
   }));
 };
 
-// Get user's full name from profile or construct from email
-export const getUserFullName = async (userId: string): Promise<string> => {
-  // First, try to get the user profile
-  const userProfile = await getUserProfile(userId);
-  
-  if (userProfile && userProfile.firstName && userProfile.lastName) {
-    return `${userProfile.firstName} ${userProfile.lastName}`;
-  }
-  
-  // If no profile or incomplete profile, try auth user
-  const user = auth.currentUser;
-  if (user) {
-    if (user.displayName) {
-      return user.displayName;
-    }
-    
-    if (user.email) {
-      // Extract name from email and format it
-      const emailName = user.email.split('@')[0];
-      const parts = emailName.split(/[._-]/);
-      
-      return parts.map(part => 
-        part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
-      ).join(' ');
-    }
-  }
-  
-  return "Anonymous User";
-};
-
 // Helper function to get user profile data
-export const getUserProfile = async (userId: string): Promise<UserProfile | null> => {
+export const getUserProfile = async (userId: string) => {
   if (!userId) return null;
   
   try {

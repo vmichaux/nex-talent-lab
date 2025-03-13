@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -18,6 +19,7 @@ const ExploreProjectsPage = () => {
   const navigate = useNavigate();
   const { projects, loading, error } = useProjects();
 
+  // Filter projects based on search query
   const filteredProjects = projects.filter(project => 
     project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -25,6 +27,7 @@ const ExploreProjectsPage = () => {
     project.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  // Redirect to login if not logged in
   if (!isLoggedIn) {
     navigate("/login");
     return null;
@@ -35,6 +38,7 @@ const ExploreProjectsPage = () => {
       <Navbar />
       <main className="flex-1">
         <div className="relative overflow-hidden bg-white">
+          {/* Background Pattern */}
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
@@ -52,6 +56,7 @@ const ExploreProjectsPage = () => {
               </p>
             </div>
 
+            {/* Search and Filter Section */}
             <div className="mb-10">
               <div className="flex flex-col md:flex-row gap-4 max-w-4xl mx-auto">
                 <div className="relative flex-1">
@@ -71,6 +76,7 @@ const ExploreProjectsPage = () => {
               </div>
             </div>
 
+            {/* Loading state */}
             {loading && (
               <div className="flex justify-center items-center py-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -78,6 +84,7 @@ const ExploreProjectsPage = () => {
               </div>
             )}
 
+            {/* Error state */}
             {error && (
               <div className="text-center py-20">
                 <p className="text-red-500 mb-4">{error}</p>
@@ -85,6 +92,7 @@ const ExploreProjectsPage = () => {
               </div>
             )}
 
+            {/* Project Categories Tabs */}
             {!loading && !error && (
               <Tabs defaultValue="all" className="mb-8">
                 <TabsList className="mb-8 mx-auto flex justify-center">
@@ -143,6 +151,7 @@ const ExploreProjectsPage = () => {
   );
 };
 
+// Project Card Component
 const ProjectCard = ({ project }: { project: Project }) => {
   const navigate = useNavigate();
   

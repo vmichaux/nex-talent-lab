@@ -7,9 +7,7 @@ export interface Project {
   category: string;
   deadline: string;
   duration: string;
-  owner: string; // This will now contain the user's full name
-  ownerEmail?: string; // Optional field to store the email
-  userId?: string; // Store the user ID for reference
+  owner: string;
   featured: boolean;
   status: "Open" | "Urgent" | "Closed";
   applicants: number;
