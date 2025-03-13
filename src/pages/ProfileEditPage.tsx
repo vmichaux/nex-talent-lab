@@ -369,7 +369,7 @@ const ProfileEditPage = () => {
   };
 
   const renderProfilePicture = () => (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center h-full justify-center">
       <Card className="p-6 w-full max-w-md text-center">
         <div className="flex flex-col items-center gap-6">
           <div className="relative group cursor-pointer" onClick={handleProfilePictureClick}>
@@ -449,32 +449,6 @@ const ProfileEditPage = () => {
                 placeholder="Doe"
               />
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="title" className="text-sm font-medium">
-              Professional Title
-            </Label>
-            <Input
-              id="title"
-              type="text"
-              value={profile.title}
-              onChange={(e) => handleInputChange("title", e.target.value)}
-              placeholder="UX Designer"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="location" className="text-sm font-medium">
-              Location
-            </Label>
-            <Input
-              id="location"
-              type="text"
-              value={profile.location}
-              onChange={(e) => handleInputChange("location", e.target.value)}
-              placeholder="San Francisco, CA"
-            />
           </div>
 
           <div className="space-y-2">
@@ -562,18 +536,46 @@ const ProfileEditPage = () => {
         </div>
       </div>
       
-      <div className="space-y-2">
-        <Label htmlFor="bio" className="text-sm font-medium">
-          Bio
-        </Label>
-        <Textarea
-          id="bio"
-          value={profile.bio}
-          onChange={(e) => handleInputChange("bio", e.target.value)}
-          placeholder="Tell us about yourself..."
-          rows={7}
-          className="min-h-[180px] w-full"
-        />
+      <div className="space-y-4 pt-4 border-t border-gray-100">
+        <div className="space-y-2">
+          <Label htmlFor="title" className="text-sm font-medium">
+            Professional Title
+          </Label>
+          <Input
+            id="title"
+            type="text"
+            value={profile.title}
+            onChange={(e) => handleInputChange("title", e.target.value)}
+            placeholder="UX Designer"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="location" className="text-sm font-medium">
+            Location
+          </Label>
+          <Input
+            id="location"
+            type="text"
+            value={profile.location}
+            onChange={(e) => handleInputChange("location", e.target.value)}
+            placeholder="San Francisco, CA"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="bio" className="text-sm font-medium">
+            Bio
+          </Label>
+          <Textarea
+            id="bio"
+            value={profile.bio}
+            onChange={(e) => handleInputChange("bio", e.target.value)}
+            placeholder="Tell us about yourself..."
+            rows={8}
+            className="min-h-[200px] w-full"
+          />
+        </div>
       </div>
     </div>
   );
