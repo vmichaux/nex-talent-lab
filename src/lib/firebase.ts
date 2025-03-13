@@ -42,6 +42,17 @@ export interface UserProfile {
   };
 }
 
+// Define Project interface to fix TypeScript errors
+export interface ProjectData {
+  id: string;
+  title?: string;
+  description?: string;
+  userId?: string;
+  createdAt?: Timestamp | Date | string | number;
+  status?: string;
+  [key: string]: any; // Allow for other properties
+}
+
 // Helper functions for Firebase operations
 export const getProjects = async () => {
   const projectsCollection = collection(db, "projects");
@@ -50,7 +61,7 @@ export const getProjects = async () => {
   const projects = projectsSnapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
-  }));
+  })) as ProjectData[];
   
   // Sort manually (newest first)
   return projects.sort((a, b) => {
