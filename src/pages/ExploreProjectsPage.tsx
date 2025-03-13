@@ -116,7 +116,7 @@ const ExploreProjectsPage = () => {
                 
                 <TabsContent value="all" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredProjects.length > 0 ? (
-                    filteredProjects.map(project => <ProjectCard key={project.id} project={project} />)
+                    filteredProjects.map(project => <ProjectCard key={project.id} project={project} currentUserId={currentUser?.uid} />)
                   ) : (
                     <div className="col-span-3 text-center py-20">
                       <p className="text-gray-500 mb-4">No projects found. Try adjusting your search criteria.</p>
@@ -126,7 +126,7 @@ const ExploreProjectsPage = () => {
                 
                 <TabsContent value="featured" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredProjects.filter(p => p.featured).length > 0 ? (
-                    filteredProjects.filter(p => p.featured).map(project => <ProjectCard key={project.id} project={project} />)
+                    filteredProjects.filter(p => p.featured).map(project => <ProjectCard key={project.id} project={project} currentUserId={currentUser?.uid} />)
                   ) : (
                     <div className="col-span-3 text-center py-20">
                       <p className="text-gray-500 mb-4">No featured projects found.</p>
@@ -136,7 +136,7 @@ const ExploreProjectsPage = () => {
                 
                 <TabsContent value="recent" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredProjects.length > 0 ? (
-                    filteredProjects.slice(0, 4).map(project => <ProjectCard key={project.id} project={project} />)
+                    filteredProjects.slice(0, 4).map(project => <ProjectCard key={project.id} project={project} currentUserId={currentUser?.uid} />)
                   ) : (
                     <div className="col-span-3 text-center py-20">
                       <p className="text-gray-500 mb-4">No recent projects found.</p>
@@ -146,7 +146,7 @@ const ExploreProjectsPage = () => {
                 
                 <TabsContent value="urgent" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredProjects.filter(p => p.status === "Urgent").length > 0 ? (
-                    filteredProjects.filter(p => p.status === "Urgent").map(project => <ProjectCard key={project.id} project={project} />)
+                    filteredProjects.filter(p => p.status === "Urgent").map(project => <ProjectCard key={project.id} project={project} currentUserId={currentUser?.uid} />)
                   ) : (
                     <div className="col-span-3 text-center py-20">
                       <p className="text-gray-500 mb-4">No urgent projects found.</p>
@@ -164,12 +164,30 @@ const ExploreProjectsPage = () => {
 };
 
 // Project Card Component
-const ProjectCard = ({ project }: { project: Project }) => {
+const ProjectCard = ({ project, currentUserId }: { project: Project; currentUserId?: string }) => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   const handleViewDetails = () => {
     navigate(`/project/${project.id}`);
   };
+  
+  const handleApplyNow = () => {
+    // Prevent applying to your own project
+    if (project.userId === currentUserId) {
+      toast({
+        title: "Cannot apply to your own project",
+        description: "You cannot apply to projects you've created.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Navigate to the application page
+    navigate(`/apply-project/${project.id}`);
+  };
+  
+  const isOwnProject = project.userId === currentUserId;
   
   return (
     <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
@@ -181,6 +199,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
                 Featured
               </Badge>}
             {project.status === "Urgent" && <Badge variant="destructive">Urgent</Badge>}
+            {isOwnProject && <Badge variant="outline" className="bg-blue-100 text-blue-800">Your Project</Badge>}
           </div>
         </div>
         <CardDescription className="text-gray-600">{project.category}</CardDescription>
@@ -212,7 +231,13 @@ const ProjectCard = ({ project }: { project: Project }) => {
         </div>
       </CardContent>
       <CardFooter className="pt-4 border-t flex gap-2">
-        <Button className="w-full">Apply Now</Button>
+        <Button 
+          className="w-full" 
+          onClick={handleApplyNow}
+          disabled={isOwnProject}
+        >
+          {isOwnProject ? "Your Project" : "Apply Now"}
+        </Button>
         <Button variant="outline" className="w-full" onClick={handleViewDetails}>Details</Button>
       </CardFooter>
     </Card>
