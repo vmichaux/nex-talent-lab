@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast";
 import { Mail, Phone, Send } from "lucide-react";
-
 export default function ContactSalesPage() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,7 +22,6 @@ export default function ContactSalesPage() {
     preferEmail: true,
     preferPhone: false
   });
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {
       name,
@@ -34,14 +32,12 @@ export default function ContactSalesPage() {
       [name]: value
     }));
   };
-
   const handleCheckboxChange = (field: string, checked: boolean) => {
     setFormData(prev => ({
       ...prev,
       [field]: checked
     }));
   };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -90,7 +86,6 @@ export default function ContactSalesPage() {
       });
     }, 1500);
   };
-
   return <div className="flex flex-col min-h-screen">
       <Navbar />
       
@@ -103,7 +98,7 @@ export default function ContactSalesPage() {
             <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
               <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">We are Here for You</div>
               
-              <h1 id="sales-title" className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
+              <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
                 Contact Our Sales Team
               </h1>
               

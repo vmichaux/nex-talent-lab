@@ -1,18 +1,7 @@
-
 import { Link } from "react-router-dom";
-import { 
-  Facebook, 
-  Twitter, 
-  Instagram, 
-  Linkedin, 
-  Mail, 
-  MapPin, 
-  Phone
-} from "lucide-react";
-
+import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 export function Footer() {
-  return (
-    <footer className="bg-gray-50 py-12 mt-16">
+  return <footer className="bg-gray-50 py-12 mt-16">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Logo and Contact */}
@@ -42,25 +31,25 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-bold mb-4 mx-[50px]">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/about" className="text-gray-600 hover:text-primary text-sm">
+                <Link to="/about" className="text-gray-600 hover:text-primary text-sm mx-[50px]">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/explore" className="text-gray-600 hover:text-primary text-sm">
+                <Link to="/explore" className="text-gray-600 hover:text-primary text-sm mx-[50px]">
                   Explore Projects
                 </Link>
               </li>
               <li>
-                <Link to="/how-it-works" className="text-gray-600 hover:text-primary text-sm">
+                <Link to="/how-it-works" className="text-gray-600 hover:text-primary text-sm mx-[50px]">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="text-gray-600 hover:text-primary text-sm">
+                <Link to="/pricing" className="text-gray-600 hover:text-primary text-sm mx-[50px]">
                   Pricing
                 </Link>
               </li>
@@ -102,11 +91,7 @@ export function Footer() {
               Subscribe to our newsletter for the latest updates and features.
             </p>
             <div className="flex flex-col space-y-2">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
+              <input type="email" placeholder="Your email address" className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50" />
               <button className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors">
                 Subscribe
               </button>
@@ -134,6 +119,5 @@ export function Footer() {
           </p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 }
