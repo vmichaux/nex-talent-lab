@@ -17,7 +17,7 @@ import { useApplications, Application } from "@/hooks/useApplications";
 import { format } from "date-fns";
 
 export function AppliedProjects() {
-  const { applications, loading, error } = useApplications();
+  const { applications, loading, error, FirestoreIndexError } = useApplications();
   const navigate = useNavigate();
 
   const getStatusBadge = (status: Application['status']) => {
@@ -68,6 +68,7 @@ export function AppliedProjects() {
             My Applications
           </h2>
         </div>
+        <FirestoreIndexError />
         <Card>
           <CardContent className="py-6">
             <p className="text-red-600">Error loading applications: {error}</p>
@@ -86,6 +87,7 @@ export function AppliedProjects() {
             My Applications
           </h2>
         </div>
+        <FirestoreIndexError />
         <Card>
           <CardContent className="py-8 text-center">
             <ClipboardCheck className="h-10 w-10 text-gray-400 mx-auto mb-4" />
@@ -111,6 +113,8 @@ export function AppliedProjects() {
         </h2>
       </div>
 
+      <FirestoreIndexError />
+      
       <Card>
         <CardHeader className="pb-0">
           <CardTitle className="text-lg">
