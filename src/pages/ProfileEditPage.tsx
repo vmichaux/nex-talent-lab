@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -17,7 +16,6 @@ const ProfileEditPage = () => {
   
   const isProfileCompleted = userData?.hasCompletedProfile || false;
   
-  // State for user profile data
   const [profile, setProfile] = useState({
     fullName: "",
     title: "",
@@ -28,7 +26,6 @@ const ProfileEditPage = () => {
     experience: [{ company: "", position: "", duration: "" }]
   });
   
-  // Load user profile data
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (currentUser?.uid) {
@@ -62,7 +59,6 @@ const ProfileEditPage = () => {
     }
   }, [isLoggedIn, navigate]);
 
-  // Handle input changes
   const handleInputChange = (field, value) => {
     setProfile({
       ...profile,
@@ -70,7 +66,6 @@ const ProfileEditPage = () => {
     });
   };
 
-  // Handle skill changes
   const handleSkillChange = (index, value) => {
     const updatedSkills = [...profile.skills];
     updatedSkills[index] = value;
@@ -80,7 +75,6 @@ const ProfileEditPage = () => {
     });
   };
 
-  // Add new skill field
   const addSkill = () => {
     setProfile({
       ...profile,
@@ -88,7 +82,6 @@ const ProfileEditPage = () => {
     });
   };
 
-  // Handle education changes
   const handleEducationChange = (index, field, value) => {
     const updatedEducation = [...profile.education];
     updatedEducation[index] = {
@@ -101,7 +94,6 @@ const ProfileEditPage = () => {
     });
   };
 
-  // Add new education field
   const addEducation = () => {
     setProfile({
       ...profile,
@@ -109,7 +101,6 @@ const ProfileEditPage = () => {
     });
   };
 
-  // Handle experience changes
   const handleExperienceChange = (index, field, value) => {
     const updatedExperience = [...profile.experience];
     updatedExperience[index] = {
@@ -122,7 +113,6 @@ const ProfileEditPage = () => {
     });
   };
 
-  // Add new experience field
   const addExperience = () => {
     setProfile({
       ...profile,
@@ -132,13 +122,11 @@ const ProfileEditPage = () => {
 
   const handleSaveProfile = async () => {
     try {
-      // Save profile data to Firestore
       if (currentUser?.uid) {
         const userProfileRef = doc(db, "userProfiles", currentUser.uid);
         await setDoc(userProfileRef, profile);
       }
       
-      // Mark the profile as completed
       await updateProfileCompletion(true);
       
       toast({
@@ -146,7 +134,6 @@ const ProfileEditPage = () => {
         description: "Votre profil a été mis à jour avec succès.",
       });
       
-      // Navigate to dashboard
       navigate("/dashboard");
     } catch (error) {
       console.error("Error saving profile:", error);
@@ -163,7 +150,6 @@ const ProfileEditPage = () => {
       <Navbar />
       <main className="flex-1">
         <div className="relative overflow-hidden bg-white">
-          {/* Background Pattern - Purple Gradient */}
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
@@ -173,7 +159,7 @@ const ProfileEditPage = () => {
               </div>
               
               <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
-                {isProfileCompleted ? "Modify Your Account" : "Complete Your Profile"}
+                Manage My Profile
               </h1>
               
               <p className="text-lg text-gray-600 md:text-xl max-w-3xl mb-8">
