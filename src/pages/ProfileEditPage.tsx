@@ -32,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const ProfileEditPage = () => {
   const { isLoggedIn, updateProfileCompletion, userData, currentUser } = useAuth();
@@ -40,6 +41,7 @@ const ProfileEditPage = () => {
   
   const isProfileCompleted = userData?.hasCompletedProfile || false;
   const [loading, setLoading] = useState(true);
+  const [activeRole, setActiveRole] = useState<"talent" | "builder" | "dual">("talent");
   
   const [profile, setProfile] = useState({
     firstName: "",
@@ -125,6 +127,18 @@ const ProfileEditPage = () => {
             
             console.log("Structured profile data:", loadedProfile);
             setProfile(loadedProfile);
+            
+            // Set the active role based on stored preference
+            const savedRole = localStorage.getItem("userRole");
+            if (savedRole) {
+              if (savedRole === "entrepreneur") {
+                setActiveRole("builder");
+              } else if (savedRole === "both") {
+                setActiveRole("dual");
+              } else {
+                setActiveRole("talent");
+              }
+            }
             
             toast({
               title: "Profile loaded",
@@ -231,6 +245,12 @@ const ProfileEditPage = () => {
     });
   };
 
+  const handleRoleChange = (role: "talent" | "builder" | "dual") => {
+    setActiveRole(role);
+    // Store the role preference in localStorage
+    localStorage.setItem("userRole", role === "builder" ? "entrepreneur" : role === "dual" ? "both" : "talent");
+  };
+
   const handleSaveProfile = async () => {
     try {
       if (currentUser?.uid) {
@@ -262,6 +282,334 @@ const ProfileEditPage = () => {
       });
     }
   };
+
+  // Render the basic information section (common to all roles)
+  const renderBasicInfo = () => (
+    <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="firstName" className="text-sm font-medium">
+              First Name
+            </Label>
+            <Input
+              id="firstName"
+              type="text"
+              value={profile.firstName}
+              onChange={(e) => handleInputChange("firstName", e.target.value)}
+              placeholder="Jane"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="lastName" className="text-sm font-medium">
+              Last Name
+            </Label>
+            <Input
+              id="lastName"
+              type="text"
+              value={profile.lastName}
+              onChange={(e) => handleInputChange("lastName", e.target.value)}
+              placeholder="Doe"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="title" className="text-sm font-medium">
+            Professional Title
+          </Label>
+          <Input
+            id="title"
+            type="text"
+            value={profile.title}
+            onChange={(e) => handleInputChange("title", e.target.value)}
+            placeholder="UX Designer"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="location" className="text-sm font-medium">
+            Location
+          </Label>
+          <Input
+            id="location"
+            type="text"
+            value={profile.location}
+            onChange={(e) => handleInputChange("location", e.target.value)}
+            placeholder="San Francisco, CA"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="bio" className="text-sm font-medium">
+            Bio
+          </Label>
+          <Textarea
+            id="bio"
+            value={profile.bio}
+            onChange={(e) => handleInputChange("bio", e.target.value)}
+            placeholder="Tell us about yourself..."
+            rows={5}
+            className="min-h-[120px]"
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  // Render the business information section
+  const renderBusinessInfo = () => (
+    <div className="border-t border-gray-200 pt-6 mt-6">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <Building className="h-5 w-5 text-primary" />
+        Business Information
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="companyName" className="text-sm font-medium">
+              Company Name
+            </Label>
+            <Input
+              id="companyName"
+              type="text"
+              value={profile.business.companyName}
+              onChange={(e) => handleBusinessChange("companyName", e.target.value)}
+              placeholder="Acme Inc."
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="foundedYear" className="text-sm font-medium">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                Year Founded
+              </div>
+            </Label>
+            <Input
+              id="foundedYear"
+              type="text"
+              value={profile.business.foundedYear}
+              onChange={(e) => handleBusinessChange("foundedYear", e.target.value)}
+              placeholder="2015"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="employees" className="text-sm font-medium">
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                Number of Employees
+              </div>
+            </Label>
+            <Select
+              value={profile.business.employees}
+              onValueChange={(value) => handleBusinessChange("employees", value)}
+            >
+              <SelectTrigger id="employees" className="w-full">
+                <SelectValue placeholder="Select company size" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0-1">0-1</SelectItem>
+                <SelectItem value="1-10">1-10</SelectItem>
+                <SelectItem value="10-50">10-50</SelectItem>
+                <SelectItem value="50-200">50-200</SelectItem>
+                <SelectItem value="200+">200+</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="industry" className="text-sm font-medium">
+              <div className="flex items-center gap-2">
+                <Tag className="h-4 w-4" />
+                Industry
+              </div>
+            </Label>
+            <Input
+              id="industry"
+              type="text"
+              value={profile.business.industry}
+              onChange={(e) => handleBusinessChange("industry", e.target.value)}
+              placeholder="Technology, Healthcare, Education, etc."
+            />
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="businessDescription" className="text-sm font-medium">
+              Company Description
+            </Label>
+            <Textarea
+              id="businessDescription"
+              value={profile.business.description}
+              onChange={(e) => handleBusinessChange("description", e.target.value)}
+              placeholder="Tell us about your business..."
+              rows={3}
+              className="min-h-[80px]"
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="projectNeeds" className="text-sm font-medium">
+              <div className="flex items-center gap-2">
+                <FileText className="h-4 w-4" />
+                Project Needs
+              </div>
+            </Label>
+            <Textarea
+              id="projectNeeds"
+              value={profile.business.projectNeeds}
+              onChange={(e) => handleBusinessChange("projectNeeds", e.target.value)}
+              placeholder="Describe the types of projects or talent you're looking for..."
+              rows={3}
+              className="min-h-[80px]"
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="billingDetails" className="text-sm font-medium">
+              <div className="flex items-center gap-2">
+                <CreditCard className="h-4 w-4" />
+                Billing Details
+              </div>
+            </Label>
+            <Textarea
+              id="billingDetails"
+              value={profile.business.billingDetails}
+              onChange={(e) => handleBusinessChange("billingDetails", e.target.value)}
+              placeholder="Add information for payments and invoicing..."
+              rows={3}
+              className="min-h-[80px]"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Render the skills section
+  const renderSkills = () => (
+    <div className="border-t border-gray-200 pt-6 mt-6">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <UserPlus className="h-5 w-5 text-primary" />
+        Skills
+      </h3>
+      <div className="grid grid-cols-1 gap-4 mb-6">
+        {profile.skills.map((skill, index) => (
+          <div key={`skill-${index}`} className="flex gap-2">
+            <input
+              type="text"
+              value={skill}
+              onChange={(e) => handleSkillChange(index, e.target.value)}
+              placeholder="e.g., UI Design, JavaScript"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+            />
+            {index === profile.skills.length - 1 && (
+              <Button onClick={addSkill} variant="outline" size="sm" className="whitespace-nowrap">
+                + Add Skill
+              </Button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Render the education section
+  const renderEducation = () => (
+    <div className="border-t border-gray-200 pt-6 mt-6">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <GraduationCap className="h-5 w-5 text-primary" />
+        Education
+      </h3>
+      <div className="space-y-6 mb-6">
+        {profile.education.map((edu, index) => (
+          <div key={`edu-${index}`} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                value={edu.school}
+                onChange={(e) => handleEducationChange(index, "school", e.target.value)}
+                placeholder="School/University"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+              <input
+                type="text"
+                value={edu.degree}
+                onChange={(e) => handleEducationChange(index, "degree", e.target.value)}
+                placeholder="Degree"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+            </div>
+            <div className="flex gap-4">
+              <input
+                type="text"
+                value={edu.year}
+                onChange={(e) => handleEducationChange(index, "year", e.target.value)}
+                placeholder="Year"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+              {index === profile.education.length - 1 && (
+                <Button onClick={addEducation} variant="outline" size="sm" className="whitespace-nowrap">
+                  + Add Education
+                </Button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Render the experience section
+  const renderExperience = () => (
+    <div className="border-t border-gray-200 pt-6 mt-6">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <Briefcase className="h-5 w-5 text-primary" />
+        Experience
+      </h3>
+      <div className="space-y-6 mb-6">
+        {profile.experience.map((exp, index) => (
+          <div key={`exp-${index}`} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                value={exp.company}
+                onChange={(e) => handleExperienceChange(index, "company", e.target.value)}
+                placeholder="Company"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+              <input
+                type="text"
+                value={exp.position}
+                onChange={(e) => handleExperienceChange(index, "position", e.target.value)}
+                placeholder="Position"
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+            </div>
+            <div className="flex gap-4">
+              <input
+                type="text"
+                value={exp.duration}
+                onChange={(e) => handleExperienceChange(index, "duration", e.target.value)}
+                placeholder="Duration (e.g., 2021-2023)"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+              {index === profile.experience.length - 1 && (
+                <Button onClick={addExperience} variant="outline" size="sm" className="whitespace-nowrap">
+                  + Add Experience
+                </Button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -297,337 +645,98 @@ const ProfileEditPage = () => {
                 <p className="mt-6 text-gray-500">Loading your profile...</p>
               </div>
             ) : (
-              <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8 border border-gray-100">
-                <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="firstName" className="text-sm font-medium">
-                          First Name
-                        </Label>
-                        <Input
-                          id="firstName"
-                          type="text"
-                          value={profile.firstName}
-                          onChange={(e) => handleInputChange("firstName", e.target.value)}
-                          placeholder="Jane"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="lastName" className="text-sm font-medium">
-                          Last Name
-                        </Label>
-                        <Input
-                          id="lastName"
-                          type="text"
-                          value={profile.lastName}
-                          onChange={(e) => handleInputChange("lastName", e.target.value)}
-                          placeholder="Doe"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="title" className="text-sm font-medium">
-                        Professional Title
-                      </Label>
-                      <Input
-                        id="title"
-                        type="text"
-                        value={profile.title}
-                        onChange={(e) => handleInputChange("title", e.target.value)}
-                        placeholder="UX Designer"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="location" className="text-sm font-medium">
-                        Location
-                      </Label>
-                      <Input
-                        id="location"
-                        type="text"
-                        value={profile.location}
-                        onChange={(e) => handleInputChange("location", e.target.value)}
-                        placeholder="San Francisco, CA"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="bio" className="text-sm font-medium">
-                        Bio
-                      </Label>
-                      <Textarea
-                        id="bio"
-                        value={profile.bio}
-                        onChange={(e) => handleInputChange("bio", e.target.value)}
-                        placeholder="Tell us about yourself..."
-                        rows={5}
-                        className="min-h-[120px]"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-6 mt-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <Building className="h-5 w-5 text-primary" />
-                    Business Information
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="companyName" className="text-sm font-medium">
-                          Company Name
-                        </Label>
-                        <Input
-                          id="companyName"
-                          type="text"
-                          value={profile.business.companyName}
-                          onChange={(e) => handleBusinessChange("companyName", e.target.value)}
-                          placeholder="Acme Inc."
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="foundedYear" className="text-sm font-medium">
-                          <div className="flex items-center gap-2">
-                            <Calendar className="h-4 w-4" />
-                            Year Founded
-                          </div>
-                        </Label>
-                        <Input
-                          id="foundedYear"
-                          type="text"
-                          value={profile.business.foundedYear}
-                          onChange={(e) => handleBusinessChange("foundedYear", e.target.value)}
-                          placeholder="2015"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="employees" className="text-sm font-medium">
-                          <div className="flex items-center gap-2">
-                            <Users className="h-4 w-4" />
-                            Number of Employees
-                          </div>
-                        </Label>
-                        <Select
-                          value={profile.business.employees}
-                          onValueChange={(value) => handleBusinessChange("employees", value)}
+              <div className="max-w-3xl mx-auto">
+                <Tabs 
+                  value={activeRole} 
+                  onValueChange={(value) => handleRoleChange(value as "talent" | "builder" | "dual")}
+                  className="w-full mb-8"
+                >
+                  <TabsList className="grid grid-cols-3 w-full">
+                    <TabsTrigger value="talent">Talent Profile</TabsTrigger>
+                    <TabsTrigger value="builder">Builder Profile</TabsTrigger>
+                    <TabsTrigger value="dual">Dual Role Profile</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="talent" className="mt-6">
+                    <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
+                      {renderBasicInfo()}
+                      {renderSkills()}
+                      {renderEducation()}
+                      {renderExperience()}
+                      
+                      <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
+                        <Button 
+                          variant="outline" 
+                          onClick={() => navigate('/dashboard')}
+                          className="gap-2"
                         >
-                          <SelectTrigger id="employees" className="w-full">
-                            <SelectValue placeholder="Select company size" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="0-1">0-1</SelectItem>
-                            <SelectItem value="1-10">1-10</SelectItem>
-                            <SelectItem value="10-50">10-50</SelectItem>
-                            <SelectItem value="50-200">50-200</SelectItem>
-                            <SelectItem value="200+">200+</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="industry" className="text-sm font-medium">
-                          <div className="flex items-center gap-2">
-                            <Tag className="h-4 w-4" />
-                            Industry
-                          </div>
-                        </Label>
-                        <Input
-                          id="industry"
-                          type="text"
-                          value={profile.business.industry}
-                          onChange={(e) => handleBusinessChange("industry", e.target.value)}
-                          placeholder="Technology, Healthcare, Education, etc."
-                        />
+                          <ArrowLeft className="h-4 w-4" />
+                          Back to Dashboard
+                        </Button>
+                        <Button 
+                          onClick={handleSaveProfile}
+                          className="gap-2"
+                        >
+                          <Save className="h-4 w-4" />
+                          {isProfileCompleted ? "Update Profile" : "Save Profile"}
+                        </Button>
                       </div>
                     </div>
-
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="businessDescription" className="text-sm font-medium">
-                          Company Description
-                        </Label>
-                        <Textarea
-                          id="businessDescription"
-                          value={profile.business.description}
-                          onChange={(e) => handleBusinessChange("description", e.target.value)}
-                          placeholder="Tell us about your business..."
-                          rows={3}
-                          className="min-h-[80px]"
-                        />
-                      </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="builder" className="mt-6">
+                    <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
+                      {renderBasicInfo()}
+                      {renderBusinessInfo()}
                       
-                      <div className="space-y-2">
-                        <Label htmlFor="projectNeeds" className="text-sm font-medium">
-                          <div className="flex items-center gap-2">
-                            <FileText className="h-4 w-4" />
-                            Project Needs
-                          </div>
-                        </Label>
-                        <Textarea
-                          id="projectNeeds"
-                          value={profile.business.projectNeeds}
-                          onChange={(e) => handleBusinessChange("projectNeeds", e.target.value)}
-                          placeholder="Describe the types of projects or talent you're looking for..."
-                          rows={3}
-                          className="min-h-[80px]"
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="billingDetails" className="text-sm font-medium">
-                          <div className="flex items-center gap-2">
-                            <CreditCard className="h-4 w-4" />
-                            Billing Details
-                          </div>
-                        </Label>
-                        <Textarea
-                          id="billingDetails"
-                          value={profile.business.billingDetails}
-                          onChange={(e) => handleBusinessChange("billingDetails", e.target.value)}
-                          placeholder="Add information for payments and invoicing..."
-                          rows={3}
-                          className="min-h-[80px]"
-                        />
+                      <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
+                        <Button 
+                          variant="outline" 
+                          onClick={() => navigate('/dashboard')}
+                          className="gap-2"
+                        >
+                          <ArrowLeft className="h-4 w-4" />
+                          Back to Dashboard
+                        </Button>
+                        <Button 
+                          onClick={handleSaveProfile}
+                          className="gap-2"
+                        >
+                          <Save className="h-4 w-4" />
+                          {isProfileCompleted ? "Update Profile" : "Save Profile"}
+                        </Button>
                       </div>
                     </div>
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-6 mt-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <UserPlus className="h-5 w-5 text-primary" />
-                    Skills
-                  </h3>
-                  <div className="grid grid-cols-1 gap-4 mb-6">
-                    {profile.skills.map((skill, index) => (
-                      <div key={`skill-${index}`} className="flex gap-2">
-                        <input
-                          type="text"
-                          value={skill}
-                          onChange={(e) => handleSkillChange(index, e.target.value)}
-                          placeholder="e.g., UI Design, JavaScript"
-                          className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                        />
-                        {index === profile.skills.length - 1 && (
-                          <Button onClick={addSkill} variant="outline" size="sm" className="whitespace-nowrap">
-                            + Add Skill
-                          </Button>
-                        )}
+                  </TabsContent>
+                  
+                  <TabsContent value="dual" className="mt-6">
+                    <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
+                      {renderBasicInfo()}
+                      {renderBusinessInfo()}
+                      {renderSkills()}
+                      {renderEducation()}
+                      {renderExperience()}
+                      
+                      <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
+                        <Button 
+                          variant="outline" 
+                          onClick={() => navigate('/dashboard')}
+                          className="gap-2"
+                        >
+                          <ArrowLeft className="h-4 w-4" />
+                          Back to Dashboard
+                        </Button>
+                        <Button 
+                          onClick={handleSaveProfile}
+                          className="gap-2"
+                        >
+                          <Save className="h-4 w-4" />
+                          {isProfileCompleted ? "Update Profile" : "Save Profile"}
+                        </Button>
                       </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-6 mt-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <GraduationCap className="h-5 w-5 text-primary" />
-                    Education
-                  </h3>
-                  <div className="space-y-6 mb-6">
-                    {profile.education.map((edu, index) => (
-                      <div key={`edu-${index}`} className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <input
-                            type="text"
-                            value={edu.school}
-                            onChange={(e) => handleEducationChange(index, "school", e.target.value)}
-                            placeholder="School/University"
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          />
-                          <input
-                            type="text"
-                            value={edu.degree}
-                            onChange={(e) => handleEducationChange(index, "degree", e.target.value)}
-                            placeholder="Degree"
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          />
-                        </div>
-                        <div className="flex gap-4">
-                          <input
-                            type="text"
-                            value={edu.year}
-                            onChange={(e) => handleEducationChange(index, "year", e.target.value)}
-                            placeholder="Year"
-                            className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          />
-                          {index === profile.education.length - 1 && (
-                            <Button onClick={addEducation} variant="outline" size="sm" className="whitespace-nowrap">
-                              + Add Education
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-6 mt-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <Briefcase className="h-5 w-5 text-primary" />
-                    Experience
-                  </h3>
-                  <div className="space-y-6 mb-6">
-                    {profile.experience.map((exp, index) => (
-                      <div key={`exp-${index}`} className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <input
-                            type="text"
-                            value={exp.company}
-                            onChange={(e) => handleExperienceChange(index, "company", e.target.value)}
-                            placeholder="Company"
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          />
-                          <input
-                            type="text"
-                            value={exp.position}
-                            onChange={(e) => handleExperienceChange(index, "position", e.target.value)}
-                            placeholder="Position"
-                            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          />
-                        </div>
-                        <div className="flex gap-4">
-                          <input
-                            type="text"
-                            value={exp.duration}
-                            onChange={(e) => handleExperienceChange(index, "duration", e.target.value)}
-                            placeholder="Duration (e.g., 2021-2023)"
-                            className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          />
-                          {index === profile.experience.length - 1 && (
-                            <Button onClick={addExperience} variant="outline" size="sm" className="whitespace-nowrap">
-                              + Add Experience
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
-                  <Button 
-                    variant="outline" 
-                    onClick={() => navigate('/dashboard')}
-                    className="gap-2"
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                    Back to Dashboard
-                  </Button>
-                  <Button 
-                    onClick={handleSaveProfile}
-                    className="gap-2"
-                  >
-                    <Save className="h-4 w-4" />
-                    {isProfileCompleted ? "Update Profile" : "Save Profile"}
-                  </Button>
-                </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </div>
             )}
           </div>
