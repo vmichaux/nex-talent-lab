@@ -42,13 +42,13 @@ export function HowItWorks({
               {index < steps.length - 1 && <div className="hidden lg:block absolute h-0.5 bg-gray-200 w-full top-7 left-1/2 -z-10"></div>}
               
               <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-              <p className="text-gray-600 mb-4">{step.description}</p>
+              <p className="text-gray-600 mb-4 my-[27px]">{step.description}</p>
               
               {/* Only show details on the dedicated page */}
               {showDetails && <ul className="space-y-2 text-sm text-gray-600">
                   {step.details.map((detail, i) => <li key={i} className="flex items-start">
                       <span className="text-primary font-bold mr-2">•</span>
-                      <span className="py-0 my-[3px]">{detail}</span>
+                      <span className="py-0 my-0">{detail}</span>
                     </li>)}
                 </ul>}
             </div>)}
