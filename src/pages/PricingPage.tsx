@@ -1,14 +1,11 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PricingSection } from "@/components/PricingSection";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Phone } from "lucide-react";
-
 export default function PricingPage() {
-  return (
-    <div className="flex flex-col min-h-screen">
+  return <div className="flex flex-col min-h-screen">
       <Navbar />
       
       <main className="flex-1">
@@ -17,7 +14,7 @@ export default function PricingPage() {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[126px]">
               <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Find the Perfect Plan</div>
               
               <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
@@ -52,6 +49,5 @@ export default function PricingPage() {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 }
