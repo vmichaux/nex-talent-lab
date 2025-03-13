@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -99,7 +98,7 @@ export default function ContactSalesPage() {
             <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
               <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">We are Here for You</div>
               
-              <h1 id="sales-title" className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
+              <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
                 Contact Our Sales Team
               </h1>
               
