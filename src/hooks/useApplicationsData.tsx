@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from "react";
 import { collection, query, where, getDocs, doc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -132,11 +133,13 @@ export function useApplicationsData() {
       );
       
       if (newStatus === 'accepted') {
-        toast.success("Application accepted. The applicant will be notified.", {
+        toast.success("Application accepted", {
+          description: "The applicant will be notified.",
           duration: 4000,
         });
       } else {
-        toast.error("Application rejected. The applicant will be notified.", {
+        toast.error("Application rejected", {
+          description: "The applicant will be notified.",
           duration: 4000,
         });
       }
@@ -144,7 +147,8 @@ export function useApplicationsData() {
       return;
     } catch (error) {
       console.error("Error updating application status:", error);
-      toast.error("Failed to update application status. Please try again.", {
+      toast.error("Failed to update application status", {
+        description: "Please try again.",
         duration: 4000,
       });
       throw error;

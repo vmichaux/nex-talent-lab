@@ -103,8 +103,7 @@ export function ReviewApplications() {
       setApplications(allApplications.slice(0, 5));
       
       if (allApplications.length > 0) {
-        toast({
-          title: "Applications Loaded",
+        toast.success("Applications Loaded", {
           description: `Found ${allApplications.length} application(s) for your projects`,
           duration: 3000,
         });

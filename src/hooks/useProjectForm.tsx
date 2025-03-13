@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Project } from "@/types/project";
 import { ProjectFormData } from "@/components/dashboard/AddProjectButton";
@@ -68,7 +69,8 @@ export function useProjectForm(project?: Project) {
       const result = await updateProject(project.id, updatedProjectData);
       
       if (result.success) {
-        toast.success("Project updated. Your project has been successfully updated.", {
+        toast.success("Project updated", {
+          description: "Your project has been successfully updated.",
           duration: 4000,
         });
         return { success: true, project: { ...project, ...updatedProjectData } };
@@ -77,7 +79,8 @@ export function useProjectForm(project?: Project) {
       }
     } catch (error) {
       console.error("Error updating project:", error);
-      toast.error("Failed to update the project. Please try again.", {
+      toast.error("Failed to update the project", {
+        description: "Please try again.",
         duration: 4000,
       });
       return { success: false, error };
