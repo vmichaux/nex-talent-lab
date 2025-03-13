@@ -29,7 +29,7 @@ export default function OurStoryPage() {
           </div>
         </div>
 
-        <div className="pt-45"></div>
+        <div className="pt-[22px]"></div>
 
         <section className="py-16">
           <div className="container mx-auto px-4">
