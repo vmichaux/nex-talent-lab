@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -9,9 +8,11 @@ import { ArrowLeft, Save, UserPlus, Briefcase, GraduationCap, Globe } from "luci
 import { useToast } from "@/components/ui/use-toast";
 
 const ProfileEditPage = () => {
-  const { isLoggedIn, updateProfileCompletion } = useAuth();
+  const { isLoggedIn, updateProfileCompletion, userData } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  const isProfileCompleted = userData?.hasCompletedProfile || false;
   
   // This would be populated from your auth context in a real app
   const [profile, setProfile] = useState({
@@ -65,15 +66,17 @@ const ProfileEditPage = () => {
           <div className="container mx-auto px-4 py-12">
             <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10">
               <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                Profile Setup
+                {isProfileCompleted ? "Account Management" : "Profile Setup"}
               </div>
               
               <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
-                Complete Your Profile
+                {isProfileCompleted ? "Modify Your Account" : "Complete Your Profile"}
               </h1>
               
               <p className="text-lg text-gray-600 md:text-xl max-w-3xl mb-8">
-                Tell us about yourself so we can match you with the right opportunities.
+                {isProfileCompleted 
+                  ? "Update your information to keep your profile current and relevant."
+                  : "Tell us about yourself so we can match you with the right opportunities."}
               </p>
             </div>
             
@@ -236,7 +239,7 @@ const ProfileEditPage = () => {
                   className="gap-2"
                 >
                   <Save className="h-4 w-4" />
-                  Save Profile
+                  {isProfileCompleted ? "Update Profile" : "Save Profile"}
                 </Button>
               </div>
             </div>
