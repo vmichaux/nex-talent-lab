@@ -46,7 +46,7 @@ export function DashboardOnboarding() {
           </div>;
       case 2:
         return <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
-            <h1 className="font-bold mb-6 custom-gradient-text text-5xl py-[17px]">Choose Your Role</h1>
+            <h1 className="font-bold mb-6 custom-gradient-text text-5xl py-0">Choose Your Role</h1>
             <p className="text-lg mb-8 text-zinc-900 my-0 py-[16px]">Are you a talent looking for opportunities or an entrepreneur? Why not both?</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-10">
