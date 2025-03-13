@@ -19,9 +19,8 @@ const ExploreProjectsPage = () => {
   useEffect(() => {
     // Redirect to login if not logged in
     if (!isLoggedIn) {
-      toast("Authentication required", {
+      toast.error("Authentication required", {
         description: "Please sign in to explore projects",
-        variant: "destructive",
         duration: 10000,
       });
       navigate("/login");
@@ -69,7 +68,7 @@ const ExploreProjectsPage = () => {
             {/* Error state */}
             {error && (
               <div className="text-center py-20">
-                <p className="text-red-500 mb-4">{error instanceof Error ? error.message : String(error)}</p>
+                <p className="text-red-500 mb-4">{typeof error === 'object' && error !== null ? (error as Error).message : String(error)}</p>
                 <button onClick={() => window.location.reload()} className="px-4 py-2 bg-primary text-white rounded">Try Again</button>
               </div>
             )}

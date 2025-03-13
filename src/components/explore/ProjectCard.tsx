@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,9 +34,8 @@ export const ProjectCard = ({
   const handleApplyNow = () => {
     // Prevent applying to your own project
     if (project.userId === currentUserId) {
-      toast("Cannot apply to your own project", {
+      toast.error("Cannot apply to your own project", {
         description: "You cannot apply to projects you've created.",
-        variant: "destructive",
         duration: 10000,
       });
       return;

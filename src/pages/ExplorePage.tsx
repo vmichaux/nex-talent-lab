@@ -82,7 +82,7 @@ const ExplorePage = () => {
             <ProjectsSection 
               projects={projects} 
               loading={loading} 
-              error={error instanceof Error ? error.message : String(error)} 
+              error={typeof error === 'object' && error !== null ? (error as Error).message : String(error)} 
               searchQuery={searchQuery} 
             />
             <TalentsSection talents={talents} />

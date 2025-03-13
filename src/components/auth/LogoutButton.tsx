@@ -19,9 +19,8 @@ export const LogoutButton: React.FC = () => {
       });
       navigate('/');
     } catch (error: any) {
-      toast("Logout error", {
+      toast.error("Logout error", {
         description: error.message,
-        variant: "destructive",
         duration: 10000,
       });
     }
