@@ -28,7 +28,7 @@ export function BuilderDashboard() {
     }
   }, [location]);
 
-  // Get recommended projects
+  // Get recommended projects from the database
   useEffect(() => {
     if (projects.length > 0) {
       // Get 3 random projects as recommendations
@@ -97,8 +97,10 @@ export function BuilderDashboard() {
               <CardTitle className="text-lg">Active Projects</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">3</div>
-              <p className="text-sm text-muted-foreground">+1 from last month</p>
+              <div className="text-3xl font-bold">
+                {projects.filter(p => p.status !== "Closed").length || 0}
+              </div>
+              <p className="text-sm text-muted-foreground">Open opportunities</p>
             </CardContent>
           </Card>
           
