@@ -1,17 +1,14 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Rocket, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SimplifiedHeader } from "./SimplifiedHeader";
-
 export function DashboardOnboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"talent" | "entrepreneur" | "both" | null>(null);
   const totalSteps = 2;
   const navigate = useNavigate();
-
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
@@ -24,7 +21,6 @@ export function DashboardOnboarding() {
       }
     }
   };
-
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
@@ -32,7 +28,6 @@ export function DashboardOnboarding() {
       navigate("/");
     }
   };
-
   const getStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -42,9 +37,7 @@ export function DashboardOnboarding() {
             
             <div className="mb-10 text-center max-w-prose">
               <p className="mb-6 px-[2px] py-[5px]">NexTalent Lab is a platform that connects emerging talent with project builders. Whether you're looking to build your portfolio or find the perfect collaborator for your project, we're here to help.</p>
-              <p className="mb-8">
-                Let's set up your profile and get you started on your journey.
-              </p>
+              <p className="mb-8">Let's set up your profile !</p>
             </div>
             
             <Button onClick={handleNext} size="lg" className="w-full md:w-auto">
@@ -105,7 +98,6 @@ export function DashboardOnboarding() {
         return null;
     }
   };
-
   return <>
       <SimplifiedHeader currentStep={currentStep} totalSteps={totalSteps} onBackClick={handleBack} />
       <div className="min-h-[calc(100vh-75px)] flex flex-col justify-center items-center p-6 py-16 bg-white">
