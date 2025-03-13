@@ -456,6 +456,83 @@ const ProfileEditPage = () => {
     });
   };
 
+  // Language handlers
+  const handleLanguageNameChange = (index: number, value: string) => {
+    const updatedLanguages = [...profile.languages];
+    updatedLanguages[index] = {
+      ...updatedLanguages[index],
+      name: value
+    };
+    setProfile({
+      ...profile,
+      languages: updatedLanguages
+    });
+  };
+
+  const handleLanguageProficiencyChange = (index: number, proficiency: ProficiencyLevel) => {
+    const updatedLanguages = [...profile.languages];
+    updatedLanguages[index] = {
+      ...updatedLanguages[index],
+      proficiency
+    };
+    setProfile({
+      ...profile,
+      languages: updatedLanguages
+    });
+  };
+
+  const addLanguage = () => {
+    setProfile({
+      ...profile,
+      languages: [...profile.languages, { name: "", proficiency: "Intermediate" }]
+    });
+  };
+
+  const removeLanguage = (index: number) => {
+    const updatedLanguages = [...profile.languages];
+    updatedLanguages.splice(index, 1);
+    if (updatedLanguages.length === 0) {
+      updatedLanguages.push({ name: "", proficiency: "Intermediate" });
+    }
+    setProfile({
+      ...profile,
+      languages: updatedLanguages
+    });
+  };
+
+  // Certification handlers
+  const handleCertificationChange = (index: number, field: string, value: string) => {
+    const updatedCertifications = [...profile.certifications];
+    updatedCertifications[index] = {
+      ...updatedCertifications[index],
+      [field]: value
+    };
+    setProfile({
+      ...profile,
+      certifications: updatedCertifications
+    });
+  };
+
+  const addCertification = () => {
+    setProfile({
+      ...profile,
+      certifications: [...profile.certifications, { 
+        name: "", 
+        issuer: "", 
+        dateObtained: "" 
+      }]
+    });
+  };
+
+  const removeCertification = (index: number) => {
+    const updatedCertifications = [...profile.certifications];
+    updatedCertifications.splice(index, 1);
+    setProfile({
+      ...profile,
+      certifications: updatedCertifications
+    });
+  };
+
   const handleSaveProfile = async () => {
     try {
       if (currentUser?.uid) {
