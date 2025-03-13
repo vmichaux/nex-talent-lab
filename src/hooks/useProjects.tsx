@@ -1,9 +1,8 @@
 
 import { useState, useEffect } from "react";
-import { collection, query, orderBy, getDocs, Timestamp, FirestoreError } from "firebase/firestore";
-import { db } from "@/lib/firebase/config";
+import { collection, query, orderBy, getDocs, Timestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { Project } from "@/types/project";
-import { toast } from "@/hooks/use-toast";
 
 export const useProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -45,14 +44,8 @@ export const useProjects = () => {
         setError(null);
         console.log("Fetched projects:", fetchedProjects);
       } catch (err) {
-        const firestoreError = err as FirestoreError;
-        console.error("Error fetching projects:", firestoreError);
-        setError(`Failed to load projects. Error: ${firestoreError.code || "Unknown error"}`);
-        toast({
-          title: "Error loading projects",
-          description: "Failed to fetch projects. Please try again later.",
-          variant: "destructive",
-        });
+        console.error("Error fetching projects:", err);
+        setError("Failed to load projects. Please try again later.");
       } finally {
         setLoading(false);
       }

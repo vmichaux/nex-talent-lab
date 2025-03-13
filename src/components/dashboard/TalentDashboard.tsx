@@ -1,11 +1,10 @@
 
 import { useState } from "react";
-import { FileSearch, Briefcase, BookOpen, Award, ClipboardList } from "lucide-react";
+import { FileSearch, Briefcase, BookOpen, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
 import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
-import { UserApplications } from "@/components/dashboard/UserApplications";
 
 export function TalentDashboard() {
   const [filter, setFilter] = useState<string>("all");
@@ -49,17 +48,6 @@ export function TalentDashboard() {
           <h2 className="text-2xl font-bold">Your Overview</h2>
         </div>
         <DashboardOverview />
-      </div>
-
-      {/* Applications section */}
-      <div className="mb-10">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <ClipboardList className="h-5 w-5 text-primary" />
-            Your Applications
-          </h2>
-        </div>
-        <UserApplications />
       </div>
 
       {/* Skills Progress */}

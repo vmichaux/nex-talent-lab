@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { 
   User,
@@ -9,27 +10,18 @@ import {
   GithubAuthProvider,
   signInWithPopup
 } from "firebase/auth";
-import { doc, setDoc, getDoc, collection, getDocs, query, where, addDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { auth, db } from "@/lib/firebase/config";
+import { auth, db } from "@/lib/firebase";
 
 interface UserData {
   email: string;
   createdAt: Date;
   lastLogin: Date;
   hasCompletedProfile?: boolean;
-}
-
-interface TestProfile {
-  id: string;
-  name: string;
-  email: string;
-  isActive: boolean;
-  createdAt: Date;
-  parentUserId: string;
 }
 
 type AuthContextType = {
@@ -43,11 +35,6 @@ type AuthContextType = {
   logout: () => Promise<void>;
   updateProfileCompletion: (completed: boolean) => Promise<void>;
   LogoutButton: React.FC;
-  testProfiles: TestProfile[];
-  activeTestProfile: TestProfile | null;
-  createTestProfile: (name: string) => Promise<void>;
-  switchToTestProfile: (profileId: string) => Promise<void>;
-  switchToMainProfile: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,8 +44,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
-  const [testProfiles, setTestProfiles] = useState<TestProfile[]>([]);
-  const [activeTestProfile, setActiveTestProfile] = useState<TestProfile | null>(null);
   const { toast } = useToast();
   
   const updateUserData = async (user: User) => {
@@ -79,6 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await setDoc(userRef, userData);
         setUserData(userData);
         
+        // Create a basic user profile with email to ensure all new accounts have one
         const userProfileRef = doc(db, "userProfiles", user.uid);
         await setDoc(userProfileRef, {
           email: user.email,
@@ -88,34 +74,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error("Error updating user data:", error);
-    }
-  };
-
-  const fetchTestProfiles = async (userId: string) => {
-    try {
-      const testProfilesQuery = query(
-        collection(db, "testProfiles"), 
-        where("parentUserId", "==", userId)
-      );
-      const querySnapshot = await getDocs(testProfilesQuery);
-      
-      const profiles: TestProfile[] = [];
-      querySnapshot.forEach((doc) => {
-        profiles.push({ id: doc.id, ...doc.data() } as TestProfile);
-      });
-      
-      setTestProfiles(profiles);
-      
-      const activeProfile = profiles.find(profile => profile.isActive);
-      if (activeProfile) {
-        setActiveTestProfile(activeProfile);
-      } else {
-        setActiveTestProfile(null);
-      }
-    } catch (error) {
-      console.error("Error fetching test profiles:", error);
-      setTestProfiles([]);
-      setActiveTestProfile(null);
     }
   };
 
@@ -149,11 +107,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoggedIn(!!user);
       if (user) {
         await updateUserData(user);
-        await fetchTestProfiles(user.uid);
       } else {
         setUserData(null);
-        setTestProfiles([]);
-        setActiveTestProfile(null);
       }
       setLoading(false);
     });
@@ -165,7 +120,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       await updateUserData(result.user);
+      // Toast will be handled by the component
     } catch (error: any) {
+      // Let the component handle the error and toast
       throw error;
     }
   };
@@ -173,7 +130,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      // Toast will be handled by the component
     } catch (error: any) {
+      // Let the component handle the error and toast
       throw error;
     }
   };
@@ -182,7 +141,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
+      // Toast will be handled by the component
     } catch (error: any) {
+      // Let the component handle the error and toast
       throw error;
     }
   };
@@ -191,22 +152,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const provider = new GithubAuthProvider();
       await signInWithPopup(auth, provider);
+      // Toast will be handled by the component
     } catch (error: any) {
+      // Let the component handle the error and toast
       throw error;
     }
   };
   
   const logout = async () => {
     try {
-      if (activeTestProfile) {
-        await switchToMainProfile();
-      }
-      
       await signOut(auth);
       setUserData(null);
-      setTestProfiles([]);
-      setActiveTestProfile(null);
-      
       toast({
         title: "Logged out successfully",
         description: "You have been logged out of your account",
@@ -218,128 +174,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         variant: "destructive"
       });
       throw error;
-    }
-  };
-
-  const createTestProfile = async (name: string) => {
-    if (!currentUser) {
-      toast({
-        title: "Authentication required",
-        description: "You must be logged in to create a test profile.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    try {
-      if (activeTestProfile) {
-        const activeProfileRef = doc(db, "testProfiles", activeTestProfile.id);
-        await setDoc(activeProfileRef, { isActive: false }, { merge: true });
-      }
-      
-      const testProfileData: Omit<TestProfile, 'id'> = {
-        name,
-        email: currentUser.email || '',
-        isActive: true,
-        createdAt: new Date(),
-        parentUserId: currentUser.uid
-      };
-      
-      const testProfileRef = await addDoc(collection(db, "testProfiles"), testProfileData);
-      
-      const newProfile = {
-        id: testProfileRef.id,
-        ...testProfileData
-      };
-      
-      setTestProfiles(prev => [...prev, newProfile]);
-      setActiveTestProfile(newProfile);
-      
-      toast({
-        title: "Test profile created",
-        description: `You are now using the test profile "${name}"`
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error creating test profile",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
-  };
-
-  const switchToTestProfile = async (profileId: string) => {
-    const profileToSwitch = testProfiles.find(profile => profile.id === profileId);
-    
-    if (!profileToSwitch) {
-      toast({
-        title: "Profile not found",
-        description: "The selected test profile could not be found.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    try {
-      const updatePromises = testProfiles.map(profile => {
-        const profileRef = doc(db, "testProfiles", profile.id);
-        return setDoc(profileRef, { isActive: profile.id === profileId }, { merge: true });
-      });
-      
-      await Promise.all(updatePromises);
-      
-      setTestProfiles(prev => 
-        prev.map(profile => ({
-          ...profile,
-          isActive: profile.id === profileId
-        }))
-      );
-      
-      setActiveTestProfile(profileToSwitch);
-      
-      toast({
-        title: "Profile switched",
-        description: `You are now using the test profile "${profileToSwitch.name}"`
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error switching profiles",
-        description: error.message,
-        variant: "destructive"
-      });
-    }
-  };
-
-  const switchToMainProfile = async () => {
-    if (!activeTestProfile) return;
-    
-    try {
-      const updatePromises = testProfiles.map(profile => {
-        const profileRef = doc(db, "testProfiles", profile.id);
-        return setDoc(profileRef, { isActive: false }, { merge: true });
-      });
-      
-      await Promise.all(updatePromises);
-      
-      setTestProfiles(prev => 
-        prev.map(profile => ({
-          ...profile,
-          isActive: false
-        }))
-      );
-      
-      setActiveTestProfile(null);
-      
-      toast({
-        title: "Main profile activated",
-        description: "You have switched back to your main profile"
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error switching profiles",
-        description: error.message,
-        variant: "destructive"
-      });
     }
   };
 
@@ -373,12 +207,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signup,
     logout,
     updateProfileCompletion,
-    LogoutButton,
-    testProfiles,
-    activeTestProfile,
-    createTestProfile,
-    switchToTestProfile,
-    switchToMainProfile
+    LogoutButton
   };
   
   return (
