@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Briefcase, Clock, MapPin, MessageSquare, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-interface Talent {
+export interface Talent {
   id: number;
   name: string;
   title: string;

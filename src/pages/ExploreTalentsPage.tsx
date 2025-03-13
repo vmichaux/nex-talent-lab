@@ -5,20 +5,22 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Search, Filter, Briefcase, MessageSquare, MapPin, Star, Clock } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Search, Filter } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { toast } from "sonner";
+import { TalentCard } from "@/components/explore/TalentCard";
 
 const ExploreTalentsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const {
-    isLoggedIn
-  } = useAuth();
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  
   useEffect(() => {
     if (!isLoggedIn) {
+      toast.error("Authentication required", {
+        description: "Please sign in to explore talents",
+        duration: 10000,
+      });
       navigate("/login");
     }
   }, [isLoggedIn, navigate]);
@@ -169,7 +171,13 @@ const ExploreTalentsPage = () => {
     image: "/placeholder.svg",
     featured: false
   }];
-  return <div className="min-h-screen flex flex-col">
+
+  if (!isLoggedIn) {
+    return null; // Don't render anything while redirecting
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
         <div className="relative overflow-hidden bg-white">
@@ -232,64 +240,8 @@ const ExploreTalentsPage = () => {
         </div>
       </main>
       <Footer />
-    </div>;
+    </div>
+  );
 };
 
-// Talent Card Component
-const TalentCard = ({
-  talent
-}) => {
-  return <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
-      <CardHeader className="pb-4">
-        <div className="flex items-start gap-4">
-          <Avatar className="h-16 w-16 border-2 border-primary/20">
-            <AvatarImage src={talent.image} alt={talent.name} />
-            <AvatarFallback>{talent.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-          </Avatar>
-          <div className="space-y-1">
-            <CardTitle className="text-xl flex items-center gap-2">
-              {talent.name}
-              {talent.featured && <Badge variant="secondary" className="bg-purple-100 text-purple-800 ml-2">
-                  Featured
-                </Badge>}
-            </CardTitle>
-            <CardDescription className="text-gray-600 font-medium">{talent.title}</CardDescription>
-            <div className="flex items-center text-sm text-gray-500 gap-2">
-              <MapPin size={14} />
-              <span>{talent.location}</span>
-            </div>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="py-4 flex-1 space-y-5">
-        <p className="text-sm text-gray-700">{talent.bio}</p>
-        <div className="flex flex-wrap gap-2">
-          {talent.skills.map((skill, index) => <Badge key={index} variant="outline" className="bg-gray-50">
-              {skill}
-            </Badge>)}
-        </div>
-        <div className="space-y-3 text-sm text-gray-600">
-          <div className="flex items-center gap-2">
-            <Briefcase size={16} className="text-gray-400" />
-            <span>Experience: {talent.experience}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Star size={16} className="text-yellow-400" />
-            <span>Rating: {talent.rating}/5.0</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Clock size={16} className="text-gray-400" />
-            <span>{talent.availability}</span>
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter className="pt-4 border-t flex gap-2">
-        <Button variant="default" className="w-full flex items-center gap-1">
-          <MessageSquare size={16} />
-          Connect
-        </Button>
-        <Button variant="outline" className="w-full">View Profile</Button>
-      </CardFooter>
-    </Card>;
-};
 export default ExploreTalentsPage;
