@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -95,20 +94,27 @@ const ProfileEditPage = () => {
               billingDetails: profileData.business?.billingDetails || ""
             };
             
-            const dateOfBirth = profileData.dateOfBirth ? new Date(profileData.dateOfBirth.toDate?.() || profileData.dateOfBirth) : null;
+            let dateOfBirth = null;
+            if (profileData.dateOfBirth) {
+              if (typeof profileData.dateOfBirth === 'object' && 'toDate' in profileData.dateOfBirth) {
+                dateOfBirth = profileData.dateOfBirth.toDate();
+              } else {
+                dateOfBirth = new Date(profileData.dateOfBirth as any);
+              }
+            }
             
             let skills: Skill[] = [];
             if (Array.isArray(profileData.skills)) {
               if (profileData.skills.length > 0) {
                 if (typeof profileData.skills[0] === 'string') {
-                  skills = profileData.skills.map(skill => ({
-                    name: skill as string,
+                  skills = (profileData.skills as string[]).map(skill => ({
+                    name: skill,
                     level: "Intermediate" as SkillLevel
                   }));
                 } else {
-                  skills = profileData.skills.map(skill => ({
-                    name: (skill as Skill).name || "",
-                    level: (skill as Skill).level || "Intermediate"
+                  skills = (profileData.skills as Skill[]).map(skill => ({
+                    name: skill.name || "",
+                    level: skill.level || "Intermediate"
                   }));
                 }
               }
@@ -327,7 +333,6 @@ const ProfileEditPage = () => {
     });
   };
 
-  // Language handlers
   const handleLanguageNameChange = (index: number, value: string) => {
     const updatedLanguages = [...profile.languages];
     updatedLanguages[index] = {
@@ -371,7 +376,6 @@ const ProfileEditPage = () => {
     });
   };
 
-  // Certification handlers
   const handleCertificationChange = (index: number, field: string, value: string) => {
     const updatedCertifications = [...profile.certifications];
     updatedCertifications[index] = {
