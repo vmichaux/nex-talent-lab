@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { FileText, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -79,7 +78,7 @@ export function ReviewApplications() {
             feedback: data.feedback,
             createdAt: data.createdAt instanceof Timestamp 
               ? data.createdAt.toDate() 
-              : new Date()
+              : new Date(data.createdAt || Date.now())
           } as ApplicationSummary;
         });
       };
@@ -97,7 +96,9 @@ export function ReviewApplications() {
       console.log("All fetched applications:", allApplications);
       
       // Sort by creation date (newest first) and take only the most recent ones
-      allApplications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      allApplications.sort((a, b) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
       setApplications(allApplications.slice(0, 5));
       
       if (allApplications.length > 0) {

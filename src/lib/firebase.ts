@@ -1,3 +1,4 @@
+
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore, collection, getDocs, query, where, orderBy, limit, doc, getDoc, Timestamp } from "firebase/firestore";
@@ -44,12 +45,19 @@ export interface UserProfile {
 // Helper functions for Firebase operations
 export const getProjects = async () => {
   const projectsCollection = collection(db, "projects");
-  const projectsQuery = query(projectsCollection, orderBy("createdAt", "desc"));
+  const projectsQuery = query(projectsCollection);
   const projectsSnapshot = await getDocs(projectsQuery);
-  return projectsSnapshot.docs.map(doc => ({
+  const projects = projectsSnapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
   }));
+  
+  // Sort manually (newest first)
+  return projects.sort((a, b) => {
+    const dateA = a.createdAt instanceof Timestamp ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+    const dateB = b.createdAt instanceof Timestamp ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+    return dateB.getTime() - dateA.getTime();
+  });
 };
 
 export const getUserProjects = async (userId: string) => {
@@ -90,8 +98,8 @@ export const getUserProjects = async (userId: string) => {
     
     // Sort projects by creation date (newest first)
     const sortedProjects = projects.sort((a, b) => {
-      const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt);
-      const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);
+      const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt || 0);
+      const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt || 0);
       return dateB.getTime() - dateA.getTime();
     });
     

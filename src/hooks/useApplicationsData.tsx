@@ -55,7 +55,7 @@ export function useApplicationsData() {
           ...doc.data(),
           createdAt: doc.data().createdAt instanceof Timestamp 
             ? doc.data().createdAt.toDate() 
-            : new Date(doc.data().createdAt)
+            : new Date(doc.data().createdAt || Date.now())
         })) as ApplicationSummary[];
       };
 
