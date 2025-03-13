@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { useAuth } from "@/hooks/useAuthHook";
+import { useAuth } from "@/hooks/use-auth";
 import { NavbarBrand } from "./navbar/NavbarBrand";
 import { NavLinks } from "./navbar/NavLinks";
 import { AuthButtons } from "./navbar/AuthButtons";
@@ -45,7 +45,7 @@ export function Navbar() {
         <NavbarBrand userRole={userRole} isLoggedIn={isLoggedIn} />
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden md:flex items-center space-x-8">
           <NavLinks isLoggedIn={isLoggedIn} handleDashboardClick={handleDashboardClick} />
         </nav>
 
