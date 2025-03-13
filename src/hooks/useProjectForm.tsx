@@ -73,7 +73,7 @@ export function useProjectForm(project?: Project) {
           description: "Your project has been successfully updated.",
           duration: 10000,
         });
-        return { success: true, project: { ...project, ...updatedProjectData } };
+        return { success: true, project: result.project };
       } else {
         throw new Error("Failed to update project");
       }
