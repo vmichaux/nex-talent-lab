@@ -30,7 +30,10 @@ import {
   Heart,
   Plus,
   Check,
-  X
+  X,
+  Award,
+  Languages,
+  MessageSquareText
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -52,10 +55,24 @@ import { cn } from "@/lib/utils";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 
 type SkillLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
+type ProficiencyLevel = "Basic" | "Intermediate" | "Advanced" | "Native";
 
 interface Skill {
   name: string;
   level: SkillLevel;
+}
+
+interface Language {
+  name: string;
+  proficiency: ProficiencyLevel;
+}
+
+interface Certification {
+  name: string;
+  issuer: string;
+  dateObtained: string;
+  expirationDate?: string;
+  verificationLink?: string;
 }
 
 const ProfileEditPage = () => {
@@ -93,7 +110,16 @@ const ProfileEditPage = () => {
     },
     skills: [] as Skill[],
     education: [{ school: "", degree: "", year: "" }],
-    experience: [{ company: "", position: "", duration: "" }]
+    experience: [{ company: "", position: "", duration: "" }],
+    languages: [] as Language[],
+    certifications: [] as Certification[]
+  });
+  
+  const [newLanguage, setNewLanguage] = useState<Language>({ name: "", proficiency: "Intermediate" });
+  const [newCertification, setNewCertification] = useState<Certification>({ 
+    name: "", 
+    issuer: "", 
+    dateObtained: "",
   });
   
   useEffect(() => {
@@ -182,7 +208,13 @@ const ProfileEditPage = () => {
                     position: exp.position || "",
                     duration: exp.duration || ""
                   }))
-                : [{ company: "", position: "", duration: "" }]
+                : [{ company: "", position: "", duration: "" }],
+              languages: Array.isArray(profileData.languages) && profileData.languages.length > 0
+                ? profileData.languages
+                : [{ name: "", proficiency: "Intermediate" }],
+              certifications: Array.isArray(profileData.certifications)
+                ? profileData.certifications
+                : []
             };
             
             console.log("Structured profile data:", loadedProfile);
@@ -1058,6 +1090,196 @@ const ProfileEditPage = () => {
     </div>
   );
 
+  const renderLanguages = () => (
+    <div className="border-t border-gray-200 pt-6 mt-6">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <Languages className="h-5 w-5 text-primary" />
+        Language Proficiency
+      </h3>
+      <div className="space-y-6 mb-6">
+        {profile.languages.map((language, index) => (
+          <div key={`language-${index}`} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+            <div className="md:col-span-1">
+              <Input
+                type="text"
+                value={language.name}
+                onChange={(e) => handleLanguageNameChange(index, e.target.value)}
+                placeholder="Language (e.g., English, Spanish)"
+                className="w-full"
+              />
+            </div>
+            
+            <div className="md:col-span-1">
+              <Select
+                value={language.proficiency}
+                onValueChange={(value) => handleLanguageProficiencyChange(index, value as ProficiencyLevel)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select proficiency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Basic">Basic</SelectItem>
+                  <SelectItem value="Intermediate">Intermediate</SelectItem>
+                  <SelectItem value="Advanced">Advanced</SelectItem>
+                  <SelectItem value="Native">Native</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="flex justify-end md:col-span-1">
+              <Button 
+                onClick={() => removeLanguage(index)} 
+                variant="outline" 
+                size="sm" 
+                className="px-2"
+                type="button"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+              
+              {index === profile.languages.length - 1 && (
+                <Button 
+                  onClick={addLanguage} 
+                  variant="outline" 
+                  size="sm" 
+                  className="ml-2 whitespace-nowrap"
+                  type="button"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Language
+                </Button>
+              )}
+            </div>
+          </div>
+        ))}
+        
+        {profile.languages.length === 0 && (
+          <Button 
+            onClick={addLanguage} 
+            variant="outline" 
+            size="sm" 
+            className="whitespace-nowrap"
+            type="button"
+          >
+            <Plus className="h-4 w-4 mr-1" />
+            Add Language
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderCertifications = () => (
+    <div className="border-t border-gray-200 pt-6 mt-6">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <Award className="h-5 w-5 text-primary" />
+        Certifications & Licenses
+      </h3>
+      <div className="space-y-6 mb-6">
+        {profile.certifications.map((cert, index) => (
+          <div key={`cert-${index}`} className="p-4 border border-gray-200 rounded-md space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor={`cert-name-${index}`} className="text-sm font-medium">
+                  Certification Name
+                </Label>
+                <Input
+                  id={`cert-name-${index}`}
+                  type="text"
+                  value={cert.name}
+                  onChange={(e) => handleCertificationChange(index, "name", e.target.value)}
+                  placeholder="e.g., AWS Solutions Architect"
+                  className="w-full"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor={`cert-issuer-${index}`} className="text-sm font-medium">
+                  Issuing Organization
+                </Label>
+                <Input
+                  id={`cert-issuer-${index}`}
+                  type="text"
+                  value={cert.issuer}
+                  onChange={(e) => handleCertificationChange(index, "issuer", e.target.value)}
+                  placeholder="e.g., Amazon Web Services"
+                  className="w-full"
+                />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor={`cert-date-${index}`} className="text-sm font-medium">
+                  Date Obtained
+                </Label>
+                <Input
+                  id={`cert-date-${index}`}
+                  type="text"
+                  value={cert.dateObtained}
+                  onChange={(e) => handleCertificationChange(index, "dateObtained", e.target.value)}
+                  placeholder="MM/YYYY"
+                  className="w-full"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor={`cert-expiry-${index}`} className="text-sm font-medium">
+                  Expiration Date (Optional)
+                </Label>
+                <Input
+                  id={`cert-expiry-${index}`}
+                  type="text"
+                  value={cert.expirationDate || ""}
+                  onChange={(e) => handleCertificationChange(index, "expirationDate", e.target.value)}
+                  placeholder="MM/YYYY or Never"
+                  className="w-full"
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor={`cert-link-${index}`} className="text-sm font-medium">
+                Verification Link (Optional)
+              </Label>
+              <Input
+                id={`cert-link-${index}`}
+                type="text"
+                value={cert.verificationLink || ""}
+                onChange={(e) => handleCertificationChange(index, "verificationLink", e.target.value)}
+                placeholder="https://..."
+                className="w-full"
+              />
+            </div>
+            
+            <div className="flex justify-end">
+              <Button 
+                onClick={() => removeCertification(index)} 
+                variant="outline" 
+                size="sm" 
+                className="px-2"
+                type="button"
+              >
+                Remove
+              </Button>
+            </div>
+          </div>
+        ))}
+        
+        <Button 
+          onClick={addCertification} 
+          variant="outline" 
+          size="sm" 
+          className="whitespace-nowrap"
+          type="button"
+        >
+          <Plus className="h-4 w-4 mr-1" />
+          Add Certification
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -1108,6 +1330,8 @@ const ProfileEditPage = () => {
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
                       {renderBasicInfo()}
                       {renderSkills()}
+                      {renderLanguages()}
+                      {renderCertifications()}
                       {renderEducation()}
                       {renderExperience()}
                       {renderInterests()}
@@ -1163,6 +1387,8 @@ const ProfileEditPage = () => {
                       {renderBasicInfo()}
                       {renderBusinessInfo()}
                       {renderSkills()}
+                      {renderLanguages()}
+                      {renderCertifications()}
                       {renderEducation()}
                       {renderExperience()}
                       {renderInterests()}

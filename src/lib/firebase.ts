@@ -1,4 +1,3 @@
-
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, getDocs, query, where, orderBy, limit, doc, getDoc } from "firebase/firestore";
@@ -69,6 +68,16 @@ export const getUserProfile = async (userId: string) => {
       // Ensure interests exists as an array
       if (!userData.interests || !Array.isArray(userData.interests)) {
         userData.interests = [];
+      }
+      
+      // Ensure certifications exists as an array
+      if (!userData.certifications || !Array.isArray(userData.certifications)) {
+        userData.certifications = [];
+      }
+      
+      // Ensure languages exists as an array
+      if (!userData.languages || !Array.isArray(userData.languages)) {
+        userData.languages = [{ name: "", proficiency: "Intermediate" }];
       }
       
       return {
