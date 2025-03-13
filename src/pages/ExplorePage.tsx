@@ -1,52 +1,25 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
+import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Search, Filter, UserCircle, Calendar, Clock, Tag, MapPin, Briefcase, Star, MessageSquare } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { TestimonialSection } from "@/components/TestimonialSection";
 import { ExploreCTA } from "@/components/ExploreCTA";
 import { useProjects } from "@/hooks/useProjects";
 import { useAuth } from "@/contexts/AuthContext";
-import { Project } from "@/types/project";
-import { useToast } from "@/hooks/use-toast";
+import { PageHeader } from "@/components/explore/PageHeader";
+import { SearchBar } from "@/components/explore/SearchBar";
+import { ProjectsSection } from "@/components/explore/ProjectsSection";
+import { TalentsSection } from "@/components/explore/TalentsSection";
 
 const ExplorePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { isLoggedIn, currentUser } = useAuth();
+  const { currentUser } = useAuth();
   const { projects, loading, error } = useProjects({
     excludeCurrentUser: true,
     userId: currentUser?.uid
   });
-  const navigate = useNavigate();
-  const { toast } = useToast();
   
-  const handleViewProjectDetails = () => {
-    if (!isLoggedIn) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to view project details",
-        variant: "destructive"
-      });
-      navigate("/login");
-      return;
-    }
-    
-    navigate("/explore-projects");
-  };
-
-  const filteredProjects = projects.filter(project => 
-    project.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    project.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    project.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    project.skills?.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
-
+  // Talent data (could be moved to a hook or API call in the future)
   const talents = [{
     id: 1,
     name: "Emma Wilson",
@@ -105,137 +78,15 @@ const ExplorePage = () => {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-24 md:py-32">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
-              <div className="mb-6 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Find Your Next Venture</div>
-              
-              <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl custom-gradient-text">
-                Explore Projects
-              </h1>
-              
-              <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal px-0">Discover thrilling projects seeking talented collaborators or find your next creative challenge.</p>
-            </div>
-
-            <div className="mb-12">
-              <div className="flex flex-col md:flex-row gap-4 max-w-4xl mx-auto">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                  <Input type="text" placeholder="Search projects by keyword, skill, or category..." className="pl-10 h-12" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
-                </div>
-                <Button variant="outline" className="flex items-center gap-2 h-12 px-6">
-                  <Filter size={16} />
-                  Filters
-                </Button>
-              </div>
-            </div>
-
-            {loading && (
-              <div className="flex justify-center items-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-                <span className="ml-3 text-gray-600">Loading projects...</span>
-              </div>
-            )}
-
-            {error && (
-              <div className="text-center py-20">
-                <p className="text-red-500 mb-4">{error}</p>
-                <Button onClick={() => window.location.reload()}>Try Again</Button>
-              </div>
-            )}
-
-            {!loading && !error && (
-              <Tabs defaultValue="all" className="mb-24">
-                <TabsList className="mb-8 mx-auto flex justify-center">
-                  <TabsTrigger value="all" className="px-6">All Projects</TabsTrigger>
-                  <TabsTrigger value="featured" className="px-6">Featured</TabsTrigger>
-                  <TabsTrigger value="recent" className="px-6">Recently Added</TabsTrigger>
-                  <TabsTrigger value="closing" className="px-6">Closing Soon</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="all" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredProjects.length > 0 ? (
-                    filteredProjects.slice(0, 6).map(project => (
-                      <ProjectCard key={project.id} project={project} onClick={handleViewProjectDetails} />
-                    ))
-                  ) : (
-                    <div className="col-span-3 text-center py-20">
-                      <p className="text-gray-500 mb-4">No projects found. Try adjusting your search criteria.</p>
-                    </div>
-                  )}
-                </TabsContent>
-                
-                <TabsContent value="featured" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredProjects.filter(p => p.featured).length > 0 ? (
-                    filteredProjects.filter(p => p.featured).slice(0, 6).map(project => (
-                      <ProjectCard key={project.id} project={project} onClick={handleViewProjectDetails} />
-                    ))
-                  ) : (
-                    <div className="col-span-3 text-center py-20">
-                      <p className="text-gray-500 mb-4">No featured projects found.</p>
-                    </div>
-                  )}
-                </TabsContent>
-                
-                <TabsContent value="recent" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredProjects.length > 0 ? (
-                    filteredProjects.slice(0, 3).map(project => (
-                      <ProjectCard key={project.id} project={project} onClick={handleViewProjectDetails} />
-                    ))
-                  ) : (
-                    <div className="col-span-3 text-center py-20">
-                      <p className="text-gray-500 mb-4">No recent projects found.</p>
-                    </div>
-                  )}
-                </TabsContent>
-                
-                <TabsContent value="closing" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredProjects.length > 0 ? (
-                    filteredProjects.slice(0, 3).map(project => (
-                      <ProjectCard key={project.id} project={project} onClick={handleViewProjectDetails} />
-                    ))
-                  ) : (
-                    <div className="col-span-3 text-center py-20">
-                      <p className="text-gray-500 mb-4">No closing soon projects found.</p>
-                    </div>
-                  )}
-                </TabsContent>
-              </Tabs>
-            )}
-
-            <div className="mb-16">
-              <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
-                <h2 className="mb-6 text-3xl font-bold tracking-tight custom-gradient-text md:text-6xl">
-                  Explore Talents
-                </h2>
-                <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal">
-                  Connect with skilled professionals ready to bring your projects to life. Browse profiles and find the perfect match for your team.
-                </p>
-              </div>
-
-              <Tabs defaultValue="all-talents" className="mb-8">
-                <TabsList className="mb-8 mx-auto flex justify-center">
-                  <TabsTrigger value="all-talents" className="px-6">All Talents</TabsTrigger>
-                  <TabsTrigger value="featured-talents" className="px-6">Featured</TabsTrigger>
-                  <TabsTrigger value="designers" className="px-6">Designers</TabsTrigger>
-                  <TabsTrigger value="developers" className="px-6">Developers</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="all-talents" className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {talents.map(talent => <TalentCard key={talent.id} talent={talent} />)}
-                </TabsContent>
-                
-                <TabsContent value="featured-talents" className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {talents.filter(t => t.featured).map(talent => <TalentCard key={talent.id} talent={talent} />)}
-                </TabsContent>
-                
-                <TabsContent value="designers" className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {talents.filter(t => t.title.includes("Designer")).map(talent => <TalentCard key={talent.id} talent={talent} />)}
-                </TabsContent>
-                
-                <TabsContent value="developers" className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {talents.filter(t => t.title.includes("Developer")).map(talent => <TalentCard key={talent.id} talent={talent} />)}
-                </TabsContent>
-              </Tabs>
-            </div>
+            <PageHeader />
+            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            <ProjectsSection 
+              projects={projects} 
+              loading={loading} 
+              error={error} 
+              searchQuery={searchQuery} 
+            />
+            <TalentsSection talents={talents} />
 
             <div className="pt-16 py-[16px]">
               <TestimonialSection />
@@ -249,108 +100,6 @@ const ExplorePage = () => {
       </main>
       <Footer />
     </div>
-  );
-};
-
-const ProjectCard = ({ project, onClick }: { project: Project, onClick: () => void }) => {
-  return (
-    <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
-      <CardHeader className="pb-4 space-y-2">
-        <div className="flex justify-between items-start">
-          <CardTitle className="text-xl">{project.title}</CardTitle>
-          {project.featured && <Badge variant="secondary" className="bg-purple-100 text-purple-800">
-              Featured
-            </Badge>}
-        </div>
-        <CardDescription className="text-gray-600">{project.category}</CardDescription>
-      </CardHeader>
-      <CardContent className="py-4 flex-1 space-y-5">
-        <p className="text-sm text-gray-700 line-clamp-3">{project.description}</p>
-        <div className="flex flex-wrap gap-2">
-          {project.skills?.slice(0, 3).map((skill, index) => (
-            <Badge key={index} variant="outline" className="bg-gray-50">
-              {skill}
-            </Badge>
-          ))}
-        </div>
-        <div className="space-y-3 text-sm text-gray-600">
-          <div className="flex items-center gap-2">
-            <Calendar size={16} className="text-gray-400" />
-            <span>Deadline: {project.deadline}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Clock size={16} className="text-gray-400" />
-            <span>Duration: {project.duration}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <UserCircle size={16} className="text-gray-400" />
-            <span>Posted by: {project.owner}</span>
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter className="pt-4 border-t">
-        <Button className="w-full" onClick={onClick}>View Details</Button>
-      </CardFooter>
-    </Card>
-  );
-};
-
-const TalentCard = ({ talent }: { talent: any }) => {
-  return (
-    <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
-      <CardHeader className="pb-4">
-        <div className="flex items-start gap-4">
-          <Avatar className="h-16 w-16 border-2 border-primary/20">
-            <AvatarImage src={talent.image} alt={talent.name} />
-            <AvatarFallback>{talent.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
-          </Avatar>
-          <div className="space-y-1">
-            <CardTitle className="text-xl flex items-center gap-2">
-              {talent.name}
-              {talent.featured && <Badge variant="secondary" className="bg-purple-100 text-purple-800 ml-2">
-                  Featured
-                </Badge>}
-            </CardTitle>
-            <CardDescription className="text-gray-600 font-medium">{talent.title}</CardDescription>
-            <div className="flex items-center text-sm text-gray-500 gap-2">
-              <MapPin size={14} />
-              <span>{talent.location}</span>
-            </div>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="py-4 flex-1 space-y-5">
-        <p className="text-sm text-gray-700">{talent.bio}</p>
-        <div className="flex flex-wrap gap-2">
-          {talent.skills.map((skill: string, index: number) => (
-            <Badge key={index} variant="outline" className="bg-gray-50">
-              {skill}
-            </Badge>
-          ))}
-        </div>
-        <div className="space-y-3 text-sm text-gray-600">
-          <div className="flex items-center gap-2">
-            <Briefcase size={16} className="text-gray-400" />
-            <span>Experience: {talent.experience}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Star size={16} className="text-yellow-400" />
-            <span>Rating: {talent.rating}/5.0</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Clock size={16} className="text-gray-400" />
-            <span>{talent.availability}</span>
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter className="pt-4 border-t flex gap-2">
-        <Button variant="default" className="w-full flex items-center gap-1">
-          <MessageSquare size={16} />
-          Connect
-        </Button>
-        <Button variant="outline" className="w-full">View Profile</Button>
-      </CardFooter>
-    </Card>
   );
 };
 
