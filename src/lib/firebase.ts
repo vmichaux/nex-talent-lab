@@ -1,4 +1,3 @@
-
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, getDocs, query, where, orderBy, limit, doc, getDoc } from "firebase/firestore";
@@ -44,7 +43,7 @@ export const getUserProjects = async (userId: string) => {
   }));
 };
 
-// New helper function to get user profile data
+// Helper function to get user profile data
 export const getUserProfile = async (userId: string) => {
   if (!userId) return null;
   
@@ -64,6 +63,11 @@ export const getUserProfile = async (userId: string) => {
             level: "Intermediate"
           }));
         }
+      }
+      
+      // Ensure interests exists as an array
+      if (!userData.interests || !Array.isArray(userData.interests)) {
+        userData.interests = [];
       }
       
       return {

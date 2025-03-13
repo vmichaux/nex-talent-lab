@@ -26,7 +26,11 @@ import {
   Mail,
   Phone,
   Star,
-  StarHalf
+  StarHalf,
+  Heart,
+  Plus,
+  Check,
+  X
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -64,6 +68,7 @@ const ProfileEditPage = () => {
   const [loading, setLoading] = useState(true);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "dual">("talent");
+  const [newInterest, setNewInterest] = useState("");
   
   const [profile, setProfile] = useState({
     firstName: "",
@@ -76,6 +81,7 @@ const ProfileEditPage = () => {
     email: "",
     phoneNumber: "",
     sex: "",
+    interests: [] as string[],
     business: {
       companyName: "",
       foundedYear: "",
@@ -392,6 +398,31 @@ const ProfileEditPage = () => {
     }
   };
 
+  const handleAddInterest = () => {
+    if (!newInterest.trim()) return;
+    
+    if (!profile.interests.includes(newInterest.trim()) && profile.interests.length < 6) {
+      setProfile({
+        ...profile,
+        interests: [...profile.interests, newInterest.trim()]
+      });
+      setNewInterest("");
+    } else if (profile.interests.length >= 6) {
+      toast({
+        title: "Maximum interests reached",
+        description: "You can only add up to 6 interests",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleRemoveInterest = (interest: string) => {
+    setProfile({
+      ...profile,
+      interests: profile.interests.filter(item => item !== interest)
+    });
+  };
+
   const handleSaveProfile = async () => {
     try {
       if (currentUser?.uid) {
@@ -473,6 +504,67 @@ const ProfileEditPage = () => {
           </div>
         </div>
       </Card>
+    </div>
+  );
+
+  const renderInterests = () => (
+    <div className="border-t border-gray-200 pt-6 mt-6">
+      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <Heart className="h-5 w-5 text-primary" />
+        Interests (2-6)
+      </h3>
+      <div className="space-y-4">
+        <div className="flex flex-wrap gap-2 mb-4">
+          {profile.interests.map((interest, index) => (
+            <div 
+              key={`interest-${index}`}
+              className="flex items-center gap-1 px-3 py-1.5 bg-primary/10 text-primary rounded-full"
+            >
+              <span>{interest}</span>
+              <button 
+                type="button"
+                onClick={() => handleRemoveInterest(interest)}
+                className="text-primary hover:text-primary/70 focus:outline-none"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          ))}
+          
+          {profile.interests.length === 0 && (
+            <p className="text-sm text-gray-500 italic">
+              Add at least 2 interests to help us match you with relevant opportunities
+            </p>
+          )}
+        </div>
+        
+        {profile.interests.length < 6 && (
+          <div className="flex gap-2">
+            <Input
+              value={newInterest}
+              onChange={(e) => setNewInterest(e.target.value)}
+              placeholder="Add an interest (e.g., Design, AI, Teaching)"
+              className="flex-1"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleAddInterest();
+                }
+              }}
+            />
+            <Button 
+              type="button"
+              onClick={handleAddInterest}
+              variant="outline"
+              className="gap-1"
+              disabled={!newInterest.trim()}
+            >
+              <Plus className="h-4 w-4" />
+              Add
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 
@@ -1014,6 +1106,7 @@ const ProfileEditPage = () => {
                   <TabsContent value="talent" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
                       {renderBasicInfo()}
+                      {renderInterests()}
                       {renderSkills()}
                       {renderEducation()}
                       {renderExperience()}
@@ -1041,6 +1134,7 @@ const ProfileEditPage = () => {
                   <TabsContent value="builder" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
                       {renderBasicInfo()}
+                      {renderInterests()}
                       {renderBusinessInfo()}
                       
                       <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
@@ -1066,6 +1160,7 @@ const ProfileEditPage = () => {
                   <TabsContent value="dual" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
                       {renderBasicInfo()}
+                      {renderInterests()}
                       {renderBusinessInfo()}
                       {renderSkills()}
                       {renderEducation()}
