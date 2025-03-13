@@ -64,11 +64,7 @@ export function Footer() {
                   Pricing
                 </Link>
               </li>
-              <li>
-                <Link to="/blog" className="text-gray-600 hover:text-primary text-sm">
-                  Blog
-                </Link>
-              </li>
+              {/* Removed the Blog link */}
             </ul>
           </div>
 
