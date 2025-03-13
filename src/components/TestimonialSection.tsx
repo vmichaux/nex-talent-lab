@@ -33,12 +33,12 @@ export function TestimonialSection() {
   return <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-3xl font-bold mb-4">What Our Users Say</h2>
-          <p className="text-gray-600 px-[77px]">Hear from creative professionals and project builders who have found success on our platform.</p>
+          <h2 className="text-3xl font-bold mb-4 my-[14px] py-[11px]">What Our Users Say</h2>
+          <p className="text-gray-600 px-[77px] my-[12px]">Hear from creative professionals and project builders who have found success on our platform.</p>
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="relative bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+          <div className="relative bg-white p-8 rounded-xl shadow-lg border border-gray-100 my-[26px]">
             {/* Decorative elements */}
             <div className="absolute -top-3 -left-3">
               <div className="p-2 bg-primary text-white rounded-full">

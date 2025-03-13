@@ -29,7 +29,7 @@ export function HowItWorks({
     details: ["Receive and give feedback after project completion", "Build a reputation through ratings and reviews", "Join industry-specific communities", "Access career development resources and mentorship"],
     color: "bg-secondary/80"
   }];
-  return <section className="py-16">
+  return <section className="py-[17px]">
       <div className="container mx-auto px-4">
         {/* Removed duplicate title and description that were in this div */}
 

@@ -32,7 +32,7 @@ const Index = () => {
             
             {/* Added title for How It Works section */}
             <div className="text-center max-w-2xl mx-auto mt-16 mb-8">
-              <h2 className="text-3xl font-bold mb-4">How It Works</h2>
+              <h2 className="text-3xl font-bold mb-4 my-[18px]">How It Works</h2>
               <p className="text-gray-600 px-[49px]">Our streamlined process makes finding and working with the perfect collaborators simple and effective.</p>
             </div>
             <HowItWorks />
