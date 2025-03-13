@@ -1,6 +1,8 @@
+
 import { Navbar } from "@/components/Navbar";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Footer } from "@/components/Footer";
+
 const HowItWorksPage = () => {
   return <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -23,11 +25,12 @@ const HowItWorksPage = () => {
                 opportunities and bring your creative projects to life.
               </p>
             </div>
-            <HowItWorks />
+            <HowItWorks showDetails={true} />
           </div>
         </div>
       </main>
       <Footer />
     </div>;
 };
+
 export default HowItWorksPage;

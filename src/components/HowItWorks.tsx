@@ -2,7 +2,8 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-export function HowItWorks() {
+
+export function HowItWorks({ showDetails = false }) {
   const steps = [{
     number: "01",
     title: "Create Your Profile",
@@ -28,6 +29,7 @@ export function HowItWorks() {
     details: ["Receive and give feedback after project completion", "Build a reputation through ratings and reviews", "Join industry-specific communities", "Access career development resources and mentorship"],
     color: "bg-secondary/80"
   }];
+
   return <section className="py-16">
       <div className="container mx-auto px-4">
         {/* Removed duplicate title and description that were in this div */}
@@ -43,62 +45,67 @@ export function HowItWorks() {
               <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
               <p className="text-gray-600 mb-4">{step.description}</p>
               
-              <ul className="space-y-2 text-sm text-gray-600">
-                {step.details.map((detail, i) => <li key={i} className="flex items-start">
-                    <span className="text-primary font-bold mr-2">•</span>
-                    <span className="py-0 my-[3px]">{detail}</span>
-                  </li>)}
-              </ul>
+              {/* Only show details on the dedicated page */}
+              {showDetails && (
+                <ul className="space-y-2 text-sm text-gray-600">
+                  {step.details.map((detail, i) => <li key={i} className="flex items-start">
+                      <span className="text-primary font-bold mr-2">•</span>
+                      <span className="py-0 my-[3px]">{detail}</span>
+                    </li>)}
+                </ul>
+              )}
             </div>)}
         </div>
 
-        <div className="mt-16 bg-gray-50 p-8 rounded-lg border border-gray-100">
-          <h3 className="text-2xl font-bold mb-4 text-center">Why Our Process Works</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h4 className="text-xl font-semibold mb-3 text-primary">For Talent</h4>
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <span className="text-primary font-bold mr-2">✓</span>
-                  <span>Access to diverse projects that match your interests and skills</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary font-bold mr-2">✓</span>
-                  <span>Build your portfolio with meaningful work experiences</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary font-bold mr-2">✓</span>
-                  <span>Connect with industry professionals and expand your network</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary font-bold mr-2">✓</span>
-                  <span>Develop new skills through diverse project experiences</span>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xl font-semibold mb-3 text-secondary">For Project Creators</h4>
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <span className="text-secondary font-bold mr-2">✓</span>
-                  <span>Find verified, skilled professionals for your specific needs</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-secondary font-bold mr-2">✓</span>
-                  <span>Streamlined collaboration tools for efficient project management</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-secondary font-bold mr-2">✓</span>
-                  <span>Quality assurance through our verification and review systems</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-secondary font-bold mr-2">✓</span>
-                  <span>Build a trusted network of collaborators for future projects</span>
-                </li>
-              </ul>
+        {showDetails && (
+          <div className="mt-16 bg-gray-50 p-8 rounded-lg border border-gray-100">
+            <h3 className="text-2xl font-bold mb-4 text-center">Why Our Process Works</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h4 className="text-xl font-semibold mb-3 text-primary">For Talent</h4>
+                <ul className="space-y-3">
+                  <li className="flex items-start">
+                    <span className="text-primary font-bold mr-2">✓</span>
+                    <span>Access to diverse projects that match your interests and skills</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary font-bold mr-2">✓</span>
+                    <span>Build your portfolio with meaningful work experiences</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary font-bold mr-2">✓</span>
+                    <span>Connect with industry professionals and expand your network</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary font-bold mr-2">✓</span>
+                    <span>Develop new skills through diverse project experiences</span>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-xl font-semibold mb-3 text-secondary">For Project Creators</h4>
+                <ul className="space-y-3">
+                  <li className="flex items-start">
+                    <span className="text-secondary font-bold mr-2">✓</span>
+                    <span>Find verified, skilled professionals for your specific needs</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-secondary font-bold mr-2">✓</span>
+                    <span>Streamlined collaboration tools for efficient project management</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-secondary font-bold mr-2">✓</span>
+                    <span>Quality assurance through our verification and review systems</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-secondary font-bold mr-2">✓</span>
+                    <span>Build a trusted network of collaborators for future projects</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         <div className="text-center mt-12">
           <Link to="/onboarding">
