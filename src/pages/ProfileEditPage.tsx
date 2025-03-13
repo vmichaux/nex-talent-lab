@@ -22,7 +22,9 @@ import {
   CreditCard,
   Camera,
   Upload,
-  ImagePlus
+  ImagePlus,
+  Mail,
+  Phone
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -38,6 +40,10 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 
 const ProfileEditPage = () => {
   const { isLoggedIn, updateProfileCompletion, userData, currentUser } = useAuth();
@@ -57,6 +63,10 @@ const ProfileEditPage = () => {
     location: "",
     bio: "",
     profilePicture: "",
+    dateOfBirth: null as Date | null,
+    email: "",
+    phoneNumber: "",
+    sex: "",
     business: {
       companyName: "",
       foundedYear: "",
@@ -107,6 +117,8 @@ const ProfileEditPage = () => {
               billingDetails: profileData.business?.billingDetails || ""
             };
             
+            const dateOfBirth = profileData.dateOfBirth ? new Date(profileData.dateOfBirth.toDate?.() || profileData.dateOfBirth) : null;
+            
             const loadedProfile = {
               firstName,
               lastName,
@@ -114,6 +126,10 @@ const ProfileEditPage = () => {
               location: profileData.location || "",
               bio: profileData.bio || "",
               profilePicture: profileData.profilePicture || "",
+              dateOfBirth,
+              email: profileData.email || currentUser.email || "",
+              phoneNumber: profileData.phoneNumber || "",
+              sex: profileData.sex || "",
               business,
               skills: Array.isArray(profileData.skills) && profileData.skills.length > 0 
                 ? profileData.skills 
@@ -153,6 +169,13 @@ const ProfileEditPage = () => {
               description: "Your profile information has been loaded successfully.",
             });
           } else {
+            if (currentUser.email) {
+              setProfile(prev => ({
+                ...prev,
+                email: currentUser.email || ""
+              }));
+            }
+            
             console.log("No profile data found, using empty profile");
             toast({
               title: "No profile found",
@@ -452,6 +475,85 @@ const ProfileEditPage = () => {
               onChange={(e) => handleInputChange("location", e.target.value)}
               placeholder="San Francisco, CA"
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-sm font-medium flex items-center gap-2">
+              <Mail className="h-4 w-4" />
+              Email Address
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              value={profile.email}
+              onChange={(e) => handleInputChange("email", e.target.value)}
+              placeholder="your.email@example.com"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="phoneNumber" className="text-sm font-medium flex items-center gap-2">
+              <Phone className="h-4 w-4" />
+              Phone Number
+            </Label>
+            <Input
+              id="phoneNumber"
+              type="tel"
+              value={profile.phoneNumber}
+              onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
+              placeholder="+1 (555) 123-4567"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="sex" className="text-sm font-medium">
+              Sex
+            </Label>
+            <Select
+              value={profile.sex}
+              onValueChange={(value) => handleInputChange("sex", value)}
+            >
+              <SelectTrigger id="sex" className="w-full">
+                <SelectValue placeholder="Select your sex" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="male">Male</SelectItem>
+                <SelectItem value="female">Female</SelectItem>
+                <SelectItem value="nonbinary">Non-binary</SelectItem>
+                <SelectItem value="preferNotToSay">Prefer not to say</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="dateOfBirth" className="text-sm font-medium flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              Date of Birth
+            </Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !profile.dateOfBirth && "text-muted-foreground"
+                  )}
+                >
+                  <Calendar className="mr-2 h-4 w-4" />
+                  {profile.dateOfBirth ? format(profile.dateOfBirth, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <CalendarComponent
+                  mode="single"
+                  selected={profile.dateOfBirth || undefined}
+                  onSelect={(date) => handleInputChange("dateOfBirth", date)}
+                  initialFocus
+                  disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
         

@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, where, orderBy, limit, doc, getDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -42,6 +42,28 @@ export const getUserProjects = async (userId: string) => {
     id: doc.id,
     ...doc.data()
   }));
+};
+
+// New helper function to get user profile data
+export const getUserProfile = async (userId: string) => {
+  if (!userId) return null;
+  
+  try {
+    const userProfileRef = doc(db, "userProfiles", userId);
+    const docSnap = await getDoc(userProfileRef);
+    
+    if (docSnap.exists()) {
+      return {
+        id: docSnap.id,
+        ...docSnap.data()
+      };
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    return null;
+  }
 };
 
 export default app;

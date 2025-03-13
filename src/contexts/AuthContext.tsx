@@ -63,6 +63,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         await setDoc(userRef, userData);
         setUserData(userData);
+        
+        // Create a basic user profile with email to ensure all new accounts have one
+        const userProfileRef = doc(db, "userProfiles", user.uid);
+        await setDoc(userProfileRef, {
+          email: user.email,
+          createdAt: new Date(),
+          lastUpdated: new Date()
+        }, { merge: true });
       }
     } catch (error) {
       console.error("Error updating user data:", error);
