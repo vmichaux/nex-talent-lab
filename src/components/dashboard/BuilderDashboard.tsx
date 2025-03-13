@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { Users, PlusCircle, Briefcase, LineChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,6 +42,17 @@ export function BuilderDashboard() {
 
   return (
     <div className="space-y-10">
+      {/* Action buttons */}
+      <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
+        <AddProjectButton />
+        <div className="md:w-1/2 lg:w-1/3">
+          <ProjectSearch />
+        </div>
+      </div>
+
+      {/* Projects section - showing this first */}
+      <DashboardProjects />
+      
       {/* Project metrics */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-6">
@@ -85,17 +95,6 @@ export function BuilderDashboard() {
         </div>
       </div>
 
-      {/* Action buttons */}
-      <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
-        <AddProjectButton />
-        <div className="md:w-1/2 lg:w-1/3">
-          <ProjectSearch />
-        </div>
-      </div>
-
-      {/* Projects section */}
-      <DashboardProjects />
-      
       {/* Recommended Talent */}
       <div className="mb-10">
         <div className="flex justify-between items-center mb-6">

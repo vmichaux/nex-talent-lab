@@ -3,10 +3,15 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { TalentDashboard } from "./TalentDashboard";
 import { BuilderDashboard } from "./BuilderDashboard";
 import { useState } from "react";
-import { ArrowRightLeft } from "lucide-react";
+import { ArrowRightLeft, Briefcase } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { DashboardProjects } from "./DashboardProjects";
 
 export function DualRoleDashboard() {
   const [viewMode, setViewMode] = useState<"combined" | "talent" | "builder">("combined");
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -27,7 +32,9 @@ export function DualRoleDashboard() {
 
       {viewMode === "combined" && (
         <div className="space-y-10">
-          {/* Combined dashboard shows most important elements from both dashboards */}
+          {/* Show projects first in combined view */}
+          <DashboardProjects />
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-gradient-to-br from-primary/5 to-primary/10 p-6 rounded-lg border border-primary/20">
               <h3 className="text-xl font-bold mb-4 text-primary">My Talent Activity</h3>

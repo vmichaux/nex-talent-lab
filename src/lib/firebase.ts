@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, getDocs, query, where, orderBy, limit, doc, getDoc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, where, orderBy, limit, doc, getDoc, Timestamp } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -51,9 +51,13 @@ export const getProjects = async () => {
 };
 
 export const getUserProjects = async (userId: string) => {
-  if (!userId) return [];
+  if (!userId) {
+    console.error("getUserProjects called without userId");
+    return [];
+  }
   
   try {
+    console.log("getUserProjects - Fetching projects for user:", userId);
     const projectsCollection = collection(db, "projects");
     const projectsQuery = query(
       projectsCollection, 
@@ -61,12 +65,36 @@ export const getUserProjects = async (userId: string) => {
     );
     
     const projectsSnapshot = await getDocs(projectsQuery);
-    const projects = projectsSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    console.log("getUserProjects - Found projects:", projectsSnapshot.size);
     
-    return projects;
+    const projects = projectsSnapshot.docs.map(doc => {
+      const data = doc.data();
+      // Convert Firestore timestamp to Date if present
+      let createdAt;
+      if (data.createdAt instanceof Timestamp) {
+        createdAt = data.createdAt.toDate();
+      } else if (data.createdAt && typeof data.createdAt.toDate === 'function') {
+        createdAt = data.createdAt.toDate();
+      } else {
+        createdAt = new Date();
+      }
+      
+      return {
+        id: doc.id,
+        ...data,
+        createdAt
+      };
+    });
+    
+    // Sort projects by creation date (newest first)
+    const sortedProjects = projects.sort((a, b) => {
+      const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt);
+      const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);
+      return dateB.getTime() - dateA.getTime();
+    });
+    
+    console.log("getUserProjects - Returning sorted projects:", sortedProjects);
+    return sortedProjects;
   } catch (error) {
     console.error("Error in getUserProjects:", error);
     return [];
