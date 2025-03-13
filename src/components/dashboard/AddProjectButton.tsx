@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,12 +41,21 @@ export interface ProjectFormData {
   projectStatus: "Open" | "Urgent" | "Closed";
 }
 
-export function AddProjectButton() {
-  const [open, setOpen] = useState(false);
+interface AddProjectButtonProps {
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
+}
+
+export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButtonProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  
+  // Use either provided state management or internal state
+  const isOpen = open !== undefined ? open : internalOpen;
+  const setIsOpen = setOpenProp || setInternalOpen;
   
   const handleSubmit = async (formData: ProjectFormData) => {
     if (!currentUser) {
@@ -115,7 +123,7 @@ export function AddProjectButton() {
       });
       
       // Close dialog
-      setOpen(false);
+      setIsOpen(false);
       
       // Navigate back to dashboard to see the new project
       navigate("/dashboard");
@@ -133,7 +141,7 @@ export function AddProjectButton() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button className="gap-2">
           <Plus className="h-4 w-4" />

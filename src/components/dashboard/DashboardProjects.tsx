@@ -154,7 +154,9 @@ export function DashboardProjects() {
           ) : (
             <div className="col-span-3 text-center py-10 bg-gray-50 rounded-md">
               <p className="text-gray-600 mb-4">You haven't created any projects yet.</p>
-              <Button onClick={() => navigate('/explore-projects')}>
+              <Button 
+                onClick={() => navigate('/dashboard', { state: { openProjectModal: true } })}
+                className="bg-primary text-white font-medium px-4 py-2 rounded-md">
                 Create Your First Project
               </Button>
             </div>

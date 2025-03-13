@@ -7,8 +7,22 @@ import { DashboardProjects } from "@/components/dashboard/DashboardProjects";
 import { DashboardRequests } from "@/components/dashboard/DashboardRequests";
 import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
 import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export function BuilderDashboard() {
+  const location = useLocation();
+  const [showProjectModal, setShowProjectModal] = useState(false);
+  
+  // Check if we need to open the project modal based on navigation state
+  useEffect(() => {
+    if (location.state?.openProjectModal) {
+      setShowProjectModal(true);
+      // Clean up the state to prevent reopening on page refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
+
   // Sample talents data
   const recommendedTalents = [
     {
@@ -44,7 +58,7 @@ export function BuilderDashboard() {
     <div className="space-y-10">
       {/* Action buttons */}
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
-        <AddProjectButton />
+        <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
         <div className="md:w-1/2 lg:w-1/3">
           <ProjectSearch />
         </div>
