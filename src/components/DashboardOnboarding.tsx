@@ -1,14 +1,17 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Rocket, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SimplifiedHeader } from "./SimplifiedHeader";
+
 export function DashboardOnboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"talent" | "entrepreneur" | "both" | null>(null);
   const totalSteps = 2;
   const navigate = useNavigate();
+
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
@@ -21,6 +24,7 @@ export function DashboardOnboarding() {
       }
     }
   };
+
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
@@ -28,11 +32,15 @@ export function DashboardOnboarding() {
       navigate("/");
     }
   };
+
   const getStepContent = () => {
     switch (currentStep) {
       case 1:
         return <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
-            <h1 className="text-4xl font-bold mb-6 custom-gradient-text">Welcome to NexTalent Lab</h1>
+            <h1 className="text-4xl font-bold mb-6">
+              <span className="text-black">Welcome to </span>
+              <span className="custom-gradient-text">NexTalent Lab</span>
+            </h1>
             <p className="text-lg mb-8 text-zinc-500">Let's get you started on your collaboration journey</p>
             
             <div className="mb-10 text-center max-w-prose">
@@ -47,7 +55,7 @@ export function DashboardOnboarding() {
       case 2:
         return <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
             <h1 className="text-4xl font-bold mb-6 custom-gradient-text">Choose Your Role</h1>
-            <p className="text-lg mb-8 text-zinc-900">Are you a talent looking for opportunities or a project builder? Why not both?</p>
+            <p className="text-lg mb-8 text-zinc-900">Are you a talent looking for opportunities or a project builder? Why not both?</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-10">
               {/* Talent Card */}
