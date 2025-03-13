@@ -37,14 +37,6 @@ export function CompensationTab({
     }
   };
 
-  const handleToggleTool = (tool: string) => {
-    if (tools.includes(tool)) {
-      setTools(tools.filter(t => t !== tool));
-    } else {
-      setTools([...tools, tool]);
-    }
-  };
-
   return (
     <div className="grid gap-6">
       <div className="grid gap-2">
@@ -100,27 +92,6 @@ export function CompensationTab({
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {perk}
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-      
-      <div className="grid gap-2">
-        <Label>Tools & Technologies</Label>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {["React", "Figma", "Adobe", "Python", "WordPress", "Node.js", "Notion", "Canva"].map((tool) => (
-            <div key={tool} className="flex items-center space-x-2">
-              <Checkbox 
-                id={`tool-${tool}`} 
-                checked={tools.includes(tool)}
-                onCheckedChange={() => handleToggleTool(tool)}
-              />
-              <label
-                htmlFor={`tool-${tool}`}
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                {tool}
               </label>
             </div>
           ))}
