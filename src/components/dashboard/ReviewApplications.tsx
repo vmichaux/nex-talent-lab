@@ -1,0 +1,165 @@
+
+import { useState, useEffect } from "react";
+import { FileText, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
+import { collection, query, where, getDocs, Timestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { useAuth } from "@/contexts/AuthContext";
+
+interface ApplicationSummary {
+  id: string;
+  projectId: string;
+  projectTitle: string;
+  userName: string;
+  status: 'pending' | 'accepted' | 'declined';
+  createdAt: Date;
+}
+
+export function ReviewApplications() {
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const [applications, setApplications] = useState<ApplicationSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [hasProjects, setHasProjects] = useState(false);
+
+  useEffect(() => {
+    const fetchApplicationSummary = async () => {
+      if (!currentUser) return;
+      
+      setLoading(true);
+      try {
+        // First, check if the user has any projects
+        const projectsQuery = query(
+          collection(db, "projects"),
+          where("userId", "==", currentUser.uid)
+        );
+        
+        const projectsSnapshot = await getDocs(projectsQuery);
+        const hasUserProjects = !projectsSnapshot.empty;
+        setHasProjects(hasUserProjects);
+        
+        if (!hasUserProjects) {
+          setLoading(false);
+          return;
+        }
+        
+        // Get all projects created by this user
+        const projectIds = projectsSnapshot.docs.map(doc => doc.id);
+        
+        // Then, get most recent applications for these projects
+        const applicationsQuery = query(
+          collection(db, "applications"),
+          where("projectId", "in", projectIds)
+        );
+        
+        const applicationsSnapshot = await getDocs(applicationsQuery);
+        const fetchedApplications = applicationsSnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            projectId: data.projectId,
+            projectTitle: data.projectTitle,
+            userName: data.userName,
+            status: data.status,
+            createdAt: data.createdAt instanceof Timestamp 
+              ? data.createdAt.toDate() 
+              : new Date()
+          } as ApplicationSummary;
+        });
+        
+        // Sort by creation date (newest first) and take only the most recent ones
+        fetchedApplications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        setApplications(fetchedApplications.slice(0, 5));
+      } catch (error) {
+        console.error("Error fetching application summary:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchApplicationSummary();
+  }, [currentUser]);
+
+  // Format date to readable format
+  const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    }).format(date);
+  };
+
+  // If the user has no projects, don't show this section
+  if (!hasProjects && !loading) {
+    return null;
+  }
+
+  return (
+    <div className="mb-12">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold flex items-center gap-2">
+          <FileText className="h-5 w-5 text-primary" />
+          Review Applications
+        </h2>
+        <Button variant="outline" className="gap-1" onClick={() => navigate('/requests')}>
+          View All <ArrowRight className="h-4 w-4" />
+        </Button>
+      </div>
+      
+      {loading ? (
+        <Card>
+          <CardContent className="flex justify-center p-6">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </CardContent>
+        </Card>
+      ) : applications.length === 0 ? (
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-center text-gray-500">
+              <p className="mb-4">No applications have been submitted to your projects yet.</p>
+              <Button variant="outline" onClick={() => navigate('/explore-projects')}>
+                Browse Projects
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-4 bg-white rounded-lg border shadow-sm p-6">
+          <div className="grid grid-cols-1 divide-y">
+            {applications.map((app) => (
+              <div key={app.id} className="py-4 first:pt-0 last:pb-0">
+                <div className="flex flex-col md:flex-row justify-between gap-4">
+                  <div>
+                    <h3 className="font-medium mb-1">
+                      {app.userName} applied to <span className="text-primary">{app.projectTitle}</span>
+                    </h3>
+                    <p className="text-sm text-gray-500">{formatDate(app.createdAt)}</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <Badge className={
+                      app.status === "accepted" ? "bg-green-100 text-green-800 hover:bg-green-100" :
+                      app.status === "declined" ? "bg-red-100 text-red-800 hover:bg-red-100" :
+                      "bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
+                    }>
+                      {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
+                    </Badge>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => navigate(`/requests?application=${app.id}`)}
+                    >
+                      Review
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

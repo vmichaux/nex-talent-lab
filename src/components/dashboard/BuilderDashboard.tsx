@@ -1,5 +1,4 @@
-
-import { Users, PlusCircle, Briefcase, LineChart } from "lucide-react";
+import { Users, PlusCircle, Briefcase, LineChart, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +6,7 @@ import { DashboardProjects } from "@/components/dashboard/DashboardProjects";
 import { DashboardRequests } from "@/components/dashboard/DashboardRequests";
 import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
 import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
+import { ReviewApplications } from "@/components/dashboard/ReviewApplications";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useProjects } from "@/hooks/useProjects";
@@ -81,6 +81,9 @@ export function BuilderDashboard() {
 
       {/* Projects section - showing this first */}
       <DashboardProjects />
+      
+      {/* Review Applications section - new section */}
+      <ReviewApplications />
       
       {/* Project metrics */}
       <div className="mb-8">
@@ -224,9 +227,6 @@ export function BuilderDashboard() {
           ))}
         </div>
       </div>
-      
-      {/* Collaboration Requests */}
-      <DashboardRequests />
     </div>
   );
 }
