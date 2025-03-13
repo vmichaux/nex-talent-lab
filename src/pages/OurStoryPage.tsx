@@ -107,7 +107,7 @@ export default function OurStoryPage() {
             <h2 className="text-3xl font-bold mb-12 text-center">Our Journey</h2>
             <div className="space-y-12 max-w-4xl mx-auto">
               <div className="flex flex-col md:flex-row gap-4">
-                <div className="md:w-1/3 font-bold text-xl text-primary">2020</div>
+                <div className="md:w-1/3 font-bold text-xl text-primary">2024</div>
                 <div className="md:w-2/3">
                   <h3 className="text-xl font-semibold mb-2">The Beginning</h3>
                   <p className="text-gray-700">
@@ -118,7 +118,7 @@ export default function OurStoryPage() {
               </div>
               
               <div className="flex flex-col md:flex-row gap-4">
-                <div className="md:w-1/3 font-bold text-xl text-primary">2021</div>
+                <div className="md:w-1/3 font-bold text-xl text-primary">2025</div>
                 <div className="md:w-2/3">
                   <h3 className="text-xl font-semibold mb-2">Growing Community</h3>
                   <p className="text-gray-700">
@@ -129,7 +129,7 @@ export default function OurStoryPage() {
               </div>
               
               <div className="flex flex-col md:flex-row gap-4">
-                <div className="md:w-1/3 font-bold text-xl text-primary">2023</div>
+                <div className="md:w-1/3 font-bold text-xl text-primary">2026</div>
                 <div className="md:w-2/3">
                   <h3 className="text-xl font-semibold mb-2">Global Expansion</h3>
                   <p className="text-gray-700">
@@ -140,7 +140,7 @@ export default function OurStoryPage() {
               </div>
               
               <div className="flex flex-col md:flex-row gap-4">
-                <div className="md:w-1/3 font-bold text-xl text-primary">Today</div>
+                <div className="md:w-1/3 font-bold text-xl text-primary">2027</div>
                 <div className="md:w-2/3">
                   <h3 className="text-xl font-semibold mb-2">Looking Forward</h3>
                   <p className="text-gray-700">
