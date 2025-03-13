@@ -25,17 +25,17 @@ export function TalentDashboard() {
         <AppliedProjects />
       </div>
 
-      {/* Skills Progress section */}
-      <SkillsProgress />
-
       {/* Recommended Opportunities section */}
       <RecommendedOpportunities filter={filter} setFilter={setFilter} />
 
-      {/* Learning Resources section */}
-      <LearningResources />
-
       {/* Messages section */}
       <DashboardMessages />
+      
+      {/* Skills Progress section */}
+      <SkillsProgress />
+
+      {/* Learning Resources section */}
+      <LearningResources />
     </div>
   );
 }
