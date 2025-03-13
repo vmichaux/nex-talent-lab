@@ -81,7 +81,7 @@ const DashboardPage = () => {
                 <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Dashboard</div>
                 
                 <h1 className="mb-4 text-3xl font-bold tracking-tight custom-gradient-text md:text-5xl">
-                  {getUserName()}'s Ventures
+                  My Journey
                 </h1>
                 
                 <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
