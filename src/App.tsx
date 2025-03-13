@@ -24,6 +24,7 @@ import ProfileEditPage from "./pages/ProfileEditPage";
 import ContactSalesPage from "./pages/ContactSalesPage";
 import { DashboardOnboarding } from "./components/DashboardOnboarding";
 import { ChatWidget } from "./components/ChatWidget";
+import { ScrollToTopButton } from "./components/ScrollToTopButton";
 
 // Scroll to top component that will be used inside the Router
 function ScrollToTop() {
@@ -67,6 +68,7 @@ const App = () => (
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <ScrollToTopButton />
           <ChatWidget />
         </BrowserRouter>
       </AuthProvider>
