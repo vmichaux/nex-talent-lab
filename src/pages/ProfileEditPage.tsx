@@ -14,24 +14,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { UploadButton } from "@/components/profile/UploadButton";
 import { Badge } from "@/components/ui/badge";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 export default function ProfileEditPage() {
-  const { isLoggedIn, activeTestProfile, testProfiles, switchToTestProfile, switchToMainProfile, createTestProfile } = useAuth();
+  const { isLoggedIn, activeTestProfile } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
-  const [newProfileName, setNewProfileName] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  
-  const handleCreateProfile = async () => {
-    if (!newProfileName.trim()) return;
-    
-    await createTestProfile(newProfileName.trim());
-    setNewProfileName("");
-    setIsDialogOpen(false);
-  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -39,97 +25,18 @@ export default function ProfileEditPage() {
       
       <div className="flex-1 bg-gray-50">
         <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Account Settings</h1>
-              <p className="text-gray-600">
-                Manage your profile information and account preferences
-              </p>
-            </div>
+          <div className="flex flex-col items-start mb-6">
+            <h1 className="text-3xl font-bold mb-2">Account Settings</h1>
+            <p className="text-gray-600">
+              Manage your profile information and account preferences
+            </p>
             
-            <div className="mt-4 md:mt-0">
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="gap-2 bg-purple-600 hover:bg-purple-700 text-white">
-                    <Icons.userPlus className="h-4 w-4" />
-                    New Test Profile
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create New Test Profile</DialogTitle>
-                    <DialogDescription>
-                      Create a test profile to simulate different users when testing your project.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4 py-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="profile-name">Profile Name</Label>
-                      <Input 
-                        id="profile-name" 
-                        placeholder="Victoria 2" 
-                        value={newProfileName}
-                        onChange={(e) => setNewProfileName(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button 
-                      type="submit" 
-                      onClick={handleCreateProfile}
-                      disabled={!newProfileName.trim()}
-                    >
-                      Create Profile
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </div>
+            {activeTestProfile && (
+              <Badge className="mt-2 bg-purple-100 text-purple-800 border-purple-300">
+                Test Profile: {activeTestProfile.name}
+              </Badge>
+            )}
           </div>
-          
-          {testProfiles.length > 0 && (
-            <Card className="mb-6">
-              <CardContent className="p-4">
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Icons.testingTools className="h-4 w-4 text-purple-600" />
-                    <h3 className="font-semibold">Active Profile</h3>
-                  </div>
-                  
-                  <ToggleGroup type="single" value={activeTestProfile?.id || "main"}>
-                    <div className="flex flex-wrap gap-2">
-                      <ToggleGroupItem 
-                        value="main" 
-                        onClick={switchToMainProfile}
-                        className={`flex items-center gap-2 p-2 border rounded-md ${!activeTestProfile ? 'bg-green-50 border-green-200 text-green-800' : 'bg-white'}`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Icons.user className="h-4 w-4" />
-                          <span>Main Profile</span>
-                          {!activeTestProfile && <Icons.circleCheck className="h-4 w-4 text-green-600" />}
-                        </div>
-                      </ToggleGroupItem>
-                      
-                      {testProfiles.map((profile) => (
-                        <ToggleGroupItem 
-                          key={profile.id} 
-                          value={profile.id}
-                          onClick={() => switchToTestProfile(profile.id)}
-                          className={`flex items-center gap-2 p-2 border rounded-md ${profile.isActive ? 'bg-purple-50 border-purple-200 text-purple-800' : 'bg-white'}`}
-                        >
-                          <div className="flex items-center gap-2">
-                            <Icons.testingTools className="h-4 w-4" />
-                            <span>{profile.name}</span>
-                            {profile.isActive && <Icons.circleCheck className="h-4 w-4 text-purple-600" />}
-                          </div>
-                        </ToggleGroupItem>
-                      ))}
-                    </div>
-                  </ToggleGroup>
-                </div>
-              </CardContent>
-            </Card>
-          )}
           
           <div className="grid md:grid-cols-[240px_1fr] gap-6">
             <Card>
