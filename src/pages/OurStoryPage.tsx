@@ -1,4 +1,3 @@
-
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -30,7 +29,7 @@ export default function OurStoryPage() {
           </div>
         </div>
 
-        <div className="pt-26"></div>
+        <div className="pt-18"></div>
 
         <section className="py-16">
           <div className="container mx-auto px-4">
