@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Github, ArrowLeft, LucideIcon } from "lucide-react";
@@ -106,7 +107,7 @@ export default function LoginPage() {
         <div className="container mx-auto flex items-center">
           <Link to="/" className="flex items-center gap-1">
             <ArrowLeft className="h-5 w-5 text-gray-500 mr-2" />
-            <span className="font-bold text-2xl text-primary">NexTalent</span>
+            <span className="font-bold text-2xl bg-gradient-to-r from-[#6E59A5] to-[#2ECC71] bg-clip-text text-transparent">NexTalent</span>
             <span className="font-bold text-2xl text-zinc-900">Lab</span>
           </Link>
         </div>
