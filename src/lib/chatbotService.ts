@@ -1,6 +1,6 @@
 
 import { collection, addDoc, query, where, orderBy, getDocs, serverTimestamp, DocumentData } from "firebase/firestore";
-import { db, auth } from "./firebase";
+import { db, auth } from "./firebase/config";
 import OpenAI from "openai";
 
 // Types for messages

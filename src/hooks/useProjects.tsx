@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { collection, query, orderBy, getDocs, Timestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebase/config";
 import { Project } from "@/types/project";
 
 export const useProjects = () => {
