@@ -32,7 +32,7 @@ export default function OurStoryPage() {
         <section className="py-16">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold mb-6 text-center">Our Mission</h2>
+              <h2 className="font-bold mb-6 text-center text-4xl">Our Mission</h2>
               <p className="text-gray-700 mb-4">
                 At NexTalent Lab, we believe everyone has unique talents that deserve the right platform to shine. 
                 We started with a simple vision: to create a space where talented individuals can connect with 
@@ -55,7 +55,7 @@ export default function OurStoryPage() {
             <div className="max-w-3xl mx-auto">
               <h3 className="text-2xl font-semibold mb-8 text-center flex items-center gap-2 justify-center">
                 <Heart className="h-6 w-6 text-primary" />
-                <span>Our Values</span>
+                <span className="text-4xl font-bold">Our Values</span>
               </h3>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="bg-white p-6 rounded-lg shadow-sm">
