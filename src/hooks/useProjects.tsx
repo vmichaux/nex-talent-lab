@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { collection, query, orderBy, getDocs, Timestamp, doc, updateDoc, getDoc } from "firebase/firestore";
+import { collection, query, orderBy, getDocs, Timestamp, doc, updateDoc, getDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Project } from "@/types/project";
 
@@ -88,6 +88,44 @@ export const useProjects = () => {
     }
   };
 
+  const getUserProjects = async (userId: string) => {
+    try {
+      setLoading(true);
+      console.log("Fetching projects for user:", userId);
+      
+      const projectsQuery = query(
+        collection(db, "projects"),
+        where("userId", "==", userId),
+        orderBy("createdAt", "desc")
+      );
+      
+      const querySnapshot = await getDocs(projectsQuery);
+      const fetchedProjects = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        
+        // Convert Firestore timestamp to Date
+        const createdAt = data.createdAt instanceof Timestamp 
+          ? data.createdAt.toDate() 
+          : new Date();
+        
+        return {
+          id: doc.id,
+          ...data,
+          createdAt,
+        } as Project;
+      });
+      
+      console.log("Fetched user projects:", fetchedProjects);
+      return fetchedProjects;
+    } catch (err) {
+      console.error("Error fetching user projects:", err);
+      setError("Failed to load user projects. Please try again later.");
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
   }, []);
@@ -97,6 +135,7 @@ export const useProjects = () => {
     loading, 
     error, 
     refetchProjects: fetchProjects,
-    updateProject
+    updateProject,
+    getUserProjects
   };
 };

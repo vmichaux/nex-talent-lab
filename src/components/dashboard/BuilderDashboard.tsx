@@ -8,11 +8,16 @@ import { DashboardRequests } from "@/components/dashboard/DashboardRequests";
 import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
 import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useProjects } from "@/hooks/useProjects";
+import { Project } from "@/types/project";
 
 export function BuilderDashboard() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [showProjectModal, setShowProjectModal] = useState(false);
+  const { projects, loading } = useProjects();
+  const [recommendedProjects, setRecommendedProjects] = useState<Project[]>([]);
   
   // Check if we need to open the project modal based on navigation state
   useEffect(() => {
@@ -22,6 +27,16 @@ export function BuilderDashboard() {
       window.history.replaceState({}, document.title);
     }
   }, [location]);
+
+  // Get recommended projects
+  useEffect(() => {
+    if (projects.length > 0) {
+      // Get 3 random projects as recommendations
+      // In a real app, you would use an algorithm based on user's skills/interests
+      const shuffled = [...projects].sort(() => 0.5 - Math.random());
+      setRecommendedProjects(shuffled.slice(0, 3));
+    }
+  }, [projects]);
 
   // Sample talents data
   const recommendedTalents = [
@@ -106,6 +121,53 @@ export function BuilderDashboard() {
               <p className="text-sm text-muted-foreground">Review candidates</p>
             </CardContent>
           </Card>
+        </div>
+      </div>
+
+      {/* Recommended Opportunities */}
+      <div className="mb-10">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <Briefcase className="h-5 w-5 text-primary" />
+            Recommended Opportunities
+          </h2>
+          <Button variant="outline" className="gap-1" onClick={() => navigate('/explore-projects')}>
+            View All Projects
+          </Button>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {loading ? (
+            <p className="col-span-3 text-center py-8">Loading recommended projects...</p>
+          ) : recommendedProjects.length > 0 ? (
+            recommendedProjects.map(project => (
+              <Card key={project.id} className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-4 space-y-2">
+                  <CardTitle className="text-xl">{project.title}</CardTitle>
+                  {project.status === "Urgent" && (
+                    <Badge variant="destructive">Urgent</Badge>
+                  )}
+                </CardHeader>
+                <CardContent className="py-4 flex-1 space-y-4">
+                  <p className="text-sm text-gray-700 line-clamp-3">{project.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.skills?.slice(0, 3).map((skill, index) => (
+                      <Badge key={index} variant="outline" className="bg-gray-50">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+                <CardContent className="pt-4 border-t flex justify-between">
+                  <Button className="w-full" onClick={() => navigate(`/project/${project.id}`)}>
+                    View Details
+                  </Button>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <p className="col-span-3 text-center py-8">No recommended projects available at the moment.</p>
+          )}
         </div>
       </div>
 

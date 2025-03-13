@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -12,25 +12,37 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProjects } from "@/hooks/useProjects";
 import { Project } from "@/types/project";
+import { useToast } from "@/hooks/use-toast";
 
 const ExploreProjectsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, currentUser } = useAuth();
   const navigate = useNavigate();
   const { projects, loading, error } = useProjects();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Redirect to login if not logged in
+    if (!isLoggedIn) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to explore projects",
+        variant: "destructive"
+      });
+      navigate("/login");
+    }
+  }, [isLoggedIn, navigate, toast]);
 
   // Filter projects based on search query
   const filteredProjects = projects.filter(project => 
-    project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    project.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    project.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
+    project.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    project.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    project.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    project.skills?.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  // Redirect to login if not logged in
   if (!isLoggedIn) {
-    navigate("/login");
-    return null;
+    return null; // Don't render anything while redirecting
   }
 
   return (
@@ -176,7 +188,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
       <CardContent className="py-4 flex-1 space-y-5">
         <p className="text-sm text-gray-700">{project.description}</p>
         <div className="flex flex-wrap gap-2">
-          {project.skills.map((skill, index) => <Badge key={index} variant="outline" className="bg-gray-50">
+          {project.skills?.map((skill, index) => <Badge key={index} variant="outline" className="bg-gray-50">
               {skill}
             </Badge>)}
         </div>
@@ -195,7 +207,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
           </div>
           <div className="flex items-center gap-2">
             <MessageSquare size={16} className="text-gray-400" />
-            <span>{project.applicants} applicants</span>
+            <span>{project.applicants || 0} applicants</span>
           </div>
         </div>
       </CardContent>
