@@ -33,18 +33,18 @@ export default function OurStoryPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-bold mb-6 text-center text-4xl">Our Mission</h2>
-              <p className="text-gray-700 mb-4">
+              <p className="text-gray-700 mb-4 text-center">
                 At NexTalent Lab, we believe everyone has unique talents that deserve the right platform to shine. 
                 We started with a simple vision: to create a space where talented individuals can connect with 
                 meaningful projects that challenge them and help them grow.
               </p>
-              <p className="text-gray-700 mb-6">
+              <p className="text-gray-700 mb-6 text-center">
                 Our mission is to democratize access to opportunities, regardless of location, background, or 
                 traditional credentials. We're building a future where skills and passion matter more than degrees.
               </p>
               <div className="flex items-center gap-4 justify-center">
-                <Target className="h-10 w-10 text-primary" />
-                <p className="font-medium text-lg">Connecting talent with purpose since 2020</p>
+                
+                
               </div>
             </div>
           </div>
@@ -54,7 +54,7 @@ export default function OurStoryPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
               <h3 className="text-2xl font-semibold mb-8 text-center flex items-center gap-2 justify-center">
-                <Heart className="h-6 w-6 text-primary" />
+                
                 <span className="text-4xl font-bold">Our Values</span>
               </h3>
               <div className="grid md:grid-cols-3 gap-6">
@@ -63,7 +63,7 @@ export default function OurStoryPage() {
                     <Award className="h-6 w-6 text-primary flex-shrink-0" />
                     <h4 className="font-medium">Excellence</h4>
                   </div>
-                  <p className="text-gray-600">Setting high standards for every project and interaction</p>
+                  <p className="text-gray-600 text-left">Setting high standards for every project and interaction</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-sm">
                   <div className="flex items-center gap-3 mb-3">
@@ -87,23 +87,13 @@ export default function OurStoryPage() {
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-8 text-center flex items-center gap-2 justify-center">
-              <Star className="h-6 w-6 text-primary" />
+              
               <span className="text-4xl font-bold">The Story Behind NexTalent Lab</span>
             </h2>
             <div className="prose prose-lg max-w-2xl mx-auto text-gray-700 space-y-6">
-              <p className="leading-relaxed">
-                In the heart of Paris, four creatives came together with one goal: to build something extraordinary. 
-                A music producer, an artistic director, a fashion designer, and a communication strategist—all driven 
-                by a shared passion for innovation. What started as an idea quickly turned into a full-fledged mission: 
-                organizing an unforgettable fashion show, despite having no budget, no sponsors, and no guarantees.
-              </p>
-              <p className="leading-relaxed">
-                But what they did have was determination, talent, and the power of collaboration. The team grew, 
-                with over 100 volunteers—some of the best in their fields—coming together to make the impossible happen. 
-                No money exchanged hands. Just skill, passion, and the belief that together, they could create something 
-                greater than themselves.
-              </p>
-              <p className="leading-relaxed">
+              <p className="leading-relaxed text-center">In the heart of Paris, four creatives came together with one goal: to build something extraordinary. A music producer, an artistic director, a fashion designer, and a communication strategist—all driven by a shared passion for innovation. What started as an idea quickly turned into a full-fledged mission: organizing an unforgettable fashion show, despite having no budget and no guarantees.</p>
+              <p className="leading-relaxed text-center">But what they did have was determination, talent, and the power of collaboration. The team grew their collective intelligence, with over 100 volunteers—some of the best in their fields—coming together to make the impossible happen. No money exchanged hands. Just skill, passion, and the belief that together, they could create something greater than themselves.</p>
+              <p className="leading-relaxed text-center">
                 That moment was proof of something revolutionary: when driven people unite around an idea, they can 
                 defy all odds. The only thing missing in the world today isn't money, but the right people coming 
                 together at the right time.
