@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, Clock, Tag, UserCircle, MessageSquare, ArrowLeft, MapPin, Share2, Pencil, Trash2, Save, X } from "lucide-react";
+import { Calendar, Clock, Tag, UserCircle, MessageSquare, ArrowLeft, MapPin, Share2, Pencil, Trash2 } from "lucide-react";
 import { db } from "@/lib/firebase";
-import { doc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { Project } from "@/types/project";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
@@ -26,6 +26,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { EditProjectForm } from "@/components/dashboard/EditProjectForm";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -237,6 +238,31 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
     );
   }
 
+  // If we're in editing mode and we have a project, render the edit form
+  if (isEditing && project) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-1">
+          <div className="container mx-auto px-4 py-6">
+            <Button 
+              variant="ghost" 
+              className="flex items-center gap-1 text-gray-600 hover:text-gray-900 mb-6"
+              onClick={() => navigate(`/project/${id}`)}
+            >
+              <ArrowLeft size={16} />
+              Back to Project
+            </Button>
+            
+            <EditProjectForm project={project} />
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Regular view mode
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -257,63 +283,43 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
               
               <div className="flex gap-3">
                 {isOwner ? (
-                  isEditing ? (
-                    <>
-                      <Button 
-                        className="bg-green-600 hover:bg-green-700 text-white"
-                        onClick={handleSaveProject}
-                        disabled={saving}
-                      >
-                        <Save size={16} className="mr-2" />
-                        {saving ? "Saving..." : "Save Changes"}
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        onClick={handleCancelEdit}
-                      >
-                        <X size={16} className="mr-2" />
-                        Cancel
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Button 
-                        className="bg-purple-600 hover:bg-purple-700 text-white"
-                        onClick={handleEditClick}
-                      >
-                        <Pencil size={16} className="mr-2" />
-                        Edit Project
-                      </Button>
-                      
-                      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                        <AlertDialogTrigger asChild>
-                          <Button 
-                            variant="destructive"
+                  <>
+                    <Button 
+                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                      onClick={handleEditClick}
+                    >
+                      <Pencil size={16} className="mr-2" />
+                      Edit Project
+                    </Button>
+                    
+                    <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                      <AlertDialogTrigger asChild>
+                        <Button 
+                          variant="destructive"
+                        >
+                          <Trash2 size={16} className="mr-2" />
+                          Delete Project
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete your project.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction 
+                            onClick={handleDeleteProject}
+                            className="bg-red-600 hover:bg-red-700"
                           >
-                            <Trash2 size={16} className="mr-2" />
-                            Delete Project
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This action cannot be undone. This will permanently delete your project.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction 
-                              onClick={handleDeleteProject}
-                              className="bg-red-600 hover:bg-red-700"
-                            >
-                              Delete
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </>
-                  )
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </>
                 ) : (
                   <Button 
                     className="bg-purple-600 hover:bg-purple-700 text-white"
@@ -802,4 +808,3 @@ const ProjectDetailPage = ({ isEditing = false }: ProjectDetailPageProps) => {
 };
 
 export default ProjectDetailPage;
-

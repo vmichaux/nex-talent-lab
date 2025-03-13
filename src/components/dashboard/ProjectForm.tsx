@@ -11,9 +11,16 @@ import { AdditionalDetailsTab } from "./project-form/AdditionalDetailsTab";
 interface ProjectFormProps {
   onSubmit: (formData: ProjectFormData) => Promise<void>;
   loading: boolean;
+  initialData?: ProjectFormData;
+  submitLabel?: string;
 }
 
-export function ProjectForm({ onSubmit, loading }: ProjectFormProps) {
+export function ProjectForm({ 
+  onSubmit, 
+  loading, 
+  initialData,
+  submitLabel = "Create Project" 
+}: ProjectFormProps) {
   const [activeTab, setActiveTab] = useState("basicInfo");
   
   // Basic Info
@@ -49,12 +56,59 @@ export function ProjectForm({ onSubmit, loading }: ProjectFormProps) {
   const [budget, setBudget] = useState("");
   const [desiredProfiles, setDesiredProfiles] = useState<string[]>(["Student", "Freelancer"]);
 
-  // Set default deadline to 3 months from now
+  // Initialize form with initial data if provided (editing mode)
   useEffect(() => {
-    const date = new Date();
-    date.setMonth(date.getMonth() + 3);
-    setProjectDeadline(date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
-  }, []);
+    if (initialData) {
+      // Basic Info
+      setProjectName(initialData.projectName);
+      setProjectDescription(initialData.projectDescription);
+      setProjectCategory(initialData.projectCategory);
+      setProjectType(initialData.projectType);
+      setProjectStatus(initialData.projectStatus);
+      
+      // Skills with level
+      if (initialData.skillsWithLevel && initialData.skillsWithLevel.length > 0) {
+        setSkillsWithLevel(initialData.skillsWithLevel);
+      }
+      
+      // Requirements
+      if (initialData.deliverables && initialData.deliverables.length > 0) {
+        setDeliverables(initialData.deliverables);
+      }
+      setProjectDuration(initialData.projectDuration);
+      setProjectDeadline(initialData.projectDeadline);
+      setCollaboratorsNeeded(initialData.collaboratorsNeeded);
+      
+      // Compensation & Benefits
+      setCompensation(initialData.compensation);
+      setCompensationDetails(initialData.compensationDetails);
+      if (initialData.perks && initialData.perks.length > 0) {
+        setPerks(initialData.perks);
+      }
+      if (initialData.tools && initialData.tools.length > 0) {
+        setTools(initialData.tools);
+      }
+      
+      // Additional Details
+      setProjectGoal(initialData.projectGoal);
+      setTargetAudience(initialData.targetAudience);
+      setLocation(initialData.location);
+      setLegalConstraints(initialData.legalConstraints);
+      setBudget(initialData.budget);
+      if (initialData.desiredProfiles && initialData.desiredProfiles.length > 0) {
+        setDesiredProfiles(initialData.desiredProfiles);
+      }
+    }
+  }, [initialData]);
+
+  // Set default deadline to 3 months from now if not editing
+  useEffect(() => {
+    if (!initialData && !projectDeadline) {
+      const date = new Date();
+      date.setMonth(date.getMonth() + 3);
+      setProjectDeadline(date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
+    }
+  }, [initialData, projectDeadline]);
 
   const isFormValid = () => {
     return (
@@ -208,7 +262,7 @@ export function ProjectForm({ onSubmit, loading }: ProjectFormProps) {
               Back
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create Project"}
+              {loading ? "Saving..." : submitLabel}
             </Button>
           </div>
         </TabsContent>
