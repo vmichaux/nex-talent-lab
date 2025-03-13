@@ -36,7 +36,7 @@ export function DashboardOnboarding() {
             <p className="text-lg mb-8 text-zinc-500">Let's get you started on your collaboration journey</p>
             
             <div className="mb-10 text-center max-w-prose">
-              <p className="mb-6 px-[2px] py-[5px]">NexTalent Lab is a platform that connects emerging talent with project builders. Whether you're looking to build your portfolio or find the perfect collaborator for your project, we're here to help.</p>
+              <p className="mb-6 px-px py-0">NexTalent Lab is a platform that connects emerging talent with project builders. Whether you're looking to build your portfolio or find the perfect collaborator for your project, we're here to help.</p>
               <p className="mb-8">Let's set up your profile !</p>
             </div>
             
