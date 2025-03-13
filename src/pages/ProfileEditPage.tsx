@@ -97,7 +97,7 @@ const ProfileEditPage = () => {
             let dateOfBirth = null;
             if (profileData.dateOfBirth) {
               if (typeof profileData.dateOfBirth === 'object' && 'toDate' in profileData.dateOfBirth) {
-                dateOfBirth = profileData.dateOfBirth.toDate();
+                dateOfBirth = (profileData.dateOfBirth as any).toDate();
               } else {
                 dateOfBirth = new Date(profileData.dateOfBirth as any);
               }
@@ -106,13 +106,16 @@ const ProfileEditPage = () => {
             let skills: Skill[] = [];
             if (Array.isArray(profileData.skills)) {
               if (profileData.skills.length > 0) {
-                if (typeof profileData.skills[0] === 'string') {
-                  skills = (profileData.skills as string[]).map(skill => ({
+                const firstSkill = profileData.skills[0];
+                if (typeof firstSkill === 'string') {
+                  const stringSkills = profileData.skills as string[];
+                  skills = stringSkills.map(skill => ({
                     name: skill,
                     level: "Intermediate" as SkillLevel
                   }));
                 } else {
-                  skills = (profileData.skills as Skill[]).map(skill => ({
+                  const objectSkills = profileData.skills as Skill[];
+                  skills = objectSkills.map(skill => ({
                     name: skill.name || "",
                     level: skill.level || "Intermediate"
                   }));
