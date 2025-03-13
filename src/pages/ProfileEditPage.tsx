@@ -88,7 +88,6 @@ import type {
 
 type EmploymentStatus = "seeking" | "employed" | "passive" | "freelance" | "student";
 
-// Update the profile interface to include all new fields
 interface ExtendedProfile {
   firstName: string;
   lastName: string;
@@ -114,7 +113,6 @@ interface ExtendedProfile {
   education: { school: string; degree: string; year: string }[];
   experience: { company: string; position: string; duration: string }[];
   
-  // New fields
   resume: Resume | null;
   portfolios: Portfolio[];
   availability: {
@@ -163,7 +161,6 @@ const ProfileEditPage = () => {
   const [newLanguage, setNewLanguage] = useState<Language>({ name: "", proficiency: "Intermediate" });
   const [newCertification, setNewCertification] = useState<Certification>({ name: "", issuer: "", dateObtained: "" });
   
-  // Initialize the profile with all the new fields
   const [profile, setProfile] = useState<ExtendedProfile>({
     firstName: "",
     lastName: "",
@@ -189,7 +186,6 @@ const ProfileEditPage = () => {
     education: [{ school: "", degree: "", year: "" }],
     experience: [{ company: "", position: "", duration: "" }],
     
-    // New fields with default values
     resume: null,
     portfolios: [],
     availability: {
@@ -752,7 +748,6 @@ const ProfileEditPage = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
-          {/* Contact information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName" className="text-sm font-medium">
@@ -814,9 +809,7 @@ const ProfileEditPage = () => {
         </div>
       </div>
       
-      {/* Additional profile information - below the photo */}
       <div className="space-y-4 pt-4 border-t border-gray-100">
-        {/* Professional Title and Location on the same line */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="title" className="text-sm font-medium">
@@ -845,7 +838,6 @@ const ProfileEditPage = () => {
           </div>
         </div>
 
-        {/* Date of Birth and Sex on the same line */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="dateOfBirth" className="text-sm font-medium flex items-center gap-2">
@@ -1008,3 +1000,51 @@ const ProfileEditPage = () => {
               className="min-h-[80px]"
             />
           </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container max-w-5xl mx-auto px-4 py-8">
+        <Button 
+          variant="ghost" 
+          className="mb-6" 
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
+
+        <div className="flex flex-col md:flex-row justify-between items-start mb-6">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">{isProfileCompleted ? "Edit Profile" : "Complete Your Profile"}</h1>
+            <p className="text-muted-foreground mt-1">
+              {isProfileCompleted 
+                ? "Update your profile information to stay current" 
+                : "Tell us about yourself to get started"}
+            </p>
+          </div>
+          
+          <Button 
+            className="mt-4 md:mt-0" 
+            onClick={handleSaveProfile}
+            disabled={loading}
+          >
+            <Save className="h-4 w-4 mr-2" />
+            Save Profile
+          </Button>
+        </div>
+
+        <div className="space-y-8">
+          {renderBasicInfo()}
+          {renderInterests()}
+          {renderBusinessInfo()}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProfileEditPage;
