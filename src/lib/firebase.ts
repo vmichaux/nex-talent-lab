@@ -1,3 +1,4 @@
+
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, getDocs, query, where, orderBy, limit, doc, getDoc, Timestamp } from "firebase/firestore";
@@ -29,6 +30,7 @@ export interface UserProfile {
   email?: string;
   displayName?: string;
   photoURL?: string;
+  phone?: string;  // Added phone property
   location?: string;
   website?: string;
   social?: {
