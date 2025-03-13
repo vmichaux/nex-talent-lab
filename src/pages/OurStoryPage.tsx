@@ -30,16 +30,16 @@ export default function OurStoryPage() {
           </div>
         </div>
 
-        <section className="py-16 my-8">
+        <section className="py-0">
           <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto rounded-lg overflow-hidden bg-gradient-to-r from-[#c8b6f8] to-[#a7f3d0] p-10">
-              <h2 className="font-bold mb-6 text-center text-4xl text-black">Our Mission</h2>
-              <p className="text-black mb-4 text-center">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="font-bold mb-6 text-center text-4xl">Our Mission</h2>
+              <p className="text-gray-700 mb-4 text-center">
                 At NexTalent Lab, we believe everyone has unique talents that deserve the right platform to shine. 
                 We started with a simple vision: to create a space where talented individuals can connect with 
                 meaningful projects that challenge them and help them grow.
               </p>
-              <p className="text-black mb-6 text-center">
+              <p className="text-gray-700 mb-6 text-center">
                 Our mission is to democratize access to opportunities, regardless of location, background, or 
                 traditional credentials. We're building a future where skills and passion matter more than degrees.
               </p>
