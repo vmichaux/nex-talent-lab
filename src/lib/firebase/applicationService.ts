@@ -2,11 +2,17 @@
 import { collection, getDocs, query, where, orderBy, Timestamp } from "firebase/firestore";
 import { db } from "./config";
 import { Application } from "./types";
+import { toast } from "@/hooks/use-toast";
 
 // Helper function to get user applications
 export const getUserApplications = async (userId: string): Promise<Application[]> => {
   if (!userId) {
     console.error("getUserApplications called without userId");
+    toast({
+      title: "Error fetching applications",
+      description: "User ID is required",
+      variant: "destructive",
+    });
     return [];
   }
   
@@ -42,6 +48,11 @@ export const getUserApplications = async (userId: string): Promise<Application[]
     return applications;
   } catch (error) {
     console.error("Error in getUserApplications:", error);
+    toast({
+      title: "Failed to load applications",
+      description: "Please try again later",
+      variant: "destructive",
+    });
     return [];
   }
 };

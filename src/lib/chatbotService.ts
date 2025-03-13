@@ -1,7 +1,8 @@
 
-import { collection, addDoc, query, where, orderBy, getDocs, serverTimestamp, DocumentData } from "firebase/firestore";
+import { collection, addDoc, query, where, orderBy, getDocs, serverTimestamp, DocumentData, FirestoreError } from "firebase/firestore";
 import { db, auth } from "./firebase/config";
 import OpenAI from "openai";
+import { toast } from "@/hooks/use-toast";
 
 // Types for messages
 export interface ChatMessage {
@@ -14,7 +15,10 @@ export interface ChatMessage {
 
 // Get conversation history for current user
 export const getUserChatHistory = async (): Promise<ChatMessage[]> => {
-  if (!auth.currentUser) return [];
+  if (!auth.currentUser) {
+    console.error("getUserChatHistory called without authenticated user");
+    return [];
+  }
   
   try {
     const messagesCollection = collection(db, "chatMessages");
@@ -31,14 +35,28 @@ export const getUserChatHistory = async (): Promise<ChatMessage[]> => {
       timestamp: doc.data().timestamp?.toDate() || new Date(),
     } as ChatMessage));
   } catch (error) {
-    console.error("Error fetching chat history:", error);
+    const firestoreError = error as FirestoreError;
+    console.error("Error fetching chat history:", firestoreError);
+    toast({
+      title: "Failed to load chat history",
+      description: `Error: ${firestoreError.code || "Unknown error"}`,
+      variant: "destructive",
+    });
     return [];
   }
 };
 
 // Save a message to Firebase
 export const saveMessage = async (content: string, role: "user" | "assistant"): Promise<string | null> => {
-  if (!auth.currentUser) return null;
+  if (!auth.currentUser) {
+    console.error("saveMessage called without authenticated user");
+    toast({
+      title: "Authentication required",
+      description: "You must be logged in to use the chat",
+      variant: "destructive",
+    });
+    return null;
+  }
   
   try {
     const message = {
@@ -52,6 +70,11 @@ export const saveMessage = async (content: string, role: "user" | "assistant"): 
     return docRef.id;
   } catch (error) {
     console.error("Error saving message:", error);
+    toast({
+      title: "Failed to save message",
+      description: "Please try again later",
+      variant: "destructive",
+    });
     return null;
   }
 };
@@ -108,6 +131,33 @@ export const sendMessageToOpenAI = async (message: string): Promise<string> => {
     return completion.choices[0].message.content || "Désolé, je n'ai pas pu générer une réponse.";
   } catch (error) {
     console.error("Error sending message to AI:", error);
-    return "Désolé, j'ai rencontré une erreur lors du traitement de votre demande. Veuillez vérifier votre configuration API.";
+    
+    let errorMessage = "Désolé, j'ai rencontré une erreur lors du traitement de votre demande.";
+    
+    // Handle specific OpenAI error types
+    if (error instanceof OpenAI.APIError) {
+      console.error("OpenAI API Error:", {
+        status: error.status,
+        message: error.message,
+        code: error.code,
+        type: error.type
+      });
+      
+      if (error.status === 401) {
+        errorMessage = "Erreur d'authentification avec l'API OpenAI. Veuillez vérifier votre clé API.";
+      } else if (error.status === 429) {
+        errorMessage = "Limite de requêtes atteinte. Veuillez réessayer plus tard.";
+      } else if (error.status === 500) {
+        errorMessage = "Erreur serveur OpenAI. Veuillez réessayer plus tard.";
+      }
+    }
+    
+    toast({
+      title: "Erreur de communication avec l'IA",
+      description: errorMessage,
+      variant: "destructive",
+    });
+    
+    return errorMessage;
   }
 };
