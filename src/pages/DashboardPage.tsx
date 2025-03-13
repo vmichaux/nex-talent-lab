@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -10,7 +9,6 @@ import { TalentDashboard } from "@/components/dashboard/TalentDashboard";
 import { BuilderDashboard } from "@/components/dashboard/BuilderDashboard";
 import { DualRoleDashboard } from "@/components/dashboard/DualRoleDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 const DashboardPage = () => {
   const {
     isLoggedIn,
@@ -29,9 +27,8 @@ const DashboardPage = () => {
       // Capitalize first letter
       return emailUsername.charAt(0).toUpperCase() + emailUsername.slice(1);
     }
-    return "friend"; // Fallback if no name or email is available
+    return "My"; // Fallback if no name or email is available
   };
-
   useEffect(() => {
     // Redirect non-logged-in users to the onboarding route
     if (!isLoggedIn) {
@@ -55,12 +52,10 @@ const DashboardPage = () => {
   const handleCompleteOnboarding = () => {
     setShowWelcome(false);
   };
-
   const handleRoleChange = (role: "talent" | "builder" | "both") => {
     setActiveRole(role);
     localStorage.setItem("userRole", role === "builder" ? "entrepreneur" : role);
   };
-
   return <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
@@ -78,18 +73,14 @@ const DashboardPage = () => {
             
             <div className="container mx-auto px-4 py-12">
               <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-6 py-[64px]">
-                <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Dashboard</div>
+                <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Let's go  {username} !</div>
                 
                 <h1 className="mb-4 text-3xl font-bold tracking-tight custom-gradient-text md:text-5xl">
                   My Journey
                 </h1>
                 
-                <p className="text-lg text-gray-600 md:text-xl max-w-3xl mb-2">
+                <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
                   Track your projects, connections, and activities all in one place.
-                </p>
-                
-                <p className="text-xl font-medium text-primary md:text-2xl">
-                  Let's go {getUserName()}!
                 </p>
               </div>
 
@@ -130,5 +121,4 @@ const DashboardPage = () => {
       <Footer />
     </div>;
 };
-
 export default DashboardPage;
