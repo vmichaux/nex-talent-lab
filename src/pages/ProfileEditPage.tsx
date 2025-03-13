@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -138,7 +137,6 @@ const ProfileEditPage = () => {
             console.log("Structured profile data:", loadedProfile);
             setProfile(loadedProfile);
             
-            // Set the active role based on stored preference
             const savedRole = localStorage.getItem("userRole");
             if (savedRole) {
               if (savedRole === "entrepreneur") {
@@ -257,7 +255,6 @@ const ProfileEditPage = () => {
 
   const handleRoleChange = (role: "talent" | "builder" | "dual") => {
     setActiveRole(role);
-    // Store the role preference in localStorage
     localStorage.setItem("userRole", role === "builder" ? "entrepreneur" : role === "dual" ? "both" : "talent");
   };
 
@@ -269,7 +266,6 @@ const ProfileEditPage = () => {
     const file = e.target.files?.[0];
     if (!file || !currentUser) return;
 
-    // Basic validation
     if (!file.type.startsWith('image/')) {
       toast({
         title: "Invalid file type",
@@ -279,7 +275,7 @@ const ProfileEditPage = () => {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+    if (file.size > 5 * 1024 * 1024) {
       toast({
         title: "File too large",
         description: "Please select an image smaller than 5MB.",
@@ -290,16 +286,12 @@ const ProfileEditPage = () => {
 
     setUploadingImage(true);
     try {
-      // Create a reference to the file in Firebase Storage
       const storageRef = ref(storage, `profilePictures/${currentUser.uid}/${Date.now()}_${file.name}`);
       
-      // Upload the file
       const snapshot = await uploadBytes(storageRef, file);
       
-      // Get download URL
       const downloadURL = await getDownloadURL(snapshot.ref);
       
-      // Update profile state
       setProfile(prev => ({
         ...prev,
         profilePicture: downloadURL
@@ -353,10 +345,9 @@ const ProfileEditPage = () => {
     }
   };
 
-  // Render the profile picture section
   const renderProfilePicture = () => (
-    <div className="mb-8 flex flex-col items-center">
-      <Card className="p-6 w-full max-w-md mx-auto text-center">
+    <div className="flex flex-col items-center">
+      <Card className="p-6 w-full max-w-md text-center">
         <div className="flex flex-col items-center gap-6">
           <div className="relative group cursor-pointer" onClick={handleProfilePictureClick}>
             <Avatar className="h-32 w-32 border-4 border-white shadow-lg">
@@ -406,9 +397,8 @@ const ProfileEditPage = () => {
     </div>
   );
 
-  // Render the basic information section (common to all roles)
   const renderBasicInfo = () => (
-    <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -462,9 +452,7 @@ const ProfileEditPage = () => {
             placeholder="San Francisco, CA"
           />
         </div>
-      </div>
 
-      <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="bio" className="text-sm font-medium">
             Bio
@@ -479,10 +467,13 @@ const ProfileEditPage = () => {
           />
         </div>
       </div>
+      
+      <div className="flex items-center justify-center">
+        {renderProfilePicture()}
+      </div>
     </div>
   );
 
-  // Render the business information section
   const renderBusinessInfo = () => (
     <div className="border-t border-gray-200 pt-6 mt-6">
       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -614,7 +605,6 @@ const ProfileEditPage = () => {
     </div>
   );
 
-  // Render the skills section
   const renderSkills = () => (
     <div className="border-t border-gray-200 pt-6 mt-6">
       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -642,7 +632,6 @@ const ProfileEditPage = () => {
     </div>
   );
 
-  // Render the education section
   const renderEducation = () => (
     <div className="border-t border-gray-200 pt-6 mt-6">
       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -688,7 +677,6 @@ const ProfileEditPage = () => {
     </div>
   );
 
-  // Render the experience section
   const renderExperience = () => (
     <div className="border-t border-gray-200 pt-6 mt-6">
       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -782,7 +770,6 @@ const ProfileEditPage = () => {
                   
                   <TabsContent value="talent" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
-                      {renderProfilePicture()}
                       {renderBasicInfo()}
                       {renderSkills()}
                       {renderEducation()}
@@ -810,7 +797,6 @@ const ProfileEditPage = () => {
                   
                   <TabsContent value="builder" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
-                      {renderProfilePicture()}
                       {renderBasicInfo()}
                       {renderBusinessInfo()}
                       
@@ -836,7 +822,6 @@ const ProfileEditPage = () => {
                   
                   <TabsContent value="dual" className="mt-6">
                     <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
-                      {renderProfilePicture()}
                       {renderBasicInfo()}
                       {renderBusinessInfo()}
                       {renderSkills()}
