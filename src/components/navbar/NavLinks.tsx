@@ -12,7 +12,7 @@ interface NavLinksProps {
 export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, onItemClick }: NavLinksProps) {
   const linkClass = isMobile 
     ? "block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2"
-    : "font-medium hover:text-primary transition-colors flex items-center gap-1";
+    : "font-medium hover:text-primary transition-colors flex items-center gap-2";
 
   const handleClick = () => {
     if (onItemClick) onItemClick();
@@ -23,6 +23,7 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
       <>
         <Link to="/dashboard" className={linkClass} onClick={handleClick}>
           <Home className="h-4 w-4" />
+          Dashboard
         </Link>
         <Link to="/explore-projects" className={linkClass} onClick={handleClick}>
           <Search className="h-4 w-4" />
@@ -43,9 +44,11 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
   return (
     <>
       <Link to="/" className={linkClass} onClick={handleClick}>
+        <Home className="h-4 w-4" />
         Home
       </Link>
       <Link to="/explore" className={linkClass} onClick={handleClick}>
+        <Search className="h-4 w-4" />
         Explore
       </Link>
       <Link 
@@ -56,17 +59,22 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
           handleClick();
         }}
       >
+        <User className="h-4 w-4" />
+        Join
       </Link>
       <Link to="/how-it-works" className={linkClass} onClick={handleClick}>
+        <Home className="h-4 w-4" />
         How It Works
       </Link>
       <Link to="/pricing" className={linkClass} onClick={handleClick}>
+        <Home className="h-4 w-4" />
         Pricing
       </Link>
       <Link to="/about" className={linkClass} onClick={handleClick}>
+        <Home className="h-4 w-4" />
         About
       </Link>
-      <Link to="/contact-sales" className={isMobile ? linkClass : `${linkClass} flex items-center gap-1`} onClick={handleClick}>
+      <Link to="/contact-sales" className={linkClass} onClick={handleClick}>
         <Phone className="h-4 w-4" />
         Contact Sales
       </Link>
