@@ -30,7 +30,8 @@ import {
   Heart,
   Plus,
   Check,
-  X
+  X,
+  Pencil
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -45,11 +46,12 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Badge } from "@/components/ui/badge";
 
 type SkillLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
 
@@ -69,6 +71,7 @@ const ProfileEditPage = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "dual">("talent");
   const [newInterest, setNewInterest] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
   
   const [profile, setProfile] = useState({
     firstName: "",
@@ -199,6 +202,9 @@ const ProfileEditPage = () => {
               }
             }
             
+            // Only set edit mode to false for completed profiles
+            setIsEditing(!isProfileCompleted);
+            
             toast({
               title: "Profile loaded",
               description: "Your profile information has been loaded successfully.",
@@ -211,6 +217,9 @@ const ProfileEditPage = () => {
                 skills: [{ name: "", level: "Intermediate" }]
               }));
             }
+            
+            // If no profile, start in edit mode
+            setIsEditing(true);
             
             console.log("No profile data found, using empty profile");
             toast({
@@ -233,7 +242,7 @@ const ProfileEditPage = () => {
     };
     
     fetchUserProfile();
-  }, [currentUser, toast]);
+  }, [currentUser, toast, isProfileCompleted]);
   
   useEffect(() => {
     if (!isLoggedIn) {
@@ -345,7 +354,9 @@ const ProfileEditPage = () => {
   };
 
   const handleProfilePictureClick = () => {
-    fileInputRef.current?.click();
+    if (isEditing) {
+      fileInputRef.current?.click();
+    }
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -445,7 +456,8 @@ const ProfileEditPage = () => {
         description: "Your profile has been updated successfully.",
       });
       
-      navigate("/dashboard");
+      // Switch to view mode after saving
+      setIsEditing(false);
     } catch (error) {
       console.error("Error saving profile:", error);
       toast({
@@ -456,11 +468,268 @@ const ProfileEditPage = () => {
     }
   };
 
+  // View Mode Component
+  const renderProfileView = () => {
+    return (
+      <div className="space-y-8">
+        <Card className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold">
+                  {profile.firstName} {profile.lastName}
+                </h2>
+                <Button 
+                  onClick={() => setIsEditing(true)} 
+                  variant="outline"
+                  className="gap-2"
+                >
+                  <Pencil className="h-4 w-4" />
+                  Modify Profile
+                </Button>
+              </div>
+              
+              {profile.title && (
+                <div className="text-lg text-muted-foreground font-medium">
+                  {profile.title}
+                </div>
+              )}
+              
+              <div className="space-y-3 mt-4">
+                {profile.email && (
+                  <div className="flex items-center gap-2">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <span>{profile.email}</span>
+                  </div>
+                )}
+                
+                {profile.phoneNumber && (
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    <span>{profile.phoneNumber}</span>
+                  </div>
+                )}
+                
+                {profile.location && (
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-muted-foreground" />
+                    <span>{profile.location}</span>
+                  </div>
+                )}
+              </div>
+              
+              {profile.bio && (
+                <div className="mt-4">
+                  <h3 className="text-md font-medium mb-2">Bio</h3>
+                  <p className="text-muted-foreground">{profile.bio}</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="flex items-center justify-center">
+              <div className="relative">
+                <Avatar className="h-32 w-32 border-4 border-white shadow-lg">
+                  {profile.profilePicture ? (
+                    <AvatarImage src={profile.profilePicture} alt={`${profile.firstName} ${profile.lastName}`} />
+                  ) : (
+                    <AvatarFallback className="bg-primary/10 text-primary text-4xl">
+                      {profile.firstName && profile.lastName 
+                        ? `${profile.firstName[0]}${profile.lastName[0]}`
+                        : "?"}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+              </div>
+            </div>
+          </div>
+        </Card>
+        
+        {/* Skills */}
+        {activeRole === "talent" || activeRole === "dual" ? (
+          <>
+            {profile.skills.length > 0 && profile.skills.some(skill => skill.name) && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <UserPlus className="h-5 w-5 text-primary" />
+                    Skills
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.skills.map((skill, index) => 
+                      skill.name ? (
+                        <div key={index} className="flex items-center gap-2 bg-primary/5 px-3 py-1.5 rounded-full">
+                          <span>{skill.name}</span>
+                          <span className="flex">
+                            {Array.from({ length: 
+                              skill.level === "Beginner" ? 1 : 
+                              skill.level === "Intermediate" ? 2 : 
+                              skill.level === "Advanced" ? 3 : 4 
+                            }).map((_, i) => (
+                              <Star key={i} className="h-3 w-3 text-yellow-400" fill="#facc15" />
+                            ))}
+                          </span>
+                        </div>
+                      ) : null
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            
+            {/* Education */}
+            {profile.education.length > 0 && profile.education.some(edu => edu.school) && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <GraduationCap className="h-5 w-5 text-primary" />
+                    Education
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {profile.education.map((edu, index) => 
+                      edu.school ? (
+                        <div key={index} className="border-l-2 border-primary/30 pl-4 py-1">
+                          <h4 className="font-semibold">{edu.school}</h4>
+                          <div className="text-sm text-muted-foreground">
+                            {edu.degree}
+                            {edu.year && ` • ${edu.year}`}
+                          </div>
+                        </div>
+                      ) : null
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            
+            {/* Experience */}
+            {profile.experience.length > 0 && profile.experience.some(exp => exp.company) && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Briefcase className="h-5 w-5 text-primary" />
+                    Experience
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {profile.experience.map((exp, index) => 
+                      exp.company ? (
+                        <div key={index} className="border-l-2 border-primary/30 pl-4 py-1">
+                          <h4 className="font-semibold">{exp.company}</h4>
+                          <div className="text-sm text-muted-foreground">
+                            {exp.position}
+                            {exp.duration && ` • ${exp.duration}`}
+                          </div>
+                        </div>
+                      ) : null
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </>
+        ) : null}
+        
+        {/* Business Information */}
+        {(activeRole === "builder" || activeRole === "dual") && profile.business.companyName && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building className="h-5 w-5 text-primary" />
+                Business Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold">{profile.business.companyName}</h4>
+                  <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mt-1">
+                    {profile.business.foundedYear && (
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        Founded {profile.business.foundedYear}
+                      </div>
+                    )}
+                    {profile.business.industry && (
+                      <div className="flex items-center gap-1">
+                        <Tag className="h-4 w-4" />
+                        {profile.business.industry}
+                      </div>
+                    )}
+                    {profile.business.employees && (
+                      <div className="flex items-center gap-1">
+                        <Users className="h-4 w-4" />
+                        {profile.business.employees} employees
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {profile.business.description && (
+                  <div>
+                    <h5 className="font-medium mb-1">Description</h5>
+                    <p className="text-sm text-muted-foreground">{profile.business.description}</p>
+                  </div>
+                )}
+                
+                {profile.business.projectNeeds && (
+                  <div>
+                    <h5 className="font-medium mb-1">Project Needs</h5>
+                    <p className="text-sm text-muted-foreground">{profile.business.projectNeeds}</p>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+        
+        {/* Interests */}
+        {profile.interests.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Heart className="h-5 w-5 text-primary" />
+                Interests
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2">
+                {profile.interests.map((interest, index) => (
+                  <Badge key={index} variant="secondary" className="text-sm">
+                    {interest}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+        
+        <div className="flex justify-end mt-6">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/dashboard')}
+            className="gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   const renderProfilePicture = () => (
     <div className="flex flex-col items-center justify-center h-full">
       <Card className="p-6 w-full max-w-md">
         <div className="flex flex-col items-center gap-6">
-          <div className="relative group cursor-pointer" onClick={handleProfilePictureClick}>
+          <div className={cn(
+            "relative group", 
+            isEditing && "cursor-pointer"
+          )} onClick={handleProfilePictureClick}>
             <Avatar className="h-32 w-32 border-4 border-white shadow-lg">
               {profile.profilePicture ? (
                 <AvatarImage src={profile.profilePicture} alt={`${profile.firstName} ${profile.lastName}`} />
@@ -472,37 +741,41 @@ const ProfileEditPage = () => {
                 </AvatarFallback>
               )}
             </Avatar>
-            <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-              <Camera className="h-8 w-8 text-white" />
-            </div>
+            {isEditing && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                <Camera className="h-8 w-8 text-white" />
+              </div>
+            )}
           </div>
           
-          <div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="gap-2"
-              onClick={handleProfilePictureClick}
-              disabled={uploadingImage}
-            >
-              {uploadingImage ? (
-                <div className="animate-pulse">Uploading...</div>
-              ) : (
-                <>
-                  <ImagePlus className="h-4 w-4" />
-                  {profile.profilePicture ? "Change Picture" : "Add Picture"}
-                </>
-              )}
-            </Button>
-            <input 
-              type="file" 
-              ref={fileInputRef} 
-              className="hidden" 
-              accept="image/*" 
-              onChange={handleFileChange}
-              disabled={uploadingImage}
-            />
-          </div>
+          {isEditing && (
+            <div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2"
+                onClick={handleProfilePictureClick}
+                disabled={uploadingImage}
+              >
+                {uploadingImage ? (
+                  <div className="animate-pulse">Uploading...</div>
+                ) : (
+                  <>
+                    <ImagePlus className="h-4 w-4" />
+                    {profile.profilePicture ? "Change Picture" : "Add Picture"}
+                  </>
+                )}
+              </Button>
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                className="hidden" 
+                accept="image/*" 
+                onChange={handleFileChange}
+                disabled={uploadingImage}
+              />
+            </div>
+          )}
         </div>
       </Card>
     </div>
@@ -715,486 +988,3 @@ const ProfileEditPage = () => {
                 <SelectItem value="female">Female</SelectItem>
                 <SelectItem value="nonbinary">Non-binary</SelectItem>
                 <SelectItem value="preferNotToSay">Prefer not to say</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="bio" className="text-sm font-medium">
-            Bio
-          </Label>
-          <Textarea
-            id="bio"
-            value={profile.bio}
-            onChange={(e) => handleInputChange("bio", e.target.value)}
-            placeholder="Tell us about yourself..."
-            rows={4}
-            className="min-h-[100px] w-full"
-          />
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderBusinessInfo = () => (
-    <div className="border-t border-gray-200 pt-6 mt-6">
-      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <Building className="h-5 w-5 text-primary" />
-        Business Information
-      </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="companyName" className="text-sm font-medium">
-              Company Name
-            </Label>
-            <Input
-              id="companyName"
-              type="text"
-              value={profile.business.companyName}
-              onChange={(e) => handleBusinessChange("companyName", e.target.value)}
-              placeholder="Acme Inc."
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="foundedYear" className="text-sm font-medium">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                Year Founded
-              </div>
-            </Label>
-            <Input
-              id="foundedYear"
-              type="text"
-              value={profile.business.foundedYear}
-              onChange={(e) => handleBusinessChange("foundedYear", e.target.value)}
-              placeholder="2015"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="employees" className="text-sm font-medium">
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                Number of Employees
-              </div>
-            </Label>
-            <Select
-              value={profile.business.employees}
-              onValueChange={(value) => handleBusinessChange("employees", value)}
-            >
-              <SelectTrigger id="employees" className="w-full">
-                <SelectValue placeholder="Select company size" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="0-1">0-1</SelectItem>
-                <SelectItem value="1-10">1-10</SelectItem>
-                <SelectItem value="10-50">10-50</SelectItem>
-                <SelectItem value="50-200">50-200</SelectItem>
-                <SelectItem value="200+">200+</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="industry" className="text-sm font-medium">
-              <div className="flex items-center gap-2">
-                <Tag className="h-4 w-4" />
-                Industry
-              </div>
-            </Label>
-            <Input
-              id="industry"
-              type="text"
-              value={profile.business.industry}
-              onChange={(e) => handleBusinessChange("industry", e.target.value)}
-              placeholder="Technology, Healthcare, Education, etc."
-            />
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="businessDescription" className="text-sm font-medium">
-              Company Description
-            </Label>
-            <Textarea
-              id="businessDescription"
-              value={profile.business.description}
-              onChange={(e) => handleBusinessChange("description", e.target.value)}
-              placeholder="Tell us about your business..."
-              rows={3}
-              className="min-h-[80px]"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="projectNeeds" className="text-sm font-medium">
-              <div className="flex items-center gap-2">
-                <FileText className="h-4 w-4" />
-                Project Needs
-              </div>
-            </Label>
-            <Textarea
-              id="projectNeeds"
-              value={profile.business.projectNeeds}
-              onChange={(e) => handleBusinessChange("projectNeeds", e.target.value)}
-              placeholder="Describe the types of projects or talent you're looking for..."
-              rows={3}
-              className="min-h-[80px]"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="billingDetails" className="text-sm font-medium">
-              <div className="flex items-center gap-2">
-                <CreditCard className="h-4 w-4" />
-                Billing Details
-              </div>
-            </Label>
-            <Textarea
-              id="billingDetails"
-              value={profile.business.billingDetails}
-              onChange={(e) => handleBusinessChange("billingDetails", e.target.value)}
-              placeholder="Add information for payments and invoicing..."
-              rows={3}
-              className="min-h-[80px]"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderSkillLevelIcon = (level: SkillLevel) => {
-    switch(level) {
-      case "Beginner":
-        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /></div>;
-      case "Intermediate":
-        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /></div>;
-      case "Advanced":
-        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /></div>;
-      case "Expert":
-        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /></div>;
-      default:
-        return null;
-    }
-  };
-
-  const renderSkills = () => (
-    <div className="border-t border-gray-200 pt-6 mt-6">
-      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <UserPlus className="h-5 w-5 text-primary" />
-        Skills
-      </h3>
-      <div className="grid grid-cols-1 gap-4 mb-6">
-        {profile.skills.map((skill, index) => (
-          <div key={`skill-${index}`} className="flex flex-col md:flex-row gap-2">
-            <div className="flex-1">
-              <input
-                type="text"
-                value={skill.name}
-                onChange={(e) => handleSkillNameChange(index, e.target.value)}
-                placeholder="e.g., UI Design, JavaScript"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </div>
-            
-            <div className="flex gap-2 items-center">
-              <Select
-                value={skill.level}
-                onValueChange={(value) => handleSkillLevelChange(index, value as SkillLevel)}
-              >
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="Select level" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Beginner">
-                    <div className="flex items-center gap-2">
-                      <span>Beginner</span>
-                      {renderSkillLevelIcon("Beginner")}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="Intermediate">
-                    <div className="flex items-center gap-2">
-                      <span>Intermediate</span>
-                      {renderSkillLevelIcon("Intermediate")}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="Advanced">
-                    <div className="flex items-center gap-2">
-                      <span>Advanced</span>
-                      {renderSkillLevelIcon("Advanced")}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="Expert">
-                    <div className="flex items-center gap-2">
-                      <span>Expert</span>
-                      {renderSkillLevelIcon("Expert")}
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              
-              <div className="flex gap-2">
-                <Button 
-                  onClick={() => removeSkill(index)} 
-                  variant="outline" 
-                  size="sm" 
-                  className="px-2"
-                  type="button"
-                >
-                  ✕
-                </Button>
-                
-                {index === profile.skills.length - 1 && (
-                  <Button 
-                    onClick={addSkill} 
-                    variant="outline" 
-                    size="sm" 
-                    className="whitespace-nowrap"
-                    type="button"
-                  >
-                    + Add Skill
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderEducation = () => (
-    <div className="border-t border-gray-200 pt-6 mt-6">
-      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <GraduationCap className="h-5 w-5 text-primary" />
-        Education
-      </h3>
-      <div className="space-y-6 mb-6">
-        {profile.education.map((edu, index) => (
-          <div key={`edu-${index}`} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                value={edu.school}
-                onChange={(e) => handleEducationChange(index, "school", e.target.value)}
-                placeholder="School/University"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              <input
-                type="text"
-                value={edu.degree}
-                onChange={(e) => handleEducationChange(index, "degree", e.target.value)}
-                placeholder="Degree"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </div>
-            <div className="flex gap-4">
-              <input
-                type="text"
-                value={edu.year}
-                onChange={(e) => handleEducationChange(index, "year", e.target.value)}
-                placeholder="Year"
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              {index === profile.education.length - 1 && (
-                <Button onClick={addEducation} variant="outline" size="sm" className="whitespace-nowrap">
-                  + Add Education
-                </Button>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderExperience = () => (
-    <div className="border-t border-gray-200 pt-6 mt-6">
-      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <Briefcase className="h-5 w-5 text-primary" />
-        Experience
-      </h3>
-      <div className="space-y-6 mb-6">
-        {profile.experience.map((exp, index) => (
-          <div key={`exp-${index}`} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                value={exp.company}
-                onChange={(e) => handleExperienceChange(index, "company", e.target.value)}
-                placeholder="Company"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              <input
-                type="text"
-                value={exp.position}
-                onChange={(e) => handleExperienceChange(index, "position", e.target.value)}
-                placeholder="Position"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </div>
-            <div className="flex gap-4">
-              <input
-                type="text"
-                value={exp.duration}
-                onChange={(e) => handleExperienceChange(index, "duration", e.target.value)}
-                placeholder="Duration (e.g., 2021-2023)"
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              {index === profile.experience.length - 1 && (
-                <Button onClick={addExperience} variant="outline" size="sm" className="whitespace-nowrap">
-                  + Add Experience
-                </Button>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1">
-        <div className="relative overflow-hidden bg-white">
-          <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
-          
-          <div className="container mx-auto px-4 py-24 md:py-32">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
-              <div className="mb-6 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                {isProfileCompleted ? "Account Management" : "Profile Setup"}
-              </div>
-              
-              <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl custom-gradient-text">
-                Manage My Profile
-              </h1>
-              
-              <p className="text-lg text-gray-600 md:text-xl max-w-3xl mb-8">
-                {isProfileCompleted 
-                  ? "Update your information to keep your profile current and relevant."
-                  : "Tell us about yourself so we can match you with the right opportunities."}
-              </p>
-            </div>
-            
-            {loading ? (
-              <div className="max-w-3xl mx-auto text-center p-10">
-                <div className="animate-pulse space-y-4">
-                  <div className="h-6 bg-gray-200 rounded w-3/4 mx-auto"></div>
-                  <div className="h-32 bg-gray-200 rounded w-full mx-auto"></div>
-                  <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto"></div>
-                </div>
-                <p className="mt-6 text-gray-500">Loading your profile...</p>
-              </div>
-            ) : (
-              <div className="max-w-3xl mx-auto">
-                <Tabs 
-                  value={activeRole} 
-                  onValueChange={(value) => handleRoleChange(value as "talent" | "builder" | "dual")}
-                  className="w-full mb-8"
-                >
-                  <TabsList className="grid grid-cols-3 w-full">
-                    <TabsTrigger value="talent">Talent Profile</TabsTrigger>
-                    <TabsTrigger value="builder">Builder Profile</TabsTrigger>
-                    <TabsTrigger value="dual">Dual Role Profile</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="talent" className="mt-6">
-                    <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
-                      {renderBasicInfo()}
-                      {renderSkills()}
-                      {renderEducation()}
-                      {renderExperience()}
-                      {renderInterests()}
-                      
-                      <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
-                        <Button 
-                          variant="outline" 
-                          onClick={() => navigate('/dashboard')}
-                          className="gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          Back to Dashboard
-                        </Button>
-                        <Button 
-                          onClick={handleSaveProfile}
-                          className="gap-2"
-                        >
-                          <Save className="h-4 w-4" />
-                          {isProfileCompleted ? "Update Profile" : "Save Profile"}
-                        </Button>
-                      </div>
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="builder" className="mt-6">
-                    <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
-                      {renderBasicInfo()}
-                      {renderBusinessInfo()}
-                      {renderInterests()}
-                      
-                      <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
-                        <Button 
-                          variant="outline" 
-                          onClick={() => navigate('/dashboard')}
-                          className="gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          Back to Dashboard
-                        </Button>
-                        <Button 
-                          onClick={handleSaveProfile}
-                          className="gap-2"
-                        >
-                          <Save className="h-4 w-4" />
-                          {isProfileCompleted ? "Update Profile" : "Save Profile"}
-                        </Button>
-                      </div>
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="dual" className="mt-6">
-                    <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
-                      {renderBasicInfo()}
-                      {renderBusinessInfo()}
-                      {renderSkills()}
-                      {renderEducation()}
-                      {renderExperience()}
-                      {renderInterests()}
-                      
-                      <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
-                        <Button 
-                          variant="outline" 
-                          onClick={() => navigate('/dashboard')}
-                          className="gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          Back to Dashboard
-                        </Button>
-                        <Button 
-                          onClick={handleSaveProfile}
-                          className="gap-2"
-                        >
-                          <Save className="h-4 w-4" />
-                          {isProfileCompleted ? "Update Profile" : "Save Profile"}
-                        </Button>
-                      </div>
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </div>
-  );
-};
-
-export default ProfileEditPage;
