@@ -9,6 +9,7 @@ export function TestProfileIndicator() {
   const { activeTestProfile, switchToMainProfile } = useAuth();
   const navigate = useNavigate();
   
+  // If there's no active test profile, don't render anything
   if (!activeTestProfile) return null;
   
   return (
@@ -33,7 +34,7 @@ export function TestProfileIndicator() {
         variant="outline"
         size="sm"
         className="text-xs bg-purple-700 text-white hover:bg-purple-800 border-purple-500"
-        onClick={switchToMainProfile}
+        onClick={() => switchToMainProfile()}
       >
         <Icons.user className="h-3 w-3 mr-1" />
         Switch to Main
