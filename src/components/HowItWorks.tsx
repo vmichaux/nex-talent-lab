@@ -41,8 +41,8 @@ export function HowItWorks({
               
               {index < steps.length - 1 && <div className="hidden lg:block absolute h-0.5 bg-gray-200 w-full top-7 left-1/2 -z-10"></div>}
               
-              <h3 className="text-xl font-semibold mb-2 py-[8px]">{step.title}</h3>
-              <p className="text-gray-600 mb-4 my-[21px]">{step.description}</p>
+              <h3 className="text-xl font-semibold mb-2 py-[8px] text-left">{step.title}</h3>
+              <p className="text-gray-600 mb-4 my-[21px] text-left">{step.description}</p>
               
               {/* Only show details on the dedicated page */}
               {showDetails && <ul className="space-y-2 text-sm text-gray-600">
