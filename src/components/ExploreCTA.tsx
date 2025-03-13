@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,7 @@ export function ExploreCTA() {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" className="border-white text-white hover:bg-white/10">
+                <Button asChild variant="outline" className="border-white bg-white/5 text-white hover:bg-white/10">
                   <Link to="/how-it-works">
                     How It Works
                   </Link>
