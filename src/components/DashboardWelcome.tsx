@@ -1,6 +1,7 @@
+
 import { ArrowRight, Check, UserPlus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 type StepProps = {
   number: number;
   title: string;
@@ -114,6 +115,10 @@ export function DashboardWelcome() {
                 <p className="text-sm text-gray-600">Track your skills development over time</p>
               </div>
             </div>
+          </div>
+          
+          <div className="text-center mt-8">
+            <p>Need help getting started? <Link to="/contact-sales" className="text-primary font-medium">Contact our support team</Link></p>
           </div>
         </div>
       </div>

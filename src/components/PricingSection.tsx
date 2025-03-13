@@ -86,7 +86,8 @@ export function PricingSection() {
       notIncluded: [],
       buttonText: "Contact Sales",
       buttonVariant: "outline",
-      popular: false
+      popular: false,
+      linkTo: "/contact-sales"
     },
     {
       name: "Incubator",
@@ -107,7 +108,8 @@ export function PricingSection() {
       buttonText: "Apply Now",
       buttonVariant: "outline",
       popular: false,
-      special: true
+      special: true,
+      linkTo: "/contact-sales"
     }
   ];
 
@@ -141,7 +143,7 @@ export function PricingSection() {
                 </div>
                 <p className="text-gray-600 mb-6">{plan.description}</p>
                 
-                <Link to={plan.special ? "/contact" : "/signup"}>
+                <Link to={plan.linkTo || "/signup"}>
                   <Button 
                     variant={plan.buttonVariant === "default" ? "default" : "outline"} 
                     className={`w-full ${plan.popular ? "bg-primary hover:bg-primary/90" : plan.special ? "border-purple-400 text-purple-600 hover:bg-purple-50" : ""}`}
@@ -174,7 +176,7 @@ export function PricingSection() {
         </div>
 
         <div className="text-center mt-12 text-gray-600">
-          <p>Need a custom solution? <a href="#" className="text-primary font-medium">Contact our sales team</a></p>
+          <p>Need a custom solution? <Link to="/contact-sales" className="text-primary font-medium">Contact our sales team</Link></p>
         </div>
       </div>
     </section>
