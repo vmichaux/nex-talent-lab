@@ -47,7 +47,7 @@ export function DashboardOnboarding() {
       case 2:
         return <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
             <h1 className="text-4xl font-bold mb-6 custom-gradient-text">Choose Your Role</h1>
-            <p className="text-lg mb-8 text-zinc-900">Are you a talent looking for opportunities or a project builder? Why not both?</p>
+            <p className="text-lg mb-8 text-zinc-900">Are you a talent looking for opportunities or an entrepreneur? Why not both?</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-10">
               {/* Talent Card */}
