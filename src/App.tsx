@@ -21,6 +21,7 @@ import DashboardPage from "./pages/DashboardPage";
 import MessagesPage from "./pages/MessagesPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
 import ApplyProjectPage from "./pages/ApplyProjectPage";
+import ReviewApplicationsPage from "./pages/ReviewApplicationsPage";
 import ProfileEditPage from "./pages/ProfileEditPage";
 import ContactSalesPage from "./pages/ContactSalesPage";
 import { DashboardOnboarding } from "./components/DashboardOnboarding";
@@ -60,6 +61,7 @@ function AppContent() {
           <Route path="/about" element={<OurStoryPage />} />
           <Route path="/contact-sales" element={<ContactSalesPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/requests" element={<ReviewApplicationsPage />} />
           {/* Special route for onboarding without Navbar */}
           <Route path="/onboarding" element={<DashboardOnboarding />} />
           <Route path="/messages" element={<MessagesPage />} />
