@@ -398,78 +398,80 @@ const ProfileEditPage = () => {
   );
 
   const renderBasicInfo = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="firstName" className="text-sm font-medium">
+                First Name
+              </Label>
+              <Input
+                id="firstName"
+                type="text"
+                value={profile.firstName}
+                onChange={(e) => handleInputChange("firstName", e.target.value)}
+                placeholder="Jane"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lastName" className="text-sm font-medium">
+                Last Name
+              </Label>
+              <Input
+                id="lastName"
+                type="text"
+                value={profile.lastName}
+                onChange={(e) => handleInputChange("lastName", e.target.value)}
+                placeholder="Doe"
+              />
+            </div>
+          </div>
+
           <div className="space-y-2">
-            <Label htmlFor="firstName" className="text-sm font-medium">
-              First Name
+            <Label htmlFor="title" className="text-sm font-medium">
+              Professional Title
             </Label>
             <Input
-              id="firstName"
+              id="title"
               type="text"
-              value={profile.firstName}
-              onChange={(e) => handleInputChange("firstName", e.target.value)}
-              placeholder="Jane"
+              value={profile.title}
+              onChange={(e) => handleInputChange("title", e.target.value)}
+              placeholder="UX Designer"
             />
           </div>
+
           <div className="space-y-2">
-            <Label htmlFor="lastName" className="text-sm font-medium">
-              Last Name
+            <Label htmlFor="location" className="text-sm font-medium">
+              Location
             </Label>
             <Input
-              id="lastName"
+              id="location"
               type="text"
-              value={profile.lastName}
-              onChange={(e) => handleInputChange("lastName", e.target.value)}
-              placeholder="Doe"
+              value={profile.location}
+              onChange={(e) => handleInputChange("location", e.target.value)}
+              placeholder="San Francisco, CA"
             />
           </div>
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="title" className="text-sm font-medium">
-            Professional Title
-          </Label>
-          <Input
-            id="title"
-            type="text"
-            value={profile.title}
-            onChange={(e) => handleInputChange("title", e.target.value)}
-            placeholder="UX Designer"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="location" className="text-sm font-medium">
-            Location
-          </Label>
-          <Input
-            id="location"
-            type="text"
-            value={profile.location}
-            onChange={(e) => handleInputChange("location", e.target.value)}
-            placeholder="San Francisco, CA"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="bio" className="text-sm font-medium">
-            Bio
-          </Label>
-          <Textarea
-            id="bio"
-            value={profile.bio}
-            onChange={(e) => handleInputChange("bio", e.target.value)}
-            placeholder="Tell us about yourself..."
-            rows={5}
-            className="min-h-[120px]"
-          />
+        
+        <div className="flex items-center justify-center">
+          {renderProfilePicture()}
         </div>
       </div>
       
-      <div className="flex items-center justify-center">
-        {renderProfilePicture()}
+      <div className="space-y-2">
+        <Label htmlFor="bio" className="text-sm font-medium">
+          Bio
+        </Label>
+        <Textarea
+          id="bio"
+          value={profile.bio}
+          onChange={(e) => handleInputChange("bio", e.target.value)}
+          placeholder="Tell us about yourself..."
+          rows={7}
+          className="min-h-[180px] w-full"
+        />
       </div>
     </div>
   );
