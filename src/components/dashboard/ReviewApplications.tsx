@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { FileText, ArrowRight } from "lucide-react";
+import { FileText, ArrowRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,14 +9,22 @@ import { collection, query, where, getDocs, Timestamp } from "firebase/firestore
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/components/ui/use-toast";
+import { ApplicationModal } from "./ApplicationModal";
 
 interface ApplicationSummary {
   id: string;
   projectId: string;
   projectTitle: string;
   userName: string;
+  userEmail: string;
+  coverLetter?: string;
+  relevantExperience?: string;
+  availabilityDate?: string;
+  timeCommitment?: string;
+  portfolioLink?: string;
   status: 'pending' | 'accepted' | 'declined';
   createdAt: Date;
+  feedback?: string;
 }
 
 export function ReviewApplications() {
@@ -26,95 +34,104 @@ export function ReviewApplications() {
   const [loading, setLoading] = useState(true);
   const [hasProjects, setHasProjects] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedApplication, setSelectedApplication] = useState<ApplicationSummary | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchApplicationSummary = async () => {
-      if (!currentUser) return;
+  const fetchApplicationSummary = async () => {
+    if (!currentUser) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // First, check if the user has any projects
+      const projectsQuery = query(
+        collection(db, "projects"),
+        where("userId", "==", currentUser.uid)
+      );
       
-      setLoading(true);
-      setError(null);
+      const projectsSnapshot = await getDocs(projectsQuery);
+      const hasUserProjects = !projectsSnapshot.empty;
+      setHasProjects(hasUserProjects);
       
-      try {
-        // First, check if the user has any projects
-        const projectsQuery = query(
-          collection(db, "projects"),
-          where("userId", "==", currentUser.uid)
+      if (!hasUserProjects) {
+        setLoading(false);
+        return;
+      }
+      
+      // Get all projects created by this user
+      const projectIds = projectsSnapshot.docs.map(doc => doc.id);
+      
+      console.log("Fetching applications for projects:", projectIds);
+      
+      if (projectIds.length === 0) {
+        setLoading(false);
+        return;
+      }
+      
+      // To handle cases where there are many projects, chunk the array
+      // Firestore "in" queries are limited to 10 values
+      const fetchApplicationsForProjectIds = async (ids: string[]) => {
+        const applicationsQuery = query(
+          collection(db, "applications"),
+          where("projectId", "in", ids)
         );
         
-        const projectsSnapshot = await getDocs(projectsQuery);
-        const hasUserProjects = !projectsSnapshot.empty;
-        setHasProjects(hasUserProjects);
-        
-        if (!hasUserProjects) {
-          setLoading(false);
-          return;
-        }
-        
-        // Get all projects created by this user
-        const projectIds = projectsSnapshot.docs.map(doc => doc.id);
-        
-        console.log("Fetching applications for projects:", projectIds);
-        
-        if (projectIds.length === 0) {
-          setLoading(false);
-          return;
-        }
-        
-        // To handle cases where there are many projects, chunk the array
-        // Firestore "in" queries are limited to 10 values
-        const fetchApplicationsForProjectIds = async (ids: string[]) => {
-          const applicationsQuery = query(
-            collection(db, "applications"),
-            where("projectId", "in", ids)
-          );
-          
-          const applicationsSnapshot = await getDocs(applicationsQuery);
-          return applicationsSnapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-              id: doc.id,
-              projectId: data.projectId,
-              projectTitle: data.projectTitle || "Untitled Project",
-              userName: data.userName || "Anonymous User",
-              status: data.status || "pending",
-              createdAt: data.createdAt instanceof Timestamp 
-                ? data.createdAt.toDate() 
-                : new Date()
-            } as ApplicationSummary;
-          });
-        };
-        
-        // Handle case where we have more than 10 projects (Firestore limit for 'in' queries)
-        let allApplications: ApplicationSummary[] = [];
-        
-        // Process projects in chunks of 10
-        for (let i = 0; i < projectIds.length; i += 10) {
-          const chunk = projectIds.slice(i, i + 10);
-          const chunkApplications = await fetchApplicationsForProjectIds(chunk);
-          allApplications = [...allApplications, ...chunkApplications];
-        }
-        
-        console.log("All fetched applications:", allApplications);
-        
-        // Sort by creation date (newest first) and take only the most recent ones
-        allApplications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-        setApplications(allApplications.slice(0, 5));
-        
-        if (allApplications.length > 0) {
-          toast({
-            title: "Applications Loaded",
-            description: `Found ${allApplications.length} application(s) for your projects`,
-            duration: 3000,
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching application summary:", error);
-        setError("Failed to load applications. Please try again.");
-      } finally {
-        setLoading(false);
+        const applicationsSnapshot = await getDocs(applicationsQuery);
+        return applicationsSnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            projectId: data.projectId,
+            projectTitle: data.projectTitle || "Untitled Project",
+            userName: data.userName || "Anonymous User",
+            userEmail: data.userEmail || "No email provided",
+            status: data.status || "pending",
+            coverLetter: data.coverLetter,
+            relevantExperience: data.relevantExperience,
+            availabilityDate: data.availabilityDate,
+            timeCommitment: data.timeCommitment,
+            portfolioLink: data.portfolioLink,
+            feedback: data.feedback,
+            createdAt: data.createdAt instanceof Timestamp 
+              ? data.createdAt.toDate() 
+              : new Date()
+          } as ApplicationSummary;
+        });
+      };
+      
+      // Handle case where we have more than 10 projects (Firestore limit for 'in' queries)
+      let allApplications: ApplicationSummary[] = [];
+      
+      // Process projects in chunks of 10
+      for (let i = 0; i < projectIds.length; i += 10) {
+        const chunk = projectIds.slice(i, i + 10);
+        const chunkApplications = await fetchApplicationsForProjectIds(chunk);
+        allApplications = [...allApplications, ...chunkApplications];
       }
-    };
-    
+      
+      console.log("All fetched applications:", allApplications);
+      
+      // Sort by creation date (newest first) and take only the most recent ones
+      allApplications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      setApplications(allApplications.slice(0, 5));
+      
+      if (allApplications.length > 0) {
+        toast({
+          title: "Applications Loaded",
+          description: `Found ${allApplications.length} application(s) for your projects`,
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching application summary:", error);
+      setError("Failed to load applications. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchApplicationSummary();
   }, [currentUser]);
 
@@ -125,6 +142,11 @@ export function ReviewApplications() {
       day: 'numeric',
       year: 'numeric'
     }).format(date);
+  };
+
+  const handleOpenModal = (application: ApplicationSummary) => {
+    setSelectedApplication(application);
+    setModalOpen(true);
   };
 
   // If the user has no projects, don't show this section
@@ -157,7 +179,7 @@ export function ReviewApplications() {
               <p className="mb-4">{error}</p>
               <Button 
                 variant="outline" 
-                onClick={() => window.location.reload()}
+                onClick={() => fetchApplicationSummary()}
               >
                 Try Again
               </Button>
@@ -198,7 +220,7 @@ export function ReviewApplications() {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => navigate(`/requests?application=${app.id}`)}
+                      onClick={() => handleOpenModal(app)}
                     >
                       Review
                     </Button>
@@ -209,6 +231,14 @@ export function ReviewApplications() {
           </div>
         </div>
       )}
+
+      {/* Application Modal */}
+      <ApplicationModal 
+        application={selectedApplication}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onRefresh={fetchApplicationSummary}
+      />
     </div>
   );
 }

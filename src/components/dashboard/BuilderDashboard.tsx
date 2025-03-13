@@ -1,4 +1,5 @@
-import { Users, PlusCircle, Briefcase, LineChart, FileText } from "lucide-react";
+
+import { Users, PlusCircle, Briefcase, LineChart, FileText, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -73,7 +74,17 @@ export function BuilderDashboard() {
     <div className="space-y-10">
       {/* Action buttons */}
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
-        <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
+        <div className="flex flex-col sm:flex-row gap-3">
+          <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
+          <Button 
+            variant="outline" 
+            className="gap-2"
+            onClick={() => navigate('/requests')}
+          >
+            <MessageSquare size={18} />
+            Review Applications
+          </Button>
+        </div>
         <div className="md:w-1/2 lg:w-1/3">
           <ProjectSearch />
         </div>
