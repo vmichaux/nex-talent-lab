@@ -5,7 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -97,7 +97,7 @@ const ApplyProjectPage = () => {
       setSubmitting(true);
       
       // Create application in Firestore
-      await addDoc(collection(db, "applications"), {
+      const applicationRef = await addDoc(collection(db, "applications"), {
         projectId: id,
         projectTitle: project.title,
         userId: currentUser.uid,
@@ -108,12 +108,19 @@ const ApplyProjectPage = () => {
         createdAt: serverTimestamp()
       });
       
+      console.log("Application submitted successfully with ID:", applicationRef.id);
+      
+      // Show success toast with more descriptive message
       toast({
-        title: "Application submitted",
-        description: "Your application has been successfully submitted. Project owner will review it shortly.",
+        title: "Application Submitted Successfully!",
+        description: "Your application has been sent to the project owner. You'll be notified when they review it.",
+        variant: "default",
       });
       
-      navigate(`/project/${id}`);
+      // Navigate back to the project details page
+      setTimeout(() => {
+        navigate(`/project/${id}`);
+      }, 1500);
     } catch (error) {
       console.error("Error submitting application:", error);
       toast({
@@ -180,7 +187,7 @@ const ApplyProjectPage = () => {
               <p className="text-gray-600 mb-4">Submit your application for the project:</p>
               <div className="inline-block">
                 <Badge className="text-lg py-1 px-4 bg-purple-100 text-purple-800 hover:bg-purple-100">
-                  {project.title}
+                  {project?.title}
                 </Badge>
               </div>
             </div>
@@ -260,7 +267,16 @@ const ApplyProjectPage = () => {
                       className="bg-purple-600 hover:bg-purple-700 text-white" 
                       disabled={submitting}
                     >
-                      {submitting ? "Submitting..." : "Submit Application"}
+                      {submitting ? (
+                        <>
+                          <div className="animate-spin mr-2 h-4 w-4 border-t-2 border-b-2 border-white rounded-full"></div>
+                          Submitting...
+                        </>
+                      ) : (
+                        <>
+                          Submit Application
+                        </>
+                      )}
                     </Button>
                   </div>
                 </form>
