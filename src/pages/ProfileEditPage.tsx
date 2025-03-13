@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -7,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Save, UserPlus, Briefcase, GraduationCap, Globe, Building, Calendar, Users } from "lucide-react";
+import { ArrowLeft, Save, UserPlus, Briefcase, GraduationCap, Globe, Building, Calendar, Users, Tag, FileText, CreditCard } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -30,7 +31,10 @@ const ProfileEditPage = () => {
       companyName: "",
       foundedYear: "",
       description: "",
-      employees: ""
+      employees: "",
+      industry: "",
+      projectNeeds: "",
+      billingDetails: ""
     },
     skills: [""],
     education: [{ school: "", degree: "", year: "" }],
@@ -67,7 +71,10 @@ const ProfileEditPage = () => {
               companyName: profileData.business?.companyName || "",
               foundedYear: profileData.business?.foundedYear || "",
               description: profileData.business?.description || "",
-              employees: profileData.business?.employees || ""
+              employees: profileData.business?.employees || "",
+              industry: profileData.business?.industry || "",
+              projectNeeds: profileData.business?.projectNeeds || "",
+              billingDetails: profileData.business?.billingDetails || ""
             };
             
             const loadedProfile = {
@@ -395,6 +402,22 @@ const ProfileEditPage = () => {
                           placeholder="1-10"
                         />
                       </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="industry" className="text-sm font-medium">
+                          <div className="flex items-center gap-2">
+                            <Tag className="h-4 w-4" />
+                            Industry
+                          </div>
+                        </Label>
+                        <Input
+                          id="industry"
+                          type="text"
+                          value={profile.business.industry}
+                          onChange={(e) => handleBusinessChange("industry", e.target.value)}
+                          placeholder="Technology, Healthcare, Education, etc."
+                        />
+                      </div>
                     </div>
 
                     <div className="space-y-4">
@@ -407,8 +430,42 @@ const ProfileEditPage = () => {
                           value={profile.business.description}
                           onChange={(e) => handleBusinessChange("description", e.target.value)}
                           placeholder="Tell us about your business..."
-                          rows={5}
-                          className="min-h-[120px]"
+                          rows={3}
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="projectNeeds" className="text-sm font-medium">
+                          <div className="flex items-center gap-2">
+                            <FileText className="h-4 w-4" />
+                            Project Needs
+                          </div>
+                        </Label>
+                        <Textarea
+                          id="projectNeeds"
+                          value={profile.business.projectNeeds}
+                          onChange={(e) => handleBusinessChange("projectNeeds", e.target.value)}
+                          placeholder="Describe the types of projects or talent you're looking for..."
+                          rows={3}
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="billingDetails" className="text-sm font-medium">
+                          <div className="flex items-center gap-2">
+                            <CreditCard className="h-4 w-4" />
+                            Billing Details
+                          </div>
+                        </Label>
+                        <Textarea
+                          id="billingDetails"
+                          value={profile.business.billingDetails}
+                          onChange={(e) => handleBusinessChange("billingDetails", e.target.value)}
+                          placeholder="Add information for payments and invoicing..."
+                          rows={3}
+                          className="min-h-[80px]"
                         />
                       </div>
                     </div>
