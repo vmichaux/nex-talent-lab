@@ -3,9 +3,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { useEffect } from "react";
+import { useAuth } from "@/hooks/use-auth";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AuthLayout from "./pages/AuthLayout";
@@ -39,6 +40,17 @@ function ScrollToTop() {
   return null;
 }
 
+// Protected route component
+function ProtectedRoute({ children }) {
+  const { isLoggedIn } = useAuth();
+  
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+  
+  return children;
+}
+
 const queryClient = new QueryClient();
 
 function AppContent() {
@@ -52,7 +64,11 @@ function AppContent() {
           <Route path="/" element={<Index />} />
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/explore-projects" element={<ExploreProjectsPage />} />
-          <Route path="/explore-talents" element={<ExploreTalentsPage />} />
+          <Route path="/explore-talents" element={
+            <ProtectedRoute>
+              <ExploreTalentsPage />
+            </ProtectedRoute>
+          } />
           <Route path="/project/:id" element={<ProjectDetailPage />} />
           <Route path="/project/edit/:id" element={<ProjectDetailPage isEditing={true} />} />
           <Route path="/apply-project/:id" element={<ApplyProjectPage />} />
