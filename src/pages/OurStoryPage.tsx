@@ -2,7 +2,8 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { BookOpen, Users, Heart, Target, Award, Star } from "lucide-react";
+import { BookOpen, Users, Heart, Target, Award, Star, ArrowRight } from "lucide-react";
+
 export default function OurStoryPage() {
   return <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -153,40 +154,25 @@ export default function OurStoryPage() {
           </div>
         </section>
 
-        <section className="bg-gray-50 py-[94px]">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold mb-12 text-center">Meet Our Team</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4"></div>
-                <h3 className="font-semibold text-xl">Victoria Michaux</h3>
-                <p className="text-gray-600">Founder & CEO</p>
-              </div>
-              <div className="text-center">
-                <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4"></div>
-                <h3 className="font-semibold text-xl">Jamie Chen</h3>
-                <p className="text-gray-600">Chief Product Officer</p>
-              </div>
-              <div className="text-center">
-                <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4"></div>
-                <h3 className="font-semibold text-xl">Taylor Morgan</h3>
-                <p className="text-gray-600">Head of Community</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-primary/65 text-white py-16">
+        <section className="py-16 rounded-none bg-gradient-to-r from-[#c8b6f8] to-[#a7f3d0] my-8">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-6">Join Our Community</h2>
-            <p className="text-xl mb-8 max-w-2xl mx-auto">
-              Be part of our growing network of talented individuals and exciting projects.
+            <h2 className="text-4xl font-bold mb-6 text-black">Ready to Start Your Journey?</h2>
+            <p className="text-xl mb-8 max-w-2xl mx-auto text-black">
+              Join our community of innovators and creators. Whether you're a talent or a builder,
+              NexTalent Lab has a place for you. Let's bring your ideas to life.
             </p>
-            <Link to="/onboarding">
-              <Button size="lg" variant="secondary" className="font-semibold">
-                Get Started Today
-              </Button>
-            </Link>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link to="/onboarding">
+                <Button size="lg" variant="default" className="font-semibold bg-primary hover:bg-primary/90 text-white">
+                  Get Started Today
+                </Button>
+              </Link>
+              <Link to="/explore">
+                <Button size="lg" variant="outline" className="font-semibold border-primary text-primary hover:bg-primary/10 flex items-center">
+                  Explore Projects <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </section>
       </main>
