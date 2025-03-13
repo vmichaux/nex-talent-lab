@@ -20,6 +20,7 @@ import OurStoryPage from "./pages/OurStoryPage";
 import DashboardPage from "./pages/DashboardPage";
 import MessagesPage from "./pages/MessagesPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
+import ApplyProjectPage from "./pages/ApplyProjectPage";
 import ProfileEditPage from "./pages/ProfileEditPage";
 import ContactSalesPage from "./pages/ContactSalesPage";
 import { DashboardOnboarding } from "./components/DashboardOnboarding";
@@ -53,6 +54,7 @@ const App = () => (
             <Route path="/explore-projects" element={<ExploreProjectsPage />} />
             <Route path="/explore-talents" element={<ExploreTalentsPage />} />
             <Route path="/project/:id" element={<ProjectDetailPage />} />
+            <Route path="/apply-project/:id" element={<ApplyProjectPage />} />
             <Route path="/how-it-works" element={<HowItWorksPage />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/about" element={<OurStoryPage />} />
