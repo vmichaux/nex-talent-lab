@@ -1,6 +1,8 @@
+
 import { ArrowRight, Check, UserPlus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 type StepProps = {
   number: number;
@@ -33,12 +35,15 @@ const Step = ({
 
 export function DashboardWelcome() {
   const navigate = useNavigate();
+  const { userData } = useAuth();
+  const profileCompleted = userData?.hasCompletedProfile || false;
+
   const steps = [{
     number: 1,
-    title: "Complete Your Profile",
+    title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
     description: "Add your skills, experience, and portfolio items to showcase your talents.",
     icon: <UserPlus className="h-4 w-4 text-primary" />,
-    completed: false
+    completed: profileCompleted
   }, {
     number: 2,
     title: "Explore Projects",
@@ -74,7 +79,7 @@ export function DashboardWelcome() {
           </div>
           
           <Button size="lg" onClick={() => navigate('/profile/edit')} className="gap-2">
-            Setup Your Profile <ArrowRight className="h-4 w-4" />
+            {profileCompleted ? "Modify Account" : "Setup Your Profile"} <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
 
