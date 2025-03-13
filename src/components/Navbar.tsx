@@ -16,23 +16,27 @@ export function Navbar() {
   } = useAuth();
 
   useEffect(() => {
+    // Get user role from localStorage
     const savedRole = localStorage.getItem("userRole");
     if (savedRole) {
       setUserRole(savedRole as "talent" | "entrepreneur" | "both");
     }
   }, []);
 
+  // Hide navbar on the onboarding route
   if (location.pathname === "/onboarding") {
     return null;
   }
 
+  // Function to handle dashboard link click
   const handleDashboardClick = (e: React.MouseEvent) => {
     if (!isLoggedIn) {
       e.preventDefault();
       navigate("/onboarding");
     }
   };
-
+  
+  // Get role badge styling
   const getRoleBadge = () => {
     if (!isLoggedIn || !userRole) return null;
     
@@ -62,7 +66,7 @@ export function Navbar() {
         return null;
     }
   };
-
+  
   return <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-1">
@@ -71,8 +75,10 @@ export function Navbar() {
           {getRoleBadge()}
         </Link>
 
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
           {isLoggedIn ?
+        // Navigation for logged-in users
         <>
               <Link to="/dashboard" className="font-medium hover:text-primary transition-colors flex items-center gap-1">
                 <Home className="h-4 w-4" />
@@ -91,6 +97,7 @@ export function Navbar() {
                 Messages
               </Link>
             </> :
+        // Navigation for non-logged-in users
         <>
               <Link to="/" className="font-medium hover:text-primary transition-colors">
                 Home
@@ -117,8 +124,10 @@ export function Navbar() {
             </>}
         </nav>
 
+        {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center space-x-4">
           {isLoggedIn ?
+        // User is logged in - show My Account and logout buttons
         <div className="flex items-center gap-3">
               <Link to="/profile/edit">
                 <Button variant="outline" size="sm" className="gap-2">
@@ -128,6 +137,7 @@ export function Navbar() {
               </Link>
               <LogoutButton />
             </div> :
+        // User is not logged in - show auth buttons
         <>
               <Link to="/login">
                 <Button variant="outline" size="sm" className="gap-2">
@@ -144,14 +154,17 @@ export function Navbar() {
             </>}
         </div>
 
+        {/* Mobile Menu Button */}
         <button className="md:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle menu">
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
+      {/* Mobile Menu */}
       {isMenuOpen && <div className="md:hidden animate-fade-in">
           <div className="py-4 px-4 space-y-4 bg-white shadow-md">
             {isLoggedIn ?
+        // Mobile navigation for logged-in users
         <>
                 <Link to="/dashboard" className="block py-2 px-4 hover:bg-gray-50 rounded-md flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                   <Home className="h-4 w-4" />
@@ -177,6 +190,7 @@ export function Navbar() {
                   <LogoutButton />
                 </div>
               </> :
+        // Mobile navigation for non-logged-in users 
         <>
                 <Link to="/" className="block py-2 px-4 hover:bg-gray-50 rounded-md" onClick={() => setIsMenuOpen(false)}>
                   Home
@@ -225,4 +239,3 @@ export function Navbar() {
         </div>}
     </header>;
 }
-
