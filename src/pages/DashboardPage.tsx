@@ -21,13 +21,17 @@ const DashboardPage = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "both">("talent");
 
-  // Get user's name from email or use "My" as fallback
-  const getUserName = () => {
-    if (currentUser?.displayName) return currentUser.displayName;
+  // Get user's first name from email or display name
+  const getUserFirstName = () => {
+    if (currentUser?.displayName) {
+      // Get first name from display name (first word)
+      return currentUser.displayName.split(' ')[0];
+    }
     if (currentUser?.email) {
+      // Get username part of email and capitalize first letter
       const emailUsername = currentUser.email.split('@')[0];
-      // Capitalize first letter
-      return emailUsername.charAt(0).toUpperCase() + emailUsername.slice(1);
+      const firstName = emailUsername.split(/[._-]/)[0]; // Split by common username separators
+      return firstName.charAt(0).toUpperCase() + firstName.slice(1);
     }
     return "friend"; // Fallback if no name or email is available
   };
@@ -78,7 +82,7 @@ const DashboardPage = () => {
             
             <div className="container mx-auto px-4 py-12">
               <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-6 py-[64px]">
-                <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Let's go {getUserName()}!</div>
+                <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Let's go {getUserFirstName()}!</div>
                 
                 <h1 className="mb-4 text-3xl font-bold tracking-tight custom-gradient-text md:text-5xl">
                   My Journey
