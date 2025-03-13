@@ -140,8 +140,8 @@ export const ChatWidget = () => {
 
   // Remove the condition that was hiding the chat widget for logged out users
   return <>
-      {!isOpen && <Button onClick={() => setIsOpen(true)} className="fixed bottom-4 right-20 z-50 rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all duration-300" size="icon">
-          <Bot className="h-6 w-6" />
+      {!isOpen && <Button onClick={() => setIsOpen(true)} className="fixed bottom-6 right-6 z-50 rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" size="icon">
+          <Bot className="h-5 w-5" />
         </Button>}
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
