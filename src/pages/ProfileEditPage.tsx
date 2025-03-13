@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -6,24 +7,54 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Save, UserPlus, Briefcase, GraduationCap, Globe } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 const ProfileEditPage = () => {
-  const { isLoggedIn, updateProfileCompletion, userData } = useAuth();
+  const { isLoggedIn, updateProfileCompletion, userData, currentUser } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   
   const isProfileCompleted = userData?.hasCompletedProfile || false;
   
-  // This would be populated from your auth context in a real app
+  // State for user profile data
   const [profile, setProfile] = useState({
     fullName: "",
     title: "",
     location: "",
     bio: "",
     skills: [""],
-    education: [""],
-    experience: [""]
+    education: [{ school: "", degree: "", year: "" }],
+    experience: [{ company: "", position: "", duration: "" }]
   });
+  
+  // Load user profile data
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (currentUser?.uid) {
+        const userProfileRef = doc(db, "userProfiles", currentUser.uid);
+        try {
+          const docSnap = await getDoc(userProfileRef);
+          if (docSnap.exists()) {
+            const profileData = docSnap.data();
+            setProfile({
+              fullName: profileData.fullName || "",
+              title: profileData.title || "",
+              location: profileData.location || "",
+              bio: profileData.bio || "",
+              skills: profileData.skills || [""],
+              education: profileData.education || [{ school: "", degree: "", year: "" }],
+              experience: profileData.experience || [{ company: "", position: "", duration: "" }]
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+        }
+      }
+    };
+    
+    fetchUserProfile();
+  }, [currentUser]);
   
   useEffect(() => {
     if (!isLoggedIn) {
@@ -31,9 +62,81 @@ const ProfileEditPage = () => {
     }
   }, [isLoggedIn, navigate]);
 
+  // Handle input changes
+  const handleInputChange = (field, value) => {
+    setProfile({
+      ...profile,
+      [field]: value
+    });
+  };
+
+  // Handle skill changes
+  const handleSkillChange = (index, value) => {
+    const updatedSkills = [...profile.skills];
+    updatedSkills[index] = value;
+    setProfile({
+      ...profile,
+      skills: updatedSkills
+    });
+  };
+
+  // Add new skill field
+  const addSkill = () => {
+    setProfile({
+      ...profile,
+      skills: [...profile.skills, ""]
+    });
+  };
+
+  // Handle education changes
+  const handleEducationChange = (index, field, value) => {
+    const updatedEducation = [...profile.education];
+    updatedEducation[index] = {
+      ...updatedEducation[index],
+      [field]: value
+    };
+    setProfile({
+      ...profile,
+      education: updatedEducation
+    });
+  };
+
+  // Add new education field
+  const addEducation = () => {
+    setProfile({
+      ...profile,
+      education: [...profile.education, { school: "", degree: "", year: "" }]
+    });
+  };
+
+  // Handle experience changes
+  const handleExperienceChange = (index, field, value) => {
+    const updatedExperience = [...profile.experience];
+    updatedExperience[index] = {
+      ...updatedExperience[index],
+      [field]: value
+    };
+    setProfile({
+      ...profile,
+      experience: updatedExperience
+    });
+  };
+
+  // Add new experience field
+  const addExperience = () => {
+    setProfile({
+      ...profile,
+      experience: [...profile.experience, { company: "", position: "", duration: "" }]
+    });
+  };
+
   const handleSaveProfile = async () => {
     try {
-      // In a real application, you would save the profile to your backend here
+      // Save profile data to Firestore
+      if (currentUser?.uid) {
+        const userProfileRef = doc(db, "userProfiles", currentUser.uid);
+        await setDoc(userProfileRef, profile);
+      }
       
       // Mark the profile as completed
       await updateProfileCompletion(true);
@@ -90,6 +193,8 @@ const ProfileEditPage = () => {
                     <input
                       id="fullName"
                       type="text"
+                      value={profile.fullName}
+                      onChange={(e) => handleInputChange("fullName", e.target.value)}
                       placeholder="Jane Doe"
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                     />
@@ -102,6 +207,8 @@ const ProfileEditPage = () => {
                     <input
                       id="title"
                       type="text"
+                      value={profile.title}
+                      onChange={(e) => handleInputChange("title", e.target.value)}
                       placeholder="UX Designer"
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                     />
@@ -114,6 +221,8 @@ const ProfileEditPage = () => {
                     <input
                       id="location"
                       type="text"
+                      value={profile.location}
+                      onChange={(e) => handleInputChange("location", e.target.value)}
                       placeholder="San Francisco, CA"
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
                     />
@@ -127,6 +236,8 @@ const ProfileEditPage = () => {
                     </label>
                     <textarea
                       id="bio"
+                      value={profile.bio}
+                      onChange={(e) => handleInputChange("bio", e.target.value)}
                       placeholder="Tell us about yourself..."
                       rows={5}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
@@ -140,22 +251,23 @@ const ProfileEditPage = () => {
                   <UserPlus className="h-5 w-5 text-primary" />
                   Skills
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                  <input
-                    type="text"
-                    placeholder="UI Design"
-                    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Wireframing"
-                    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  />
-                  <div className="flex items-center">
-                    <Button variant="outline" size="sm" className="w-full">
-                      + Add Skill
-                    </Button>
-                  </div>
+                <div className="grid grid-cols-1 gap-4 mb-6">
+                  {profile.skills.map((skill, index) => (
+                    <div key={`skill-${index}`} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={skill}
+                        onChange={(e) => handleSkillChange(index, e.target.value)}
+                        placeholder="e.g., UI Design, JavaScript"
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                      {index === profile.skills.length - 1 && (
+                        <Button onClick={addSkill} variant="outline" size="sm" className="whitespace-nowrap">
+                          + Add Skill
+                        </Button>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -164,31 +276,41 @@ const ProfileEditPage = () => {
                   <GraduationCap className="h-5 w-5 text-primary" />
                   Education
                 </h3>
-                <div className="space-y-4 mb-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      placeholder="School/University"
-                      className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Degree"
-                      className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      placeholder="Year"
-                      className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
-                    <div className="flex items-center">
-                      <Button variant="outline" size="sm" className="w-full">
-                        + Add Education
-                      </Button>
+                <div className="space-y-6 mb-6">
+                  {profile.education.map((edu, index) => (
+                    <div key={`edu-${index}`} className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input
+                          type="text"
+                          value={edu.school}
+                          onChange={(e) => handleEducationChange(index, "school", e.target.value)}
+                          placeholder="School/University"
+                          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                        <input
+                          type="text"
+                          value={edu.degree}
+                          onChange={(e) => handleEducationChange(index, "degree", e.target.value)}
+                          placeholder="Degree"
+                          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                      </div>
+                      <div className="flex gap-4">
+                        <input
+                          type="text"
+                          value={edu.year}
+                          onChange={(e) => handleEducationChange(index, "year", e.target.value)}
+                          placeholder="Year"
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                        {index === profile.education.length - 1 && (
+                          <Button onClick={addEducation} variant="outline" size="sm" className="whitespace-nowrap">
+                            + Add Education
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
@@ -197,31 +319,41 @@ const ProfileEditPage = () => {
                   <Briefcase className="h-5 w-5 text-primary" />
                   Experience
                 </h3>
-                <div className="space-y-4 mb-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      placeholder="Company"
-                      className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Position"
-                      className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      placeholder="Duration (e.g., 2021-2023)"
-                      className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
-                    <div className="flex items-center">
-                      <Button variant="outline" size="sm" className="w-full">
-                        + Add Experience
-                      </Button>
+                <div className="space-y-6 mb-6">
+                  {profile.experience.map((exp, index) => (
+                    <div key={`exp-${index}`} className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input
+                          type="text"
+                          value={exp.company}
+                          onChange={(e) => handleExperienceChange(index, "company", e.target.value)}
+                          placeholder="Company"
+                          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                        <input
+                          type="text"
+                          value={exp.position}
+                          onChange={(e) => handleExperienceChange(index, "position", e.target.value)}
+                          placeholder="Position"
+                          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                      </div>
+                      <div className="flex gap-4">
+                        <input
+                          type="text"
+                          value={exp.duration}
+                          onChange={(e) => handleExperienceChange(index, "duration", e.target.value)}
+                          placeholder="Duration (e.g., 2021-2023)"
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                        {index === profile.experience.length - 1 && (
+                          <Button onClick={addExperience} variant="outline" size="sm" className="whitespace-nowrap">
+                            + Add Experience
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
