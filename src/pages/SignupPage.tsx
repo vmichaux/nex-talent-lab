@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Mail, Lock, User, Github, Linkedin } from "lucide-react";
@@ -7,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
@@ -22,7 +21,6 @@ export default function SignupPage() {
   const fromOnboarding = searchParams.get('fromOnboarding') === 'true';
   const { signup, signInWithGoogle, signInWithGithub } = useAuth();
 
-  // Get welcome message based on role
   const getWelcomeMessage = () => {
     if (!role) return "Create your account";
     
@@ -38,7 +36,6 @@ export default function SignupPage() {
     }
   };
   
-  // Get description message based on role
   const getDescription = () => {
     if (!role) return "Start your journey with NexTalent Lab";
     
@@ -60,7 +57,6 @@ export default function SignupPage() {
     
     try {
       await signup(email, password);
-      // Save selected role if coming from onboarding
       if (role) {
         localStorage.setItem("userRole", role);
       }
@@ -70,7 +66,6 @@ export default function SignupPage() {
       });
       navigate("/dashboard");
     } catch (error) {
-      // Error is already handled in the signup function
       console.error("Signup error:", error);
     } finally {
       setIsLoading(false);
@@ -81,7 +76,6 @@ export default function SignupPage() {
     setIsLoading(true);
     try {
       await signInWithGoogle();
-      // Save selected role if coming from onboarding
       if (role) {
         localStorage.setItem("userRole", role);
       }
@@ -91,7 +85,6 @@ export default function SignupPage() {
       });
       navigate("/dashboard");
     } catch (error) {
-      // Error is already handled in the signInWithGoogle function
       console.error("Google sign-in error:", error);
     } finally {
       setIsLoading(false);
@@ -102,7 +95,6 @@ export default function SignupPage() {
     setIsLoading(true);
     try {
       await signInWithGithub();
-      // Save selected role if coming from onboarding
       if (role) {
         localStorage.setItem("userRole", role);
       }
@@ -112,7 +104,6 @@ export default function SignupPage() {
       });
       navigate("/dashboard");
     } catch (error) {
-      // Error is already handled in the signInWithGithub function
       console.error("GitHub sign-in error:", error);
     } finally {
       setIsLoading(false);

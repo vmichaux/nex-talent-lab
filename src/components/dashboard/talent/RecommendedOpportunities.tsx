@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { FileSearch } from "lucide-react";
 import { useProjects } from "@/hooks/useProjects";
@@ -8,7 +7,7 @@ import { ProjectCard } from "./ProjectCard";
 import { OpportunitiesLoading } from "./OpportunitiesLoading";
 import { OpportunitiesEmpty } from "./OpportunitiesEmpty";
 import { OpportunitiesError } from "./OpportunitiesError";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/use-auth";
 
 interface RecommendedOpportunitiesProps {
   filter: string;
@@ -23,25 +22,21 @@ export function RecommendedOpportunities({ filter, setFilter }: RecommendedOppor
   });
   const [recommendations, setRecommendations] = useState<Project[]>([]);
   
-  // Process projects to get recommendations
   useEffect(() => {
     if (projects.length > 0) {
-      // Here we could implement a more sophisticated recommendation algorithm
-      // For now, just filter open projects and add a match percentage
       const openProjects = projects
         .filter(project => project.status === "Open")
         .map(project => ({
           ...project,
-          matchPercentage: Math.floor(Math.random() * (99 - 70) + 70) // Random match between 70-99%
+          matchPercentage: Math.floor(Math.random() * (99 - 70) + 70)
         }))
         .sort((a, b) => ((b.matchPercentage || 0) - (a.matchPercentage || 0)))
-        .slice(0, 6); // Limit to top 6 matches
+        .slice(0, 6);
         
       setRecommendations(openProjects);
     }
-  }, [projects]); // No need to include currentUser.uid anymore
+  }, [projects]);
 
-  // Filter the recommendations based on location type
   const filteredRecommendations = recommendations.filter(project => {
     if (filter === "all") return true;
     return project.location?.toLowerCase() === filter.toLowerCase();

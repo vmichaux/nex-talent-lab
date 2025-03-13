@@ -9,7 +9,8 @@ import { ImpactSection } from "@/components/ImpactSection";
 import { PricingSection } from "@/components/PricingSection";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/use-auth";
+
 const Index = () => {
   const {
     isLoggedIn
@@ -47,4 +48,5 @@ const Index = () => {
       <Footer />
     </div>;
 };
+
 export default Index;

@@ -6,11 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/use-auth";
+
 const Google = (props: React.ComponentProps<LucideIcon>) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
     <path d="M17.8395 10.1333H12.6668V12.9333H15.7462C15.4002 14.8 13.8135 15.7333 12.0002 15.7333C9.74683 15.7333 7.9335 13.9333 7.9335 12C7.9335 10.0667 9.74683 8.26667 12.0002 8.26667C13.1868 8.26667 14.0002 8.73333 14.5735 9.26667L16.6002 7.06667C15.3735 5.93333 13.7868 5.33333 12.0002 5.33333C8.0535 5.33333 4.9335 8.4 4.9335 12C4.9335 15.6 8.0535 18.6667 12.0002 18.6667C15.5868 18.6667 18.6668 16.2667 18.6668 12C18.6668 11.4 18.7335 10.5333 18.5868 10.1333H17.8395Z" />
   </svg>;
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +26,7 @@ export default function LoginPage() {
     signInWithGoogle,
     signInWithGithub
   } = useAuth();
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -45,6 +48,7 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
+
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     try {
@@ -65,6 +69,7 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
+
   const handleGithubSignIn = async () => {
     setIsLoading(true);
     try {
@@ -85,6 +90,7 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   };
+
   return <div className="min-h-screen flex flex-col bg-gray-50">
       <header className="w-full bg-white border-b border-gray-100 py-4 px-6">
         <div className="container mx-auto flex items-center">

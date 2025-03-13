@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { TestimonialSection } from "@/components/TestimonialSection";
 import { ExploreCTA } from "@/components/ExploreCTA";
 import { useProjects } from "@/hooks/useProjects";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/use-auth";
 import { PageHeader } from "@/components/explore/PageHeader";
 import { SearchBar } from "@/components/explore/SearchBar";
 import { ProjectsSection } from "@/components/explore/ProjectsSection";

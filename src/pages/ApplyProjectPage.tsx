@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -14,7 +13,7 @@ import { doc, getDoc, collection, addDoc, serverTimestamp } from "firebase/fires
 import { Project } from "@/types/project";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/use-auth";
 
 const ApplyProjectPage = () => {
   const { id } = useParams();

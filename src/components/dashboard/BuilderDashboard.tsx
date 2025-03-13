@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useProjects } from "@/hooks/useProjects";
 import { Project } from "@/types/project";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/use-auth";
 
 export function BuilderDashboard() {
   const location = useLocation();
@@ -24,26 +24,20 @@ export function BuilderDashboard() {
   });
   const [recommendedProjects, setRecommendedProjects] = useState<Project[]>([]);
   
-  // Check if we need to open the project modal based on navigation state
   useEffect(() => {
     if (location.state?.openProjectModal) {
       setShowProjectModal(true);
-      // Clean up the state to prevent reopening on page refresh
       window.history.replaceState({}, document.title);
     }
   }, [location]);
 
-  // Get recommended projects from the database
   useEffect(() => {
     if (projects.length > 0) {
-      // Get 3 random projects as recommendations
-      // In a real app, you would use an algorithm based on user's skills/interests
       const shuffled = [...projects].sort(() => 0.5 - Math.random());
       setRecommendedProjects(shuffled.slice(0, 3));
     }
   }, [projects]);
 
-  // Sample talents data
   const recommendedTalents = [
     {
       id: 1,
@@ -76,7 +70,6 @@ export function BuilderDashboard() {
 
   return (
     <div className="space-y-10">
-      {/* Action buttons */}
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
         <div className="flex flex-col sm:flex-row gap-3">
           <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
@@ -94,13 +87,10 @@ export function BuilderDashboard() {
         </div>
       </div>
 
-      {/* Projects section - showing this first */}
       <DashboardProjects />
       
-      {/* Review Applications section - new section */}
       <ReviewApplications />
       
-      {/* Project metrics */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -144,7 +134,6 @@ export function BuilderDashboard() {
         </div>
       </div>
 
-      {/* Recommended Opportunities */}
       <div className="mb-10">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -191,7 +180,6 @@ export function BuilderDashboard() {
         </div>
       </div>
 
-      {/* Recommended Talent */}
       <div className="mb-10">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold flex items-center gap-2">

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { collection, query, where, orderBy, getDocs, Timestamp, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/use-auth";
 import { toast } from "@/components/ui/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { ExternalLink } from "lucide-react";

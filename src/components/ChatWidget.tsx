@@ -3,9 +3,10 @@ import { MessageSquare, X, Minimize2, Maximize2, Send, Loader, Bot } from "lucid
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { getUserChatHistory, saveMessage, sendMessageToOpenAI, ChatMessage } from "@/lib/chatbotService";
+
 export const ChatWidget = () => {
   const {
     isLoggedIn
@@ -21,26 +22,24 @@ export const ChatWidget = () => {
     toast
   } = useToast();
 
-  // Load chat history when widget is opened
   useEffect(() => {
     if (isOpen && isLoggedIn) {
       loadChatHistory();
     }
   }, [isOpen, isLoggedIn]);
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
       behavior: "smooth"
     });
   }, [messages]);
+
   const loadChatHistory = async () => {
     setIsLoading(true);
     setApiError(null);
     try {
       const history = await getUserChatHistory();
       if (history.length === 0) {
-        // Add welcome message if no history exists
         const welcomeMessage: ChatMessage = {
           content: "Bonjour ! Je suis votre assistant IA. Comment puis-je vous aider aujourd'hui ?",
           role: "assistant",
@@ -62,6 +61,7 @@ export const ChatWidget = () => {
       setIsLoading(false);
     }
   };
+
   const handleSendMessage = async () => {
     if (!input.trim() || isLoading) return;
     const userMessage: ChatMessage = {
@@ -70,16 +70,13 @@ export const ChatWidget = () => {
       timestamp: new Date()
     };
 
-    // Optimistically add user message to UI
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
     setApiError(null);
     try {
-      // Save user message to Firebase
       await saveMessage(userMessage.content, userMessage.role);
 
-      // Set a loading message
       const loadingMessage: ChatMessage = {
         content: "...",
         role: "assistant",
@@ -87,10 +84,8 @@ export const ChatWidget = () => {
       };
       setMessages(prev => [...prev, loadingMessage]);
 
-      // Get AI response
       const aiResponse = await sendMessageToOpenAI(userMessage.content);
 
-      // Remove loading message and add real response
       setMessages(prev => {
         const filteredMessages = prev.filter(msg => msg.content !== "...");
         const assistantMessage: ChatMessage = {
@@ -101,12 +96,10 @@ export const ChatWidget = () => {
         return [...filteredMessages, assistantMessage];
       });
 
-      // Save AI response to Firebase
       await saveMessage(aiResponse, "assistant");
     } catch (error) {
       console.error("Error in chat sequence:", error);
 
-      // Update error state for user feedback
       setApiError("Une erreur est survenue lors de la communication avec l'API. Veuillez réessayer.");
       toast({
         title: "Erreur",
@@ -114,12 +107,12 @@ export const ChatWidget = () => {
         variant: "destructive"
       });
 
-      // Remove loading message if there was an error
       setMessages(prev => prev.filter(msg => msg.content !== "..."));
     } finally {
       setIsLoading(false);
     }
   };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -127,18 +120,14 @@ export const ChatWidget = () => {
     }
   };
 
-  // Don't render anything if user is not logged in
   if (!isLoggedIn) return null;
   return <>
-      {/* Chat button fixed in the bottom right */}
       {!isOpen && <Button onClick={() => setIsOpen(true)} className="fixed bottom-4 right-4 z-50 rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all duration-300" size="icon">
           <Bot className="h-6 w-6" />
         </Button>}
 
-      {/* Chat dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className={`fixed bottom-4 right-4 p-0 w-80 md:w-96 rounded-lg shadow-xl border-0 max-w-none ${isMinimized ? "h-16" : "h-[550px]"} transition-all duration-300 overflow-hidden transform-none bg-white`}>
-          {/* Chat header - More visible now */}
           <div className="flex items-center justify-between bg-primary text-white p-3 sticky top-0 z-10 py-0 px-[11px]">
             <div className="flex items-center gap-2">
               <Bot className="h-5 w-5" />
@@ -154,14 +143,11 @@ export const ChatWidget = () => {
             </div>
           </div>
 
-          {/* Chat content - only shown when not minimized */}
           {!isMinimized && <>
-              {/* API Error Message if needed */}
               {apiError && <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-2">
                   <p className="text-sm">{apiError}</p>
                 </div>}
               
-              {/* Messages area - REDUCED height from 380px to 340px */}
               <div className="h-[340px] overflow-y-auto p-4 space-y-4 py-0 px-[12px]">
                 {messages.map((message, index) => <div key={message.id || index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div className={`max-w-[85%] rounded-lg px-4 py-2 ${message.role === "user" ? "bg-primary text-white" : "bg-gray-100 text-gray-800"}`}>
@@ -174,7 +160,6 @@ export const ChatWidget = () => {
                 <div ref={messagesEndRef} />
               </div>
               
-              {/* Input area - Increased padding for better visibility */}
               <div className="border-t pt-3 pb-5 px-3 mb-3">
                 <div className="flex items-start space-x-2">
                   <Textarea value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="Tapez votre message..." className="flex-1 min-h-[60px] max-h-[120px] resize-none focus:outline-none text-sm p-2 border rounded-md" disabled={isLoading} />
