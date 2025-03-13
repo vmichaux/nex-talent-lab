@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -489,81 +488,87 @@ const ProfileEditPage = () => {
       
       {/* Additional profile information - below the photo */}
       <div className="space-y-4 pt-4 border-t border-gray-100">
-        <div className="space-y-2">
-          <Label htmlFor="title" className="text-sm font-medium">
-            Professional Title
-          </Label>
-          <Input
-            id="title"
-            type="text"
-            value={profile.title}
-            onChange={(e) => handleInputChange("title", e.target.value)}
-            placeholder="UX Designer"
-          />
+        {/* Professional Title and Location on the same line */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="title" className="text-sm font-medium">
+              Professional Title
+            </Label>
+            <Input
+              id="title"
+              type="text"
+              value={profile.title}
+              onChange={(e) => handleInputChange("title", e.target.value)}
+              placeholder="UX Designer"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="location" className="text-sm font-medium">
+              Location
+            </Label>
+            <Input
+              id="location"
+              type="text"
+              value={profile.location}
+              onChange={(e) => handleInputChange("location", e.target.value)}
+              placeholder="San Francisco, CA"
+            />
+          </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="location" className="text-sm font-medium">
-            Location
-          </Label>
-          <Input
-            id="location"
-            type="text"
-            value={profile.location}
-            onChange={(e) => handleInputChange("location", e.target.value)}
-            placeholder="San Francisco, CA"
-          />
-        </div>
+        {/* Date of Birth and Sex on the same line */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="dateOfBirth" className="text-sm font-medium flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              Date of Birth
+            </Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !profile.dateOfBirth && "text-muted-foreground"
+                  )}
+                >
+                  <Calendar className="mr-2 h-4 w-4" />
+                  {profile.dateOfBirth ? format(profile.dateOfBirth, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <CalendarComponent
+                  mode="single"
+                  selected={profile.dateOfBirth || undefined}
+                  onSelect={(date) => handleInputChange("dateOfBirth", date)}
+                  initialFocus
+                  disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="dateOfBirth" className="text-sm font-medium flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
-            Date of Birth
-          </Label>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !profile.dateOfBirth && "text-muted-foreground"
-                )}
-              >
-                <Calendar className="mr-2 h-4 w-4" />
-                {profile.dateOfBirth ? format(profile.dateOfBirth, "PPP") : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <CalendarComponent
-                mode="single"
-                selected={profile.dateOfBirth || undefined}
-                onSelect={(date) => handleInputChange("dateOfBirth", date)}
-                initialFocus
-                disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                className={cn("p-3 pointer-events-auto")}
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="sex" className="text-sm font-medium">
-            Sex
-          </Label>
-          <Select
-            value={profile.sex}
-            onValueChange={(value) => handleInputChange("sex", value)}
-          >
-            <SelectTrigger id="sex" className="w-full">
-              <SelectValue placeholder="Select your sex" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="male">Male</SelectItem>
-              <SelectItem value="female">Female</SelectItem>
-              <SelectItem value="nonbinary">Non-binary</SelectItem>
-              <SelectItem value="preferNotToSay">Prefer not to say</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="space-y-2">
+            <Label htmlFor="sex" className="text-sm font-medium">
+              Sex
+            </Label>
+            <Select
+              value={profile.sex}
+              onValueChange={(value) => handleInputChange("sex", value)}
+            >
+              <SelectTrigger id="sex" className="w-full">
+                <SelectValue placeholder="Select your sex" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="male">Male</SelectItem>
+                <SelectItem value="female">Female</SelectItem>
+                <SelectItem value="nonbinary">Non-binary</SelectItem>
+                <SelectItem value="preferNotToSay">Prefer not to say</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className="space-y-2">
