@@ -25,7 +25,7 @@ export function DashboardProjects() {
         // Get projects created by the current user, limited to 3
         const projectsQuery = query(
           collection(db, "projects"),
-          where("owner", "==", currentUser.displayName || currentUser.email),
+          where("userId", "==", currentUser.uid),
           orderBy("createdAt", "desc"),
           limit(3)
         );
@@ -39,6 +39,9 @@ export function DashboardProjects() {
         if (fetchedProjects.length > 0) {
           setProjects(fetchedProjects as Project[]);
         } else {
+          // Get the user's full name for sample projects
+          const userFullName = await getUserFullName(currentUser.uid);
+          
           // Fallback to sample data if no projects yet
           setProjects([
             {
@@ -51,7 +54,9 @@ export function DashboardProjects() {
               status: "Open" as "Open",
               skills: ["Mobile Development", "React Native", "UI/UX"],
               category: "Environment",
-              owner: currentUser.displayName || currentUser.email || "You",
+              owner: userFullName,
+              userId: currentUser.uid,
+              ownerEmail: currentUser.email || "",
               featured: false,
               applicants: 3,
               createdAt: new Date(),
@@ -83,7 +88,9 @@ export function DashboardProjects() {
               status: "Open" as "Open",
               skills: ["Web Development", "React", "Firebase"],
               category: "Community",
-              owner: currentUser.displayName || currentUser.email || "You",
+              owner: userFullName,
+              userId: currentUser.uid,
+              ownerEmail: currentUser.email || "",
               featured: false,
               applicants: 5,
               createdAt: new Date(),
@@ -117,7 +124,9 @@ export function DashboardProjects() {
               status: "Urgent" as "Urgent",
               skills: ["VR Development", "Unity3D", "Education"],
               category: "Education",
-              owner: currentUser.displayName || currentUser.email || "You",
+              owner: userFullName,
+              userId: currentUser.uid,
+              ownerEmail: currentUser.email || "",
               featured: true,
               applicants: 4,
               createdAt: new Date(),

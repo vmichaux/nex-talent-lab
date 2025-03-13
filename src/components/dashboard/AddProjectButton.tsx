@@ -152,6 +152,9 @@ export function AddProjectButton() {
     try {
       setLoading(true);
       
+      // Get user's full name
+      const ownerName = await getUserFullName(currentUser.uid);
+      
       // Extract skills for backward compatibility
       const skills = skillsWithLevel.map(item => item.skill);
       
@@ -163,7 +166,9 @@ export function AddProjectButton() {
         skills: skills,
         deadline: projectDeadline,
         duration: projectDuration,
-        owner: currentUser.displayName || currentUser.email || "Anonymous",
+        owner: ownerName,
+        ownerEmail: currentUser.email || "anonymous@example.com",
+        userId: currentUser.uid,
         featured: false,
         status: projectStatus,
         applicants: 0,
@@ -173,7 +178,7 @@ export function AddProjectButton() {
         projectType,
         skillsWithLevel,
         deliverables,
-        timeline: projectDuration, // For now, using the same value as duration
+        timeline: projectDuration,
         compensation,
         compensationDetails,
         perks,
