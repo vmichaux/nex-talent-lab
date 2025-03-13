@@ -70,7 +70,7 @@ const ExploreProjectsPage = () => {
             {/* Error state */}
             {error && (
               <div className="text-center py-20">
-                <p className="text-red-500 mb-4">{error.message}</p>
+                <p className="text-red-500 mb-4">{error}</p>
                 <button onClick={() => window.location.reload()} className="px-4 py-2 bg-primary text-white rounded">Try Again</button>
               </div>
             )}

@@ -1,7 +1,7 @@
 
-import { useState, useEffect, useCallback } from "react";
-import { db } from "../lib/firebase";
-import { collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc, query, where, orderBy, Timestamp } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { collection, query, orderBy, getDocs, Timestamp, doc, updateDoc, getDoc, where, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { Project } from "@/types/project";
 
 interface UseProjectsOptions {
@@ -9,139 +9,189 @@ interface UseProjectsOptions {
   userId?: string | null;
 }
 
-interface CreateProjectResult {
-  success: boolean;
-  projectId?: string;
-  error?: Error;
-}
-
-interface UpdateProjectResult {
-  success: boolean;
-  project?: Project;
-  error?: Error;
-}
-
-export function useProjects(options: UseProjectsOptions = {}) {
+export const useProjects = (options: UseProjectsOptions = {}) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const { excludeCurrentUser = false, userId = null } = options;
 
-  const fetchProjects = useCallback(async () => {
+  const fetchProjects = async () => {
     try {
       setLoading(true);
-      setError(null);
-      
-      let projectsQuery = query(
+      const projectsQuery = query(
         collection(db, "projects"),
         orderBy("createdAt", "desc")
       );
       
-      if (options.userId) {
-        projectsQuery = query(
-          collection(db, "projects"),
-          where("userId", "==", options.userId),
-          orderBy("createdAt", "desc")
-        );
-      }
-      
       const querySnapshot = await getDocs(projectsQuery);
-      const fetchedProjects: Project[] = [];
-      
-      querySnapshot.forEach((doc) => {
-        const projectData = doc.data() as Omit<Project, "id">;
-        fetchedProjects.push({
+      const fetchedProjects = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        
+        // Convert Firestore timestamp to Date
+        const createdAt = data.createdAt instanceof Timestamp 
+          ? data.createdAt.toDate() 
+          : new Date();
+        
+        // Ensure project status is one of the allowed types
+        const status = ["Open", "Urgent", "Closed"].includes(data.status) 
+          ? data.status as "Open" | "Urgent" | "Closed"
+          : "Open";
+        
+        return {
           id: doc.id,
-          ...projectData,
-          createdAt: projectData.createdAt instanceof Timestamp ? projectData.createdAt.toDate() : new Date()
-        });
+          ...data,
+          status,
+          createdAt,
+        } as Project;
       });
       
-      console.log("Fetched projects:", fetchedProjects.length, "projects");
-      setProjects(fetchedProjects);
-    } catch (error) {
-      console.error("Error fetching projects:", error);
-      setError(error as Error);
+      // Filter out current user's projects if requested
+      const filteredProjects = excludeCurrentUser && userId 
+        ? fetchedProjects.filter(project => project.userId !== userId)
+        : fetchedProjects;
+      
+      setProjects(filteredProjects);
+      setError(null);
+      console.log("Fetched projects:", filteredProjects.length, "projects");
+      
+      if (excludeCurrentUser && userId) {
+        console.log("Excluding projects from user:", userId);
+      }
+    } catch (err) {
+      console.error("Error fetching projects:", err);
+      setError("Failed to load projects. Please try again later.");
     } finally {
       setLoading(false);
     }
-  }, [options.userId]);
-
-  useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
-
-  // Function to add a new project to local state without fetching from database
-  const addProjectToState = useCallback((project: Project) => {
-    setProjects(prevProjects => [project, ...prevProjects]);
-  }, []);
-
-  const createProject = async (projectData: Omit<Project, "id" | "createdAt">): Promise<CreateProjectResult> => {
-    try {
-      const newProjectRef = await addDoc(collection(db, "projects"), {
-        ...projectData,
-        createdAt: Timestamp.now()
-      });
-      
-      // Create a new Project object with the ID and add it to local state
-      const newProject: Project = {
-        id: newProjectRef.id,
-        ...projectData,
-        createdAt: new Date()
-      };
-      
-      // Add the new project to local state
-      addProjectToState(newProject);
-      
-      return { success: true, projectId: newProjectRef.id };
-    } catch (error) {
-      console.error("Error creating project:", error);
-      return { success: false, error: error as Error };
-    }
   };
 
-  const updateProject = async (projectId: string, projectData: Partial<Project>): Promise<UpdateProjectResult> => {
+  // Function to add a new project to the local state
+  const addProjectToState = (project: Project) => {
+    setProjects(prev => [project, ...prev]);
+  };
+
+  // Function to update a project in Firestore
+  const updateProject = async (projectId: string, updatedData: Partial<Project>) => {
     try {
-      const projectRef = doc(db, "projects", projectId);
-      await updateDoc(projectRef, projectData);
+      setLoading(true);
+      console.log("Updating project with ID:", projectId);
+      console.log("Update data:", updatedData);
       
-      // Update the project in local state
+      const projectRef = doc(db, "projects", projectId);
+      
+      // First get the current project data
+      const projectSnap = await getDoc(projectRef);
+      if (!projectSnap.exists()) {
+        throw new Error("Project not found");
+      }
+      
+      // Update the document in Firestore
+      await updateDoc(projectRef, updatedData);
+      console.log("Project updated successfully in Firestore");
+      
+      // Update the local state
       setProjects(prevProjects => 
         prevProjects.map(project => 
           project.id === projectId 
-            ? { ...project, ...projectData } 
+            ? { ...project, ...updatedData } 
             : project
         )
       );
       
-      return { success: true, project: { ...projects.find(p => p.id === projectId)!, ...projectData } };
-    } catch (error) {
-      console.error("Error updating project:", error);
-      return { success: false, error: error as Error };
+      return { success: true };
+    } catch (err) {
+      console.error("Error updating project:", err);
+      setError("Failed to update project. Please try again later.");
+      return { success: false, error: err };
+    } finally {
+      setLoading(false);
     }
   };
 
-  const deleteProject = async (projectId: string): Promise<boolean> => {
+  // Function to create a new project and update local state
+  const createProject = async (projectData: Omit<Project, 'id' | 'createdAt'>) => {
     try {
-      await deleteDoc(doc(db, "projects", projectId));
+      setLoading(true);
+      console.log("Creating new project:", projectData);
       
-      // Remove the project from local state
-      setProjects(prevProjects => prevProjects.filter(project => project.id !== projectId));
+      // Add the document to Firestore
+      const projectRef = await addDoc(collection(db, "projects"), {
+        ...projectData,
+        createdAt: serverTimestamp()
+      });
       
-      return true;
-    } catch (error) {
-      console.error("Error deleting project:", error);
-      return false;
+      console.log("Project created successfully with ID:", projectRef.id);
+      
+      // Create a complete project object with the new ID
+      const newProject: Project = {
+        id: projectRef.id,
+        ...projectData,
+        createdAt: new Date()
+      };
+      
+      // Add the new project to the local state
+      addProjectToState(newProject);
+      
+      return { success: true, projectId: projectRef.id, project: newProject };
+    } catch (err) {
+      console.error("Error creating project:", err);
+      setError("Failed to create project. Please try again later.");
+      return { success: false, error: err };
+    } finally {
+      setLoading(false);
     }
   };
 
-  return {
-    projects,
-    loading,
-    error,
-    fetchProjects,
-    createProject,
+  const getUserProjects = async (userId: string) => {
+    try {
+      setLoading(true);
+      console.log("Fetching projects for user:", userId);
+      
+      const projectsQuery = query(
+        collection(db, "projects"),
+        where("userId", "==", userId),
+        orderBy("createdAt", "desc")
+      );
+      
+      const querySnapshot = await getDocs(projectsQuery);
+      const fetchedProjects = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        
+        // Convert Firestore timestamp to Date
+        const createdAt = data.createdAt instanceof Timestamp 
+          ? data.createdAt.toDate() 
+          : new Date();
+        
+        return {
+          id: doc.id,
+          ...data,
+          createdAt,
+        } as Project;
+      });
+      
+      console.log("Fetched user projects:", fetchedProjects.length, "projects");
+      return fetchedProjects;
+    } catch (err) {
+      console.error("Error fetching user projects:", err);
+      setError("Failed to load user projects. Please try again later.");
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, [userId, excludeCurrentUser]); // Re-fetch when these dependencies change
+
+  return { 
+    projects, 
+    loading, 
+    error, 
+    refetchProjects: fetchProjects,
     updateProject,
-    deleteProject,
+    getUserProjects,
+    createProject,
     addProjectToState
   };
-}
+};
