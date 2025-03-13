@@ -1,4 +1,3 @@
-
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, getDocs, query, where, orderBy, limit, doc, getDoc, Timestamp } from "firebase/firestore";
@@ -37,6 +36,23 @@ export interface UserProfile {
     linkedin?: string;
     github?: string;
   };
+}
+
+// Define Application interface
+export interface Application {
+  id: string;
+  projectId: string;
+  projectTitle: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  coverLetter: string;
+  relevantExperience: string;
+  availabilityDate: string;
+  timeCommitment: string;
+  portfolioLink?: string;
+  status: "pending" | "accepted" | "rejected";
+  createdAt: Date;
 }
 
 // Helper functions for Firebase operations
@@ -153,6 +169,49 @@ export const getUserFullName = async (userId: string): Promise<string> => {
   } else {
     const user = auth.currentUser;
     return user?.displayName || user?.email || "Anonymous";
+  }
+};
+
+// Helper function to get user applications
+export const getUserApplications = async (userId: string): Promise<Application[]> => {
+  if (!userId) {
+    console.error("getUserApplications called without userId");
+    return [];
+  }
+  
+  try {
+    const applicationsCollection = collection(db, "applications");
+    const applicationsQuery = query(
+      applicationsCollection, 
+      where("userId", "==", userId),
+      orderBy("createdAt", "desc")
+    );
+    
+    const applicationsSnapshot = await getDocs(applicationsQuery);
+    
+    const applications = applicationsSnapshot.docs.map(doc => {
+      const data = doc.data();
+      // Convert Firestore timestamp to Date if present
+      let createdAt;
+      if (data.createdAt instanceof Timestamp) {
+        createdAt = data.createdAt.toDate();
+      } else if (data.createdAt && typeof data.createdAt.toDate === 'function') {
+        createdAt = data.createdAt.toDate();
+      } else {
+        createdAt = new Date();
+      }
+      
+      return {
+        id: doc.id,
+        ...data,
+        createdAt
+      } as Application;
+    });
+    
+    return applications;
+  } catch (error) {
+    console.error("Error in getUserApplications:", error);
+    return [];
   }
 };
 
