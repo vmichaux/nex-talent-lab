@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, Clock, Tag, UserCircle, MessageSquare, ArrowLeft, Star, MapPin, Briefcase } from "lucide-react";
+import { Calendar, Clock, Tag, UserCircle, MessageSquare, ArrowLeft, Star, MapPin, Briefcase, Share2 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { Project } from "@/types/project";
@@ -112,15 +112,33 @@ const ProjectDetailPage = () => {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
-            {/* Back Button */}
-            <Button 
-              variant="ghost" 
-              className="mb-8 flex items-center gap-1 text-gray-600 hover:text-gray-900"
-              onClick={() => navigate("/dashboard")}
-            >
-              <ArrowLeft size={16} />
-              Back to Dashboard
-            </Button>
+            {/* Top section with back button and action buttons */}
+            <div className="flex justify-between items-center mb-8">
+              <Button 
+                variant="ghost" 
+                className="flex items-center gap-1 text-gray-600 hover:text-gray-900"
+                onClick={() => navigate("/dashboard")}
+              >
+                <ArrowLeft size={16} />
+                Back to Dashboard
+              </Button>
+              
+              {/* Action buttons at top right */}
+              <div className="flex gap-3">
+                <Button 
+                  className="bg-purple-600 hover:bg-purple-700 text-white" 
+                >
+                  Apply to Collaborate
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="border-purple-600 text-purple-600 hover:bg-purple-50"
+                >
+                  <Share2 size={16} className="mr-2" />
+                  Share Project
+                </Button>
+              </div>
+            </div>
 
             {/* Project Header */}
             <div className="mb-12">
@@ -415,23 +433,7 @@ const ProjectDetailPage = () => {
                   </Card>
                 )}
                 
-                {/* Actions Card */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Actions</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <Button variant="outline" className="w-full justify-start">
-                      Apply to Collaborate
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      Share Project
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/dashboard")}>
-                      Return to Dashboard
-                    </Button>
-                  </CardContent>
-                </Card>
+                {/* Actions Card removed from here */}
               </div>
             </div>
           </div>
