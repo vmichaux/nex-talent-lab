@@ -4,10 +4,16 @@ import { collection, query, orderBy, getDocs, Timestamp, doc, updateDoc, getDoc,
 import { db } from "@/lib/firebase";
 import { Project } from "@/types/project";
 
-export const useProjects = () => {
+interface UseProjectsOptions {
+  excludeCurrentUser?: boolean;
+  userId?: string | null;
+}
+
+export const useProjects = (options: UseProjectsOptions = {}) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { excludeCurrentUser = false, userId = null } = options;
 
   const fetchProjects = async () => {
     try {
@@ -39,9 +45,18 @@ export const useProjects = () => {
         } as Project;
       });
       
-      setProjects(fetchedProjects);
+      // Filter out current user's projects if requested
+      const filteredProjects = excludeCurrentUser && userId 
+        ? fetchedProjects.filter(project => project.userId !== userId)
+        : fetchedProjects;
+      
+      setProjects(filteredProjects);
       setError(null);
-      console.log("Fetched projects:", fetchedProjects);
+      console.log("Fetched projects:", filteredProjects.length, "projects");
+      
+      if (excludeCurrentUser && userId) {
+        console.log("Excluding projects from user:", userId);
+      }
     } catch (err) {
       console.error("Error fetching projects:", err);
       setError("Failed to load projects. Please try again later.");
@@ -115,7 +130,7 @@ export const useProjects = () => {
         } as Project;
       });
       
-      console.log("Fetched user projects:", fetchedProjects);
+      console.log("Fetched user projects:", fetchedProjects.length, "projects");
       return fetchedProjects;
     } catch (err) {
       console.error("Error fetching user projects:", err);
@@ -128,7 +143,7 @@ export const useProjects = () => {
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [userId, excludeCurrentUser]); // Re-fetch when these dependencies change
 
   return { 
     projects, 

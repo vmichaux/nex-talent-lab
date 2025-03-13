@@ -1,4 +1,3 @@
-
 import { Users, PlusCircle, Briefcase, LineChart, FileText, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,12 +11,17 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useProjects } from "@/hooks/useProjects";
 import { Project } from "@/types/project";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function BuilderDashboard() {
   const location = useLocation();
   const navigate = useNavigate();
   const [showProjectModal, setShowProjectModal] = useState(false);
-  const { projects, loading } = useProjects();
+  const { currentUser } = useAuth();
+  const { projects, loading } = useProjects({
+    excludeCurrentUser: true,
+    userId: currentUser?.uid
+  });
   const [recommendedProjects, setRecommendedProjects] = useState<Project[]>([]);
   
   // Check if we need to open the project modal based on navigation state

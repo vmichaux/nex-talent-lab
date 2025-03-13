@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -19,12 +18,14 @@ import { useToast } from "@/hooks/use-toast";
 
 const ExplorePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { projects, loading, error } = useProjects();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, currentUser } = useAuth();
+  const { projects, loading, error } = useProjects({
+    excludeCurrentUser: true,
+    userId: currentUser?.uid
+  });
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Redirect to login if not logged in when trying to view projects
   const handleViewProjectDetails = () => {
     if (!isLoggedIn) {
       toast({
@@ -39,7 +40,6 @@ const ExplorePage = () => {
     navigate("/explore-projects");
   };
 
-  // Filter projects based on search query
   const filteredProjects = projects.filter(project => 
     project.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     project.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -47,7 +47,6 @@ const ExplorePage = () => {
     project.skills?.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  // Mock talent data for display purposes
   const talents = [{
     id: 1,
     name: "Emma Wilson",
@@ -103,12 +102,10 @@ const ExplorePage = () => {
       <Navbar />
       <main className="flex-1">
         <div className="relative overflow-hidden bg-white">
-          {/* Background Pattern - Purple Gradient - Same as Hero */}
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-24 md:py-32">
             <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
-              {/* Updated text in the label with capitalized first letters */}
               <div className="mb-6 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Find Your Next Venture</div>
               
               <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl custom-gradient-text">
@@ -118,7 +115,6 @@ const ExplorePage = () => {
               <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal px-0">Discover thrilling projects seeking talented collaborators or find your next creative challenge.</p>
             </div>
 
-            {/* Search and Filter Section */}
             <div className="mb-12">
               <div className="flex flex-col md:flex-row gap-4 max-w-4xl mx-auto">
                 <div className="relative flex-1">
@@ -132,7 +128,6 @@ const ExplorePage = () => {
               </div>
             </div>
 
-            {/* Loading state */}
             {loading && (
               <div className="flex justify-center items-center py-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -140,7 +135,6 @@ const ExplorePage = () => {
               </div>
             )}
 
-            {/* Error state */}
             {error && (
               <div className="text-center py-20">
                 <p className="text-red-500 mb-4">{error}</p>
@@ -148,7 +142,6 @@ const ExplorePage = () => {
               </div>
             )}
 
-            {/* Project Categories Tabs */}
             {!loading && !error && (
               <Tabs defaultValue="all" className="mb-24">
                 <TabsList className="mb-8 mx-auto flex justify-center">
@@ -208,7 +201,6 @@ const ExplorePage = () => {
               </Tabs>
             )}
 
-            {/* Explore Talents Section */}
             <div className="mb-16">
               <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
                 <h2 className="mb-6 text-3xl font-bold tracking-tight custom-gradient-text md:text-6xl">
@@ -219,7 +211,6 @@ const ExplorePage = () => {
                 </p>
               </div>
 
-              {/* Talent Categories Tabs */}
               <Tabs defaultValue="all-talents" className="mb-8">
                 <TabsList className="mb-8 mx-auto flex justify-center">
                   <TabsTrigger value="all-talents" className="px-6">All Talents</TabsTrigger>
@@ -246,12 +237,10 @@ const ExplorePage = () => {
               </Tabs>
             </div>
 
-            {/* What Users Say Section */}
             <div className="pt-16 py-[16px]">
               <TestimonialSection />
             </div>
 
-            {/* Call to Action Section */}
             <div className="pt-16">
               <ExploreCTA />
             </div>
@@ -263,7 +252,6 @@ const ExplorePage = () => {
   );
 };
 
-// Project Card Component
 const ProjectCard = ({ project, onClick }: { project: Project, onClick: () => void }) => {
   return (
     <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
@@ -307,7 +295,6 @@ const ProjectCard = ({ project, onClick }: { project: Project, onClick: () => vo
   );
 };
 
-// Talent Card Component
 const TalentCard = ({ talent }: { talent: any }) => {
   return (
     <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
