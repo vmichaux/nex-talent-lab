@@ -88,7 +88,7 @@ export default function OurStoryPage() {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-8 text-center flex items-center gap-2 justify-center">
               <Star className="h-6 w-6 text-primary" />
-              <span>The Story Behind NexTalent Lab</span>
+              <span className="text-4xl font-bold">The Story Behind NexTalent Lab</span>
             </h2>
             <div className="prose prose-lg max-w-2xl mx-auto text-gray-700 space-y-6">
               <p className="leading-relaxed">
