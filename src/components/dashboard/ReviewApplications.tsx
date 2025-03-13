@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/components/ui/use-toast";
 
 interface ApplicationSummary {
   id: string;
@@ -24,12 +25,15 @@ export function ReviewApplications() {
   const [applications, setApplications] = useState<ApplicationSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasProjects, setHasProjects] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchApplicationSummary = async () => {
       if (!currentUser) return;
       
       setLoading(true);
+      setError(null);
+      
       try {
         // First, check if the user has any projects
         const projectsQuery = query(
@@ -49,32 +53,63 @@ export function ReviewApplications() {
         // Get all projects created by this user
         const projectIds = projectsSnapshot.docs.map(doc => doc.id);
         
-        // Then, get most recent applications for these projects
-        const applicationsQuery = query(
-          collection(db, "applications"),
-          where("projectId", "in", projectIds)
-        );
+        console.log("Fetching applications for projects:", projectIds);
         
-        const applicationsSnapshot = await getDocs(applicationsQuery);
-        const fetchedApplications = applicationsSnapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            projectId: data.projectId,
-            projectTitle: data.projectTitle,
-            userName: data.userName,
-            status: data.status,
-            createdAt: data.createdAt instanceof Timestamp 
-              ? data.createdAt.toDate() 
-              : new Date()
-          } as ApplicationSummary;
-        });
+        if (projectIds.length === 0) {
+          setLoading(false);
+          return;
+        }
+        
+        // To handle cases where there are many projects, chunk the array
+        // Firestore "in" queries are limited to 10 values
+        const fetchApplicationsForProjectIds = async (ids: string[]) => {
+          const applicationsQuery = query(
+            collection(db, "applications"),
+            where("projectId", "in", ids)
+          );
+          
+          const applicationsSnapshot = await getDocs(applicationsQuery);
+          return applicationsSnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              projectId: data.projectId,
+              projectTitle: data.projectTitle || "Untitled Project",
+              userName: data.userName || "Anonymous User",
+              status: data.status || "pending",
+              createdAt: data.createdAt instanceof Timestamp 
+                ? data.createdAt.toDate() 
+                : new Date()
+            } as ApplicationSummary;
+          });
+        };
+        
+        // Handle case where we have more than 10 projects (Firestore limit for 'in' queries)
+        let allApplications: ApplicationSummary[] = [];
+        
+        // Process projects in chunks of 10
+        for (let i = 0; i < projectIds.length; i += 10) {
+          const chunk = projectIds.slice(i, i + 10);
+          const chunkApplications = await fetchApplicationsForProjectIds(chunk);
+          allApplications = [...allApplications, ...chunkApplications];
+        }
+        
+        console.log("All fetched applications:", allApplications);
         
         // Sort by creation date (newest first) and take only the most recent ones
-        fetchedApplications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-        setApplications(fetchedApplications.slice(0, 5));
+        allApplications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        setApplications(allApplications.slice(0, 5));
+        
+        if (allApplications.length > 0) {
+          toast({
+            title: "Applications Loaded",
+            description: `Found ${allApplications.length} application(s) for your projects`,
+            duration: 3000,
+          });
+        }
       } catch (error) {
         console.error("Error fetching application summary:", error);
+        setError("Failed to load applications. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -113,6 +148,20 @@ export function ReviewApplications() {
         <Card>
           <CardContent className="flex justify-center p-6">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </CardContent>
+        </Card>
+      ) : error ? (
+        <Card>
+          <CardContent className="p-6">
+            <div className="text-center text-red-500">
+              <p className="mb-4">{error}</p>
+              <Button 
+                variant="outline" 
+                onClick={() => window.location.reload()}
+              >
+                Try Again
+              </Button>
+            </div>
           </CardContent>
         </Card>
       ) : applications.length === 0 ? (
