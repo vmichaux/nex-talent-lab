@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Plus, Briefcase, Award, Users, Calendar, Clock, DollarSign, Target, MapPin, Scale, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,12 +36,15 @@ export function AddProjectButton() {
   const [projectCategory, setProjectCategory] = useState("Technology");
   const [projectType, setProjectType] = useState("Short-term");
 
-  // Requirements
+  // Skills with level
   const [skillsInput, setSkillsInput] = useState("");
   const [skillsWithLevel, setSkillsWithLevel] = useState<Array<{skill: string, level: "Beginner" | "Intermediate" | "Advanced" | "Expert"}>>([
     { skill: "React", level: "Intermediate" },
     { skill: "UI/UX Design", level: "Beginner" }
   ]);
+  const [selectedSkillLevel, setSelectedSkillLevel] = useState<"Beginner" | "Intermediate" | "Advanced" | "Expert">("Intermediate");
+
+  // Requirements
   const [deliverables, setDeliverables] = useState<string[]>(["Website mockup", "Functional prototype"]);
   const [projectDuration, setProjectDuration] = useState("3 months");
   const [projectDeadline, setProjectDeadline] = useState("");
@@ -72,7 +74,7 @@ export function AddProjectButton() {
 
   const handleAddSkill = () => {
     if (skillsInput.trim()) {
-      setSkillsWithLevel([...skillsWithLevel, { skill: skillsInput.trim(), level: "Intermediate" }]);
+      setSkillsWithLevel([...skillsWithLevel, { skill: skillsInput.trim(), level: selectedSkillLevel }]);
       setSkillsInput("");
     }
   };
@@ -396,7 +398,8 @@ export function AddProjectButton() {
                     />
                     <select 
                       className="w-40 rounded-md border border-input bg-background px-3 py-2"
-                      defaultValue="Intermediate"
+                      value={selectedSkillLevel}
+                      onChange={(e) => setSelectedSkillLevel(e.target.value as "Beginner" | "Intermediate" | "Advanced" | "Expert")}
                     >
                       <option value="Beginner">Beginner</option>
                       <option value="Intermediate">Intermediate</option>

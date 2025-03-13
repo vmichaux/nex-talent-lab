@@ -53,9 +53,22 @@ export const getUserProfile = async (userId: string) => {
     const docSnap = await getDoc(userProfileRef);
     
     if (docSnap.exists()) {
+      const userData = docSnap.data();
+      
+      // Handle potential old skills format (strings) vs new format (objects with name and level)
+      if (userData.skills && Array.isArray(userData.skills)) {
+        // Check if skills are in old format (strings)
+        if (userData.skills.length > 0 && typeof userData.skills[0] === 'string') {
+          userData.skills = userData.skills.map(skill => ({
+            name: skill,
+            level: "Intermediate"
+          }));
+        }
+      }
+      
       return {
         id: docSnap.id,
-        ...docSnap.data()
+        ...userData
       };
     } else {
       return null;

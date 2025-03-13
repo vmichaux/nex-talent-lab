@@ -24,7 +24,9 @@ import {
   Upload,
   ImagePlus,
   Mail,
-  Phone
+  Phone,
+  Star,
+  StarHalf
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -44,6 +46,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+
+type SkillLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
+
+interface Skill {
+  name: string;
+  level: SkillLevel;
+}
 
 const ProfileEditPage = () => {
   const { isLoggedIn, updateProfileCompletion, userData, currentUser } = useAuth();
@@ -76,7 +85,7 @@ const ProfileEditPage = () => {
       projectNeeds: "",
       billingDetails: ""
     },
-    skills: [""],
+    skills: [] as Skill[],
     education: [{ school: "", degree: "", year: "" }],
     experience: [{ company: "", position: "", duration: "" }]
   });
@@ -119,6 +128,27 @@ const ProfileEditPage = () => {
             
             const dateOfBirth = profileData.dateOfBirth ? new Date(profileData.dateOfBirth.toDate?.() || profileData.dateOfBirth) : null;
             
+            let skills: Skill[] = [];
+            if (Array.isArray(profileData.skills)) {
+              if (profileData.skills.length > 0) {
+                if (typeof profileData.skills[0] === 'string') {
+                  skills = profileData.skills.map(skill => ({
+                    name: skill,
+                    level: "Intermediate" as SkillLevel
+                  }));
+                } else {
+                  skills = profileData.skills.map(skill => ({
+                    name: skill.name || "",
+                    level: skill.level || "Intermediate"
+                  }));
+                }
+              }
+            }
+            
+            if (skills.length === 0) {
+              skills = [{ name: "", level: "Intermediate" }];
+            }
+            
             const loadedProfile = {
               firstName,
               lastName,
@@ -131,9 +161,7 @@ const ProfileEditPage = () => {
               phoneNumber: profileData.phoneNumber || "",
               sex: profileData.sex || "",
               business,
-              skills: Array.isArray(profileData.skills) && profileData.skills.length > 0 
-                ? profileData.skills 
-                : [""],
+              skills,
               education: Array.isArray(profileData.education) && profileData.education.length > 0 
                 ? profileData.education.map(edu => ({
                     school: edu.school || "",
@@ -172,7 +200,8 @@ const ProfileEditPage = () => {
             if (currentUser.email) {
               setProfile(prev => ({
                 ...prev,
-                email: currentUser.email || ""
+                email: currentUser.email || "",
+                skills: [{ name: "", level: "Intermediate" }]
               }));
             }
             
@@ -222,9 +251,24 @@ const ProfileEditPage = () => {
     });
   };
 
-  const handleSkillChange = (index, value) => {
+  const handleSkillNameChange = (index, value) => {
     const updatedSkills = [...profile.skills];
-    updatedSkills[index] = value;
+    updatedSkills[index] = {
+      ...updatedSkills[index],
+      name: value
+    };
+    setProfile({
+      ...profile,
+      skills: updatedSkills
+    });
+  };
+
+  const handleSkillLevelChange = (index, level: SkillLevel) => {
+    const updatedSkills = [...profile.skills];
+    updatedSkills[index] = {
+      ...updatedSkills[index],
+      level
+    };
     setProfile({
       ...profile,
       skills: updatedSkills
@@ -234,7 +278,19 @@ const ProfileEditPage = () => {
   const addSkill = () => {
     setProfile({
       ...profile,
-      skills: [...profile.skills, ""]
+      skills: [...profile.skills, { name: "", level: "Intermediate" }]
+    });
+  };
+
+  const removeSkill = (index: number) => {
+    const updatedSkills = [...profile.skills];
+    updatedSkills.splice(index, 1);
+    if (updatedSkills.length === 0) {
+      updatedSkills.push({ name: "", level: "Intermediate" });
+    }
+    setProfile({
+      ...profile,
+      skills: updatedSkills
     });
   };
 
@@ -719,6 +775,21 @@ const ProfileEditPage = () => {
     </div>
   );
 
+  const renderSkillLevelIcon = (level: SkillLevel) => {
+    switch(level) {
+      case "Beginner":
+        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /></div>;
+      case "Intermediate":
+        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /></div>;
+      case "Advanced":
+        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /></div>;
+      case "Expert":
+        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /></div>;
+      default:
+        return null;
+    }
+  };
+
   const renderSkills = () => (
     <div className="border-t border-gray-200 pt-6 mt-6">
       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -727,19 +798,77 @@ const ProfileEditPage = () => {
       </h3>
       <div className="grid grid-cols-1 gap-4 mb-6">
         {profile.skills.map((skill, index) => (
-          <div key={`skill-${index}`} className="flex gap-2">
-            <input
-              type="text"
-              value={skill}
-              onChange={(e) => handleSkillChange(index, e.target.value)}
-              placeholder="e.g., UI Design, JavaScript"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-            />
-            {index === profile.skills.length - 1 && (
-              <Button onClick={addSkill} variant="outline" size="sm" className="whitespace-nowrap">
-                + Add Skill
-              </Button>
-            )}
+          <div key={`skill-${index}`} className="flex flex-col md:flex-row gap-2">
+            <div className="flex-1">
+              <input
+                type="text"
+                value={skill.name}
+                onChange={(e) => handleSkillNameChange(index, e.target.value)}
+                placeholder="e.g., UI Design, JavaScript"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+            </div>
+            
+            <div className="flex gap-2 items-center">
+              <Select
+                value={skill.level}
+                onValueChange={(value) => handleSkillLevelChange(index, value as SkillLevel)}
+              >
+                <SelectTrigger className="w-[150px]">
+                  <SelectValue placeholder="Select level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Beginner">
+                    <div className="flex items-center gap-2">
+                      <span>Beginner</span>
+                      {renderSkillLevelIcon("Beginner")}
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="Intermediate">
+                    <div className="flex items-center gap-2">
+                      <span>Intermediate</span>
+                      {renderSkillLevelIcon("Intermediate")}
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="Advanced">
+                    <div className="flex items-center gap-2">
+                      <span>Advanced</span>
+                      {renderSkillLevelIcon("Advanced")}
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="Expert">
+                    <div className="flex items-center gap-2">
+                      <span>Expert</span>
+                      {renderSkillLevelIcon("Expert")}
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => removeSkill(index)} 
+                  variant="outline" 
+                  size="sm" 
+                  className="px-2"
+                  type="button"
+                >
+                  ✕
+                </Button>
+                
+                {index === profile.skills.length - 1 && (
+                  <Button 
+                    onClick={addSkill} 
+                    variant="outline" 
+                    size="sm" 
+                    className="whitespace-nowrap"
+                    type="button"
+                  >
+                    + Add Skill
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
         ))}
       </div>
