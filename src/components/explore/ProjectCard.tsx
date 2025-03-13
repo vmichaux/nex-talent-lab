@@ -3,23 +3,64 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, UserCircle } from "lucide-react";
+import { Calendar, Clock, UserCircle, MessageSquare } from "lucide-react";
 import { Project } from "@/types/project";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProjectCardProps {
   project: Project;
-  onClick: () => void;
+  onClick?: () => void;
+  currentUserId?: string;
+  showActions?: boolean;
 }
 
-export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
+export const ProjectCard = ({ 
+  project, 
+  onClick, 
+  currentUserId,
+  showActions = false
+}: ProjectCardProps) => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  const handleViewDetails = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      navigate(`/project/${project.id}`);
+    }
+  };
+  
+  const handleApplyNow = () => {
+    // Prevent applying to your own project
+    if (project.userId === currentUserId) {
+      toast({
+        title: "Cannot apply to your own project",
+        description: "You cannot apply to projects you've created.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Navigate to the application page
+    navigate(`/apply-project/${project.id}`);
+  };
+  
+  const isOwnProject = project.userId === currentUserId;
+  
   return (
     <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
       <CardHeader className="pb-4 space-y-2">
         <div className="flex justify-between items-start">
           <CardTitle className="text-xl">{project.title}</CardTitle>
-          {project.featured && <Badge variant="secondary" className="bg-purple-100 text-purple-800">
-              Featured
-            </Badge>}
+          <div className="flex gap-2">
+            {project.featured && <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+                Featured
+              </Badge>}
+            {project.status === "Urgent" && <Badge variant="destructive">Urgent</Badge>}
+            {isOwnProject && showActions && <Badge variant="outline" className="bg-blue-100 text-blue-800">Your Project</Badge>}
+          </div>
         </div>
         <CardDescription className="text-gray-600">{project.category}</CardDescription>
       </CardHeader>
@@ -45,10 +86,29 @@ export const ProjectCard = ({ project, onClick }: ProjectCardProps) => {
             <UserCircle size={16} className="text-gray-400" />
             <span>Posted by: {project.owner}</span>
           </div>
+          {project.applicants !== undefined && (
+            <div className="flex items-center gap-2">
+              <MessageSquare size={16} className="text-gray-400" />
+              <span>{project.applicants} applicants</span>
+            </div>
+          )}
         </div>
       </CardContent>
-      <CardFooter className="pt-4 border-t">
-        <Button className="w-full" onClick={onClick}>View Details</Button>
+      <CardFooter className="pt-4 border-t flex gap-2">
+        {showActions ? (
+          <>
+            <Button 
+              className="w-full" 
+              onClick={handleApplyNow}
+              disabled={isOwnProject}
+            >
+              {isOwnProject ? "Your Project" : "Apply Now"}
+            </Button>
+            <Button variant="outline" className="w-full" onClick={handleViewDetails}>Details</Button>
+          </>
+        ) : (
+          <Button className="w-full" onClick={handleViewDetails}>View Details</Button>
+        )}
       </CardFooter>
     </Card>
   );
