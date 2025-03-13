@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { 
   ArrowLeft, 
   Save, 
@@ -30,7 +31,25 @@ import {
   Heart,
   Plus,
   Check,
-  X
+  X,
+  File,
+  Link,
+  Clock,
+  UserCheck,
+  DollarSign,
+  MapPin,
+  User,
+  Factory,
+  Wifi,
+  Monitor,
+  Languages,
+  MessageSquareText,
+  Award,
+  BadgeCheck,
+  FileCheck,
+  Puzzle,
+  List,
+  Computer
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -50,12 +69,80 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { 
+  RadioGroup, 
+  RadioGroupItem 
+} from "@/components/ui/radio-group";
+import type { 
+  SkillLevel, 
+  ProficiencyLevel, 
+  CompanyStage, 
+  Skill, 
+  Language, 
+  Certification, 
+  ProjectPreference, 
+  RemoteWorkSetup, 
+  Portfolio, 
+  Resume 
+} from "@/types/profile";
 
-type SkillLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
+type EmploymentStatus = "seeking" | "employed" | "passive" | "freelance" | "student";
 
-interface Skill {
-  name: string;
-  level: SkillLevel;
+// Update the profile interface to include all new fields
+interface ExtendedProfile {
+  firstName: string;
+  lastName: string;
+  title: string;
+  location: string;
+  bio: string;
+  profilePicture: string;
+  dateOfBirth: Date | null;
+  email: string;
+  phoneNumber: string;
+  sex: string;
+  interests: string[];
+  business: {
+    companyName: string;
+    foundedYear: string;
+    description: string;
+    employees: string;
+    industry: string;
+    projectNeeds: string;
+    billingDetails: string;
+  };
+  skills: Skill[];
+  education: { school: string; degree: string; year: string }[];
+  experience: { company: string; position: string; duration: string }[];
+  
+  // New fields
+  resume: Resume | null;
+  portfolios: Portfolio[];
+  availability: {
+    status: EmploymentStatus;
+    noticePeriod: string;
+    startDate: Date | null;
+    fullTime: boolean;
+    partTime: boolean;
+    contractWork: boolean;
+    hoursPerWeek: string;
+  };
+  desiredRole: {
+    title: string;
+    contractType: string[];
+    minSalary: string;
+    maxSalary: string;
+    location: string;
+    remote: boolean;
+    hybrid: boolean;
+    onsite: boolean;
+  };
+  employmentStatus: EmploymentStatus;
+  noticePeriod: string;
+  industrySectors: string[];
+  remoteWorkSetup: RemoteWorkSetup;
+  languages: Language[];
+  certifications: Certification[];
+  projectPreferences: ProjectPreference;
 }
 
 const ProfileEditPage = () => {
@@ -63,25 +150,32 @@ const ProfileEditPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const resumeFileInputRef = useRef<HTMLInputElement>(null);
   
   const isProfileCompleted = userData?.hasCompletedProfile || false;
   const [loading, setLoading] = useState(true);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingResume, setUploadingResume] = useState(false);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "dual">("talent");
   const [newInterest, setNewInterest] = useState("");
+  const [newPortfolio, setNewPortfolio] = useState<Portfolio>({ title: "", link: "" });
+  const [newIndustrySector, setNewIndustrySector] = useState("");
+  const [newLanguage, setNewLanguage] = useState<Language>({ name: "", proficiency: "Intermediate" });
+  const [newCertification, setNewCertification] = useState<Certification>({ name: "", issuer: "", dateObtained: "" });
   
-  const [profile, setProfile] = useState({
+  // Initialize the profile with all the new fields
+  const [profile, setProfile] = useState<ExtendedProfile>({
     firstName: "",
     lastName: "",
     title: "",
     location: "",
     bio: "",
     profilePicture: "",
-    dateOfBirth: null as Date | null,
+    dateOfBirth: null,
     email: "",
     phoneNumber: "",
     sex: "",
-    interests: [] as string[],
+    interests: [],
     business: {
       companyName: "",
       foundedYear: "",
@@ -91,9 +185,52 @@ const ProfileEditPage = () => {
       projectNeeds: "",
       billingDetails: ""
     },
-    skills: [] as Skill[],
+    skills: [{ name: "", level: "Intermediate" }],
     education: [{ school: "", degree: "", year: "" }],
-    experience: [{ company: "", position: "", duration: "" }]
+    experience: [{ company: "", position: "", duration: "" }],
+    
+    // New fields with default values
+    resume: null,
+    portfolios: [],
+    availability: {
+      status: "seeking",
+      noticePeriod: "",
+      startDate: null,
+      fullTime: true,
+      partTime: false,
+      contractWork: false,
+      hoursPerWeek: "40"
+    },
+    desiredRole: {
+      title: "",
+      contractType: ["full-time"],
+      minSalary: "",
+      maxSalary: "",
+      location: "",
+      remote: true,
+      hybrid: true,
+      onsite: true
+    },
+    employmentStatus: "seeking",
+    noticePeriod: "",
+    industrySectors: [],
+    remoteWorkSetup: {
+      hasWorkspace: false,
+      hasHighSpeedInternet: false,
+      hasWebcamMic: false,
+      hasMultipleMonitors: false,
+      timezone: "",
+      workingHours: "",
+      remoteExperience: ""
+    },
+    languages: [{ name: "", proficiency: "Intermediate" }],
+    certifications: [],
+    projectPreferences: {
+      teamSize: "",
+      companyStage: "Any",
+      projectDuration: "",
+      roleLevel: ""
+    }
   });
   
   useEffect(() => {
@@ -182,7 +319,48 @@ const ProfileEditPage = () => {
                     position: exp.position || "",
                     duration: exp.duration || ""
                   }))
-                : [{ company: "", position: "", duration: "" }]
+                : [{ company: "", position: "", duration: "" }],
+              resume: profileData.resume || null,
+              portfolios: Array.isArray(profileData.portfolios) ? profileData.portfolios : [],
+              availability: profileData.availability || {
+                status: "seeking",
+                noticePeriod: "",
+                startDate: null,
+                fullTime: true,
+                partTime: false,
+                contractWork: false,
+                hoursPerWeek: "40"
+              },
+              desiredRole: profileData.desiredRole || {
+                title: "",
+                contractType: ["full-time"],
+                minSalary: "",
+                maxSalary: "",
+                location: "",
+                remote: true,
+                hybrid: true,
+                onsite: true
+              },
+              employmentStatus: profileData.employmentStatus || "seeking",
+              noticePeriod: profileData.noticePeriod || "",
+              industrySectors: Array.isArray(profileData.industrySectors) ? profileData.industrySectors : [],
+              remoteWorkSetup: profileData.remoteWorkSetup || {
+                hasWorkspace: false,
+                hasHighSpeedInternet: false,
+                hasWebcamMic: false,
+                hasMultipleMonitors: false,
+                timezone: "",
+                workingHours: "",
+                remoteExperience: ""
+              },
+              languages: Array.isArray(profileData.languages) ? profileData.languages : [{ name: "", proficiency: "Intermediate" }],
+              certifications: Array.isArray(profileData.certifications) ? profileData.certifications : [],
+              projectPreferences: profileData.projectPreferences || {
+                teamSize: "",
+                companyStage: "Any",
+                projectDuration: "",
+                roleLevel: ""
+              }
             };
             
             console.log("Structured profile data:", loadedProfile);
@@ -434,7 +612,8 @@ const ProfileEditPage = () => {
         await setDoc(userProfileRef, {
           ...profile,
           fullName,
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
+          ...profile // Save all profile data
         });
       }
       
@@ -829,372 +1008,3 @@ const ProfileEditPage = () => {
               className="min-h-[80px]"
             />
           </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="projectNeeds" className="text-sm font-medium">
-              <div className="flex items-center gap-2">
-                <FileText className="h-4 w-4" />
-                Project Needs
-              </div>
-            </Label>
-            <Textarea
-              id="projectNeeds"
-              value={profile.business.projectNeeds}
-              onChange={(e) => handleBusinessChange("projectNeeds", e.target.value)}
-              placeholder="Describe the types of projects or talent you're looking for..."
-              rows={3}
-              className="min-h-[80px]"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="billingDetails" className="text-sm font-medium">
-              <div className="flex items-center gap-2">
-                <CreditCard className="h-4 w-4" />
-                Billing Details
-              </div>
-            </Label>
-            <Textarea
-              id="billingDetails"
-              value={profile.business.billingDetails}
-              onChange={(e) => handleBusinessChange("billingDetails", e.target.value)}
-              placeholder="Add information for payments and invoicing..."
-              rows={3}
-              className="min-h-[80px]"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderSkillLevelIcon = (level: SkillLevel) => {
-    switch(level) {
-      case "Beginner":
-        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /></div>;
-      case "Intermediate":
-        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /></div>;
-      case "Advanced":
-        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /></div>;
-      case "Expert":
-        return <div className="flex"><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /><Star className="h-4 w-4 text-yellow-400" /></div>;
-      default:
-        return null;
-    }
-  };
-
-  const renderSkills = () => (
-    <div className="border-t border-gray-200 pt-6 mt-6">
-      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <UserPlus className="h-5 w-5 text-primary" />
-        Skills
-      </h3>
-      <div className="grid grid-cols-1 gap-4 mb-6">
-        {profile.skills.map((skill, index) => (
-          <div key={`skill-${index}`} className="flex flex-col md:flex-row gap-2">
-            <div className="flex-1">
-              <input
-                type="text"
-                value={skill.name}
-                onChange={(e) => handleSkillNameChange(index, e.target.value)}
-                placeholder="e.g., UI Design, JavaScript"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </div>
-            
-            <div className="flex gap-2 items-center">
-              <Select
-                value={skill.level}
-                onValueChange={(value) => handleSkillLevelChange(index, value as SkillLevel)}
-              >
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="Select level" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Beginner">
-                    <div className="flex items-center gap-2">
-                      <span>Beginner</span>
-                      {renderSkillLevelIcon("Beginner")}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="Intermediate">
-                    <div className="flex items-center gap-2">
-                      <span>Intermediate</span>
-                      {renderSkillLevelIcon("Intermediate")}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="Advanced">
-                    <div className="flex items-center gap-2">
-                      <span>Advanced</span>
-                      {renderSkillLevelIcon("Advanced")}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="Expert">
-                    <div className="flex items-center gap-2">
-                      <span>Expert</span>
-                      {renderSkillLevelIcon("Expert")}
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              
-              <div className="flex gap-2">
-                <Button 
-                  onClick={() => removeSkill(index)} 
-                  variant="outline" 
-                  size="sm" 
-                  className="px-2"
-                  type="button"
-                >
-                  ✕
-                </Button>
-                
-                {index === profile.skills.length - 1 && (
-                  <Button 
-                    onClick={addSkill} 
-                    variant="outline" 
-                    size="sm" 
-                    className="whitespace-nowrap"
-                    type="button"
-                  >
-                    + Add Skill
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderEducation = () => (
-    <div className="border-t border-gray-200 pt-6 mt-6">
-      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <GraduationCap className="h-5 w-5 text-primary" />
-        Education
-      </h3>
-      <div className="space-y-6 mb-6">
-        {profile.education.map((edu, index) => (
-          <div key={`edu-${index}`} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                value={edu.school}
-                onChange={(e) => handleEducationChange(index, "school", e.target.value)}
-                placeholder="School/University"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              <input
-                type="text"
-                value={edu.degree}
-                onChange={(e) => handleEducationChange(index, "degree", e.target.value)}
-                placeholder="Degree"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </div>
-            <div className="flex gap-4">
-              <input
-                type="text"
-                value={edu.year}
-                onChange={(e) => handleEducationChange(index, "year", e.target.value)}
-                placeholder="Year"
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              {index === profile.education.length - 1 && (
-                <Button onClick={addEducation} variant="outline" size="sm" className="whitespace-nowrap">
-                  + Add Education
-                </Button>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderExperience = () => (
-    <div className="border-t border-gray-200 pt-6 mt-6">
-      <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-        <Briefcase className="h-5 w-5 text-primary" />
-        Experience
-      </h3>
-      <div className="space-y-6 mb-6">
-        {profile.experience.map((exp, index) => (
-          <div key={`exp-${index}`} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                value={exp.company}
-                onChange={(e) => handleExperienceChange(index, "company", e.target.value)}
-                placeholder="Company"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              <input
-                type="text"
-                value={exp.position}
-                onChange={(e) => handleExperienceChange(index, "position", e.target.value)}
-                placeholder="Position"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </div>
-            <div className="flex gap-4">
-              <input
-                type="text"
-                value={exp.duration}
-                onChange={(e) => handleExperienceChange(index, "duration", e.target.value)}
-                placeholder="Duration (e.g., 2021-2023)"
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              {index === profile.experience.length - 1 && (
-                <Button onClick={addExperience} variant="outline" size="sm" className="whitespace-nowrap">
-                  + Add Experience
-                </Button>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1">
-        <div className="relative overflow-hidden bg-white">
-          <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
-          
-          <div className="container mx-auto px-4 py-24 md:py-32">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
-              <div className="mb-6 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                {isProfileCompleted ? "Account Management" : "Profile Setup"}
-              </div>
-              
-              <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl custom-gradient-text">
-                Manage My Profile
-              </h1>
-              
-              <p className="text-lg text-gray-600 md:text-xl max-w-3xl mb-8">
-                {isProfileCompleted 
-                  ? "Update your information to keep your profile current and relevant."
-                  : "Tell us about yourself so we can match you with the right opportunities."}
-              </p>
-            </div>
-            
-            {loading ? (
-              <div className="max-w-3xl mx-auto text-center p-10">
-                <div className="animate-pulse space-y-4">
-                  <div className="h-6 bg-gray-200 rounded w-3/4 mx-auto"></div>
-                  <div className="h-32 bg-gray-200 rounded w-full mx-auto"></div>
-                  <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto"></div>
-                </div>
-                <p className="mt-6 text-gray-500">Loading your profile...</p>
-              </div>
-            ) : (
-              <div className="max-w-3xl mx-auto">
-                <Tabs 
-                  value={activeRole} 
-                  onValueChange={(value) => handleRoleChange(value as "talent" | "builder" | "dual")}
-                  className="w-full mb-8"
-                >
-                  <TabsList className="grid grid-cols-3 w-full">
-                    <TabsTrigger value="talent">Talent Profile</TabsTrigger>
-                    <TabsTrigger value="builder">Builder Profile</TabsTrigger>
-                    <TabsTrigger value="dual">Dual Role Profile</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="talent" className="mt-6">
-                    <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
-                      {renderBasicInfo()}
-                      {renderSkills()}
-                      {renderEducation()}
-                      {renderExperience()}
-                      {renderInterests()}
-                      
-                      <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
-                        <Button 
-                          variant="outline" 
-                          onClick={() => navigate('/dashboard')}
-                          className="gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          Back to Dashboard
-                        </Button>
-                        <Button 
-                          onClick={handleSaveProfile}
-                          className="gap-2"
-                        >
-                          <Save className="h-4 w-4" />
-                          {isProfileCompleted ? "Update Profile" : "Save Profile"}
-                        </Button>
-                      </div>
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="builder" className="mt-6">
-                    <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
-                      {renderBasicInfo()}
-                      {renderBusinessInfo()}
-                      {renderInterests()}
-                      
-                      <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
-                        <Button 
-                          variant="outline" 
-                          onClick={() => navigate('/dashboard')}
-                          className="gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          Back to Dashboard
-                        </Button>
-                        <Button 
-                          onClick={handleSaveProfile}
-                          className="gap-2"
-                        >
-                          <Save className="h-4 w-4" />
-                          {isProfileCompleted ? "Update Profile" : "Save Profile"}
-                        </Button>
-                      </div>
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="dual" className="mt-6">
-                    <div className="bg-white rounded-lg shadow-md p-8 border border-gray-100">
-                      {renderBasicInfo()}
-                      {renderBusinessInfo()}
-                      {renderSkills()}
-                      {renderEducation()}
-                      {renderExperience()}
-                      {renderInterests()}
-                      
-                      <div className="border-t border-gray-200 pt-6 mt-6 flex flex-col sm:flex-row gap-4 justify-end">
-                        <Button 
-                          variant="outline" 
-                          onClick={() => navigate('/dashboard')}
-                          className="gap-2"
-                        >
-                          <ArrowLeft className="h-4 w-4" />
-                          Back to Dashboard
-                        </Button>
-                        <Button 
-                          onClick={handleSaveProfile}
-                          className="gap-2"
-                        >
-                          <Save className="h-4 w-4" />
-                          {isProfileCompleted ? "Update Profile" : "Save Profile"}
-                        </Button>
-                      </div>
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </div>
-  );
-};
-
-export default ProfileEditPage;
