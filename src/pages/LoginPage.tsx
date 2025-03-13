@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Github, ArrowLeft, LucideIcon } from "lucide-react";
@@ -17,33 +18,21 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const navigate = useNavigate();
-  const {
-    login,
-    signInWithGoogle,
-    signInWithGithub
-  } = useAuth();
+  const { login, signInWithGoogle, signInWithGithub } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    
     try {
+      console.log(`Login form submitted with email: ${email}`);
       await login(email, password);
-      toast({
-        title: "Login Successful",
-        description: "Welcome back to NexTalent Lab!"
-      });
       navigate("/dashboard");
     } catch (error: any) {
-      toast({
-        title: "Login Failed",
-        description: error.message || "Please check your credentials and try again",
-        variant: "destructive"
-      });
-      console.error("Login error:", error);
+      console.error("Login error in component:", error);
+      // Toast is already handled in the AuthContext
     } finally {
       setIsLoading(false);
     }
@@ -52,19 +41,12 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     try {
+      console.log("Google sign-in button clicked");
       await signInWithGoogle();
-      toast({
-        title: "Login Successful",
-        description: "Welcome back to NexTalent Lab!"
-      });
       navigate("/dashboard");
     } catch (error: any) {
-      toast({
-        title: "Google Sign-in Failed",
-        description: error.message || "There was an issue signing in with Google",
-        variant: "destructive"
-      });
-      console.error("Google sign-in error:", error);
+      console.error("Google sign-in error in component:", error);
+      // Toast is already handled in the AuthContext
     } finally {
       setIsLoading(false);
     }
@@ -74,18 +56,10 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       await signInWithGithub();
-      toast({
-        title: "Login Successful",
-        description: "Welcome back to NexTalent Lab!"
-      });
       navigate("/dashboard");
     } catch (error: any) {
-      toast({
-        title: "GitHub Sign-in Failed",
-        description: error.message || "There was an issue signing in with GitHub",
-        variant: "destructive"
-      });
-      console.error("GitHub sign-in error:", error);
+      console.error("GitHub sign-in error in component:", error);
+      // Toast is already handled in the AuthContext
     } finally {
       setIsLoading(false);
     }

@@ -11,7 +11,8 @@ import {
   signup as signupService,
   login as loginService,
   signInWithGoogle as signInWithGoogleService,
-  signInWithGithub as signInWithGithubService
+  signInWithGithub as signInWithGithubService,
+  formatAuthError
 } from "@/services/authService";
 
 type AuthContextType = {
@@ -38,11 +39,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.log("Auth state changed:", user ? `User: ${user.email}` : "No user");
       setCurrentUser(user);
       setIsLoggedIn(!!user);
       if (user) {
-        const data = await updateUserData(user);
-        setUserData(data);
+        try {
+          const data = await updateUserData(user);
+          setUserData(data);
+        } catch (error) {
+          console.error("Error updating user data after auth state change:", error);
+        }
       } else {
         setUserData(null);
       }
@@ -55,23 +61,57 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = async (email: string, password: string) => {
     try {
       await signupService(email, password);
+      toast({
+        title: "Account created successfully!",
+        description: "Welcome to NexTalent Lab."
+      });
     } catch (error: any) {
+      const errorMessage = formatAuthError(error);
+      toast({
+        title: "Signup failed",
+        description: errorMessage,
+        variant: "destructive"
+      });
       throw error;
     }
   };
   
   const login = async (email: string, password: string) => {
     try {
+      console.log(`Attempting to login with email: ${email}`);
       await loginService(email, password);
+      toast({
+        title: "Login successful",
+        description: "Welcome back to NexTalent Lab!"
+      });
     } catch (error: any) {
+      console.error("Login error in context:", error);
+      const errorMessage = formatAuthError(error);
+      toast({
+        title: "Login failed",
+        description: errorMessage,
+        variant: "destructive"
+      });
       throw error;
     }
   };
 
   const signInWithGoogle = async () => {
     try {
+      console.log("Attempting Google sign-in from context");
       await signInWithGoogleService();
+      toast({
+        title: "Login successful",
+        description: "Welcome to NexTalent Lab!"
+      });
     } catch (error: any) {
+      console.error("Google sign-in error in context:", error);
+      const errorMessage = formatAuthError(error);
+      toast({
+        title: "Google sign-in failed",
+        description: errorMessage,
+        variant: "destructive"
+      });
       throw error;
     }
   };
@@ -79,7 +119,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signInWithGithub = async () => {
     try {
       await signInWithGithubService();
+      toast({
+        title: "Login successful",
+        description: "Welcome to NexTalent Lab!"
+      });
     } catch (error: any) {
+      const errorMessage = formatAuthError(error);
+      toast({
+        title: "GitHub sign-in failed",
+        description: errorMessage,
+        variant: "destructive"
+      });
       throw error;
     }
   };
@@ -93,9 +143,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         description: "You have been logged out of your account",
       });
     } catch (error: any) {
+      const errorMessage = formatAuthError(error);
       toast({
         title: "Logout error",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive"
       });
       throw error;
@@ -116,9 +167,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
       }
     } catch (error: any) {
+      const errorMessage = formatAuthError(error);
       toast({
         title: "Update error",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive"
       });
       throw error;
@@ -144,5 +196,3 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   );
 }
-
-// Export AuthContext for direct import in the useAuth hook

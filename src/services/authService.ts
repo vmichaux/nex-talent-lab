@@ -4,7 +4,9 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword,
   signInWithPopup,
-  GithubAuthProvider
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  AuthError
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db, googleProvider } from "@/lib/firebase";
@@ -57,6 +59,40 @@ export const updateProfileCompletion = async (user: User, completed: boolean): P
   await setDoc(userRef, { hasCompletedProfile: completed }, { merge: true });
 };
 
+// Format Firebase auth error messages
+export const formatAuthError = (error: any): string => {
+  if (!error || !error.code) {
+    return "An unknown error occurred. Please try again.";
+  }
+
+  // Handle common Firebase auth error codes
+  switch (error.code) {
+    case 'auth/user-not-found':
+    case 'auth/wrong-password':
+      return "Invalid email or password. Please try again.";
+    case 'auth/email-already-in-use':
+      return "This email is already in use. Please use a different email or log in.";
+    case 'auth/weak-password':
+      return "Password should be at least 6 characters long.";
+    case 'auth/invalid-email':
+      return "Please enter a valid email address.";
+    case 'auth/popup-closed-by-user':
+      return "Sign-in was cancelled. Please try again.";
+    case 'auth/cancelled-popup-request':
+      return "Sign-in was cancelled. Please try again.";
+    case 'auth/popup-blocked':
+      return "Sign-in popup was blocked by your browser. Please allow popups for this site.";
+    case 'auth/account-exists-with-different-credential':
+      return "An account already exists with the same email but different sign-in credentials. Please sign in using the original method.";
+    case 'auth/network-request-failed':
+      return "Network error. Please check your internet connection and try again.";
+    case 'auth/too-many-requests':
+      return "Too many unsuccessful login attempts. Please try again later.";
+    default:
+      return error.message || "Authentication failed. Please try again.";
+  }
+};
+
 // Sign up with email and password
 export const signup = async (email: string, password: string): Promise<User> => {
   try {
@@ -64,6 +100,7 @@ export const signup = async (email: string, password: string): Promise<User> => 
     await updateUserData(result.user);
     return result.user;
   } catch (error) {
+    console.error("Signup error:", error);
     throw error;
   }
 };
@@ -73,6 +110,7 @@ export const login = async (email: string, password: string): Promise<void> => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
+    console.error("Login error:", error);
     throw error;
   }
 };
@@ -80,8 +118,11 @@ export const login = async (email: string, password: string): Promise<void> => {
 // Sign in with Google
 export const signInWithGoogle = async (): Promise<void> => {
   try {
+    console.log("Attempting Google sign in");
     await signInWithPopup(auth, googleProvider);
+    console.log("Google sign in successful");
   } catch (error) {
+    console.error("Google sign-in error:", error);
     throw error;
   }
 };
@@ -92,6 +133,7 @@ export const signInWithGithub = async (): Promise<void> => {
     const provider = new GithubAuthProvider();
     await signInWithPopup(auth, provider);
   } catch (error) {
+    console.error("GitHub sign-in error:", error);
     throw error;
   }
 };
