@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Github, ArrowLeft, LucideIcon } from "lucide-react";
@@ -9,7 +8,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 
-// Custom Google icon component as it's not available in Lucide
 const Google = (props: React.ComponentProps<LucideIcon>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +114,7 @@ export default function LoginPage() {
       <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
           <div className="mb-8 text-center">
-            <h1 className="text-2xl font-bold">Welcome back</h1>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-[#6E59A5] to-[#2ECC71] bg-clip-text text-transparent">Welcome back</h1>
             <p className="text-gray-500 mt-1">Log in to your NexTalent Lab account</p>
           </div>
 
