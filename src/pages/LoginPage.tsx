@@ -102,100 +102,113 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
-      <div className="mb-8 text-center">
-        <h1 className="text-2xl font-bold">Welcome back</h1>
-        <p className="text-gray-500 mt-1">Log in to your NexTalent Lab account</p>
-      </div>
-
-      <form onSubmit={handleLogin} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              className="pl-10"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+        <div className="mb-8 text-center">
+          <Link to="/" className="inline-flex items-center justify-center mb-6">
+            <span className="font-bold text-2xl text-primary">NexTalent</span>
+            <span className="font-bold text-2xl">Lab</span>
+          </Link>
+          <h1 className="text-2xl font-bold">Welcome back</h1>
+          <p className="text-gray-500 mt-1">Log in to your NexTalent Lab account</p>
         </div>
 
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <Label htmlFor="password">Password</Label>
-            <Link to="/forgot-password" className="text-sm text-primary hover:underline">
-              Forgot password?
-            </Link>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                className="pl-10"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
           </div>
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              className="pl-10"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="password">Password</Label>
+              <Link to="/forgot-password" className="text-sm text-primary hover:underline">
+                Forgot password?
+              </Link>
+            </div>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                className="pl-10"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center space-x-2">
-          <Checkbox id="remember" />
-          <Label htmlFor="remember" className="text-sm">Remember me for 30 days</Label>
-        </div>
-
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Logging in..." : "Log in"}
-        </Button>
-      </form>
-
-      <div className="mt-6">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
+          <div className="flex items-center space-x-2">
+            <Checkbox id="remember" />
+            <Label htmlFor="remember" className="text-sm">Remember me for 30 days</Label>
           </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">Or continue with</span>
-          </div>
-        </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          <Button 
-            variant="outline" 
-            type="button" 
-            className="gap-2"
-            onClick={handleGithubSignIn}
-            disabled={isLoading}
-          >
-            <Github className="h-4 w-4" />
-            <span>GitHub</span>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Logging in..." : "Log in"}
           </Button>
-          <Button 
-            variant="outline" 
-            type="button" 
-            className="gap-2"
-            onClick={handleGoogleSignIn}
-            disabled={isLoading}
-          >
-            <Google className="h-4 w-4" />
-            <span>Google</span>
-          </Button>
+        </form>
+
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">Or continue with</span>
+            </div>
+          </div>
+
+          <div className="mt-6 grid grid-cols-2 gap-4">
+            <Button 
+              variant="outline" 
+              type="button" 
+              className="gap-2"
+              onClick={handleGithubSignIn}
+              disabled={isLoading}
+            >
+              <Github className="h-4 w-4" />
+              <span>GitHub</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              type="button" 
+              className="gap-2"
+              onClick={handleGoogleSignIn}
+              disabled={isLoading}
+            >
+              <Google className="h-4 w-4" />
+              <span>Google</span>
+            </Button>
+          </div>
+        </div>
+
+        <p className="mt-8 text-center text-sm text-gray-500">
+          Don't have an account?{" "}
+          <Link to="/signup" className="font-medium text-primary hover:underline">
+            Sign up
+          </Link>
+        </p>
+        
+        <div className="mt-6 text-center">
+          <Link to="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-800 transition-colors text-sm">
+            <ArrowLeft className="h-4 w-4" />
+            <span>Back to homepage</span>
+          </Link>
         </div>
       </div>
-
-      <p className="mt-8 text-center text-sm text-gray-500">
-        Don't have an account?{" "}
-        <Link to="/signup" className="font-medium text-primary hover:underline">
-          Sign up
-        </Link>
-      </p>
     </div>
   );
 }

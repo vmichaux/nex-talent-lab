@@ -1,11 +1,21 @@
 
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+
 export default function AuthLayout() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const fromOnboarding = searchParams.get('fromOnboarding') === 'true';
+  
+  // Check if the current path is for the login page
+  const isLoginPage = location.pathname === "/login";
+  
+  // If it's the login page, just render the outlet directly (modified login page is self-contained)
+  if (isLoginPage) {
+    return <Outlet />;
+  }
+  
+  // For signup and other auth pages, use the original layout with sidebar
   return <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left sidebar with branding and illustration */}
       <div className="w-full md:w-1/2 bg-gradient-to-br from-primary to-purple-900 text-white p-8 md:p-12 flex flex-col bg-[#ce8aef]/[0.17]">
