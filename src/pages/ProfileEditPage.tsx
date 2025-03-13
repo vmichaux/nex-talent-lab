@@ -8,10 +8,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Save, UserPlus, Briefcase, GraduationCap, Globe, Building, Calendar, Users, Tag, FileText, CreditCard } from "lucide-react";
+import { 
+  ArrowLeft, 
+  Save, 
+  UserPlus, 
+  Briefcase, 
+  GraduationCap, 
+  Globe, 
+  Building, 
+  Calendar, 
+  Users, 
+  Tag, 
+  FileText, 
+  CreditCard 
+} from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ProfileEditPage = () => {
   const { isLoggedIn, updateProfileCompletion, userData, currentUser } = useAuth();
@@ -394,13 +414,21 @@ const ProfileEditPage = () => {
                             Number of Employees
                           </div>
                         </Label>
-                        <Input
-                          id="employees"
-                          type="text"
+                        <Select
                           value={profile.business.employees}
-                          onChange={(e) => handleBusinessChange("employees", e.target.value)}
-                          placeholder="1-10"
-                        />
+                          onValueChange={(value) => handleBusinessChange("employees", value)}
+                        >
+                          <SelectTrigger id="employees" className="w-full">
+                            <SelectValue placeholder="Select company size" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="0-1">0-1</SelectItem>
+                            <SelectItem value="1-10">1-10</SelectItem>
+                            <SelectItem value="10-50">10-50</SelectItem>
+                            <SelectItem value="50-200">50-200</SelectItem>
+                            <SelectItem value="200+">200+</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                       
                       <div className="space-y-2">
