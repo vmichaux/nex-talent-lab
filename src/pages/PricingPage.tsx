@@ -15,7 +15,7 @@ export default function PricingPage() {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-[100px] md:py-32">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-26">
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10">
               <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Find the Perfect Plan</div>
               
               <h1 className="mb-6 text-4xl font-bold tracking-tight custom-gradient-text md:text-6xl">
