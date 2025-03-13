@@ -29,7 +29,7 @@ export default function OurStoryPage() {
           </div>
         </div>
 
-        <section className="py-16">
+        <section className="py-0">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
               <h2 className="font-bold mb-6 text-center text-4xl">Our Mission</h2>
@@ -51,7 +51,7 @@ export default function OurStoryPage() {
         </section>
 
         <section className="py-12 bg-gray-50">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 py-[68px]">
             <div className="max-w-3xl mx-auto">
               <h3 className="text-2xl font-semibold mb-8 text-center flex items-center gap-2 justify-center">
                 
