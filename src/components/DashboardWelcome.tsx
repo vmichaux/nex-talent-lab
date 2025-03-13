@@ -1,7 +1,7 @@
-
 import { ArrowRight, Check, UserPlus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
+
 type StepProps = {
   number: number;
   title: string;
@@ -9,6 +9,7 @@ type StepProps = {
   icon: React.ReactNode;
   completed?: boolean;
 };
+
 const Step = ({
   number,
   title,
@@ -29,6 +30,7 @@ const Step = ({
       <p className="text-gray-600">{description}</p>
     </div>
   </div>;
+
 export function DashboardWelcome() {
   const navigate = useNavigate();
   const steps = [{
@@ -50,8 +52,8 @@ export function DashboardWelcome() {
     icon: <ArrowRight className="h-4 w-4 text-primary" />,
     completed: false
   }];
+
   return <div className="relative overflow-hidden bg-white">
-      {/* Background Pattern - Purple Gradient */}
       <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
       
       <div className="container mx-auto px-4 py-12">
@@ -118,7 +120,7 @@ export function DashboardWelcome() {
           </div>
           
           <div className="text-center mt-8">
-            <p>Need help getting started? <Link to="/contact-sales" className="text-primary font-medium">Contact our support team</Link></p>
+            <p>Need help getting started? <Link to="/contact-sales#sales-title" className="text-primary font-medium">Contact our support team</Link></p>
           </div>
         </div>
       </div>

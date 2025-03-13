@@ -1,4 +1,3 @@
-
 import { Check, X, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -87,7 +86,7 @@ export function PricingSection() {
       buttonText: "Contact Sales",
       buttonVariant: "outline",
       popular: false,
-      linkTo: "/contact-sales"
+      linkTo: "/contact-sales#sales-title"
     },
     {
       name: "Incubator",
@@ -109,7 +108,7 @@ export function PricingSection() {
       buttonVariant: "outline",
       popular: false,
       special: true,
-      linkTo: "/contact-sales"
+      linkTo: "/contact-sales#sales-title"
     }
   ];
 
@@ -176,7 +175,7 @@ export function PricingSection() {
         </div>
 
         <div className="text-center mt-12 text-gray-600">
-          <p>Need a custom solution? <Link to="/contact-sales" className="text-primary font-medium">Contact our sales team</Link></p>
+          <p>Need a custom solution? <Link to="/contact-sales#sales-title" className="text-primary font-medium">Contact our sales team</Link></p>
         </div>
       </div>
     </section>
