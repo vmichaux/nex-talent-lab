@@ -34,7 +34,11 @@ export function TestProfileIndicator() {
         variant="outline"
         size="sm"
         className="text-xs bg-purple-700 text-white hover:bg-purple-800 border-purple-500"
-        onClick={() => switchToMainProfile()}
+        onClick={() => {
+          switchToMainProfile();
+          // Navigate to dashboard after switching profile
+          navigate('/dashboard');
+        }}
       >
         <Icons.user className="h-3 w-3 mr-1" />
         Switch to Main
