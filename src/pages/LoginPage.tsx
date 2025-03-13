@@ -100,7 +100,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
           <div className="mb-8 text-center">
             <h1 className="font-bold bg-gradient-to-r from-[#6E59A5] to-[#2ECC71] bg-clip-text text-transparent text-5xl">Welcome back</h1>
-            <p className="text-gray-500 mt-1 my-[11px]">Log in to your NexTalent Lab account</p>
+            <p className="text-gray-500 mt-1 my-[12px]">Log in to your NexTalent Lab account</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
