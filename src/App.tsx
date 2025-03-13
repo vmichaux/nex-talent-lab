@@ -13,7 +13,6 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ExplorePage from "./pages/ExplorePage";
 import ExploreProjectsPage from "./pages/ExploreProjectsPage";
-import ExploreTalentsPage from "./pages/ExploreTalentsPage";
 import HowItWorksPage from "./pages/HowItWorksPage";
 import PricingPage from "./pages/PricingPage";
 import OurStoryPage from "./pages/OurStoryPage";
@@ -52,7 +51,6 @@ function AppContent() {
           <Route path="/" element={<Index />} />
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/explore-projects" element={<ExploreProjectsPage />} />
-          <Route path="/explore-talents" element={<ExploreTalentsPage />} />
           <Route path="/project/:id" element={<ProjectDetailPage />} />
           <Route path="/project/edit/:id" element={<ProjectDetailPage isEditing={true} />} />
           <Route path="/apply-project/:id" element={<ApplyProjectPage />} />
