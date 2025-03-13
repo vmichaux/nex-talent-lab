@@ -58,7 +58,7 @@ export function HowItWorks({
             <h3 className="text-2xl font-bold mb-4 text-center">Why Our Process Works</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
-                <h4 className="text-xl font-semibold mb-3 text-primary">For Talent</h4>
+                <h4 className="text-xl font-semibold mb-3 text-primary my-[40px]">For Talent</h4>
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <span className="text-primary font-bold mr-2">✓</span>
@@ -79,7 +79,7 @@ export function HowItWorks({
                 </ul>
               </div>
               <div>
-                <h4 className="text-xl font-semibold mb-3 text-secondary">For Project Creators</h4>
+                <h4 className="text-xl font-semibold mb-3 text-secondary py-0 my-[40px]">For Project Creators</h4>
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <span className="text-secondary font-bold mr-2">✓</span>
