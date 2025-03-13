@@ -35,24 +35,52 @@ const ProfileEditPage = () => {
         const userProfileRef = doc(db, "userProfiles", currentUser.uid);
         try {
           const docSnap = await getDoc(userProfileRef);
+          console.log("Document exists:", docSnap.exists());
+          
           if (docSnap.exists()) {
-            console.log("Profile data found:", docSnap.data());
             const profileData = docSnap.data();
-            setProfile({
+            console.log("Raw profile data:", profileData);
+            
+            // Create a properly structured profile object with fallbacks
+            const loadedProfile = {
               fullName: profileData.fullName || "",
               title: profileData.title || "",
               location: profileData.location || "",
               bio: profileData.bio || "",
-              skills: profileData.skills?.length ? profileData.skills : [""],
-              education: profileData.education?.length 
-                ? profileData.education 
+              skills: Array.isArray(profileData.skills) && profileData.skills.length > 0 
+                ? profileData.skills 
+                : [""],
+              education: Array.isArray(profileData.education) && profileData.education.length > 0 
+                ? profileData.education.map(edu => ({
+                    school: edu.school || "",
+                    degree: edu.degree || "",
+                    year: edu.year || ""
+                  }))
                 : [{ school: "", degree: "", year: "" }],
-              experience: profileData.experience?.length 
-                ? profileData.experience 
+              experience: Array.isArray(profileData.experience) && profileData.experience.length > 0 
+                ? profileData.experience.map(exp => ({
+                    company: exp.company || "",
+                    position: exp.position || "",
+                    duration: exp.duration || ""
+                  }))
                 : [{ company: "", position: "", duration: "" }]
+            };
+            
+            console.log("Structured profile data:", loadedProfile);
+            setProfile(loadedProfile);
+            
+            // Notify the user that their profile data has loaded
+            toast({
+              title: "Profile loaded",
+              description: "Your profile information has been loaded successfully.",
             });
           } else {
             console.log("No profile data found, using empty profile");
+            toast({
+              title: "No profile found",
+              description: "No previous profile data was found. You can create your profile now.",
+              variant: "destructive"
+            });
           }
         } catch (error) {
           console.error("Error fetching user profile:", error);
@@ -142,7 +170,10 @@ const ProfileEditPage = () => {
       if (currentUser?.uid) {
         const userProfileRef = doc(db, "userProfiles", currentUser.uid);
         console.log("Saving profile data:", profile);
-        await setDoc(userProfileRef, profile);
+        await setDoc(userProfileRef, {
+          ...profile,
+          lastUpdated: new Date()
+        });
       }
       
       await updateProfileCompletion(true);
