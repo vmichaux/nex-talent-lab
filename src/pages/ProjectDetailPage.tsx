@@ -8,123 +8,66 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Calendar, Clock, Tag, UserCircle, MessageSquare, ArrowLeft, Star, MapPin, Briefcase } from "lucide-react";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { Project } from "@/types/project";
+import { useToast } from "@/hooks/use-toast";
+import { Progress } from "@/components/ui/progress";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { getUserProfile } from "@/lib/firebase";
 
 const ProjectDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [project, setProject] = useState(null);
+  const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [owner, setOwner] = useState<any>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
-    // Mock project data - in a real app, you would fetch this from an API
-    const projects = [
-      {
-        id: 1,
-        title: "AI-Powered Educational Platform",
-        description: "Building an interactive learning platform with personalized AI tutoring for K-12 students.",
-        fullDescription: "Our vision is to revolutionize education by creating an AI-powered learning platform that adapts to each student's unique learning style, pace, and interests. The platform will use machine learning algorithms to analyze student performance and provide personalized learning paths, interactive exercises, and real-time feedback. We aim to make quality education more accessible and engaging for students of all backgrounds.",
-        skills: ["React", "Machine Learning", "UI/UX Design"],
-        category: "Education",
-        deadline: "June 15, 2025",
-        duration: "3 months",
-        owner: {
-          name: "Alexandra Chen",
-          title: "EdTech Entrepreneur",
-          location: "Boston, MA",
-          bio: "Former teacher turned tech entrepreneur with a passion for making education more accessible through technology. I've been building educational products for the past 5 years and have a background in cognitive science and machine learning.",
-          image: "/placeholder.svg",
-          rating: 4.9,
-          projectsCompleted: 7
-        },
-        featured: true,
-        objectives: [
-          "Develop a responsive web application with React frontend and Python/TensorFlow backend",
-          "Create personalized learning algorithms that adapt to individual student needs",
-          "Design engaging, interactive learning exercises across multiple subjects",
-          "Implement a dashboard for parents and teachers to track student progress"
-        ],
-        timeline: [
-          { phase: "Research & Planning", duration: "2 weeks" },
-          { phase: "Design & Prototyping", duration: "3 weeks" },
-          { phase: "Development", duration: "6 weeks" },
-          { phase: "Testing & Refinement", duration: "2 weeks" },
-        ]
-      },
-      {
-        id: 2,
-        title: "Health and Wellness Mobile App",
-        description: "Creating a holistic wellness app that combines fitness tracking with mental health resources.",
-        fullDescription: "We're developing a comprehensive health and wellness mobile application that seamlessly integrates physical fitness tracking with mental health support. Our goal is to create a holistic approach to wellbeing that acknowledges the interconnectedness of physical and mental health. The app will combine activity tracking, nutrition guidance, meditation sessions, mood monitoring, and access to professional resources, all within a supportive community environment.",
-        skills: ["React Native", "Firebase", "Health APIs"],
-        category: "Health",
-        deadline: "May 20, 2025",
-        duration: "2 months",
-        owner: {
-          name: "Marcus Johnson",
-          title: "Health Tech Developer",
-          location: "San Diego, CA",
-          bio: "Software engineer with a background in healthcare and a personal passion for wellness. I've spent the last decade building digital health solutions that have helped thousands of people live healthier lives.",
-          image: "/placeholder.svg",
-          rating: 4.8,
-          projectsCompleted: 5
-        },
-        featured: false,
-        objectives: [
-          "Build a cross-platform mobile app using React Native",
-          "Integrate with health tracking APIs for activity and biometric monitoring",
-          "Develop a content library of guided meditations and mental health resources",
-          "Create a secure, privacy-focused user experience"
-        ],
-        timeline: [
-          { phase: "UX Research", duration: "2 weeks" },
-          { phase: "UI Design", duration: "2 weeks" },
-          { phase: "App Development", duration: "4 weeks" },
-          { phase: "Testing & Launch", duration: "1 week" },
-        ]
-      },
-      {
-        id: 3,
-        title: "Sustainable Fashion Marketplace",
-        description: "Developing an e-commerce platform for eco-friendly fashion brands and second-hand clothing.",
-        fullDescription: "Our project aims to create a specialized e-commerce marketplace focused exclusively on sustainable and ethical fashion. We will connect conscious consumers with eco-friendly brands, second-hand retailers, and upcycled fashion designers in one curated platform. The marketplace will feature robust verification of sustainability claims, transparent supply chain information, and educational content about sustainable fashion practices.",
-        skills: ["E-commerce", "Sustainability", "Branding"],
-        category: "Fashion",
-        deadline: "July 30, 2025",
-        duration: "4 months",
-        owner: {
-          name: "Sophia Patel",
-          title: "Sustainable Fashion Advocate",
-          location: "New York, NY",
-          bio: "Fashion industry veteran with 8 years of experience in ethical fashion. I've worked with major brands on sustainability initiatives and have founded two eco-conscious fashion startups.",
-          image: "/placeholder.svg",
-          rating: 4.7,
-          projectsCompleted: 4
-        },
-        featured: true,
-        objectives: [
-          "Design and build a user-friendly e-commerce platform",
-          "Implement a verification system for sustainability claims",
-          "Create a visual identity that appeals to eco-conscious consumers",
-          "Develop a community feature for knowledge sharing"
-        ],
-        timeline: [
-          { phase: "Market Research", duration: "3 weeks" },
-          { phase: "Platform Design", duration: "4 weeks" },
-          { phase: "Development", duration: "8 weeks" },
-          { phase: "Vendor Onboarding", duration: "3 weeks" },
-        ]
+    const fetchProjectDetails = async () => {
+      if (!id) return;
+      
+      try {
+        setLoading(true);
+        const projectRef = doc(db, "projects", id);
+        const projectSnap = await getDoc(projectRef);
+        
+        if (projectSnap.exists()) {
+          const projectData = {
+            id: projectSnap.id,
+            ...projectSnap.data()
+          } as Project;
+          
+          setProject(projectData);
+          
+          // If there's a userId, fetch owner info
+          if (projectData.userId) {
+            const ownerProfile = await getUserProfile(projectData.userId);
+            setOwner(ownerProfile);
+          }
+        } else {
+          toast({
+            title: "Project not found",
+            description: "The project you're looking for doesn't exist or has been removed.",
+            variant: "destructive"
+          });
+          setProject(null);
+        }
+      } catch (error) {
+        console.error("Error fetching project:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load project details. Please try again.",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
       }
-    ];
+    };
 
-    // Find the project with the matching ID
-    const foundProject = projects.find(p => p.id === parseInt(id));
-    
-    // Simulate API delay
-    setTimeout(() => {
-      setProject(foundProject);
-      setLoading(false);
-    }, 500);
-  }, [id]);
+    fetchProjectDetails();
+  }, [id, toast]);
 
   if (loading) {
     return (
@@ -149,9 +92,9 @@ const ProjectDetailPage = () => {
           <div className="container mx-auto px-4 py-12 text-center">
             <h1 className="text-3xl font-bold mb-4">Project Not Found</h1>
             <p className="mb-8 text-gray-600">The project you're looking for doesn't exist or has been removed.</p>
-            <Button onClick={() => navigate("/explore")}>
+            <Button onClick={() => navigate("/dashboard")}>
               <ArrowLeft className="mr-2" size={16} />
-              Back to Explore
+              Back to Dashboard
             </Button>
           </div>
         </main>
@@ -173,10 +116,10 @@ const ProjectDetailPage = () => {
             <Button 
               variant="ghost" 
               className="mb-8 flex items-center gap-1 text-gray-600 hover:text-gray-900"
-              onClick={() => navigate("/explore")}
+              onClick={() => navigate("/dashboard")}
             >
               <ArrowLeft size={16} />
-              Back to Projects
+              Back to Dashboard
             </Button>
 
             {/* Project Header */}
@@ -189,7 +132,7 @@ const ProjectDetailPage = () => {
                     <span>{project.category}</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {project.skills.map((skill, index) => (
+                    {project.skills && project.skills.map((skill, index) => (
                       <Badge key={index} variant="outline" className="bg-gray-50">
                         {skill}
                       </Badge>
@@ -197,13 +140,25 @@ const ProjectDetailPage = () => {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <Button className="gap-2">
-                    <MessageSquare size={16} />
-                    Contact Owner
-                  </Button>
-                  <Button variant="outline">Apply Now</Button>
+                  {project.progress !== undefined && (
+                    <div className="bg-white p-4 rounded-lg shadow-sm border min-w-40">
+                      <p className="text-sm text-gray-500 mb-2">Project Progress</p>
+                      <div className="flex justify-between text-sm mb-2">
+                        <span className="font-medium text-gray-700">{project.progress}%</span>
+                      </div>
+                      <Progress value={project.progress} className="h-2" />
+                    </div>
+                  )}
                 </div>
               </div>
+              
+              <Badge className={
+                project.status === "Urgent" ? "bg-red-100 text-red-800 hover:bg-red-100" :
+                project.status === "Closed" ? "bg-gray-100 text-gray-800 hover:bg-gray-100" :
+                "bg-green-100 text-green-800 hover:bg-green-100"
+              }>
+                {project.status}
+              </Badge>
             </div>
 
             {/* Main Content Area - Two Column Layout */}
@@ -216,134 +171,264 @@ const ProjectDetailPage = () => {
                     <CardTitle>Project Overview</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <p className="text-gray-700">{project.fullDescription}</p>
+                    <p className="text-gray-700">{project.description}</p>
                     
-                    <div>
-                      <h3 className="font-semibold mb-3">Project Objectives</h3>
-                      <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                        {project.objectives.map((objective, index) => (
-                          <li key={index}>{objective}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    <div>
-                      <h3 className="font-semibold mb-3">Timeline</h3>
-                      <div className="space-y-3">
-                        {project.timeline.map((phase, index) => (
-                          <div key={index} className="flex items-center justify-between pb-2 border-b border-gray-100">
-                            <span className="text-gray-700">{phase.phase}</span>
-                            <span className="text-gray-500 text-sm">{phase.duration}</span>
-                          </div>
-                        ))}
+                    {project.projectGoal && (
+                      <div>
+                        <h3 className="font-semibold mb-3">Project Goal</h3>
+                        <p className="text-gray-700">{project.projectGoal}</p>
                       </div>
-                    </div>
+                    )}
+                    
+                    {project.deliverables && project.deliverables.length > 0 && (
+                      <div>
+                        <h3 className="font-semibold mb-3">Deliverables</h3>
+                        <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                          {project.deliverables.map((deliverable, index) => (
+                            <li key={index}>{deliverable}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {project.timeline && (
+                      <div>
+                        <h3 className="font-semibold mb-3">Timeline</h3>
+                        <div className="text-gray-700">
+                          <p>{project.timeline}</p>
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
                 
-                {/* Key Details Card */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Key Details</CardTitle>
-                  </CardHeader>
-                  <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <Calendar size={18} className="text-gray-400" />
+                {/* Skills and Requirements */}
+                {(project.skills || project.desiredProfiles) && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Skills and Requirements</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      {project.skills && project.skills.length > 0 && (
                         <div>
-                          <p className="font-medium">Project Deadline</p>
-                          <p className="text-sm">{project.deadline}</p>
+                          <h3 className="font-semibold mb-3">Required Skills</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {project.skills.map((skill, index) => (
+                              <Badge key={index} variant="outline" className="bg-gray-50 px-3 py-1">
+                                {skill}
+                              </Badge>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <Clock size={18} className="text-gray-400" />
+                      )}
+                      
+                      {project.skillsWithLevel && project.skillsWithLevel.length > 0 && (
                         <div>
-                          <p className="font-medium">Estimated Duration</p>
-                          <p className="text-sm">{project.duration}</p>
+                          <h3 className="font-semibold mb-3">Skills with Proficiency</h3>
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Skill</TableHead>
+                                <TableHead>Level</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {project.skillsWithLevel.map((skillWithLevel, index) => (
+                                <TableRow key={index}>
+                                  <TableCell>{skillWithLevel.skill}</TableCell>
+                                  <TableCell>{skillWithLevel.level}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
                         </div>
-                      </div>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <Tag size={18} className="text-gray-400" />
+                      )}
+                      
+                      {project.desiredProfiles && project.desiredProfiles.length > 0 && (
                         <div>
-                          <p className="font-medium">Category</p>
-                          <p className="text-sm">{project.category}</p>
+                          <h3 className="font-semibold mb-3">Desired Profiles</h3>
+                          <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                            {project.desiredProfiles.map((profile, index) => (
+                              <li key={index}>{profile}</li>
+                            ))}
+                          </ul>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <UserCircle size={18} className="text-gray-400" />
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
+                
+                {/* Compensation and Benefits */}
+                {(project.compensation || project.perks) && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Compensation and Benefits</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      {project.compensation && (
                         <div>
-                          <p className="font-medium">Posted By</p>
-                          <p className="text-sm">{project.owner.name}</p>
+                          <h3 className="font-semibold mb-2">Compensation Type</h3>
+                          <p className="text-gray-700">{project.compensation}</p>
+                          {project.compensationDetails && (
+                            <p className="text-gray-700 mt-2">{project.compensationDetails}</p>
+                          )}
                         </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                      )}
+                      
+                      {project.budget && (
+                        <div>
+                          <h3 className="font-semibold mb-2">Budget</h3>
+                          <p className="text-gray-700">{project.budget}</p>
+                        </div>
+                      )}
+                      
+                      {project.perks && project.perks.length > 0 && (
+                        <div>
+                          <h3 className="font-semibold mb-3">Additional Perks</h3>
+                          <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                            {project.perks.map((perk, index) => (
+                              <li key={index}>{perk}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
               </div>
 
               {/* Project Owner - Right Column (1/3) */}
               <div className="space-y-6">
-                {/* Project Owner Card */}
+                {/* Project Key Details Card */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Project Owner</CardTitle>
-                    <CardDescription>Learn about who's behind this project</CardDescription>
+                    <CardTitle>Key Details</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="flex items-center gap-4">
-                      <Avatar className="h-16 w-16 border-2 border-primary/20">
-                        <AvatarImage src={project.owner.image} alt={project.owner.name} />
-                        <AvatarFallback>{project.owner.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Calendar size={18} className="text-gray-400" />
                       <div>
-                        <h3 className="font-semibold text-lg">{project.owner.name}</h3>
-                        <p className="text-gray-600">{project.owner.title}</p>
+                        <p className="font-medium">Deadline</p>
+                        <p className="text-sm">{project.deadline || "Not specified"}</p>
                       </div>
                     </div>
-                    
-                    <div className="space-y-3 text-sm text-gray-600">
-                      <div className="flex items-center gap-2">
-                        <MapPin size={16} className="text-gray-400" />
-                        <span>{project.owner.location}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Star size={16} className="text-yellow-400" />
-                        <span>Rating: {project.owner.rating}/5.0</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Briefcase size={16} className="text-gray-400" />
-                        <span>{project.owner.projectsCompleted} projects completed</span>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Clock size={18} className="text-gray-400" />
+                      <div>
+                        <p className="font-medium">Duration</p>
+                        <p className="text-sm">{project.duration || "Not specified"}</p>
                       </div>
                     </div>
-                    
-                    <div>
-                      <h4 className="font-medium mb-2">Bio</h4>
-                      <p className="text-gray-700 text-sm">{project.owner.bio}</p>
+                    <div className="flex items-center gap-2 text-gray-700">
+                      <Tag size={18} className="text-gray-400" />
+                      <div>
+                        <p className="font-medium">Category</p>
+                        <p className="text-sm">{project.category || "Not specified"}</p>
+                      </div>
                     </div>
-                    
-                    <Button className="w-full gap-2">
-                      <MessageSquare size={16} />
-                      Contact {project.owner.name.split(' ')[0]}
-                    </Button>
+                    {project.location && (
+                      <div className="flex items-center gap-2 text-gray-700">
+                        <MapPin size={18} className="text-gray-400" />
+                        <div>
+                          <p className="font-medium">Location</p>
+                          <p className="text-sm">{project.location}</p>
+                        </div>
+                      </div>
+                    )}
+                    {project.collaboratorsNeeded && (
+                      <div className="flex items-center gap-2 text-gray-700">
+                        <UserCircle size={18} className="text-gray-400" />
+                        <div>
+                          <p className="font-medium">Collaborators Needed</p>
+                          <p className="text-sm">{project.collaboratorsNeeded}</p>
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
                 
-                {/* Related Actions Card */}
+                {/* Project Owner Card */}
+                {owner ? (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Project Owner</CardTitle>
+                      <CardDescription>About the project creator</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="flex items-center gap-4">
+                        <Avatar className="h-16 w-16 border-2 border-primary/20">
+                          <AvatarImage src={owner.photoURL} alt={owner.displayName} />
+                          <AvatarFallback>
+                            {owner.firstName ? owner.firstName[0] + (owner.lastName ? owner.lastName[0] : '') : 'U'}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <h3 className="font-semibold text-lg">
+                            {owner.firstName && owner.lastName 
+                              ? `${owner.firstName} ${owner.lastName}`
+                              : owner.displayName || 'User'}
+                          </h3>
+                          <p className="text-gray-600">{owner.title || 'Project Creator'}</p>
+                        </div>
+                      </div>
+                      
+                      {owner.location && (
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <MapPin size={16} className="text-gray-400" />
+                          <span>{owner.location}</span>
+                        </div>
+                      )}
+                      
+                      {owner.bio && (
+                        <div>
+                          <h4 className="font-medium mb-2">Bio</h4>
+                          <p className="text-gray-700 text-sm">{owner.bio}</p>
+                        </div>
+                      )}
+                      
+                      <Button className="w-full gap-2">
+                        <MessageSquare size={16} />
+                        Contact Owner
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Project Owner</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center gap-4">
+                        <Avatar className="h-16 w-16 border-2 border-primary/20">
+                          <AvatarFallback>U</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <h3 className="font-semibold text-lg">{project.owner || "Project Creator"}</h3>
+                        </div>
+                      </div>
+                      
+                      <Button className="w-full gap-2 mt-6">
+                        <MessageSquare size={16} />
+                        Contact Owner
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )}
+                
+                {/* Actions Card */}
                 <Card>
                   <CardHeader>
                     <CardTitle>Actions</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <Button variant="outline" className="w-full justify-start">
-                      Save to Favorites
+                      Apply to Collaborate
                     </Button>
                     <Button variant="outline" className="w-full justify-start">
                       Share Project
                     </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      Report Project
+                    <Button variant="outline" className="w-full justify-start" onClick={() => navigate("/dashboard")}>
+                      Return to Dashboard
                     </Button>
                   </CardContent>
                 </Card>
