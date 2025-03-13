@@ -29,7 +29,7 @@ const DashboardPage = () => {
       // Capitalize first letter
       return emailUsername.charAt(0).toUpperCase() + emailUsername.slice(1);
     }
-    return "My"; // Fallback if no name or email is available
+    return "friend"; // Fallback if no name or email is available
   };
 
   useEffect(() => {
@@ -84,8 +84,12 @@ const DashboardPage = () => {
                   My Journey
                 </h1>
                 
-                <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
+                <p className="text-lg text-gray-600 md:text-xl max-w-3xl mb-2">
                   Track your projects, connections, and activities all in one place.
+                </p>
+                
+                <p className="text-xl font-medium text-primary md:text-2xl">
+                  Let's go {getUserName()}!
                 </p>
               </div>
 
