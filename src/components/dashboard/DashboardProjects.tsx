@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { collection, query, where, orderBy, limit, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
-import { Project } from "@/types/project"; // Import Project type
+import { Project } from "@/types/project";
+import { getUserProjects } from "@/lib/firebase";
+import { Progress } from "@/components/ui/progress";
 
 export function DashboardProjects() {
   const navigate = useNavigate();
@@ -22,25 +23,14 @@ export function DashboardProjects() {
       
       try {
         setLoading(true);
-        // Get projects created by the current user (using userId field), limited to 3
-        const projectsQuery = query(
-          collection(db, "projects"),
-          where("userId", "==", currentUser.uid),
-          orderBy("createdAt", "desc"),
-          limit(3)
-        );
-        
-        const querySnapshot = await getDocs(projectsQuery);
-        const fetchedProjects = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
+        // Use the getUserProjects helper function to get user's projects
+        const fetchedProjects = await getUserProjects(currentUser.uid);
         
         if (fetchedProjects.length > 0) {
           setProjects(fetchedProjects as Project[]);
+          console.log("Fetched user projects:", fetchedProjects);
         } else {
-          // Fallback to sample data if no projects yet
-          // User can create projects using the AddProjectButton
+          // Fallback to empty array if no projects yet
           setProjects([]);
         }
       } catch (error) {
@@ -94,12 +84,7 @@ export function DashboardProjects() {
                       <span className="text-gray-600">Progress</span>
                       <span className="font-medium">{project.progress || 0}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-primary rounded-full h-2" 
-                        style={{ width: `${project.progress || 0}%` }}
-                      ></div>
-                    </div>
+                    <Progress value={project.progress || 0} className="h-2" />
                   </div>
                   
                   <div className="flex justify-between items-center">
