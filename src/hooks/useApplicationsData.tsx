@@ -153,11 +153,11 @@ export function useApplicationsData() {
       
       await updateDoc(applicationRef, updateData);
       
-      // Update local state with proper type casting
+      // Update local state
       setApplications(prev => 
         prev.map(app => 
           app.id === applicationId 
-            ? { ...app, status: newStatus as ApplicationSummary['status'], feedback: feedback || app.feedback } 
+            ? { ...app, status: newStatus, feedback: feedback || app.feedback } 
             : app
         )
       );
@@ -165,7 +165,7 @@ export function useApplicationsData() {
       setFilteredApplications(prev => 
         prev.map(app => 
           app.id === applicationId 
-            ? { ...app, status: newStatus as ApplicationSummary['status'], feedback: feedback || app.feedback } 
+            ? { ...app, status: newStatus, feedback: feedback || app.feedback } 
             : app
         )
       );
