@@ -34,7 +34,7 @@ export function TestimonialSection() {
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <h2 className="text-3xl font-bold mb-4 my-[14px] py-[11px]">What Our Users Say</h2>
-          <p className="text-gray-600 px-[77px] my-[12px]">Hear from creative professionals and project builders who have found success on our platform.</p>
+          <p className="text-gray-600 my-[12px] px-[131px]">Hear from creative professionals and project builders who have found success on our platform.</p>
         </div>
 
         <div className="max-w-4xl mx-auto">
