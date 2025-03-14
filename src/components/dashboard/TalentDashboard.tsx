@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
 import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
@@ -11,9 +12,10 @@ import { ProjectMetrics } from "@/components/dashboard/ProjectMetrics";
 import { ProjectHistory } from "@/components/dashboard/ProjectHistory";
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
-import { Search } from "lucide-react";
+import { Search, LineChart, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
 export function TalentDashboard() {
   const [filter, setFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,7 +29,10 @@ export function TalentDashboard() {
       <div className="lg:w-3/5 space-y-12">
         {/* Overview section */}
         <div>
-          <h2 className="text-xl font-bold mb-6">Your Overview</h2>
+          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <BarChart3 className="h-4 w-4 text-primary" />
+            Your Overview
+          </h2>
           <DashboardOverview role="talent" />
         </div>
 

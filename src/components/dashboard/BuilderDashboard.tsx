@@ -5,8 +5,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { useProjects } from "@/hooks/useProjects";
 import { Project } from "@/types/project";
 import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
-import { DashboardProjects } from "@/components/dashboard/DashboardProjects";
 import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
+import { DashboardProjects } from "@/components/dashboard/DashboardProjects";
 import { ProjectDeadlines } from "@/components/dashboard/ProjectDeadlines";
 import { ProjectMetrics } from "@/components/dashboard/ProjectMetrics";
 import { ReviewApplications } from "@/components/dashboard/ReviewApplications";
@@ -17,6 +17,7 @@ import { ProjectActions } from "@/components/dashboard/builder/ProjectActions";
 import { RecommendedTalents } from "@/components/dashboard/builder/RecommendedTalents";
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
+import { BarChart3, LineChart } from "lucide-react";
 
 export function BuilderDashboard() {
   const location = useLocation();
@@ -48,7 +49,10 @@ export function BuilderDashboard() {
       <div className="lg:w-3/5 space-y-12">
         {/* Overview section */}
         <div>
-          <h2 className="text-lg font-bold mb-4">Your Overview</h2>
+          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <BarChart3 className="h-4 w-4 text-primary" />
+            Your Overview
+          </h2>
           <DashboardOverview role="builder" />
         </div>
 

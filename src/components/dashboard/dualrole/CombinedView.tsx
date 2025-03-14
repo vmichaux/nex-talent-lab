@@ -15,21 +15,26 @@ import { ProjectHistory } from "../ProjectHistory";
 import { SkillsProgress } from "../talent/SkillsProgress";
 import { LearningResources } from "../talent/LearningResources";
 import { ManageReviewsRecommendations } from "../ManageReviewsRecommendations";
-import { Users } from "lucide-react";
+import { BarChart3, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RecommendedTalents } from "../builder/RecommendedTalents";
 import { NetworkList } from "../builder/NetworkList";
 import { ProjectActions } from "../builder/ProjectActions";
+
 export function CombinedView() {
   const [filter, setFilter] = useState<string>("all");
   const [showProjectModal, setShowProjectModal] = useState(false);
+  
   return <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
       {/* Left column (wider) */}
       <div className="lg:w-3/5 space-y-12">
         {/* Overview metrics */}
         <div>
-          <h2 className="text-lg font-bold mb-4">Your Overview</h2>
+          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <BarChart3 className="h-4 w-4 text-primary" />
+            Your Overview
+          </h2>
           <DashboardOverview role="both" />
         </div>
         
@@ -44,7 +49,10 @@ export function CombinedView() {
         
         {/* Project Metrics section with role activities */}
         <div>
-          <h2 className="text-lg font-bold mb-4">Project Metrics</h2>
+          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <Users className="h-4 w-4 text-primary" />
+            Project Metrics
+          </h2>
           <RoleActivityCards />
         </div>
         
