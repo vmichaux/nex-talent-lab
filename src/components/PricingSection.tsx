@@ -1,7 +1,9 @@
+
 import { Check, X, Rocket, Building2, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+
 export function PricingSection() {
   const plans = [{
     name: "Talents",
@@ -37,6 +39,7 @@ export function PricingSection() {
     special: true,
     linkTo: "/contact-sales#sales-title"
   }];
+  
   return <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -51,7 +54,7 @@ export function PricingSection() {
               <div className="p-6">
                 <div className="flex items-center mb-3">
                   {plan.icon}
-                  <h3 className="text-xl font-bold px-[17px]">{plan.name}</h3>
+                  <h3 className="text-xl font-bold">{plan.name}</h3>
                 </div>
                 <div className="flex items-baseline mb-4">
                   <span className="text-4xl font-bold">{plan.price === "0" ? "€0" : plan.price === "Custom" ? "" : `€${plan.price}`}</span>
@@ -84,7 +87,7 @@ export function PricingSection() {
         </div>
 
         <div className="text-center mt-12 text-gray-600">
-          <p className="py-[14px] my-0">Need a custom solution? <Link to="/contact-sales#sales-title" className="text-primary font-medium">Contact our sales team</Link></p>
+          <p>Need a custom solution? <Link to="/contact-sales#sales-title" className="text-primary font-medium">Contact our sales team</Link></p>
         </div>
       </div>
     </section>;
