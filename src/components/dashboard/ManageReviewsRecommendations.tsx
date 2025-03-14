@@ -37,7 +37,7 @@ export function ManageReviewsRecommendations({
   }];
   return <div>
       <div className="flex justify-between items-center mb-4 rounded-2xl">
-        <h2 className="text-2xl font-semibold flex items-center gap-2 category-title-gradient">
+        <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl">
           <ThumbsUp className="h-4 w-4 text-primary" />
           Manage Reviews & Recommendations
         </h2>

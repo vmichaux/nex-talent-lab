@@ -47,8 +47,8 @@ export function RecommendedTalents() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold flex items-center gap-2">
-          <Users className="h-5 w-5 text-primary" />
+        <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl">
+          <Users className="h-4 w-4 text-primary" />
           Recommended Talent
         </h2>
         <Button variant="outline" className="gap-1">
