@@ -37,33 +37,46 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
     );
   }
 
+  // For non-logged-in users, use a container div with flex and uniform spacing
   return (
     <>
-      <Link to="/" className={linkClass} onClick={handleClick}>
-        Home
-      </Link>
-      <Link to="/explore" className={linkClass} onClick={handleClick}>
-        Explore
-      </Link>
-      <Link 
-        to="/onboarding" 
-        className={linkClass} 
-        onClick={(e) => {
-          handleDashboardClick(e);
-          handleClick();
-        }}
-      >
-      </Link>
-      <Link to="/how-it-works" className={linkClass} onClick={handleClick}>
-        How It Works
-      </Link>
-      <Link to="/about" className={linkClass} onClick={handleClick}>
-        About
-      </Link>
-      <Link to="/contact-sales" className={linkClass} onClick={handleClick}>
-        <Phone className="h-4 w-4" />
-        Contact Sales
-      </Link>
+      <div className="flex items-center">
+        <Link to="/" className={`${linkClass} px-4`} onClick={handleClick}>
+          Home
+        </Link>
+      </div>
+      <div className="flex items-center">
+        <Link to="/explore" className={`${linkClass} px-4`} onClick={handleClick}>
+          Explore
+        </Link>
+      </div>
+      <div className="flex items-center">
+        <Link 
+          to="/onboarding" 
+          className={`${linkClass} px-4`} 
+          onClick={(e) => {
+            handleDashboardClick(e);
+            handleClick();
+          }}
+        >
+        </Link>
+      </div>
+      <div className="flex items-center">
+        <Link to="/how-it-works" className={`${linkClass} px-4`} onClick={handleClick}>
+          How It Works
+        </Link>
+      </div>
+      <div className="flex items-center">
+        <Link to="/about" className={`${linkClass} px-4`} onClick={handleClick}>
+          About
+        </Link>
+      </div>
+      <div className="flex items-center">
+        <Link to="/contact-sales" className={`${linkClass} px-4`} onClick={handleClick}>
+          <Phone className="h-4 w-4 mr-1" />
+          Contact Sales
+        </Link>
+      </div>
     </>
   );
 }
