@@ -1,29 +1,41 @@
 
 import { useState, useEffect } from "react";
-import { collection, query, orderBy, getDocs, Timestamp, doc, updateDoc, getDoc, where, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, query, orderBy, getDocs, Timestamp, doc, updateDoc, getDoc, where, addDoc, serverTimestamp, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Project } from "@/types/project";
 
 interface UseProjectsOptions {
   excludeCurrentUser?: boolean;
   userId?: string | null;
+  limitCount?: number;
 }
 
 export const useProjects = (options: UseProjectsOptions = {}) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { excludeCurrentUser = false, userId = null } = options;
+  const { excludeCurrentUser = false, userId = null, limitCount = 0 } = options;
 
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      const projectsQuery = query(
+      console.log("Fetching projects with options:", { excludeCurrentUser, userId, limitCount });
+      
+      // Start building the query
+      let projectsQuery = query(
         collection(db, "projects"),
         orderBy("createdAt", "desc")
       );
       
+      // Add limit if specified
+      if (limitCount > 0) {
+        projectsQuery = query(projectsQuery, limit(limitCount));
+      }
+      
+      console.log("Executing Firestore query...");
       const querySnapshot = await getDocs(projectsQuery);
+      console.log(`Raw query returned ${querySnapshot.size} documents`);
+      
       const fetchedProjects = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         
@@ -182,7 +194,7 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
 
   useEffect(() => {
     fetchProjects();
-  }, [userId, excludeCurrentUser]); // Re-fetch when these dependencies change
+  }, [userId, excludeCurrentUser, limitCount]); // Re-fetch when these dependencies change
 
   return { 
     projects, 

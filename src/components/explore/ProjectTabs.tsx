@@ -7,22 +7,31 @@ import { ProjectCard } from "./ProjectCard";
 interface ProjectTabsProps {
   projects: Project[];
   filteredProjects: Project[];
-  currentUserId?: string;
+  currentUserId?: string | null;
 }
 
 export const ProjectTabs = ({ projects, filteredProjects, currentUserId }: ProjectTabsProps) => {
+  // Make sure we have valid arrays to work with
+  const validProjects = Array.isArray(projects) ? projects : [];
+  const validFilteredProjects = Array.isArray(filteredProjects) ? filteredProjects : [];
+  
+  // Calculate counts for the tab labels
+  const featuredCount = validFilteredProjects.filter(p => p.featured).length;
+  const urgentCount = validFilteredProjects.filter(p => p.status === "Urgent").length;
+  const recentCount = Math.min(validFilteredProjects.length, 6);
+
   return (
     <Tabs defaultValue="all" className="mb-8">
       <TabsList className="mb-8 mx-auto flex justify-center">
-        <TabsTrigger value="all">All Projects ({filteredProjects.length})</TabsTrigger>
-        <TabsTrigger value="featured">Featured ({filteredProjects.filter(p => p.featured).length})</TabsTrigger>
-        <TabsTrigger value="recent">Recently Added ({Math.min(filteredProjects.length, 4)})</TabsTrigger>
-        <TabsTrigger value="urgent">Urgent Needs ({filteredProjects.filter(p => p.status === "Urgent").length})</TabsTrigger>
+        <TabsTrigger value="all">All Projects ({validFilteredProjects.length})</TabsTrigger>
+        <TabsTrigger value="featured">Featured ({featuredCount})</TabsTrigger>
+        <TabsTrigger value="recent">Recently Added ({recentCount})</TabsTrigger>
+        <TabsTrigger value="urgent">Urgent Needs ({urgentCount})</TabsTrigger>
       </TabsList>
       
       <TabsContent value="all" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filteredProjects.length > 0 ? (
-          filteredProjects.map(project => (
+        {validFilteredProjects.length > 0 ? (
+          validFilteredProjects.map(project => (
             <ProjectCard 
               key={project.id} 
               project={project} 
@@ -38,8 +47,8 @@ export const ProjectTabs = ({ projects, filteredProjects, currentUserId }: Proje
       </TabsContent>
       
       <TabsContent value="featured" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filteredProjects.filter(p => p.featured).length > 0 ? (
-          filteredProjects.filter(p => p.featured).map(project => (
+        {validFilteredProjects.filter(p => p.featured).length > 0 ? (
+          validFilteredProjects.filter(p => p.featured).map(project => (
             <ProjectCard 
               key={project.id} 
               project={project} 
@@ -55,8 +64,8 @@ export const ProjectTabs = ({ projects, filteredProjects, currentUserId }: Proje
       </TabsContent>
       
       <TabsContent value="recent" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filteredProjects.length > 0 ? (
-          filteredProjects.slice(0, 4).map(project => (
+        {validFilteredProjects.length > 0 ? (
+          validFilteredProjects.slice(0, 6).map(project => (
             <ProjectCard 
               key={project.id} 
               project={project} 
@@ -72,8 +81,8 @@ export const ProjectTabs = ({ projects, filteredProjects, currentUserId }: Proje
       </TabsContent>
       
       <TabsContent value="urgent" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filteredProjects.filter(p => p.status === "Urgent").length > 0 ? (
-          filteredProjects.filter(p => p.status === "Urgent").map(project => (
+        {validFilteredProjects.filter(p => p.status === "Urgent").length > 0 ? (
+          validFilteredProjects.filter(p => p.status === "Urgent").map(project => (
             <ProjectCard 
               key={project.id} 
               project={project} 

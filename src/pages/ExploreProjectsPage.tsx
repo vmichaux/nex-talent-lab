@@ -1,14 +1,16 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useProjects } from "@/hooks/useProjects";
 import { PageHeader } from "@/components/explore/PageHeader";
 import { SearchBar } from "@/components/explore/SearchBar";
 import { ProjectTabs } from "@/components/explore/ProjectTabs";
+import { useAuth } from "@/hooks/use-auth";
 
 const ExploreProjectsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { currentUser } = useAuth();
   const { projects, loading, error } = useProjects();
   
   // Filter projects based on search query
@@ -60,7 +62,15 @@ const ExploreProjectsPage = () => {
               <ProjectTabs 
                 projects={projects} 
                 filteredProjects={filteredProjects} 
+                currentUserId={currentUser?.uid}
               />
+            )}
+
+            {/* No Projects State */}
+            {!loading && !error && projects.length === 0 && (
+              <div className="text-center py-20">
+                <p className="text-gray-500 mb-4">No projects available at this time. Please check back later.</p>
+              </div>
             )}
           </div>
         </div>
