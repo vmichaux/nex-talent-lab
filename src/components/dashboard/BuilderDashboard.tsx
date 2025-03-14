@@ -1,19 +1,24 @@
 
+import { useState, useEffect } from "react";
 import { Users, PlusCircle, Briefcase, LineChart, FileText, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DashboardProjects } from "@/components/dashboard/DashboardProjects";
-import { DashboardRequests } from "@/components/dashboard/DashboardRequests";
 import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
 import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
 import { ReviewApplications } from "@/components/dashboard/ReviewApplications";
-import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useProjects } from "@/hooks/useProjects";
 import { Project } from "@/types/project";
 import { useAuth } from "@/hooks/use-auth";
 import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
+import { ProjectDeadlines } from "@/components/dashboard/ProjectDeadlines";
+import { ProjectMetrics } from "@/components/dashboard/ProjectMetrics";
+import { SkillsProgress } from "@/components/dashboard/talent/SkillsProgress";
+import { LearningResources } from "@/components/dashboard/talent/LearningResources";
+import { ProjectHistory } from "@/components/dashboard/ProjectHistory";
+import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
 
 export function BuilderDashboard() {
   const location = useLocation();
@@ -72,47 +77,10 @@ export function BuilderDashboard() {
 
   return (
     <div className="space-y-16">
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <LineChart className="h-5 w-5 text-primary" />
-            Project Metrics
-          </h2>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-none shadow-md">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Active Projects</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">
-                {projects.filter(p => p.status !== "Closed").length || 0}
-              </div>
-              <p className="text-sm text-muted-foreground">Open opportunities</p>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-none shadow-md">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Total Collaborators</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">12</div>
-              <p className="text-sm text-muted-foreground">+4 from last month</p>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-none shadow-md">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Pending Applications</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">8</div>
-              <p className="text-sm text-muted-foreground">Review candidates</p>
-            </CardContent>
-          </Card>
-        </div>
+      {/* Overview section */}
+      <div>
+        <h2 className="text-2xl font-bold mb-8">Your Overview</h2>
+        <DashboardOverview role="builder" />
       </div>
 
       <div className="flex flex-col md:flex-row justify-between gap-6 mb-8">
@@ -132,58 +100,22 @@ export function BuilderDashboard() {
         </div>
       </div>
 
+      {/* Active Projects section */}
       <DashboardProjects />
       
+      {/* Projects Deadlines and Milestones */}
+      <ProjectDeadlines />
+      
+      {/* Review Applications */}
       <ReviewApplications />
       
+      {/* Project Metrics section */}
+      <ProjectMetrics role="builder" />
+      
+      {/* Messages section */}
       <DashboardMessages />
-
-      <div className="mb-10">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Briefcase className="h-5 w-5 text-primary" />
-            Recommended Opportunities
-          </h2>
-          <Button variant="outline" className="gap-1" onClick={() => navigate('/explore-projects')}>
-            View All Projects
-          </Button>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {loading ? (
-            <p className="col-span-3 text-center py-8">Loading recommended projects...</p>
-          ) : recommendedProjects.length > 0 ? (
-            recommendedProjects.map(project => (
-              <Card key={project.id} className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-4 space-y-2">
-                  <CardTitle className="text-xl">{project.title}</CardTitle>
-                  {project.status === "Urgent" && (
-                    <Badge variant="destructive">Urgent</Badge>
-                  )}
-                </CardHeader>
-                <CardContent className="py-4 flex-1 space-y-4">
-                  <p className="text-sm text-gray-700 line-clamp-3">{project.description}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.skills?.slice(0, 3).map((skill, index) => (
-                      <Badge key={index} variant="outline" className="bg-gray-50">
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-                <CardContent className="pt-4 border-t flex justify-between">
-                  <Button className="w-full" onClick={() => navigate(`/project/${project.id}`)}>
-                    View Details
-                  </Button>
-                </CardContent>
-              </Card>
-            ))
-          ) : (
-            <p className="col-span-3 text-center py-8">No recommended projects available at the moment.</p>
-          )}
-        </div>
-      </div>
-
+      
+      {/* Recommended Talent section */}
       <div>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -234,6 +166,15 @@ export function BuilderDashboard() {
           ))}
         </div>
       </div>
+      
+      {/* Project History section */}
+      <ProjectHistory />
+      
+      {/* Skills Progress section */}
+      <SkillsProgress />
+      
+      {/* Learning Resources section */}
+      <LearningResources />
     </div>
   );
 }

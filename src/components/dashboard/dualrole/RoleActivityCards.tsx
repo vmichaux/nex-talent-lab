@@ -12,12 +12,12 @@ export function RoleActivityCards() {
             <p className="text-gray-600">5 new projects match your skills</p>
           </div>
           <div className="bg-white p-5 rounded-lg shadow-sm">
-            <h4 className="font-medium text-lg mb-2">Skills Progress</h4>
-            <p className="text-gray-600">Your React skills are now at 85%</p>
-          </div>
-          <div className="bg-white p-5 rounded-lg shadow-sm">
             <h4 className="font-medium text-lg mb-2">Recent Applications</h4>
             <p className="text-gray-600">2 applications pending review</p>
+          </div>
+          <div className="bg-white p-5 rounded-lg shadow-sm">
+            <h4 className="font-medium text-lg mb-2">Skill Progress</h4>
+            <p className="text-gray-600">Your React skills are now at 85%</p>
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@ export function RoleActivityCards() {
             <p className="text-gray-600">8 new applications to review</p>
           </div>
           <div className="bg-white p-5 rounded-lg shadow-sm">
-            <h4 className="font-medium text-lg mb-2">Project Metrics</h4>
+            <h4 className="font-medium text-lg mb-2">Projects Metrics</h4>
             <p className="text-gray-600">2 projects ahead of schedule</p>
           </div>
         </div>
