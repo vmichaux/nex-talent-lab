@@ -1,43 +1,35 @@
-
 import React from "react";
 import { History, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
 export function ProjectHistory() {
   // Sample history data
-  const projectHistory = [
-    {
-      id: 1,
-      name: "E-commerce Website Redesign",
-      role: "Frontend Developer",
-      date: "January - March 2023",
-      status: "Completed",
-      contribution: "Led UI development, implemented responsive design"
-    },
-    {
-      id: 2,
-      name: "Mobile Banking App",
-      role: "React Native Developer",
-      date: "October - December 2022",
-      status: "Completed",
-      contribution: "Built authentication flow and transaction features"
-    },
-    {
-      id: 3,
-      name: "Health Tracking Dashboard",
-      role: "Full Stack Developer",
-      date: "July - September 2022",
-      status: "Completed",
-      contribution: "Developed data visualization components and API integration"
-    }
-  ];
-
-  return (
-    <div>
+  const projectHistory = [{
+    id: 1,
+    name: "E-commerce Website Redesign",
+    role: "Frontend Developer",
+    date: "January - March 2023",
+    status: "Completed",
+    contribution: "Led UI development, implemented responsive design"
+  }, {
+    id: 2,
+    name: "Mobile Banking App",
+    role: "React Native Developer",
+    date: "October - December 2022",
+    status: "Completed",
+    contribution: "Built authentication flow and transaction features"
+  }, {
+    id: 3,
+    name: "Health Tracking Dashboard",
+    role: "Full Stack Developer",
+    date: "July - September 2022",
+    status: "Completed",
+    contribution: "Developed data visualization components and API integration"
+  }];
+  return <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold flex items-center gap-2">
+        <h2 className="flex items-center gap-2 font-semibold text-2xl">
           <History className="h-4 w-4 text-primary" />
           My Project History
         </h2>
@@ -48,8 +40,7 @@ export function ProjectHistory() {
       
       <Card className="shadow-sm">
         <CardContent className="p-0">
-          {projectHistory.map((project) => (
-            <div key={project.id} className="p-4 border-b last:border-b-0 hover:bg-gray-50 transition-colors">
+          {projectHistory.map(project => <div key={project.id} className="p-4 border-b last:border-b-0 hover:bg-gray-50 transition-colors">
               <div className="md:flex justify-between mb-2">
                 <div>
                   <h3 className="text-sm font-semibold mb-1">{project.name}</h3>
@@ -60,10 +51,8 @@ export function ProjectHistory() {
                 </Badge>
               </div>
               <p className="text-xs text-gray-700">{project.contribution}</p>
-            </div>
-          ))}
+            </div>)}
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 }
