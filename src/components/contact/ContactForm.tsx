@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "@/hooks/use-toast";
 import { submitContactForm, checkContactCollection } from "@/lib/contactService";
 
 interface ContactFormData {
@@ -31,6 +30,7 @@ const ContactForm = () => {
     preferEmail: true,
     preferPhone: false
   });
+  const [formStatus, setFormStatus] = useState<{type: 'success' | 'error', message: string} | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -50,13 +50,13 @@ const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setFormStatus(null);
 
     // Form validation
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
-      toast({
-        title: "Missing information",
-        description: "Please fill out all required fields.",
-        variant: "destructive"
+      setFormStatus({
+        type: 'error',
+        message: "Please fill out all required fields."
       });
       setIsSubmitting(false);
       return;
@@ -65,10 +65,9 @@ const ContactForm = () => {
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      toast({
-        title: "Invalid email",
-        description: "Please enter a valid email address.",
-        variant: "destructive"
+      setFormStatus({
+        type: 'error',
+        message: "Please enter a valid email address."
       });
       setIsSubmitting(false);
       return;
@@ -78,10 +77,9 @@ const ContactForm = () => {
       // Check if we can access the collection
       const collectionAccessible = await checkContactCollection();
       if (!collectionAccessible) {
-        toast({
-          title: "Service unavailable",
-          description: "Contact form service is currently unavailable. Please try again later.",
-          variant: "destructive"
+        setFormStatus({
+          type: 'error',
+          message: "Contact form service is currently unavailable. Please try again later."
         });
         setIsSubmitting(false);
         return;
@@ -91,9 +89,9 @@ const ContactForm = () => {
       const result = await submitContactForm(formData);
       
       if (result) {
-        toast({
-          title: "Message sent!",
-          description: "Our sales team will contact you shortly."
+        setFormStatus({
+          type: 'success',
+          message: "Message sent! Our sales team will contact you shortly."
         });
         
         // Reset form
@@ -111,10 +109,9 @@ const ContactForm = () => {
       }
     } catch (error) {
       console.error("Contact form submission error:", error);
-      toast({
-        title: "Submission failed",
-        description: "There was a problem submitting your message. Please try again later.",
-        variant: "destructive"
+      setFormStatus({
+        type: 'error',
+        message: "There was a problem submitting your message. Please try again later."
       });
     } finally {
       setIsSubmitting(false);
@@ -130,6 +127,11 @@ const ContactForm = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {formStatus && (
+          <div className={`mb-4 p-3 rounded ${formStatus.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+            {formStatus.message}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid gap-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

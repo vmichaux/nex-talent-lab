@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Rocket, Lightbulb, Loader } from "lucide-react";
@@ -7,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { SimplifiedHeader } from "./SimplifiedHeader";
 import { auth } from "@/lib/firebase";
 import { updateUserRole } from "@/services/authService";
-import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 
 export function DashboardOnboarding() {
@@ -70,21 +68,12 @@ export function DashboardOnboarding() {
 
           if (currentUser) {
             await updateUserRole(currentUser, selectedRole);
-            toast.success("Your profile has been updated!", {
-              description: "Your role preferences have been saved.",
-              duration: 6000
-            });
             navigate("/dashboard");
           } else {
-            // Si l'utilisateur n'est pas connecté, dirigez-le vers l'inscription avec le rôle sélectionné
             navigate(`/signup?role=${selectedRole}&fromOnboarding=true`);
           }
         } catch (error) {
           console.error("Error saving role:", error);
-          toast.error("Could not save your preferences", {
-            description: "Please try again or contact support.",
-            duration: 6000
-          });
         }
       }
     }
