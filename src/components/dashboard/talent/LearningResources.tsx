@@ -7,9 +7,9 @@ import { Card, CardContent } from "@/components/ui/card";
 export function LearningResources() {
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold flex items-center gap-2">
-          <BookOpen className="h-4 w-4 text-primary" />
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl font-bold flex items-center gap-2">
+          <BookOpen className="h-5 w-5 text-primary" />
           Learning Resources
         </h2>
       </div>

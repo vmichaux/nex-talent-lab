@@ -1,3 +1,4 @@
+
 import { Briefcase, MessageSquare, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -7,12 +8,12 @@ const stats = {
   applications: 2,
   unreadMessages: 2
 };
+
 interface DashboardOverviewProps {
   role?: "talent" | "builder" | "both";
 }
-export function DashboardOverview({
-  role = "talent"
-}: DashboardOverviewProps) {
+
+export function DashboardOverview({ role = "talent" }: DashboardOverviewProps) {
   const getSecondBoxTitle = () => {
     switch (role) {
       case "builder":
@@ -23,7 +24,9 @@ export function DashboardOverview({
         return "My Applications";
     }
   };
-  return <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
       <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-none shadow-sm">
         <CardHeader className="pb-2 pt-4 px-4">
           <div className="flex items-center space-x-2">
@@ -34,8 +37,8 @@ export function DashboardOverview({
           </div>
         </CardHeader>
         <CardContent className="px-4 pb-4 pt-0">
-          <div className="text-2xl font-bold px-[222px]">{stats.projects}</div>
-          <p className="text-xs text-muted-foreground text-right">Active Projects</p>
+          <div className="text-2xl font-bold">{stats.projects}</div>
+          <p className="text-xs text-muted-foreground">Active Projects</p>
         </CardContent>
       </Card>
       
@@ -49,8 +52,8 @@ export function DashboardOverview({
           </div>
         </CardHeader>
         <CardContent className="px-4 pb-4 pt-0">
-          <div className="text-2xl font-bold px-[221px]">{stats.applications}</div>
-          <p className="text-xs text-muted-foreground text-right">Pending Applications</p>
+          <div className="text-2xl font-bold">{stats.applications}</div>
+          <p className="text-xs text-muted-foreground">Pending Applications</p>
         </CardContent>
       </Card>
       
@@ -64,9 +67,10 @@ export function DashboardOverview({
           </div>
         </CardHeader>
         <CardContent className="px-4 pb-4 pt-0">
-          <div className="text-2xl font-bold px-[221px]">{stats.unreadMessages}</div>
-          <p className="text-xs text-muted-foreground text-right">Unread Messages</p>
+          <div className="text-2xl font-bold">{stats.unreadMessages}</div>
+          <p className="text-xs text-muted-foreground">Unread Messages</p>
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 }
