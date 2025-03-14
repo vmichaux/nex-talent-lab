@@ -32,7 +32,7 @@ export function CombinedView() {
       <div className="lg:w-3/5 space-y-16">
         {/* Overview metrics */}
         <div>
-          <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+          <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2 category-title-gradient">
             <Search className="h-4 w-4 text-primary" />
             Your Overview
           </h2>
@@ -50,7 +50,7 @@ export function CombinedView() {
         
         {/* Project Metrics section with role activities */}
         <div>
-          <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+          <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2 category-title-gradient">
             <BarChart className="h-4 w-4 text-primary" />
             Project Metrics
           </h2>

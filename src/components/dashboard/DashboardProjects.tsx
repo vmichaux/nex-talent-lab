@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Briefcase, ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,7 @@ export function DashboardProjects() {
   const displayedProjects = userProjects.slice(0, 3);
   return <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="flex items-center gap-2 text-2xl font-semibold">
+        <h2 className="flex items-center gap-2 text-2xl font-semibold category-title-gradient">
           <Briefcase className="h-4 w-4 text-primary" />
           Active Projects
         </h2>

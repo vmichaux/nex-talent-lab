@@ -1,3 +1,4 @@
+
 import { BarChart, Briefcase, UserPlus, FileText, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,7 @@ export function ProjectMetrics({
 }: ProjectMetricsProps) {
   return <div className="mb-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="flex items-center gap-2 font-semibold text-2xl">
+        <h2 className="flex items-center gap-2 font-semibold text-2xl category-title-gradient">
           <BarChart className="h-4 w-4 text-primary" />
           Project Metrics
         </h2>

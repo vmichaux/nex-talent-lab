@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,7 +31,7 @@ export function ProjectDeadlines() {
   }];
   return <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="flex items-center gap-2 text-2xl font-semibold">
+        <h2 className="flex items-center gap-2 text-2xl font-semibold category-title-gradient">
           <Calendar className="h-4 w-4 text-primary" />
           Projects Deadlines and Milestones
         </h2>

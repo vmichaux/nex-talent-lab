@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -108,5 +109,10 @@
     background-clip: text;
     color: transparent;
     display: inline-block;
+  }
+  
+  /* New class for category titles */
+  .category-title-gradient {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-[#6E59A5] to-[#2ECC71];
   }
 }
