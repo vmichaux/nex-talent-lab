@@ -7,6 +7,7 @@ import { Calendar, Clock, UserCircle, MessageSquare } from "lucide-react";
 import { Project } from "@/types/project";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/use-auth";
 
 interface ProjectCardProps {
   project: Project;
@@ -22,6 +23,7 @@ export const ProjectCard = ({
   showActions = false
 }: ProjectCardProps) => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
   
   const handleViewDetails = () => {
     if (onClick) {
@@ -32,11 +34,21 @@ export const ProjectCard = ({
   };
   
   const handleApplyNow = () => {
+    // Redirect to login if user is not logged in
+    if (!isLoggedIn) {
+      toast.info("Authentication required", {
+        description: "Please sign in to apply for projects",
+        duration: 6000,
+      });
+      navigate('/login');
+      return;
+    }
+    
     // Prevent applying to your own project
     if (project.userId === currentUserId) {
       toast.error("Cannot apply to your own project", {
         description: "You cannot apply to projects you've created.",
-        duration: 6000,  // Changed from 10000 to 6000
+        duration: 6000,
       });
       return;
     }
@@ -98,9 +110,9 @@ export const ProjectCard = ({
             <Button 
               className="w-full" 
               onClick={handleApplyNow}
-              disabled={isOwnProject}
+              disabled={isLoggedIn && isOwnProject}
             >
-              {isOwnProject ? "Your Project" : "Apply Now"}
+              {isLoggedIn && isOwnProject ? "Your Project" : "Apply Now"}
             </Button>
             <Button variant="outline" className="w-full" onClick={handleViewDetails}>Details</Button>
           </>

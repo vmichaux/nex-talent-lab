@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -28,16 +27,6 @@ export const ProjectsSection = ({ projects, loading, error, searchQuery }: Proje
   );
 
   const handleViewProjectDetails = () => {
-    if (!isLoggedIn) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to view project details",
-        variant: "destructive"
-      });
-      navigate("/login");
-      return;
-    }
-    
     navigate("/explore-projects");
   };
 
