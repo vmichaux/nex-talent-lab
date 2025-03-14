@@ -20,9 +20,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RecommendedTalents } from "../builder/RecommendedTalents";
 import { NetworkList } from "../builder/NetworkList";
+import { ProjectActions } from "../builder/ProjectActions";
 
 export function CombinedView() {
   const [filter, setFilter] = useState<string>("all");
+  const [showProjectModal, setShowProjectModal] = useState(false);
 
   return (
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
@@ -33,6 +35,12 @@ export function CombinedView() {
           <h2 className="text-xl font-bold mb-6">Your Overview</h2>
           <DashboardOverview role="both" />
         </div>
+        
+        {/* Project actions section */}
+        <ProjectActions 
+          showProjectModal={showProjectModal} 
+          setShowProjectModal={setShowProjectModal} 
+        />
         
         {/* Active Projects section */}
         <DashboardProjects />
