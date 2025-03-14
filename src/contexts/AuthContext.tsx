@@ -21,7 +21,7 @@ type AuthContextType = {
   isLoggedIn: boolean;
   login: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
-  signup: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string, firstName?: string, lastName?: string) => Promise<void>;
   logout: () => Promise<void>;
   updateProfileCompletion: (completed: boolean) => Promise<void>;
   updateUserRole: (role: "talent" | "entrepreneur" | "both") => Promise<void>;
@@ -58,9 +58,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsubscribe;
   }, []);
   
-  const signup = async (email: string, password: string) => {
+  const signup = async (email: string, password: string, firstName?: string, lastName?: string) => {
     try {
-      await signupService(email, password);
+      await signupService(email, password, firstName, lastName);
       toast({
         title: "Account created successfully!",
         description: "Welcome to NexTalent Lab."
