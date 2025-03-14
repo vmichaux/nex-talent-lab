@@ -1,9 +1,7 @@
-
 import { ArrowRight, Check, UserPlus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
-
 type StepProps = {
   number: number;
   title: string;
@@ -12,7 +10,6 @@ type StepProps = {
   completed?: boolean;
   onClick?: () => void;
 };
-
 const Step = ({
   number,
   title,
@@ -21,11 +18,7 @@ const Step = ({
   completed = false,
   onClick
 }: StepProps) => {
-  const StepComponent = (
-    <div 
-      className={`flex items-start gap-4 bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 ${onClick ? 'cursor-pointer' : ''}`}
-      onClick={onClick}
-    >
+  const StepComponent = <div className={`flex items-start gap-4 bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 ${onClick ? 'cursor-pointer' : ''}`} onClick={onClick}>
       <div className={`flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center ${completed ? 'bg-green-100 text-green-600' : 'bg-primary/10 text-primary'}`}>
         {completed ? <Check className="h-5 w-5" /> : <span className="font-semibold">{number}</span>}
       </div>
@@ -38,21 +31,18 @@ const Step = ({
         </div>
         <p className="text-gray-600">{description}</p>
       </div>
-    </div>
-  );
-
+    </div>;
   return StepComponent;
 };
-
 export function DashboardWelcome() {
   const navigate = useNavigate();
-  const { userData } = useAuth();
+  const {
+    userData
+  } = useAuth();
   const profileCompleted = userData?.hasCompletedProfile || false;
-
   const navigateToProfileEdit = () => {
     navigate('/profile/edit');
   };
-
   const steps = [{
     number: 1,
     title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
@@ -73,7 +63,6 @@ export function DashboardWelcome() {
     icon: <ArrowRight className="h-4 w-4 text-primary" />,
     completed: false
   }];
-
   return <div className="relative overflow-hidden bg-white">
       <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
       
@@ -83,7 +72,7 @@ export function DashboardWelcome() {
             Welcome to NexTalent Lab
           </div>
           
-          <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
+          <h1 className="mb-4 text-3xl font-bold tracking-tight custom-gradient-text md:text-5xl">
             Let's get you started on your collaboration journey
           </h1>
           
