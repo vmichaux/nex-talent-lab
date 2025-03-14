@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
 import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
@@ -15,19 +14,15 @@ import { ManageReviewsRecommendations } from "@/components/dashboard/ManageRevie
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 export function TalentDashboard() {
   const [filter, setFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
-
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Searching for:", searchTerm);
     // Here you would implement the actual search functionality
   };
-
-  return (
-    <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
+  return <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
       {/* Left column (wider) */}
       <div className="lg:w-3/5 space-y-12">
         {/* Overview section */}
@@ -38,20 +33,14 @@ export function TalentDashboard() {
 
         {/* Search bar section */}
         <div>
-          <h2 className="text-xl font-bold mb-6">Search</h2>
+          
           <form onSubmit={handleSearch} className="flex gap-4 w-full">
             <Button type="submit" variant="default" className="h-10">
               <Search className="h-4 w-4 mr-2" />
               Search
             </Button>
             <div className="relative flex-1">
-              <Input
-                type="text"
-                placeholder="Search for projects, skills, or opportunities..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full"
-              />
+              <Input type="text" placeholder="Search for projects, skills, or opportunities..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full" />
             </div>
           </form>
         </div>
@@ -92,6 +81,5 @@ export function TalentDashboard() {
         {/* Project History section */}
         <ProjectHistory />
       </div>
-    </div>
-  );
+    </div>;
 }
