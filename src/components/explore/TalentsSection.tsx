@@ -1,11 +1,15 @@
+
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TalentCard } from "./TalentCard";
 import { useTalents, Talent } from "@/hooks/useTalents";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ExploreTalentsHeader } from "./ExploreTalentsHeader";
+
 interface TalentsSectionProps {
   searchQuery?: string;
 }
+
 export const TalentsSection = ({
   searchQuery = ''
 }: TalentsSectionProps) => {
@@ -29,14 +33,7 @@ export const TalentsSection = ({
   // Loading state
   if (loading) {
     return <div className="mb-16">
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
-          <h2 className="mb-6 text-3xl font-bold tracking-tight custom-gradient-text md:text-6xl">
-            Explore Talents
-          </h2>
-          <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal">
-            Connect with skilled professionals ready to bring your projects to life. Browse profiles and find the perfect match for your team.
-          </p>
-        </div>
+        <ExploreTalentsHeader />
         
         <Tabs defaultValue="all-talents" className="mb-8">
           <TabsList className="mb-8 mx-auto flex justify-center">
@@ -61,14 +58,10 @@ export const TalentsSection = ({
   // Error state
   if (error) {
     return <div className="mb-16">
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
-          <h2 className="mb-6 text-3xl font-bold tracking-tight custom-gradient-text md:text-6xl">
-            Explore Talents
-          </h2>
-          <div className="p-8 bg-red-50 rounded-lg text-red-600 mb-10">
-            <p className="text-lg">Failed to load talents: {error}</p>
-            <p className="mt-2">Please try again later or contact support.</p>
-          </div>
+        <ExploreTalentsHeader />
+        <div className="p-8 bg-red-50 rounded-lg text-red-600 mb-10">
+          <p className="text-lg">Failed to load talents: {error}</p>
+          <p className="mt-2">Please try again later or contact support.</p>
         </div>
       </div>;
   }
@@ -76,14 +69,7 @@ export const TalentsSection = ({
   // Empty state
   if (talents.length === 0) {
     return <div className="mb-16">
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
-          <h2 className="mb-6 text-3xl font-bold tracking-tight custom-gradient-text md:text-6xl">
-            Explore Talents
-          </h2>
-          <p className="mb-10 text-lg text-gray-600 md:text-xl max-w-3xl whitespace-normal">
-            Connect with skilled professionals ready to bring your projects to life. Browse profiles and find the perfect match for your team.
-          </p>
-        </div>
+        <ExploreTalentsHeader />
         
         <Tabs value={activeTab} onValueChange={handleTabChange} className="mb-8">
           <TabsList className="mb-8 mx-auto flex justify-center">
@@ -100,11 +86,9 @@ export const TalentsSection = ({
         </Tabs>
       </div>;
   }
+  
   return <div className="mb-16">
-      <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
-        
-        
-      </div>
+      <ExploreTalentsHeader />
 
       <Tabs value={activeTab} onValueChange={handleTabChange} className="mb-8">
         <TabsList className="mb-8 mx-auto flex justify-center">

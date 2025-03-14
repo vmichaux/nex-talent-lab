@@ -9,6 +9,7 @@ import { TalentDashboard } from "@/components/dashboard/TalentDashboard";
 import { BuilderDashboard } from "@/components/dashboard/BuilderDashboard";
 import { DualRoleDashboard } from "@/components/dashboard/DualRoleDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PageHeader } from "@/components/explore/PageHeader";
 import { toast } from "sonner";
 
 const DashboardPage = () => {
@@ -99,14 +100,12 @@ const DashboardPage = () => {
             <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
             
             <div className="w-full px-4 py-16">
-              <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
-                <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Let's go {getUserFirstName()}!</div>
-                
-                <h1 className="mb-4 text-3xl font-bold tracking-tight custom-gradient-text md:text-5xl">Your Journey</h1>
-                
-                <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
-                  Track your projects, connections, and activities all in one place.
-                </p>
+              <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-6 py-[32px] px-[44px] my-0">
+                <PageHeader
+                  subtitle={`Let's go ${getUserFirstName()}!`}
+                  title="Your Journey"
+                  description="Track your projects, connections, and activities all in one place."
+                />
               </div>
 
               <div className="flex justify-center mb-10">

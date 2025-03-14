@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -6,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/explore/PageHeader";
 
 // Fake message data
 const fakeMessages = [{
@@ -117,18 +119,12 @@ const MessagesPage = () => {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
-              <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                Messages
-              </div>
-              
-              <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
-                Your Conversations
-              </h1>
-              
-              <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
-                Connect with collaborators and project owners through direct messaging.
-              </p>
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-6 py-[32px] px-[44px] my-0">
+              <PageHeader 
+                subtitle="Messages" 
+                title="Your Conversations" 
+                description="Connect with collaborators and project owners through direct messaging."
+              />
             </div>
 
             {/* Messages content */}
