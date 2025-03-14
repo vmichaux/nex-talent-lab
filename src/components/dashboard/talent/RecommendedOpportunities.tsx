@@ -72,11 +72,9 @@ export function RecommendedOpportunities({ filter, setFilter }: RecommendedOppor
       ) : displayedRecommendations.length === 0 ? (
         <OpportunitiesEmpty filter={filter} setFilter={setFilter} />
       ) : (
-        <div className="flex flex-nowrap gap-4 overflow-x-auto pb-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {displayedRecommendations.map((project) => (
-            <div key={project.id} className="min-w-[280px] max-w-[350px] flex-1">
-              <ProjectCard project={project} />
-            </div>
+            <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       )}
