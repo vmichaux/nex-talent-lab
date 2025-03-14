@@ -16,7 +16,7 @@ export function ProjectSearch() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="flex gap-2">
+    <form onSubmit={handleSearch} className="flex gap-2 w-full">
       <div className="relative flex-1">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
         <Input
@@ -24,10 +24,10 @@ export function ProjectSearch() {
           placeholder="Search for projects..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-9"
+          className="pl-9 w-full"
         />
       </div>
-      <Button type="submit">Search</Button>
+      <Button type="submit" variant="purple">Search</Button>
     </form>
   );
 }
