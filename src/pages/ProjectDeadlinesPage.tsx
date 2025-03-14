@@ -9,10 +9,12 @@ import { Calendar, Clock, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { DeadlinesCalendarView } from "@/components/dashboard/DeadlinesCalendarView";
 
 const ProjectDeadlinesPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'calendar'
   
   // Sample data - in a real app, this would come from a database
   const deadlines = [
@@ -122,63 +124,95 @@ const ProjectDeadlinesPage = () => {
                 <TabsTrigger value="behind">Behind</TabsTrigger>
               </TabsList>
             </Tabs>
+            
+            {/* View mode toggle */}
+            <Tabs defaultValue="grid" value={viewMode} onValueChange={setViewMode} className="w-full sm:w-auto">
+              <TabsList>
+                <TabsTrigger value="grid">
+                  <div className="flex items-center gap-1">
+                    <div className="grid grid-cols-2 gap-0.5">
+                      <div className="w-1.5 h-1.5 bg-current rounded-sm"></div>
+                      <div className="w-1.5 h-1.5 bg-current rounded-sm"></div>
+                      <div className="w-1.5 h-1.5 bg-current rounded-sm"></div>
+                      <div className="w-1.5 h-1.5 bg-current rounded-sm"></div>
+                    </div>
+                    <span className="ml-1.5">Grid</span>
+                  </div>
+                </TabsTrigger>
+                <TabsTrigger value="calendar">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-3.5 w-3.5" />
+                    <span>Calendar</span>
+                  </div>
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
 
-          {/* Deadlines cards grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredDeadlines.length > 0 ? (
-              filteredDeadlines.map(item => (
-                <Card key={item.id} className="shadow-sm hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2 pt-4 px-4">
-                    <CardTitle className="text-base">{item.projectName}</CardTitle>
-                    <p className="text-sm text-gray-500">{item.milestone}</p>
-                  </CardHeader>
-                  <CardContent className="space-y-4 px-4 pb-4">
-                    <div className="space-y-2">
-                      <p className="text-sm text-gray-600">{item.description}</p>
-                      <p className="text-xs text-gray-500">Assigned to: {item.assignedTo}</p>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-1 text-xs text-gray-600">
-                        <Clock className="h-3.5 w-3.5" />
-                        {item.deadline}
-                      </div>
-                      <Badge className={
-                        item.status === "On Track" 
-                          ? "bg-green-100 text-green-800 hover:bg-green-100 text-xs px-2 py-0.5" 
-                          : item.status === "At Risk" 
-                          ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-100 text-xs px-2 py-0.5" 
-                          : "bg-red-100 text-red-800 hover:bg-red-100 text-xs px-2 py-0.5"
-                      }>
-                        {item.status}
-                      </Badge>
-                    </div>
-                    
-                    <div>
-                      <div className="flex justify-between text-xs mb-1">
-                        <span>Progress</span>
-                        <span>{item.progress}%</span>
-                      </div>
-                      <Progress value={item.progress} className="h-1.5" />
-                    </div>
-                    
-                    <Button variant="outline" size="sm" className="w-full text-xs">
-                      View Details
+          {/* View content based on selected mode */}
+          <div className="animate-fade-in">
+            {viewMode === "grid" ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredDeadlines.length > 0 ? (
+                  filteredDeadlines.map(item => (
+                    <Card key={item.id} className="shadow-sm hover:shadow-md transition-shadow">
+                      <CardHeader className="pb-2 pt-4 px-4">
+                        <CardTitle className="text-base">{item.projectName}</CardTitle>
+                        <p className="text-sm text-gray-500">{item.milestone}</p>
+                      </CardHeader>
+                      <CardContent className="space-y-4 px-4 pb-4">
+                        <div className="space-y-2">
+                          <p className="text-sm text-gray-600">{item.description}</p>
+                          <p className="text-xs text-gray-500">Assigned to: {item.assignedTo}</p>
+                        </div>
+                        
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-1 text-xs text-gray-600">
+                            <Clock className="h-3.5 w-3.5" />
+                            {item.deadline}
+                          </div>
+                          <Badge className={
+                            item.status === "On Track" 
+                              ? "bg-green-100 text-green-800 hover:bg-green-100 text-xs px-2 py-0.5" 
+                              : item.status === "At Risk" 
+                              ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-100 text-xs px-2 py-0.5" 
+                              : "bg-red-100 text-red-800 hover:bg-red-100 text-xs px-2 py-0.5"
+                          }>
+                            {item.status}
+                          </Badge>
+                        </div>
+                        
+                        <div>
+                          <div className="flex justify-between text-xs mb-1">
+                            <span>Progress</span>
+                            <span>{item.progress}%</span>
+                          </div>
+                          <Progress value={item.progress} className="h-1.5" />
+                        </div>
+                        
+                        <Button variant="outline" size="sm" className="w-full text-xs">
+                          View Details
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))
+                ) : (
+                  <div className="col-span-3 text-center py-20 bg-white rounded-md shadow-sm">
+                    <p className="text-gray-500 mb-4">No deadlines or milestones match your search criteria.</p>
+                    <Button variant="outline" onClick={() => {
+                      setSearchQuery('');
+                      setStatusFilter('all');
+                    }}>
+                      Clear Filters
                     </Button>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              <div className="col-span-3 text-center py-20 bg-white rounded-md shadow-sm">
-                <p className="text-gray-500 mb-4">No deadlines or milestones match your search criteria.</p>
-                <Button variant="outline" onClick={() => {
-                  setSearchQuery('');
-                  setStatusFilter('all');
-                }}>
-                  Clear Filters
-                </Button>
+                  </div>
+                )}
               </div>
+            ) : (
+              <DeadlinesCalendarView 
+                deadlines={deadlines} 
+                filteredDeadlines={filteredDeadlines}
+              />
             )}
           </div>
         </div>
