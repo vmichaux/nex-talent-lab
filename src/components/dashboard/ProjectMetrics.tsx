@@ -1,17 +1,15 @@
-
 import { BarChart, Briefcase, UserPlus, FileText, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
 interface ProjectMetricsProps {
   role?: "talent" | "builder" | "both";
 }
-
-export function ProjectMetrics({ role = "talent" }: ProjectMetricsProps) {
-  return (
-    <div className="mb-8">
+export function ProjectMetrics({
+  role = "talent"
+}: ProjectMetricsProps) {
+  return <div className="mb-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg font-bold flex items-center gap-2">
+        <h2 className="flex items-center gap-2 font-semibold text-2xl">
           <BarChart className="h-4 w-4 text-primary" />
           Project Metrics
         </h2>
@@ -51,6 +49,5 @@ export function ProjectMetrics({ role = "talent" }: ProjectMetricsProps) {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 }

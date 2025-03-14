@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
 import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
@@ -15,7 +14,6 @@ import { ManageReviewsRecommendations } from "@/components/dashboard/ManageRevie
 import { Search, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 export function TalentDashboard() {
   const [filter, setFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -29,7 +27,7 @@ export function TalentDashboard() {
       <div className="lg:w-3/5 space-y-20">
         {/* Overview section */}
         <div>
-          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+          <h2 className="mb-4 flex items-center gap-2 text-2xl font-semibold">
             <Search className="h-4 w-4 text-primary" />
             Your Overview
           </h2>

@@ -1,26 +1,20 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ClipboardCheck, Clock, CheckCircle, XCircle, ArrowUpRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useApplications, Application } from "@/hooks/useApplications";
 import { format } from "date-fns";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-
 export function AppliedProjects() {
-  const { applications, loading, error } = useApplications();
+  const {
+    applications,
+    loading,
+    error
+  } = useApplications();
   const navigate = useNavigate();
-
   const getStatusBadge = (status: Application['status']) => {
     switch (status) {
       case "accepted":
@@ -31,7 +25,6 @@ export function AppliedProjects() {
         return <Badge variant="outline" className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Pending</Badge>;
     }
   };
-
   const getStatusIcon = (status: Application['status']) => {
     switch (status) {
       case "accepted":
@@ -42,10 +35,8 @@ export function AppliedProjects() {
         return <Clock className="h-3 w-3 text-yellow-600" />;
     }
   };
-
   if (loading) {
-    return (
-      <div className="space-y-4">
+    return <div className="space-y-4">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <ClipboardCheck className="h-4 w-4 text-primary" />
@@ -59,13 +50,10 @@ export function AppliedProjects() {
           <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-sm text-gray-600">Loading your applications...</p>
         </div>
-      </div>
-    );
+      </div>;
   }
-
   if (error) {
-    return (
-      <div className="space-y-4">
+    return <div className="space-y-4">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <ClipboardCheck className="h-4 w-4 text-primary" />
@@ -80,13 +68,10 @@ export function AppliedProjects() {
             <p className="text-red-600 text-sm">Error loading applications: {error}</p>
           </CardContent>
         </Card>
-      </div>
-    );
+      </div>;
   }
-
   if (applications.length === 0) {
-    return (
-      <div className="space-y-4">
+    return <div className="space-y-4">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <ClipboardCheck className="h-4 w-4 text-primary" />
@@ -108,17 +93,14 @@ export function AppliedProjects() {
             </Button>
           </CardContent>
         </Card>
-      </div>
-    );
+      </div>;
   }
 
   // Show only the first 4 applications
   const displayedApplications = applications.slice(0, 4);
-
-  return (
-    <div>
+  return <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold flex items-center gap-2">
+        <h2 className="flex items-center gap-2 text-2xl font-semibold">
           <ClipboardCheck className="h-4 w-4 text-primary" />
           My Applications
         </h2>
@@ -144,8 +126,7 @@ export function AppliedProjects() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {displayedApplications.map((application) => (
-                <TableRow key={application.id}>
+              {displayedApplications.map(application => <TableRow key={application.id}>
                   <TableCell className="font-medium text-sm py-3">{application.projectTitle}</TableCell>
                   <TableCell className="py-3 text-xs">{format(application.createdAt, 'MMM d, yyyy')}</TableCell>
                   <TableCell className="py-3">
@@ -155,21 +136,14 @@ export function AppliedProjects() {
                     </div>
                   </TableCell>
                   <TableCell className="text-right py-3">
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="text-xs px-2 py-1 h-7"
-                      onClick={() => navigate(`/project/${application.projectId}`)}
-                    >
+                    <Button variant="outline" size="sm" className="text-xs px-2 py-1 h-7" onClick={() => navigate(`/project/${application.projectId}`)}>
                       View
                     </Button>
                   </TableCell>
-                </TableRow>
-              ))}
+                </TableRow>)}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 }
