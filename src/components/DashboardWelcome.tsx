@@ -1,3 +1,4 @@
+
 import { ArrowRight, Check, UserPlus, Lightbulb, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -25,7 +26,7 @@ const Step = ({
       <div className={`flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center ${completed ? 'bg-green-100 text-green-600' : 'bg-primary/10 text-primary'}`}>
         {completed ? <Check className="h-5 w-5" /> : <span className="font-semibold">{number}</span>}
       </div>
-      <div className="space-y-1">
+      <div className="space-y-1 text-left">
         <div className="flex items-center gap-2">
           <h3 className="font-semibold text-lg">{title}</h3>
           <div className="p-1 bg-primary/10 rounded-full">
