@@ -7,6 +7,7 @@ import { NavbarBrand } from "./navbar/NavbarBrand";
 import { NavLinks } from "./navbar/NavLinks";
 import { AuthButtons } from "./navbar/AuthButtons";
 import { MobileMenu } from "./navbar/MobileMenu";
+import { NotificationBell } from "./navbar/NotificationBell";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -51,6 +52,7 @@ export function Navbar() {
 
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center space-x-4">
+          {isLoggedIn && <NotificationBell />}
           <AuthButtons isLoggedIn={isLoggedIn} LogoutButton={LogoutButton} />
         </div>
 

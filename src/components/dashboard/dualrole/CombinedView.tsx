@@ -15,6 +15,7 @@ import { ProjectHistory } from "../ProjectHistory";
 import { SkillsProgress } from "../talent/SkillsProgress";
 import { LearningResources } from "../talent/LearningResources";
 import { ManageReviewsRecommendations } from "../ManageReviewsRecommendations";
+import { DashboardNotifications } from "../DashboardNotifications";
 import { Search, BarChart, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -71,6 +72,9 @@ export function CombinedView() {
       
       {/* Right column (narrower) */}
       <div className="lg:w-2/5 space-y-20">
+        {/* Notifications section - Added at the top */}
+        <DashboardNotifications />
+        
         {/* Applied Projects */}
         <AppliedProjects />
         

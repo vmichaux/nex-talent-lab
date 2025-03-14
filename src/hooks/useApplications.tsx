@@ -1,6 +1,17 @@
 
 import { useState, useEffect } from "react";
-import { collection, query, where, getDocs, Timestamp, doc, updateDoc, getDoc } from "firebase/firestore";
+import { 
+  collection, 
+  query, 
+  where, 
+  getDocs, 
+  Timestamp, 
+  doc, 
+  updateDoc, 
+  getDoc, 
+  addDoc, 
+  serverTimestamp 
+} from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
@@ -83,16 +94,34 @@ export const useApplications = () => {
     }
   };
 
-  useEffect(() => {
-    if (currentUser?.uid) {
-      fetchUserApplications(currentUser.uid);
+  // Create a notification when an application status changes
+  const createNotification = async (application: Application, status: "accepted" | "rejected", feedback?: string) => {
+    try {
+      // Create notification for the applicant
+      await addDoc(collection(db, "notifications"), {
+        userId: application.userId,
+        type: "application",
+        title: `Application ${status === "accepted" ? "Accepted" : "Declined"}`,
+        content: status === "accepted" 
+          ? `Your application for "${application.projectTitle}" has been accepted${feedback ? ": " + feedback : ""}` 
+          : `Your application for "${application.projectTitle}" has been declined${feedback ? ": " + feedback : ""}`,
+        read: false,
+        createdAt: serverTimestamp(),
+        link: `/project/${application.projectId}`,
+        relatedId: application.id
+      });
+      
+      console.log(`Notification created for application status change to ${status}`);
+    } catch (error) {
+      console.error("Error creating notification:", error);
     }
-  }, [currentUser?.uid]);
+  };
 
   return { 
     applications, 
     loading, 
     error,
-    refetchApplications: fetchUserApplications
+    refetchApplications: fetchUserApplications,
+    createNotification
   };
 };

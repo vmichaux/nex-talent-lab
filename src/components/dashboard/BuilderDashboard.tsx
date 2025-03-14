@@ -17,6 +17,7 @@ import { ProjectActions } from "@/components/dashboard/builder/ProjectActions";
 import { RecommendedTalents } from "@/components/dashboard/builder/RecommendedTalents";
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
+import { DashboardNotifications } from "@/components/dashboard/DashboardNotifications";
 import { Search, BarChart } from "lucide-react";
 
 export function BuilderDashboard() {
@@ -83,6 +84,9 @@ export function BuilderDashboard() {
       
       {/* Right column (narrower) */}
       <div className="lg:w-2/5 space-y-20">
+        {/* Notifications section - Added at the top */}
+        <DashboardNotifications />
+        
         {/* Review Applications */}
         <ReviewApplications />
         

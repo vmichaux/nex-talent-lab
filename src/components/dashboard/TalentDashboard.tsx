@@ -12,17 +12,21 @@ import { ProjectMetrics } from "@/components/dashboard/ProjectMetrics";
 import { ProjectHistory } from "@/components/dashboard/ProjectHistory";
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
+import { DashboardNotifications } from "@/components/dashboard/DashboardNotifications";
 import { Search, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
 export function TalentDashboard() {
   const [filter, setFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
+  
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Searching for:", searchTerm);
     // Here you would implement the actual search functionality
   };
+  
   return <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
       {/* Left column (wider) */}
       <div className="lg:w-3/5 space-y-20">
@@ -37,7 +41,6 @@ export function TalentDashboard() {
 
         {/* Search bar section */}
         <div>
-          
           <form onSubmit={handleSearch} className="flex gap-4 w-full">
             <Button type="submit" variant="default" className="h-10">
               <Search className="h-4 w-4 mr-2" />
@@ -70,6 +73,9 @@ export function TalentDashboard() {
       
       {/* Right column (narrower) */}
       <div className="lg:w-2/5 space-y-20">
+        {/* Notifications section - Added at the top */}
+        <DashboardNotifications />
+        
         {/* Applied Projects section */}
         <AppliedProjects />
         
