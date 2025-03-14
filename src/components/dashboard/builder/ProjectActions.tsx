@@ -1,16 +1,17 @@
+
 import { Button } from "@/components/ui/button";
 import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
 import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
+
 interface ProjectActionsProps {
   showProjectModal: boolean;
   setShowProjectModal: (show: boolean) => void;
 }
-export function ProjectActions({
-  showProjectModal,
-  setShowProjectModal
-}: ProjectActionsProps) {
-  return <div>
-      
+
+export function ProjectActions({ showProjectModal, setShowProjectModal }: ProjectActionsProps) {
+  return (
+    <div>
+      <h2 className="text-lg font-bold mb-4">Project Actions</h2>
       <div className="flex flex-col md:flex-row justify-between gap-4">
         <div className="flex gap-4">
           <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
@@ -20,5 +21,6 @@ export function ProjectActions({
           <ProjectSearch hideButton={true} />
         </div>
       </div>
-    </div>;
+    </div>
+  );
 }
