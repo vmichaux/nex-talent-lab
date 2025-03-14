@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Heart, Plus, X } from "lucide-react";
-import { toast } from "@/hooks/use-toast-sonner";
+import { useToast } from "@/components/ui/use-toast";
 
 interface InterestsSectionProps {
   interests: string[];
@@ -17,34 +17,46 @@ export const InterestsSection = ({
   onRemoveInterest
 }: InterestsSectionProps) => {
   const [newInterest, setNewInterest] = useState("");
+  const { toast } = useToast();
 
   const handleAddInterest = () => {
     if (!newInterest.trim()) {
-      toast.error("Invalid interest", {
-        description: "Please enter a valid interest name"
+      toast({
+        title: "Invalid interest",
+        description: "Please enter a valid interest name",
+        variant: "destructive",
+        duration: 6000  // Added duration of 6000 (6 seconds)
       });
       return;
     }
     
     if (interests.includes(newInterest.trim())) {
-      toast.error("Duplicate interest", {
-        description: "This interest is already in your list"
+      toast({
+        title: "Duplicate interest",
+        description: "This interest is already in your list",
+        variant: "destructive",
+        duration: 6000  // Added duration of 6000 (6 seconds)
       });
       setNewInterest("");
       return;
     }
     
     if (interests.length >= 6) {
-      toast.error("Maximum interests reached", {
-        description: "You can only add up to 6 interests"
+      toast({
+        title: "Maximum interests reached",
+        description: "You can only add up to 6 interests",
+        variant: "destructive",
+        duration: 6000  // Added duration of 6000 (6 seconds)
       });
       return;
     }
     
     onAddInterest(newInterest.trim());
     console.log("Added interest:", newInterest.trim());
-    toast.success("Interest added", {
-      description: `"${newInterest.trim()}" has been added to your interests`
+    toast({
+      title: "Interest added",
+      description: `"${newInterest.trim()}" has been added to your interests`,
+      duration: 6000  // Added duration of 6000 (6 seconds)
     });
     
     setNewInterest("");
@@ -110,4 +122,4 @@ export const InterestsSection = ({
       </div>
     </div>
   );
-}
+};

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { useToast } from "@/hooks/use-toast-sonner";
+import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { formatAuthError } from "@/services/authService";
 import { LoginForm } from "@/components/auth/LoginForm";

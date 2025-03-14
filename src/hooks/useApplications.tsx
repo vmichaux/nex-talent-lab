@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { 
   collection, 
@@ -13,7 +14,7 @@ import {
 } from "firebase/firestore";
 import { db, getUserProfile } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
-import { toast } from "@/hooks/use-toast-sonner";
+import { toast } from "sonner";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { ExternalLink } from "lucide-react";
 
@@ -53,6 +54,7 @@ export const useApplications = () => {
       setLoading(true);
       console.log("Fetching applications for user:", targetUserId);
       
+      // Simple query without ordering to avoid index requirements
       const applicationsQuery = query(
         collection(db, "applications"),
         where("userId", "==", targetUserId)
@@ -62,6 +64,7 @@ export const useApplications = () => {
       const fetchedApplications = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         
+        // Convert Firestore timestamp to Date
         const createdAt = data.createdAt instanceof Timestamp 
           ? data.createdAt.toDate() 
           : new Date(data.createdAt || Date.now());
@@ -73,8 +76,10 @@ export const useApplications = () => {
         } as Application;
       });
       
+      // Get full names for applications if needed
       const applicationsWithNames = await Promise.all(
         fetchedApplications.map(async (app) => {
+          // Only try to get full name if userName is default/empty
           if (app.userId && (app.userName === "Anonymous User" || !app.userName)) {
             try {
               const userProfile = await getUserProfile(app.userId);
@@ -97,6 +102,7 @@ export const useApplications = () => {
         })
       );
       
+      // Sort applications manually (newest first)
       const sortedApplications = applicationsWithNames.sort((a, b) => 
         b.createdAt.getTime() - a.createdAt.getTime()
       );
@@ -114,8 +120,10 @@ export const useApplications = () => {
     }
   };
 
+  // Create a notification when an application status changes
   const createNotification = async (application: Application, status: "accepted" | "rejected", feedback?: string) => {
     try {
+      // Create notification for the applicant
       await addDoc(collection(db, "notifications"), {
         userId: application.userId,
         type: "application",

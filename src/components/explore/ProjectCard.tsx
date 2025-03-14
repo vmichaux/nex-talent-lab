@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, UserCircle, MessageSquare } from "lucide-react";
 import { Project } from "@/types/project";
 import { useNavigate } from "react-router-dom";
-import { toast } from "@/hooks/use-toast-sonner";
+import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 
 interface ProjectCardProps {
@@ -36,7 +37,8 @@ export const ProjectCard = ({
     // Redirect to login if user is not logged in
     if (!isLoggedIn) {
       toast.info("Authentication required", {
-        description: "Please sign in to apply for projects"
+        description: "Please sign in to apply for projects",
+        duration: 6000,
       });
       navigate('/login');
       return;
@@ -45,7 +47,8 @@ export const ProjectCard = ({
     // Prevent applying to your own project
     if (project.userId === currentUserId) {
       toast.error("Cannot apply to your own project", {
-        description: "You cannot apply to projects you've created."
+        description: "You cannot apply to projects you've created.",
+        duration: 6000,
       });
       return;
     }
