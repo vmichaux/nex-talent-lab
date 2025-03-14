@@ -37,7 +37,7 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
     );
   }
 
-  // For non-logged-in users, use a container div with flex and uniform spacing
+  // For non-logged-in users, use evenly spaced links without the empty onboarding link
   return (
     <>
       <div className="flex items-center">
@@ -52,17 +52,10 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
       </div>
       <div className="flex items-center">
         <Link 
-          to="/onboarding" 
+          to="/how-it-works" 
           className={`${linkClass} px-4`} 
-          onClick={(e) => {
-            handleDashboardClick(e);
-            handleClick();
-          }}
+          onClick={handleClick}
         >
-        </Link>
-      </div>
-      <div className="flex items-center">
-        <Link to="/how-it-works" className={`${linkClass} px-4`} onClick={handleClick}>
           How It Works
         </Link>
       </div>
@@ -72,7 +65,11 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
         </Link>
       </div>
       <div className="flex items-center">
-        <Link to="/contact-sales" className={`${linkClass} px-4`} onClick={handleClick}>
+        <Link 
+          to="/contact-sales" 
+          className={`${linkClass} px-4`} 
+          onClick={handleClick}
+        >
           <Phone className="h-4 w-4 mr-1" />
           Contact Sales
         </Link>
