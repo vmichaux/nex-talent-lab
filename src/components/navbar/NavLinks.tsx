@@ -1,5 +1,6 @@
 
 import { Link } from "react-router-dom";
+import { Phone } from "lucide-react";
 
 interface NavLinksProps {
   isLoggedIn: boolean;
@@ -60,6 +61,7 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
         About
       </Link>
       <Link to="/contact-sales" className={linkClass} onClick={handleClick}>
+        <Phone className="h-4 w-4" />
         Contact Sales
       </Link>
     </>
