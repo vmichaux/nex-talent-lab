@@ -8,12 +8,15 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/use-auth";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -55,6 +58,7 @@ export default function SignupPage() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setAuthError(null);
     
     try {
       await signup(email, password);
@@ -75,6 +79,8 @@ export default function SignupPage() {
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
+    setAuthError(null);
+    
     try {
       await signInWithGoogle();
       if (role) {
@@ -85,8 +91,11 @@ export default function SignupPage() {
         description: "Welcome to NexTalent Lab. Let's set up your profile.",
       });
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Google sign-in error:", error);
+      if (error.code === "auth/unauthorized-domain") {
+        setAuthError("This website domain is not authorized for Google sign-in. You can only use Google sign-in on the production site or localhost.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -98,6 +107,13 @@ export default function SignupPage() {
         <h1 className="text-2xl font-bold">{getWelcomeMessage()}</h1>
         <p className="text-gray-500 mt-1">{getDescription()}</p>
       </div>
+
+      {authError && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{authError}</AlertDescription>
+        </Alert>
+      )}
 
       <form onSubmit={handleSignup} className="space-y-4">
         <div className="space-y-2">
@@ -188,10 +204,17 @@ export default function SignupPage() {
             onClick={handleGoogleSignIn}
             disabled={isLoading}
           >
-            <Linkedin className="h-4 w-4" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
+              <path d="M17.8395 10.1333H12.6668V12.9333H15.7462C15.4002 14.8 13.8135 15.7333 12.0002 15.7333C9.74683 15.7333 7.9335 13.9333 7.9335 12C7.9335 10.0667 9.74683 8.26667 12.0002 8.26667C13.1868 8.26667 14.0002 8.73333 14.5735 9.26667L16.6002 7.06667C15.3735 5.93333 13.7868 5.33333 12.0002 5.33333C8.0535 5.33333 4.9335 8.4 4.9335 12C4.9335 15.6 8.0535 18.6667 12.0002 18.6667C15.5868 18.6667 18.6668 16.2667 18.6668 12C18.6668 11.4 18.7335 10.5333 18.5868 10.1333H17.8395Z" />
+            </svg>
             <span>Google</span>
           </Button>
         </div>
+        
+        <p className="mt-3 text-xs text-center text-gray-500">
+          Note: Google sign-in only works on authorized domains
+        </p>
       </div>
 
       {!fromOnboarding && (

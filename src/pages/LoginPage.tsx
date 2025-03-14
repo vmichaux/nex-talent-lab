@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/use-auth";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const Google = (props: React.ComponentProps<LucideIcon>) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
@@ -18,6 +20,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { login, signInWithGoogle } = useAuth();
@@ -25,6 +28,7 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setAuthError(null);
     
     try {
       console.log(`Login form submitted with email: ${email}`);
@@ -40,12 +44,17 @@ export default function LoginPage() {
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
+    setAuthError(null);
+    
     try {
       console.log("Google sign-in button clicked");
       await signInWithGoogle();
       navigate("/dashboard");
     } catch (error: any) {
       console.error("Google sign-in error in component:", error);
+      if (error.code === "auth/unauthorized-domain") {
+        setAuthError("This website domain is not authorized for Google sign-in. You can only use Google sign-in on the production site or localhost.");
+      }
       // Toast is already handled in the AuthContext
     } finally {
       setIsLoading(false);
@@ -69,6 +78,13 @@ export default function LoginPage() {
             <h1 className="font-bold bg-gradient-to-r from-[#6E59A5] to-[#2ECC71] bg-clip-text text-transparent text-5xl">Welcome back</h1>
             <p className="text-gray-500 mt-1 my-[12px]">Log in to your NexTalent Lab account</p>
           </div>
+
+          {authError && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{authError}</AlertDescription>
+            </Alert>
+          )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
@@ -118,6 +134,10 @@ export default function LoginPage() {
                 <span>Google</span>
               </Button>
             </div>
+            
+            <p className="mt-3 text-xs text-center text-gray-500">
+              Note: Google sign-in only works on authorized domains
+            </p>
           </div>
 
           <p className="mt-8 text-center text-sm text-gray-500">

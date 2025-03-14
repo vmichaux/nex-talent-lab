@@ -4,7 +4,6 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword,
   signInWithPopup,
-  GithubAuthProvider,
   GoogleAuthProvider,
   AuthError
 } from "firebase/auth";
@@ -88,6 +87,8 @@ export const formatAuthError = (error: any): string => {
       return "Network error. Please check your internet connection and try again.";
     case 'auth/too-many-requests':
       return "Too many unsuccessful login attempts. Please try again later.";
+    case 'auth/unauthorized-domain':
+      return "Google sign-in failed: This website domain is not authorized for Firebase authentication. You can only use Google sign-in on the production site or localhost.";
     default:
       return error.message || "Authentication failed. Please try again.";
   }
@@ -123,17 +124,6 @@ export const signInWithGoogle = async (): Promise<void> => {
     console.log("Google sign in successful");
   } catch (error) {
     console.error("Google sign-in error:", error);
-    throw error;
-  }
-};
-
-// Sign in with GitHub
-export const signInWithGithub = async (): Promise<void> => {
-  try {
-    const provider = new GithubAuthProvider();
-    await signInWithPopup(auth, provider);
-  } catch (error) {
-    console.error("GitHub sign-in error:", error);
     throw error;
   }
 };
