@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast";
 import { Mail, Phone, Send } from "lucide-react";
+import { submitContactForm, checkContactCollection } from "@/lib/contactService";
+
 export default function ContactSalesPage() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,6 +24,7 @@ export default function ContactSalesPage() {
     preferEmail: true,
     preferPhone: false
   });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {
       name,
@@ -32,13 +35,15 @@ export default function ContactSalesPage() {
       [name]: value
     }));
   };
+
   const handleCheckboxChange = (field: string, checked: boolean) => {
     setFormData(prev => ({
       ...prev,
       [field]: checked
     }));
   };
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -65,33 +70,58 @@ export default function ContactSalesPage() {
       return;
     }
 
-    // Simulate API call to submit form
-    setTimeout(() => {
-      console.log("Form submitted:", formData);
+    try {
+      // Check if we can access the collection
+      const collectionAccessible = await checkContactCollection();
+      if (!collectionAccessible) {
+        toast({
+          title: "Service unavailable",
+          description: "Contact form service is currently unavailable. Please try again later.",
+          variant: "destructive"
+        });
+        setIsSubmitting(false);
+        return;
+      }
+      
+      // Submit to Firebase
+      const result = await submitContactForm(formData);
+      
+      if (result) {
+        toast({
+          title: "Message sent!",
+          description: "Our sales team will contact you shortly."
+        });
+        
+        // Reset form
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          message: "",
+          preferEmail: true,
+          preferPhone: false
+        });
+      } else {
+        throw new Error("Failed to submit contact form");
+      }
+    } catch (error) {
+      console.error("Contact form submission error:", error);
       toast({
-        title: "Message sent!",
-        description: "Our sales team will contact you shortly."
+        title: "Submission failed",
+        description: "There was a problem submitting your message. Please try again later.",
+        variant: "destructive"
       });
+    } finally {
       setIsSubmitting(false);
-
-      // Reset form
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        message: "",
-        preferEmail: true,
-        preferPhone: false
-      });
-    }, 1500);
+    }
   };
+
   return <div className="flex flex-col min-h-screen">
       <Navbar />
       
       <main className="flex-1">
         <div className="relative overflow-hidden bg-white">
-          {/* Background Pattern - Purple Gradient */}
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
