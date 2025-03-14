@@ -1,5 +1,4 @@
 
-import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -47,8 +46,7 @@ export function RecommendedTalents() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl">
-          <Users className="h-4 w-4 text-primary" />
+        <h2 className="font-semibold category-title-gradient text-3xl">
           Recommended Talent
         </h2>
         <Button variant="outline" className="gap-1">

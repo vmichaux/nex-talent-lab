@@ -3,7 +3,6 @@ import { TabsContent } from "@/components/ui/tabs";
 import { TalentDashboard } from "./TalentDashboard";
 import { BuilderDashboard } from "./BuilderDashboard";
 import { useState } from "react";
-import { ArrowRightLeft } from "lucide-react";
 import { ViewModeTabs } from "./dualrole/ViewModeTabs";
 import { CombinedView } from "./dualrole/CombinedView";
 
@@ -13,8 +12,7 @@ export function DualRoleDashboard() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-semibold flex items-center gap-2">
-          <ArrowRightLeft className="h-4 w-4 text-primary" />
+        <h2 className="text-2xl font-semibold">
           Dual Role View
         </h2>
         
