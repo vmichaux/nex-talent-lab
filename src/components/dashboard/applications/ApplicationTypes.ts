@@ -12,9 +12,10 @@ export interface ApplicationSummary {
   availabilityDate?: string;
   timeCommitment?: string;
   portfolioLink?: string;
+  // Update to include 'rejected' status
   status: 'pending' | 'accepted' | 'declined' | 'rejected';
   createdAt: Date;
-  feedback?: string;
+  feedback?: string; // Add the feedback property
 }
 
 export type ApplicationFilter = 'all' | 'pending' | 'reviewed';

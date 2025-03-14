@@ -17,8 +17,8 @@ interface ApplicationDetailsDialogProps {
   setOpen: (open: boolean) => void;
   application: ApplicationSummary | null;
   onOpenFeedback: () => void;
-  onAccept: (applicationId: string) => Promise<void>;
-  onReject: (applicationId: string) => Promise<void>;
+  onAccept: (applicationId: string, feedback?: string) => Promise<void>;
+  onReject: (applicationId: string, feedback?: string) => Promise<void>;
   isSubmitting: boolean;
 }
 
