@@ -5,8 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export function ProjectDeadlines() {
+  const navigate = useNavigate();
+  
   // Sample data - in a real app, this would come from a data source
   const deadlines = [{
     id: 1,
@@ -36,7 +39,12 @@ export function ProjectDeadlines() {
         <h2 className="font-semibold category-title-gradient text-3xl">
           Projects Deadlines and Milestones
         </h2>
-        <Button variant="outline" size="sm" className="gap-1">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="gap-1"
+          onClick={() => navigate('/project-deadlines')}
+        >
           View All <ArrowRight className="h-3 w-3" />
         </Button>
       </div>

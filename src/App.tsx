@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,12 +23,12 @@ import ApplyProjectPage from "./pages/ApplyProjectPage";
 import ReviewApplicationsPage from "./pages/ReviewApplicationsPage";
 import ProfileEditPage from "./pages/ProfileEditPage";
 import ContactSalesPage from "./pages/ContactSalesPage";
+import ProjectDeadlinesPage from "./pages/ProjectDeadlinesPage";
 import { DashboardOnboarding } from "./components/DashboardOnboarding";
 import { ChatWidget } from "./components/ChatWidget";
 import { ScrollToTopButton } from "./components/ScrollToTopButton";
 import { ProjectForm } from "./components/dashboard/ProjectForm";
 
-// Scroll to top component that will be used inside the Router
 function ScrollToTop() {
   const { pathname } = useLocation();
   
@@ -64,7 +63,7 @@ function AppContent() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/dashboard/new-project" element={<DashboardPage newProject={true} />} />
           <Route path="/requests" element={<ReviewApplicationsPage />} />
-          {/* Special route for onboarding without Navbar */}
+          <Route path="/project-deadlines" element={<ProjectDeadlinesPage />} />
           <Route path="/onboarding" element={<DashboardOnboarding />} />
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/profile/edit" element={<ProfileEditPage />} />
