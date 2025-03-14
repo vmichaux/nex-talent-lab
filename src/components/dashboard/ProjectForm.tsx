@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { ProjectFormData } from "./AddProjectButton";
 import { Button } from "@/components/ui/button";
@@ -37,7 +36,7 @@ export function ProjectForm({
   ]);
 
   // Requirements
-  const [deliverables, setDeliverables] = useState<string[]>(["Website mockup", "Functional prototype"]);
+  const [deliverables, setDeliverables] = useState<string[]>([]);
   const [projectDuration, setProjectDuration] = useState("3 months");
   const [projectDeadline, setProjectDeadline] = useState("");
   const [collaboratorsNeeded, setCollaboratorsNeeded] = useState(2);

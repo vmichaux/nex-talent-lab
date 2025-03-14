@@ -32,6 +32,7 @@ export function RequirementsTab({
 }: RequirementsTabProps) {
   const [skillsInput, setSkillsInput] = useState("");
   const [selectedSkillLevel, setSelectedSkillLevel] = useState<"Beginner" | "Intermediate" | "Advanced" | "Expert">("Intermediate");
+  const [deliverableInput, setDeliverableInput] = useState("");
 
   const handleAddSkill = () => {
     if (skillsInput.trim()) {
@@ -50,10 +51,15 @@ export function RequirementsTab({
     setSkillsWithLevel(updatedSkills);
   };
 
-  const handleAddDeliverable = (deliverable: string) => {
-    if (deliverable.trim() && !deliverables.includes(deliverable.trim())) {
-      setDeliverables([...deliverables, deliverable.trim()]);
+  const handleAddDeliverable = () => {
+    if (deliverableInput.trim() && !deliverables.includes(deliverableInput.trim())) {
+      setDeliverables([...deliverables, deliverableInput.trim()]);
+      setDeliverableInput("");
     }
+  };
+
+  const handleRemoveDeliverable = (indexToRemove: number) => {
+    setDeliverables(deliverables.filter((_, index) => index !== indexToRemove));
   };
 
   return (
@@ -101,13 +107,38 @@ export function RequirementsTab({
       
       <div className="space-y-2">
         <Label htmlFor="deliverables">Deliverables & Timeline</Label>
-        <Textarea
-          id="deliverables"
-          placeholder="List the expected deliverables for this project, e.g., 'Website mockup, functional prototype, etc.'"
-          value={deliverables.join(', ')}
-          onChange={(e) => setDeliverables(e.target.value.split(',').map(item => item.trim()))}
-          className="min-h-[80px]"
-        />
+        
+        <div className="flex flex-wrap gap-2 p-3 border rounded-md mb-2">
+          {deliverables.map((item, index) => (
+            <div key={index} className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full">
+              <span>{item}</span>
+              <button 
+                type="button" 
+                onClick={() => handleRemoveDeliverable(index)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+          {deliverables.length === 0 && (
+            <div className="text-muted-foreground text-sm py-1">
+              No deliverables added yet
+            </div>
+          )}
+        </div>
+        
+        <div className="flex gap-2">
+          <Input
+            value={deliverableInput}
+            onChange={(e) => setDeliverableInput(e.target.value)}
+            placeholder="Add a deliverable..."
+            className="flex-1"
+          />
+          <Button type="button" onClick={handleAddDeliverable}>
+            Add
+          </Button>
+        </div>
       </div>
       
       <div className="grid grid-cols-2 gap-4">
