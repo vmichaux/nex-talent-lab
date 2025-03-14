@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
@@ -45,7 +46,7 @@ export function BuilderDashboard() {
   return (
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
       {/* Left column (wider) */}
-      <div className="lg:w-3/5 space-y-12">
+      <div className="lg:w-3/5 space-y-20">
         {/* Overview section */}
         <div>
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -81,7 +82,7 @@ export function BuilderDashboard() {
       </div>
       
       {/* Right column (narrower) */}
-      <div className="lg:w-2/5 space-y-12">
+      <div className="lg:w-2/5 space-y-20">
         {/* Review Applications */}
         <ReviewApplications />
         
