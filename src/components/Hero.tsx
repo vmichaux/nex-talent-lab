@@ -59,7 +59,7 @@ export function Hero() {
                   </div>
                   <div>
                     <h3 className="font-medium">Project Collaboration</h3>
-                    <p className="text-sm text-gray-500">Seamless tools to create, share and manage projects with your team</p>
+                    <p className="text-sm text-gray-500">Seamless tools to create, share and manage projects with your team.</p>
                   </div>
                 </div>
                 
