@@ -26,7 +26,7 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
           console.log("Filtering by category:", options.category);
           talentsQuery = query(
             talentsQuery, 
-            where("title", "array-contains", options.category)
+            where("title", "==", options.category)
           );
         }
         
@@ -61,7 +61,7 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
             return {
               id: doc.id,
               name: `${data.firstName || ''} ${data.lastName || ''}`.trim(),
-              title: data.title || "Professional",
+              title: Array.isArray(data.title) ? data.title.join(", ") : (data.title || "Professional"),
               location: data.location || "Remote",
               skills: Array.isArray(data.skills) 
                 ? data.skills.map((skill: any) => typeof skill === 'object' ? skill.name : skill)

@@ -7,7 +7,7 @@ import { Briefcase, Clock, MapPin, MessageSquare, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export interface Talent {
-  id: string; // Changed from number to string to match Firebase document IDs
+  id: string;
   name: string;
   title: string;
   location: string;
@@ -24,7 +24,7 @@ interface TalentCardProps {
   talent: Talent;
 }
 
-export const TalentCard = ({ talent }: TalentCardProps) => {
+const TalentCard = ({ talent }: TalentCardProps) => {
   return (
     <Card className="overflow-hidden h-full flex flex-col shadow-md hover:shadow-lg transition-shadow">
       <CardHeader className="pb-4">
@@ -51,7 +51,7 @@ export const TalentCard = ({ talent }: TalentCardProps) => {
       <CardContent className="py-4 flex-1 space-y-5">
         <p className="text-sm text-gray-700">{talent.bio}</p>
         <div className="flex flex-wrap gap-2">
-          {talent.skills.slice(0, 2).map((skill: string, index: number) => (
+          {talent.skills && talent.skills.slice(0, 2).map((skill: string, index: number) => (
             <Badge key={index} variant="outline" className="bg-gray-50 text-xs">
               {skill}
             </Badge>

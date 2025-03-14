@@ -13,6 +13,11 @@ export const TalentsSection = () => {
   const { talents: designerTalents, loading: designersLoading, error: designersError } = useTalents({ category: "Designer" });
   const { talents: developerTalents, loading: developersLoading, error: developersError } = useTalents({ category: "Developer" });
 
+  console.log("All talents:", allTalents);
+  console.log("Featured talents:", featuredTalents);
+  console.log("Designer talents:", designerTalents);
+  console.log("Developer talents:", developerTalents);
+
   // Combine loading states based on active tab
   const isLoading = 
     (activeTab === "all-talents" && allLoading) ||
