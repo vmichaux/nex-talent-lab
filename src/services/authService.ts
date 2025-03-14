@@ -15,6 +15,8 @@ export interface UserData {
   createdAt: Date;
   lastLogin: Date;
   hasCompletedProfile?: boolean;
+  firstName?: string;
+  lastName?: string;
 }
 
 // Update user data in Firestore

@@ -32,7 +32,7 @@ export function DashboardWelcome() {
   // Helper function to extract the user's first name
   const getUserFirstName = (): string => {
     // First priority: Check userData from Firestore
-    if (userData?.firstName) {
+    if (userData && userData.firstName) {
       return userData.firstName;
     }
     
