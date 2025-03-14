@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useAuth } from "@/hooks/use-auth";
@@ -11,16 +10,25 @@ import { DualRoleDashboard } from "@/components/dashboard/DualRoleDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/explore/PageHeader";
 import { toast } from "sonner";
+import { ProjectForm } from "@/components/dashboard/ProjectForm";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-const DashboardPage = () => {
+interface DashboardPageProps {
+  newProject?: boolean;
+}
+
+const DashboardPage = ({ newProject = false }: DashboardPageProps) => {
   const {
     isLoggedIn,
     currentUser,
     userData
   } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showWelcome, setShowWelcome] = useState(true);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "both">("talent");
+  const [showProjectModal, setShowProjectModal] = useState(newProject);
+  const [loading, setLoading] = useState(false);
   
   const getUserFirstName = () => {
     if (currentUser?.displayName) {
@@ -40,19 +48,15 @@ const DashboardPage = () => {
       return;
     }
     
-    // First check userData from Firestore (from auth context)
     if (userData?.userRole) {
       const mappedRole = userData.userRole === "entrepreneur" ? "builder" : userData.userRole;
       setActiveRole(mappedRole);
-      // Also update localStorage for consistency
       localStorage.setItem("userRole", userData.userRole);
     } else {
-      // Fall back to localStorage if Firestore doesn't have the info
       const savedRole = localStorage.getItem("userRole");
       if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
         setActiveRole(savedRole === "entrepreneur" ? "builder" : savedRole);
       } else if (isLoggedIn && !savedRole) {
-        // User is logged in but has no role set - redirect to onboarding
         toast.info("Let's set up your profile", {
           description: "Please select your role to continue.",
           duration: 6000,
@@ -67,17 +71,25 @@ const DashboardPage = () => {
     }
   }, [isLoggedIn, navigate, userData]);
   
+  useEffect(() => {
+    setShowProjectModal(newProject);
+  }, [newProject]);
+  
+  useEffect(() => {
+    if (location.pathname === "/dashboard/new-project" && !showProjectModal) {
+      navigate("/dashboard");
+    }
+  }, [showProjectModal, location.pathname, navigate]);
+
   const handleCompleteOnboarding = () => {
     setShowWelcome(false);
   };
   
   const handleRoleChange = (role: "talent" | "builder" | "both") => {
     setActiveRole(role);
-    // Update localStorage with the mapped value
     const storageRole = role === "builder" ? "entrepreneur" : role;
     localStorage.setItem("userRole", storageRole);
     
-    // If the user is logged in, update the role in Firestore as well
     if (currentUser) {
       import("@/services/authService").then(({ updateUserRole }) => {
         updateUserRole(currentUser, storageRole as "talent" | "entrepreneur" | "both")
@@ -85,6 +97,39 @@ const DashboardPage = () => {
             console.error("Error updating role:", error);
           });
       });
+    }
+  };
+  
+  const handleSubmit = async (formData: any) => {
+    try {
+      setLoading(true);
+      import("@/hooks/useProjects").then(({ useProjects }) => {
+        const { createProject } = useProjects();
+        createProject(formData as any)
+          .then(result => {
+            if (result.success) {
+              toast.success("Project created successfully", {
+                duration: 6000,
+              });
+              setShowProjectModal(false);
+              navigate("/dashboard");
+            } else {
+              throw new Error("Failed to create project");
+            }
+          })
+          .catch(error => {
+            console.error("Error creating project:", error);
+            toast.error("Failed to create project. Please try again.", {
+              duration: 6000,
+            });
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      setLoading(false);
     }
   };
   
@@ -130,7 +175,7 @@ const DashboardPage = () => {
                   </TabsContent>
                   
                   <TabsContent value="builder" className="mt-8 px-4 max-w-[1800px] mx-auto">
-                    <BuilderDashboard />
+                    <BuilderDashboard showProjectModal={showProjectModal} setShowProjectModal={setShowProjectModal} />
                   </TabsContent>
                   
                   <TabsContent value="both" className="mt-8 px-4 max-w-[1800px] mx-auto">
@@ -142,6 +187,16 @@ const DashboardPage = () => {
           </div>}
       </main>
       <Footer />
+      
+      <Dialog open={showProjectModal} onOpenChange={setShowProjectModal}>
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+          <ProjectForm 
+            onSubmit={handleSubmit} 
+            loading={loading} 
+            submitLabel="Create Project" 
+          />
+        </DialogContent>
+      </Dialog>
     </div>;
 };
 export default DashboardPage;

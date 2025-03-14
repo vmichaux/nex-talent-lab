@@ -43,9 +43,10 @@ export interface ProjectFormData {
 interface AddProjectButtonProps {
   open?: boolean;
   setOpen?: (open: boolean) => void;
+  onClick?: () => void;
 }
 
-export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButtonProps) {
+export function AddProjectButton({ open, setOpen: setOpenProp, onClick }: AddProjectButtonProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { currentUser } = useAuth();
@@ -54,6 +55,14 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
   
   const isOpen = open !== undefined ? open : internalOpen;
   const setIsOpen = setOpenProp || setInternalOpen;
+  
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      setIsOpen(true);
+    }
+  };
   
   const handleSubmit = async (formData: ProjectFormData) => {
     if (!currentUser) {
@@ -130,7 +139,7 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={handleClick}>
           <Plus className="h-4 w-4" />
           New Project
         </Button>

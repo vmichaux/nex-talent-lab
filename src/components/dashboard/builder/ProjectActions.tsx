@@ -22,7 +22,11 @@ export function ProjectActions({
   return <div>
       <div className="flex flex-col md:flex-row justify-between gap-4">
         <div className="flex gap-4">
-          <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} onClick={handleNewProject} />
+          <AddProjectButton 
+            open={showProjectModal} 
+            setOpen={setShowProjectModal} 
+            onClick={handleNewProject} 
+          />
           <Button type="submit" variant="default" className="h-10">Search</Button>
         </div>
         <div className="flex-1">

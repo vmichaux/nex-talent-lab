@@ -18,11 +18,18 @@ import { RecommendedTalents } from "@/components/dashboard/builder/RecommendedTa
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
 import { DashboardNotifications } from "@/components/dashboard/DashboardNotifications";
-import { Search, BarChart } from "lucide-react";
 
-export function BuilderDashboard() {
+interface BuilderDashboardProps {
+  showProjectModal?: boolean;
+  setShowProjectModal?: (show: boolean) => void;
+}
+
+export function BuilderDashboard({ 
+  showProjectModal = false, 
+  setShowProjectModal = () => {} 
+}: BuilderDashboardProps) {
   const location = useLocation();
-  const [showProjectModal, setShowProjectModal] = useState(false);
+  const [internalShowProjectModal, setInternalShowProjectModal] = useState(false);
   const { currentUser } = useAuth();
   const { projects, loading } = useProjects({
     excludeCurrentUser: true,
@@ -30,9 +37,16 @@ export function BuilderDashboard() {
   });
   const [recommendedProjects, setRecommendedProjects] = useState<Project[]>([]);
   
+  // Use either the props or internal state
+  const modalOpen = showProjectModal || internalShowProjectModal;
+  const setModalOpen = (show: boolean) => {
+    setShowProjectModal(show);
+    setInternalShowProjectModal(show);
+  };
+  
   useEffect(() => {
     if (location.state?.openProjectModal) {
-      setShowProjectModal(true);
+      setModalOpen(true);
       window.history.replaceState({}, document.title);
     }
   }, [location]);
@@ -58,8 +72,8 @@ export function BuilderDashboard() {
 
         {/* Project actions section */}
         <ProjectActions 
-          showProjectModal={showProjectModal} 
-          setShowProjectModal={setShowProjectModal} 
+          showProjectModal={modalOpen} 
+          setShowProjectModal={setModalOpen} 
         />
 
         {/* Active Projects section */}
