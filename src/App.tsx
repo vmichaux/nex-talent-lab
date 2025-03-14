@@ -24,6 +24,7 @@ import ApplyProjectPage from "./pages/ApplyProjectPage";
 import ReviewApplicationsPage from "./pages/ReviewApplicationsPage";
 import ProfileEditPage from "./pages/ProfileEditPage";
 import ContactSalesPage from "./pages/ContactSalesPage";
+import MyProjectsPage from "./pages/MyProjectsPage";
 import { DashboardOnboarding } from "./components/DashboardOnboarding";
 import { ChatWidget } from "./components/ChatWidget";
 import { ScrollToTopButton } from "./components/ScrollToTopButton";
@@ -61,6 +62,7 @@ function AppContent() {
           <Route path="/about" element={<OurStoryPage />} />
           <Route path="/contact-sales" element={<ContactSalesPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/my-projects" element={<MyProjectsPage />} />
           <Route path="/requests" element={<ReviewApplicationsPage />} />
           {/* Special route for onboarding without Navbar */}
           <Route path="/onboarding" element={<DashboardOnboarding />} />
