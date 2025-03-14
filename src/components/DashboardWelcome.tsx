@@ -1,3 +1,4 @@
+
 import { ArrowRight, Check, UserPlus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -73,7 +74,7 @@ export function DashboardWelcome() {
           </div>
           
           <h1 className="mb-4 text-3xl font-bold tracking-tight custom-gradient-text md:text-5xl">
-            Let's get you started on your collaboration journey
+            Let's get you started on <span className="whitespace-nowrap">your collaboration journey</span>
           </h1>
           
           <p className="text-lg text-gray-600 md:text-xl max-w-3xl mb-8">
