@@ -6,9 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 export function SkillsProgress() {
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <Award className="h-5 w-5 text-primary" />
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-bold flex items-center gap-2">
+          <Award className="h-4 w-4 text-primary" />
           Skills Progress
         </h2>
       </div>

@@ -10,13 +10,16 @@ interface ProjectActionsProps {
 
 export function ProjectActions({ showProjectModal, setShowProjectModal }: ProjectActionsProps) {
   return (
-    <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
-      <div className="flex gap-4">
-        <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
-        <Button type="submit" variant="default" className="h-10">Search</Button>
-      </div>
-      <div className="flex-1">
-        <ProjectSearch hideButton={true} />
+    <div>
+      <h2 className="text-lg font-bold mb-4">Project Actions</h2>
+      <div className="flex flex-col md:flex-row justify-between gap-4">
+        <div className="flex gap-4">
+          <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
+          <Button type="submit" variant="default" className="h-10">Search</Button>
+        </div>
+        <div className="flex-1">
+          <ProjectSearch hideButton={true} />
+        </div>
       </div>
     </div>
   );
