@@ -1,9 +1,9 @@
 
-export const welcomeMessages = {
-  talent: "Welcome to Your Talent Journey",
-  builder: "Welcome to Your Builder Journey",
-  both: "Welcome to Your Dual Journey"
-};
+export const getWelcomeMessages = (firstName: string = "") => ({
+  talent: `Let's go ${firstName}! Welcome to Your Talent Journey`,
+  builder: `Let's go ${firstName}! Welcome to Your Builder Journey`,
+  both: `Let's go ${firstName}! Welcome to Your Dual Journey`
+});
 
 export const descriptions = {
   talent: "Let's showcase your skills and find the perfect projects",

@@ -5,12 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { useEffect, useState } from "react";
 import { Step } from "@/components/dashboard/welcome/Step";
-import { welcomeMessages, descriptions } from "@/components/dashboard/welcome/profileConstants";
+import { getWelcomeMessages, descriptions } from "@/components/dashboard/welcome/profileConstants";
 
 export function DashboardWelcome() {
   const navigate = useNavigate();
   const {
-    userData
+    userData,
+    currentUser
   } = useAuth();
   const [profileType, setProfileType] = useState<"talent" | "builder" | "both">("talent");
   const profileCompleted = userData?.hasCompletedProfile || false;
@@ -27,6 +28,28 @@ export function DashboardWelcome() {
       setProfileType(userRole);
     }
   }, []);
+  
+  // Helper function to extract the user's first name
+  const getUserFirstName = (): string => {
+    // First priority: Check userData from Firestore
+    if (userData?.firstName) {
+      return userData.firstName;
+    }
+    
+    // Second priority: Check displayName from Firebase Auth
+    if (currentUser?.displayName) {
+      return currentUser.displayName.split(' ')[0];
+    }
+    
+    // Third priority: Extract from email
+    if (currentUser?.email) {
+      const emailUsername = currentUser.email.split('@')[0];
+      const firstName = emailUsername.split(/[._-]/)[0];
+      return firstName.charAt(0).toUpperCase() + firstName.slice(1);
+    }
+    
+    return "";
+  };
   
   const stepsByProfile = {
     talent: [
@@ -95,7 +118,7 @@ export function DashboardWelcome() {
   };
   
   const currentSteps = stepsByProfile[profileType];
-  const welcomeMessage = welcomeMessages[profileType];
+  const welcomeMessage = getWelcomeMessages(getUserFirstName())[profileType];
   const description = descriptions[profileType];
   
   return (
@@ -126,8 +149,6 @@ export function DashboardWelcome() {
           
           {!profileCompleted}
         </div>
-
-        {/* ProfileBenefits section removed */}
       </div>
     </div>
   );
