@@ -70,7 +70,7 @@ export function ApplicationModal({ application, isOpen, onClose, onRefresh }: Ap
           description: newStatus === 'accepted' 
             ? "You have accepted the application. The applicant will be notified." 
             : "You have rejected the application. The applicant will be notified.",
-          duration: 10000,
+          duration: 6000,  // Changed from 10000 to 6000
         }
       );
       
@@ -83,7 +83,7 @@ export function ApplicationModal({ application, isOpen, onClose, onRefresh }: Ap
       console.error("Error updating application status:", error);
       toast("Update failed", {
         description: "Failed to update application status. Please try again.",
-        duration: 10000,
+        duration: 6000,  // Changed from 10000 to 6000
       });
     } finally {
       setIsSubmitting(false);

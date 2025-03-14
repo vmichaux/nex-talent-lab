@@ -24,7 +24,8 @@ export const InterestsSection = ({
       toast({
         title: "Invalid interest",
         description: "Please enter a valid interest name",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 6000  // Added duration of 6000 (6 seconds)
       });
       return;
     }
@@ -33,7 +34,8 @@ export const InterestsSection = ({
       toast({
         title: "Duplicate interest",
         description: "This interest is already in your list",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 6000  // Added duration of 6000 (6 seconds)
       });
       setNewInterest("");
       return;
@@ -43,7 +45,8 @@ export const InterestsSection = ({
       toast({
         title: "Maximum interests reached",
         description: "You can only add up to 6 interests",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 6000  // Added duration of 6000 (6 seconds)
       });
       return;
     }
@@ -53,6 +56,7 @@ export const InterestsSection = ({
     toast({
       title: "Interest added",
       description: `"${newInterest.trim()}" has been added to your interests`,
+      duration: 6000  // Added duration of 6000 (6 seconds)
     });
     
     setNewInterest("");

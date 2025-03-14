@@ -58,7 +58,7 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
   const handleSubmit = async (formData: ProjectFormData) => {
     if (!currentUser) {
       toast.error("Authentication required. You must be logged in to create a project.", {
-        duration: 10000,
+        duration: 6000,  // Changed from 10000 to 6000
       });
       return;
     }
@@ -108,7 +108,7 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
         console.log("Project added with ID: ", result.projectId);
         
         toast.success("Project created. Your new project has been successfully added to your dashboard.", {
-          duration: 10000,
+          duration: 6000,  // Changed from 10000 to 6000
         });
         
         setIsOpen(false);
@@ -119,7 +119,7 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
     } catch (error) {
       console.error("Error creating project:", error);
       toast.error("Failed to create project. Please try again.", {
-        duration: 10000,
+        duration: 6000,  // Changed from 10000 to 6000
       });
     } finally {
       setLoading(false);

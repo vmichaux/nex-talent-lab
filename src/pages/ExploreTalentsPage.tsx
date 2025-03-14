@@ -16,7 +16,7 @@ const ExploreTalentsPage = () => {
     if (!isLoggedIn) {
       toast.error("Authentication required", {
         description: "Please sign in to explore talents",
-        duration: 10000,
+        duration: 6000,  // Changed from 10000 to 6000
       });
       navigate("/login");
     }

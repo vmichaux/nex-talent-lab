@@ -15,13 +15,13 @@ export const LogoutButton: React.FC = () => {
       await signOut(auth);
       toast("Logged out successfully", {
         description: "You have been logged out of your account",
-        duration: 10000,
+        duration: 6000,  // Changed from 10000 to 6000
       });
       navigate('/');
     } catch (error: any) {
       toast.error("Logout error", {
         description: error.message,
-        duration: 10000,
+        duration: 6000,  // Changed from 10000 to 6000
       });
     }
   };

@@ -135,12 +135,12 @@ export function useApplicationsData() {
       if (newStatus === 'accepted') {
         toast.success("Application accepted", {
           description: "The applicant will be notified.",
-          duration: 4000,
+          duration: 6000,  // Changed from 4000 to 6000
         });
       } else {
         toast.error("Application rejected", {
           description: "The applicant will be notified.",
-          duration: 4000,
+          duration: 6000,  // Changed from 4000 to 6000
         });
       }
       
@@ -149,7 +149,7 @@ export function useApplicationsData() {
       console.error("Error updating application status:", error);
       toast.error("Failed to update application status", {
         description: "Please try again.",
-        duration: 4000,
+        duration: 6000,  // Changed from 4000 to 6000
       });
       throw error;
     } finally {

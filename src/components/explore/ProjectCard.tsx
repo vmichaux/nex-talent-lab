@@ -36,7 +36,7 @@ export const ProjectCard = ({
     if (project.userId === currentUserId) {
       toast.error("Cannot apply to your own project", {
         description: "You cannot apply to projects you've created.",
-        duration: 10000,
+        duration: 6000,  // Changed from 10000 to 6000
       });
       return;
     }
