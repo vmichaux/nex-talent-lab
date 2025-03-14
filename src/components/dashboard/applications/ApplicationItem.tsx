@@ -22,10 +22,10 @@ export function ApplicationItem({ application, onReview }: ApplicationItemProps)
     <div className="py-4 first:pt-0 last:pb-0">
       <div className="flex flex-col md:flex-row justify-between gap-4">
         <div>
-          <h3 className="font-medium mb-1">
+          <h3 className="font-medium text-sm mb-1">
             {application.userName} applied to <span className="text-primary">{application.projectTitle}</span>
           </h3>
-          <p className="text-sm text-gray-500">{formatDate(application.createdAt)}</p>
+          <p className="text-xs text-gray-500">{formatDate(application.createdAt)}</p>
         </div>
         <div className="flex items-center gap-4">
           <Badge className={
@@ -39,6 +39,7 @@ export function ApplicationItem({ application, onReview }: ApplicationItemProps)
             size="sm" 
             variant="outline"
             onClick={() => onReview(application)}
+            className="text-xs"
           >
             Review
           </Button>

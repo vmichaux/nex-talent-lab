@@ -12,14 +12,14 @@ export function ApplicationDetailContent({ application }: ApplicationDetailConte
       {application.coverLetter && (
         <div>
           <h4 className="text-sm font-medium text-gray-500">Cover Letter</h4>
-          <p className="mt-1 bg-gray-50 p-3 rounded">{application.coverLetter}</p>
+          <p className="mt-1 bg-gray-50 p-3 rounded text-sm">{application.coverLetter}</p>
         </div>
       )}
       
       {application.relevantExperience && (
         <div>
           <h4 className="text-sm font-medium text-gray-500">Relevant Experience</h4>
-          <p className="mt-1 bg-gray-50 p-3 rounded">{application.relevantExperience}</p>
+          <p className="mt-1 bg-gray-50 p-3 rounded text-sm">{application.relevantExperience}</p>
         </div>
       )}
       
@@ -27,14 +27,14 @@ export function ApplicationDetailContent({ application }: ApplicationDetailConte
         {application.availabilityDate && (
           <div>
             <h4 className="text-sm font-medium text-gray-500">Availability</h4>
-            <p className="mt-1 bg-gray-50 p-3 rounded">{application.availabilityDate}</p>
+            <p className="mt-1 bg-gray-50 p-3 rounded text-sm">{application.availabilityDate}</p>
           </div>
         )}
         
         {application.timeCommitment && (
           <div>
             <h4 className="text-sm font-medium text-gray-500">Time Commitment</h4>
-            <p className="mt-1 bg-gray-50 p-3 rounded">{application.timeCommitment}</p>
+            <p className="mt-1 bg-gray-50 p-3 rounded text-sm">{application.timeCommitment}</p>
           </div>
         )}
       </div>
@@ -46,7 +46,7 @@ export function ApplicationDetailContent({ application }: ApplicationDetailConte
             href={application.portfolioLink} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="text-primary hover:underline mt-1 inline-flex items-center gap-1 bg-gray-50 p-3 rounded w-full"
+            className="text-primary hover:underline mt-1 inline-flex items-center gap-1 bg-gray-50 p-3 rounded w-full text-sm"
           >
             {application.portfolioLink}
             <ExternalLink size={14} />
@@ -56,13 +56,13 @@ export function ApplicationDetailContent({ application }: ApplicationDetailConte
       
       <div>
         <h4 className="text-sm font-medium text-gray-500">Contact</h4>
-        <p className="mt-1 bg-gray-50 p-3 rounded">{application.userEmail}</p>
+        <p className="mt-1 bg-gray-50 p-3 rounded text-sm">{application.userEmail}</p>
       </div>
       
       {application.feedback && (
         <div>
           <h4 className="text-sm font-medium text-gray-500">Your Feedback</h4>
-          <p className="mt-1 bg-gray-50 p-3 rounded">{application.feedback}</p>
+          <p className="mt-1 bg-gray-50 p-3 rounded text-sm">{application.feedback}</p>
         </div>
       )}
     </div>

@@ -15,8 +15,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <CardContent className="p-6">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
           <div>
-            <h3 className="text-xl font-semibold mb-1">{project.title}</h3>
-            <p className="text-gray-600 mb-3">{project.owner} • {project.location || "Location not specified"}</p>
+            <h3 className="text-lg font-semibold mb-1">{project.title}</h3>
+            <p className="text-sm text-gray-600 mb-3">{project.owner} • {project.location || "Location not specified"}</p>
             
             <div className="flex flex-wrap gap-2 mb-4">
               {project.skills?.slice(0, 2).map((skill, index) => (
@@ -36,17 +36,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
               </div>
             )}
             
-            <div className="text-sm text-gray-600">
+            <div className="text-xs text-gray-600">
               Duration: {project.duration || "Not specified"}
             </div>
           </div>
           
           <div className="flex flex-col items-center">
-            <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium mb-3">
+            <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium mb-3">
               {project.matchPercentage || 85}% Match
             </div>
             <Button 
-              className="w-full"
+              className="w-full text-xs"
               onClick={() => window.location.href = `/project/${project.id}`}
             >
               Apply Now

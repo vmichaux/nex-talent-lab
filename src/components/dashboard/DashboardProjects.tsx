@@ -69,7 +69,7 @@ export function DashboardProjects() {
                   </div>
                   
                   <div className="flex flex-wrap gap-1.5 mb-2">
-                    {project.skills && project.skills.slice(0, 3).map((skill, index) => (
+                    {project.skills && project.skills.slice(0, 2).map((skill, index) => (
                       <span key={index} className="bg-primary/10 text-primary text-[10px] px-2 py-1 rounded-full">
                         {skill}
                       </span>

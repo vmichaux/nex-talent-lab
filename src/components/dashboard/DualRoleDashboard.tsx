@@ -12,9 +12,9 @@ export function DualRoleDashboard() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <ArrowRightLeft className="h-5 w-5 text-primary" />
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-bold flex items-center gap-2">
+          <ArrowRightLeft className="h-4 w-4 text-primary" />
           Dual Role View
         </h2>
         

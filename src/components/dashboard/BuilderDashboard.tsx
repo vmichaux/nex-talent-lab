@@ -48,7 +48,7 @@ export function BuilderDashboard() {
       <div className="lg:w-3/5 space-y-12">
         {/* Overview section */}
         <div>
-          <h2 className="text-xl font-bold mb-6">Your Overview</h2>
+          <h2 className="text-lg font-bold mb-4">Your Overview</h2>
           <DashboardOverview role="builder" />
         </div>
 

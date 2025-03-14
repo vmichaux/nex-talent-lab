@@ -8,16 +8,16 @@ export function RoleActivityCards() {
         <h3 className="text-lg font-bold mb-3 text-primary">My Talent Activity</h3>
         <div className="space-y-2">
           <div className="bg-white p-3 rounded-lg shadow-sm">
-            <h4 className="font-medium text-xs mb-1">New Opportunities</h4>
-            <p className="text-gray-600 text-[10px]">5 new projects match your skills</p>
+            <h4 className="font-medium text-sm mb-1">New Opportunities</h4>
+            <p className="text-xs text-gray-600">5 new projects match your skills</p>
           </div>
           <div className="bg-white p-3 rounded-lg shadow-sm">
-            <h4 className="font-medium text-xs mb-1">Recent Applications</h4>
-            <p className="text-gray-600 text-[10px]">2 applications pending review</p>
+            <h4 className="font-medium text-sm mb-1">Recent Applications</h4>
+            <p className="text-xs text-gray-600">2 applications pending review</p>
           </div>
           <div className="bg-white p-3 rounded-lg shadow-sm">
-            <h4 className="font-medium text-xs mb-1">Skill Progress</h4>
-            <p className="text-gray-600 text-[10px]">Your React skills are now at 85%</p>
+            <h4 className="font-medium text-sm mb-1">Skill Progress</h4>
+            <p className="text-xs text-gray-600">Your React skills are now at 85%</p>
           </div>
         </div>
       </div>
@@ -26,16 +26,16 @@ export function RoleActivityCards() {
         <h3 className="text-lg font-bold mb-3 text-secondary">My Builder Activity</h3>
         <div className="space-y-2">
           <div className="bg-white p-3 rounded-lg shadow-sm">
-            <h4 className="font-medium text-xs mb-1">Active Projects</h4>
-            <p className="text-gray-600 text-[10px]">3 projects in progress</p>
+            <h4 className="font-medium text-sm mb-1">Active Projects</h4>
+            <p className="text-xs text-gray-600">3 projects in progress</p>
           </div>
           <div className="bg-white p-3 rounded-lg shadow-sm">
-            <h4 className="font-medium text-xs mb-1">Talent Applications</h4>
-            <p className="text-gray-600 text-[10px]">8 new applications to review</p>
+            <h4 className="font-medium text-sm mb-1">Talent Applications</h4>
+            <p className="text-xs text-gray-600">8 new applications to review</p>
           </div>
           <div className="bg-white p-3 rounded-lg shadow-sm">
-            <h4 className="font-medium text-xs mb-1">Projects Metrics</h4>
-            <p className="text-gray-600 text-[10px]">2 projects ahead of schedule</p>
+            <h4 className="font-medium text-sm mb-1">Projects Metrics</h4>
+            <p className="text-xs text-gray-600">2 projects ahead of schedule</p>
           </div>
         </div>
       </div>

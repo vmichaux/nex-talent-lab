@@ -35,8 +35,8 @@ export function NetworkList() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold flex items-center gap-2">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-bold flex items-center gap-2">
           <Network className="h-4 w-4 text-primary" />
           My Network
         </h2>

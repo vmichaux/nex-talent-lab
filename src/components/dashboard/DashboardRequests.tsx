@@ -9,13 +9,13 @@ export function DashboardRequests() {
   
   return (
     <div className="mb-12">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <UserPlus className="h-5 w-5 text-primary" />
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-bold flex items-center gap-2">
+          <UserPlus className="h-4 w-4 text-primary" />
           Collaboration Requests
         </h2>
-        <Button variant="outline" className="gap-1" onClick={() => navigate('/requests')}>
-          View All <ArrowRight className="h-4 w-4" />
+        <Button variant="outline" size="sm" className="gap-1" onClick={() => navigate('/requests')}>
+          View All <ArrowRight className="h-3 w-3" />
         </Button>
       </div>
       
