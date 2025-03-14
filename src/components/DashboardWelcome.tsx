@@ -1,8 +1,9 @@
-
-import { ArrowRight, Check, UserPlus, Lightbulb } from "lucide-react";
+import { ArrowRight, Check, UserPlus, Lightbulb, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import { useEffect, useState } from "react";
+
 type StepProps = {
   number: number;
   title: string;
@@ -11,6 +12,7 @@ type StepProps = {
   completed?: boolean;
   onClick?: () => void;
 };
+
 const Step = ({
   number,
   title,
@@ -35,35 +37,118 @@ const Step = ({
     </div>;
   return StepComponent;
 };
+
 export function DashboardWelcome() {
   const navigate = useNavigate();
-  const {
-    userData
-  } = useAuth();
+  const { userData } = useAuth();
+  const [profileType, setProfileType] = useState<"talent" | "builder" | "both">("talent");
+  
   const profileCompleted = userData?.hasCompletedProfile || false;
+  
   const navigateToProfileEdit = () => {
     navigate('/profile/edit');
   };
-  const steps = [{
-    number: 1,
-    title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
-    description: "Add your skills, experience, and portfolio items to showcase your talents.",
-    icon: <UserPlus className="h-4 w-4 text-primary" />,
-    completed: profileCompleted,
-    onClick: navigateToProfileEdit
-  }, {
-    number: 2,
-    title: "Explore Projects",
-    description: "Discover projects that match your skills and interests.",
-    icon: <Lightbulb className="h-4 w-4 text-primary" />,
-    completed: false
-  }, {
-    number: 3,
-    title: "Connect with Teams",
-    description: "Reach out to project owners and start collaborating.",
-    icon: <ArrowRight className="h-4 w-4 text-primary" />,
-    completed: false
-  }];
+
+  useEffect(() => {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole === "entrepreneur") {
+      setProfileType("builder");
+    } else if (userRole === "talent" || userRole === "both") {
+      setProfileType(userRole);
+    }
+  }, []);
+
+  const welcomeMessages = {
+    talent: "Welcome to Your Talent Journey",
+    builder: "Welcome to Your Builder Journey",
+    both: "Welcome to Your Dual Journey"
+  };
+
+  const descriptions = {
+    talent: "Let's showcase your skills and find the perfect projects",
+    builder: "Let's find the right talent for your projects",
+    both: "Let's connect you with projects and talents"
+  };
+
+  const stepsByProfile = {
+    talent: [
+      {
+        number: 1,
+        title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
+        description: "Add your skills, experience, and portfolio items to showcase your talents.",
+        icon: <UserPlus className="h-4 w-4 text-primary" />,
+        completed: profileCompleted,
+        onClick: navigateToProfileEdit
+      },
+      {
+        number: 2,
+        title: "Explore Projects",
+        description: "Discover projects that match your skills and interests.",
+        icon: <Lightbulb className="h-4 w-4 text-primary" />,
+        completed: false
+      },
+      {
+        number: 3,
+        title: "Connect and Network",
+        description: "Reach out to project builders, start collaborating and develop your network.",
+        icon: <Users className="h-4 w-4 text-primary" />,
+        completed: false
+      }
+    ],
+    builder: [
+      {
+        number: 1,
+        title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
+        description: "Add your professional details, project needs and the type of talent you are looking for.",
+        icon: <UserPlus className="h-4 w-4 text-primary" />,
+        completed: profileCompleted,
+        onClick: navigateToProfileEdit
+      },
+      {
+        number: 2,
+        title: "Explore Talents",
+        description: "Discover talents that match your needs and vision.",
+        icon: <Lightbulb className="h-4 w-4 text-primary" />,
+        completed: false
+      },
+      {
+        number: 3,
+        title: "Connect and Network",
+        description: "Reach out to talents and other project builders, start collaborating and develop your network.",
+        icon: <Users className="h-4 w-4 text-primary" />,
+        completed: false
+      }
+    ],
+    both: [
+      {
+        number: 1,
+        title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
+        description: "Add your skills, experience, project needs and the type of talent you are looking for.",
+        icon: <UserPlus className="h-4 w-4 text-primary" />,
+        completed: profileCompleted,
+        onClick: navigateToProfileEdit
+      },
+      {
+        number: 2,
+        title: "Explore Talents & Projects",
+        description: "Discover motivated talents and meaningful projects that match your vision.",
+        icon: <Lightbulb className="h-4 w-4 text-primary" />,
+        completed: false
+      },
+      {
+        number: 3,
+        title: "Connect and Network",
+        description: "Reach out to talents and other project builders, start collaborating and develop your network.",
+        icon: <Users className="h-4 w-4 text-primary" />,
+        completed: false
+      }
+    ]
+  };
+
+  const currentSteps = stepsByProfile[profileType];
+  const welcomeMessage = welcomeMessages[profileType];
+  const description = descriptions[profileType];
+
   return <div className="relative overflow-hidden bg-white">
       <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
       
@@ -74,14 +159,15 @@ export function DashboardWelcome() {
           </div>
           
           <h1 className="mb-4 text-3xl font-bold tracking-tight custom-gradient-text md:text-5xl">
-            Let's get you started on <span className="whitespace-nowrap">your collaboration journey</span>
+            {welcomeMessage}
           </h1>
           
           <p className="text-lg text-gray-600 md:text-xl max-w-3xl mb-8">
-        </p>
+            {description}
+          </p>
           
           <div className="w-full max-w-3xl space-y-4 mb-10">
-            {steps.map(step => <Step key={step.number} {...step} />)}
+            {currentSteps.map(step => <Step key={step.number} {...step} />)}
           </div>
           
           <Button size="lg" onClick={() => navigate('/profile/edit')} className="gap-2">
