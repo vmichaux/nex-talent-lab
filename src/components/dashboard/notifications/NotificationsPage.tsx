@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+import { Timestamp } from "firebase/firestore";
 
 type NotificationFilter = "all" | NotificationType;
 
@@ -63,6 +64,14 @@ export function NotificationsPage() {
       default:
         return type;
     }
+  };
+
+  // Helper function to convert Timestamp to Date
+  const convertToDate = (dateOrTimestamp: Date | Timestamp): Date => {
+    if (dateOrTimestamp instanceof Timestamp) {
+      return dateOrTimestamp.toDate();
+    }
+    return dateOrTimestamp as Date;
   };
 
   const filteredNotifications = getFilteredNotifications();
@@ -161,9 +170,7 @@ export function NotificationsPage() {
                         </div>
                         <span className="text-xs text-gray-400">
                           {format(
-                            notification.createdAt instanceof Date
-                              ? notification.createdAt
-                              : new Date(notification.createdAt),
+                            convertToDate(notification.createdAt),
                             "MMM d, h:mm a"
                           )}
                         </span>
