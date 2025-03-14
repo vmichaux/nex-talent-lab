@@ -1,5 +1,5 @@
 
-import { collection, addDoc, query, where, orderBy, getDocs, serverTimestamp, DocumentData } from "firebase/firestore";
+import { collection, addDoc, query, where, orderBy, getDocs, serverTimestamp, DocumentData, getDoc, doc } from "firebase/firestore";
 import { db, auth } from "./firebase";
 import OpenAI from "openai";
 
@@ -65,6 +65,22 @@ export const saveMessage = async (
   }
 };
 
+// Fetch OpenAI API key from Firestore
+export const getOpenAIKey = async (): Promise<string | null> => {
+  try {
+    const apiKeyDoc = await getDoc(doc(db, "config", "openai"));
+    if (apiKeyDoc.exists()) {
+      return apiKeyDoc.data().apiKey;
+    } else {
+      console.error("OpenAI API key not found in Firestore");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching OpenAI API key:", error);
+    return null;
+  }
+};
+
 // Send a message to OpenAI API
 export const sendMessageToOpenAI = async (message: string, chatHistory: ChatMessage[] = []): Promise<string> => {
   try {
@@ -73,9 +89,15 @@ export const sendMessageToOpenAI = async (message: string, chatHistory: ChatMess
       throw new Error("User not authenticated");
     }
 
-    // Créer une instance du client OpenAI avec la clé API fournie
+    // Récupérer la clé API depuis Firestore
+    const apiKey = await getOpenAIKey();
+    if (!apiKey) {
+      return "Erreur: La clé API OpenAI n'a pas été trouvée dans Firestore. Veuillez configurer la clé API.";
+    }
+
+    // Créer une instance du client OpenAI avec la clé API récupérée
     const openai = new OpenAI({
-      apiKey: "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",
+      apiKey: apiKey,
       dangerouslyAllowBrowser: true // Note: Ce paramètre est nécessaire pour l'utilisation côté client, mais n'est pas recommandé en production
     });
 

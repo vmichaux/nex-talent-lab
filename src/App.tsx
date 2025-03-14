@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,6 +25,8 @@ import ReviewApplicationsPage from "./pages/ReviewApplicationsPage";
 import ProfileEditPage from "./pages/ProfileEditPage";
 import ContactSalesPage from "./pages/ContactSalesPage";
 import ProjectDeadlinesPage from "./pages/ProjectDeadlinesPage";
+import ChatbotPage from "./pages/ChatbotPage";
+import AdminConfigPage from "./pages/AdminConfigPage";
 import { DashboardOnboarding } from "./components/DashboardOnboarding";
 import { ChatWidget } from "./components/ChatWidget";
 import { ScrollToTopButton } from "./components/ScrollToTopButton";
@@ -67,6 +70,8 @@ function AppContent() {
           <Route path="/onboarding" element={<DashboardOnboarding />} />
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/profile/edit" element={<ProfileEditPage />} />
+          <Route path="/chatbot" element={<ChatbotPage />} />
+          <Route path="/admin/config" element={<AdminConfigPage />} />
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
