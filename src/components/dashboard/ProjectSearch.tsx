@@ -16,7 +16,7 @@ export function ProjectSearch() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="flex gap-2 w-full">
+    <form onSubmit={handleSearch} className="flex gap-2">
       <div className="relative flex-1">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
         <Input
