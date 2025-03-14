@@ -1,5 +1,5 @@
 
-import { Mail, Phone, Calendar } from "lucide-react";
+import { Mail, Phone, Calendar as CalendarIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -144,7 +144,7 @@ export const BasicInfoForm = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="dateOfBirth" className="text-sm font-medium flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
+              <CalendarIcon className="h-4 w-4" />
               Date of Birth
             </Label>
             <Popover>
@@ -156,7 +156,7 @@ export const BasicInfoForm = ({
                     !profile.dateOfBirth && "text-muted-foreground"
                   )}
                 >
-                  <Calendar className="mr-2 h-4 w-4" />
+                  <CalendarIcon className="mr-2 h-4 w-4" />
                   {profile.dateOfBirth ? format(profile.dateOfBirth, "PPP") : <span>Pick a date</span>}
                 </Button>
               </PopoverTrigger>
