@@ -100,7 +100,7 @@ export function ReviewApplications() {
       allApplications.sort((a, b) => 
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-      setApplications(allApplications.slice(0, 5));
+      setApplications(allApplications.slice(0, 4)); // Only show 4 items
       
       if (allApplications.length > 0) {
         toast.success("Applications Loaded", {
@@ -131,14 +131,14 @@ export function ReviewApplications() {
   }
 
   return (
-    <div className="mb-12">
+    <div className="mb-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <FileText className="h-5 w-5 text-primary" />
+        <h2 className="text-xl font-bold flex items-center gap-2">
+          <FileText className="h-4 w-4 text-primary" />
           Review Applications
         </h2>
-        <Button variant="outline" className="gap-1" onClick={() => navigate('/requests')}>
-          View All <ArrowRight className="h-4 w-4" />
+        <Button variant="outline" size="sm" className="gap-1" onClick={() => navigate('/requests')}>
+          View All <ArrowRight className="h-3 w-3" />
         </Button>
       </div>
       

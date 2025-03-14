@@ -9,10 +9,11 @@ interface FilterButtonsProps {
 
 export function FilterButtons({ filter, setFilter }: FilterButtonsProps) {
   return (
-    <div className="flex space-x-2">
+    <div className="flex space-x-1">
       <Button 
         variant={filter === "all" ? "default" : "outline"} 
         size="sm"
+        className="text-xs h-7 px-3"
         onClick={() => setFilter("all")}
       >
         All
@@ -20,6 +21,7 @@ export function FilterButtons({ filter, setFilter }: FilterButtonsProps) {
       <Button 
         variant={filter === "remote" ? "default" : "outline"} 
         size="sm"
+        className="text-xs h-7 px-3"
         onClick={() => setFilter("remote")}
       >
         Remote
@@ -27,6 +29,7 @@ export function FilterButtons({ filter, setFilter }: FilterButtonsProps) {
       <Button 
         variant={filter === "hybrid" ? "default" : "outline"} 
         size="sm"
+        className="text-xs h-7 px-3"
         onClick={() => setFilter("hybrid")}
       >
         Hybrid

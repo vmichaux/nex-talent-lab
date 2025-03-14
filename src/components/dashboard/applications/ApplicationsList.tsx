@@ -33,7 +33,7 @@ export function ApplicationsList({
   }
   
   return (
-    <div className="space-y-4 bg-white rounded-lg border shadow-sm p-6">
+    <div className="space-y-3 bg-white rounded-lg border shadow-sm p-4">
       <div className="grid grid-cols-1 divide-y">
         {applications.map((app) => (
           <ApplicationItem 

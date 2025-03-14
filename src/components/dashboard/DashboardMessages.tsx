@@ -1,94 +1,88 @@
 
+import React from "react";
 import { MessageSquare, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-
-// Update the sample data
-const messages = [
-  {
-    id: 1,
-    sender: {
-      name: "Emma Wilson",
-      avatar: "/placeholder.svg",
-      initials: "EW"
-    },
-    preview: "I've uploaded the design files for the eco app. Let me know what you think!",
-    timestamp: "2 hours ago",
-    unread: true,
-    project: "Eco-Friendly Mobile App"
-  },
-  {
-    id: 2,
-    sender: {
-      name: "Marcus Rivera",
-      avatar: "/placeholder.svg",
-      initials: "MR"
-    },
-    preview: "Can we schedule a call to discuss the garden platform timeline?",
-    timestamp: "Yesterday",
-    unread: false,
-    project: "Community Garden Platform"
-  },
-  {
-    id: 3,
-    sender: {
-      name: "Sophia Chen",
-      avatar: "/placeholder.svg",
-      initials: "SC"
-    },
-    preview: "The VR simulations are ready for testing. Would you like to try them?",
-    timestamp: "2 days ago",
-    unread: true,
-    project: "Educational VR Experience"
-  }
-];
 
 export function DashboardMessages() {
   const navigate = useNavigate();
   
+  // Sample messages data - in a real app, this would come from a data source like Firebase
+  const recentMessages = [
+    {
+      id: 1,
+      sender: "Emma Davis",
+      avatar: "/placeholder.svg",
+      initials: "ED",
+      preview: "Hi there! I'm interested in discussing the project details further...",
+      time: "10:45 AM",
+      unread: true,
+      projectName: "Eco App Development"
+    },
+    {
+      id: 2,
+      sender: "Michael Wilson",
+      avatar: "/placeholder.svg",
+      initials: "MW",
+      preview: "I've completed the wireframes for the dashboard. When can we meet?",
+      time: "Yesterday",
+      unread: true,
+      projectName: "Dashboard Redesign"
+    },
+    {
+      id: 3,
+      sender: "Sarah Johnson",
+      avatar: "/placeholder.svg",
+      initials: "SJ",
+      preview: "Thanks for your feedback on the logo designs. I've made the revisions...",
+      time: "Aug 12",
+      unread: false,
+      projectName: "Brand Identity"
+    }
+  ];
+
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <MessageSquare className="h-5 w-5 text-primary" />
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-bold flex items-center gap-2">
+          <MessageSquare className="h-4 w-4 text-primary" />
           Recent Messages
         </h2>
-        <Button variant="outline" className="gap-1" onClick={() => navigate('/messages')}>
-          View All <ArrowRight className="h-4 w-4" />
+        <Button variant="outline" size="sm" className="gap-1" onClick={() => navigate('/messages')}>
+          View All <ArrowRight className="h-3 w-3" />
         </Button>
       </div>
       
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        {messages.map((message) => (
-          <div key={message.id} className={`p-6 border-b hover:bg-gray-50 cursor-pointer transition-colors ${message.unread ? 'bg-primary/5' : ''}`}>
-            <div className="flex items-start gap-4">
-              <Avatar className="h-12 w-12">
-                <AvatarImage src={message.sender.avatar} alt={message.sender.name} />
-                <AvatarFallback>{message.sender.initials}</AvatarFallback>
+      <Card className="shadow-sm">
+        <CardContent className="p-0">
+          {recentMessages.map((message) => (
+            <div 
+              key={message.id} 
+              className={`flex gap-3 p-3 border-b last:border-b-0 hover:bg-gray-50 transition-colors cursor-pointer ${message.unread ? 'bg-primary/5' : ''}`}
+              onClick={() => navigate('/messages')}
+            >
+              <Avatar className="h-9 w-9">
+                <AvatarImage src={message.avatar} alt={message.sender} />
+                <AvatarFallback>{message.initials}</AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-center mb-2">
-                  <div className="font-medium flex items-center gap-2 text-lg">
-                    {message.sender.name}
-                    {message.unread && <span className="w-2 h-2 bg-primary rounded-full inline-block"></span>}
+                <div className="flex justify-between items-center mb-1">
+                  <div className="font-medium text-sm flex items-center">
+                    {message.sender}
+                    {message.unread && <Badge className="ml-2 bg-primary h-1.5 w-1.5 p-0 rounded-full" />}
                   </div>
-                  <span className="text-sm text-gray-500">{message.timestamp}</span>
+                  <span className="text-xs text-gray-500">{message.time}</span>
                 </div>
-                <p className="text-gray-600 truncate mb-2">{message.preview}</p>
-                {message.project && (
-                  <div className="mt-1">
-                    <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20">
-                      {message.project}
-                    </Badge>
-                  </div>
-                )}
+                <p className="text-xs text-gray-600 mb-1 truncate">{message.preview}</p>
+                <p className="text-xs text-gray-500 truncate">Re: {message.projectName}</p>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 }

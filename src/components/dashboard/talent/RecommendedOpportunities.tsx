@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { FileSearch } from "lucide-react";
+import { FileSearch, ArrowRight } from "lucide-react";
 import { useProjects } from "@/hooks/useProjects";
 import { Project } from "@/types/project";
 import { FilterButtons } from "./FilterButtons";
@@ -9,6 +9,8 @@ import { OpportunitiesLoading } from "./OpportunitiesLoading";
 import { OpportunitiesEmpty } from "./OpportunitiesEmpty";
 import { OpportunitiesError } from "./OpportunitiesError";
 import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface RecommendedOpportunitiesProps {
   filter: string;
@@ -17,6 +19,7 @@ interface RecommendedOpportunitiesProps {
 
 export function RecommendedOpportunities({ filter, setFilter }: RecommendedOpportunitiesProps) {
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
   const { projects, loading, error } = useProjects({
     excludeCurrentUser: true,
     userId: currentUser?.uid
@@ -43,26 +46,34 @@ export function RecommendedOpportunities({ filter, setFilter }: RecommendedOppor
     return project.location?.toLowerCase() === filter.toLowerCase();
   });
 
+  // Only show 4 items
+  const displayedRecommendations = filteredRecommendations.slice(0, 4);
+
   return (
-    <div className="mb-10">
+    <div className="mb-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
-          <FileSearch className="h-5 w-5 text-primary" />
+        <h2 className="text-xl font-bold flex items-center gap-2">
+          <FileSearch className="h-4 w-4 text-primary" />
           Recommended Opportunities
         </h2>
         
-        <FilterButtons filter={filter} setFilter={setFilter} />
+        <div className="flex items-center gap-4">
+          <FilterButtons filter={filter} setFilter={setFilter} />
+          <Button variant="outline" size="sm" className="gap-1" onClick={() => navigate('/explore-projects')}>
+            View All <ArrowRight className="h-3 w-3" />
+          </Button>
+        </div>
       </div>
       
       {loading ? (
         <OpportunitiesLoading />
       ) : error ? (
         <OpportunitiesError />
-      ) : filteredRecommendations.length === 0 ? (
+      ) : displayedRecommendations.length === 0 ? (
         <OpportunitiesEmpty filter={filter} setFilter={setFilter} />
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredRecommendations.map((project) => (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {displayedRecommendations.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>
