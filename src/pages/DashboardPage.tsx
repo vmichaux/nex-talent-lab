@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -21,45 +20,38 @@ const DashboardPage = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "both">("talent");
 
-  // Get user's first name from email or display name
   const getUserFirstName = () => {
     if (currentUser?.displayName) {
-      // Get first name from display name (first word)
       return currentUser.displayName.split(' ')[0];
     }
     if (currentUser?.email) {
-      // Get username part of email and capitalize first letter
       const emailUsername = currentUser.email.split('@')[0];
-      const firstName = emailUsername.split(/[._-]/)[0]; // Split by common username separators
+      const firstName = emailUsername.split(/[._-]/)[0];
       return firstName.charAt(0).toUpperCase() + firstName.slice(1);
     }
-    return "friend"; // Fallback if no name or email is available
+    return "friend";
   };
-  
+
   useEffect(() => {
-    // Redirect non-logged-in users to the onboarding route
     if (!isLoggedIn) {
       navigate("/onboarding");
       return;
     }
 
-    // Get saved role preference from localStorage
     const savedRole = localStorage.getItem("userRole");
     if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
       setActiveRole(savedRole === "entrepreneur" ? "builder" : savedRole);
     }
 
-    // Automatically show dashboard if the user has completed their profile
     if (userData?.hasCompletedProfile) {
       setShowWelcome(false);
     }
   }, [isLoggedIn, navigate, userData]);
 
-  // Complete onboarding and show dashboard
   const handleCompleteOnboarding = () => {
     setShowWelcome(false);
   };
-  
+
   const handleRoleChange = (role: "talent" | "builder" | "both") => {
     setActiveRole(role);
     localStorage.setItem("userRole", role === "builder" ? "entrepreneur" : role);
@@ -70,14 +62,12 @@ const DashboardPage = () => {
       <main className="flex-1">
         {showWelcome ? <>
             <DashboardWelcome />
-            {/* For demo purposes only - allows toggling between views */}
             <div className="text-center mb-10">
               <Button variant="outline" onClick={handleCompleteOnboarding} className="mx-auto">
                 Go to Dashboard
               </Button>
             </div>
           </> : <div className="relative overflow-hidden bg-white">
-            {/* Background Pattern - Purple Gradient */}
             <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
             
             <div className="w-full px-4 py-16">
@@ -93,7 +83,6 @@ const DashboardPage = () => {
                 </p>
               </div>
 
-              {/* Role switcher tabs */}
               <div className="flex justify-center mb-10">
                 <Tabs value={activeRole} onValueChange={value => handleRoleChange(value as "talent" | "builder" | "both")} className="w-full max-w-6xl">
                   <TabsList className="grid grid-cols-3 w-full max-w-2xl mx-auto">

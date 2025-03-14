@@ -15,6 +15,7 @@ import { SkillsProgress } from "@/components/dashboard/talent/SkillsProgress";
 import { LearningResources } from "@/components/dashboard/talent/LearningResources";
 import { ProjectActions } from "@/components/dashboard/builder/ProjectActions";
 import { RecommendedTalents } from "@/components/dashboard/builder/RecommendedTalents";
+import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 
 export function BuilderDashboard() {
   const location = useLocation();
@@ -41,45 +42,54 @@ export function BuilderDashboard() {
   }, [projects]);
 
   return (
-    <div className="space-y-16">
-      {/* Overview section */}
-      <div>
-        <h2 className="text-2xl font-bold mb-8">Your Overview</h2>
-        <DashboardOverview role="builder" />
+    <div className="flex flex-col lg:flex-row gap-8">
+      {/* Left column (wider) */}
+      <div className="lg:w-2/3 space-y-16">
+        {/* Overview section */}
+        <div>
+          <h2 className="text-2xl font-bold mb-8">Your Overview</h2>
+          <DashboardOverview role="builder" />
+        </div>
+
+        {/* Project actions section */}
+        <ProjectActions 
+          showProjectModal={showProjectModal} 
+          setShowProjectModal={setShowProjectModal} 
+        />
+
+        {/* Active Projects section */}
+        <DashboardProjects />
+        
+        {/* Projects Deadlines and Milestones */}
+        <ProjectDeadlines />
+        
+        {/* Project Metrics section */}
+        <ProjectMetrics role="builder" />
+        
+        {/* Messages section */}
+        <DashboardMessages />
+        
+        {/* Project History section */}
+        <ProjectHistory />
       </div>
-
-      {/* Project actions section */}
-      <ProjectActions 
-        showProjectModal={showProjectModal} 
-        setShowProjectModal={setShowProjectModal} 
-      />
-
-      {/* Active Projects section */}
-      <DashboardProjects />
       
-      {/* Projects Deadlines and Milestones */}
-      <ProjectDeadlines />
-      
-      {/* Review Applications */}
-      <ReviewApplications />
-      
-      {/* Project Metrics section */}
-      <ProjectMetrics role="builder" />
-      
-      {/* Messages section */}
-      <DashboardMessages />
-      
-      {/* Recommended Talent section */}
-      <RecommendedTalents />
-      
-      {/* Project History section */}
-      <ProjectHistory />
-      
-      {/* Skills Progress section */}
-      <SkillsProgress />
-      
-      {/* Learning Resources section */}
-      <LearningResources />
+      {/* Right column (narrower) */}
+      <div className="lg:w-1/3 space-y-16">
+        {/* Review Applications */}
+        <ReviewApplications />
+        
+        {/* Recommended Talent section */}
+        <RecommendedTalents />
+        
+        {/* Network section */}
+        <NetworkList />
+        
+        {/* Skills Progress section */}
+        <SkillsProgress />
+        
+        {/* Learning Resources section */}
+        <LearningResources />
+      </div>
     </div>
   );
 }
