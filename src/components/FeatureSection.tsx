@@ -32,7 +32,7 @@ export function FeatureSection() {
             <span className="block mb-1">Why Choose</span>
             <span className="block">NexTalent Lab</span>
           </h2>
-          <p className="text-gray-600 py-0 my-[31px] mx-[46px]">
+          <p className="text-gray-600 py-0 my-[31px] mx-[74px]">
             Our platform offers innovative features designed to make talent discovery 
             and project collaboration seamless and effective.
           </p>
