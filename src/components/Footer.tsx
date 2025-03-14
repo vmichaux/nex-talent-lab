@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin, Phone } from "lucide-react";
@@ -6,12 +5,12 @@ import { subscribeToNewsletter, checkNewsletterCollection } from "@/lib/newslett
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-
 export function Footer() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -62,7 +61,7 @@ export function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Logo and Contact */}
-          <div className="space-y-4">
+          <div className="space-y-4 px-0 mx-[3px]">
             <Link to="/" className="flex items-center gap-1">
               <span className="font-bold text-2xl gradient-text">NexTalent</span>
               <span className="text-black font-bold text-2xl">Lab</span>
@@ -88,25 +87,25 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-bold mb-4 mx-[50px] px-[50px]">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/about" className="text-gray-600 hover:text-primary text-sm">
+                <Link to="/about" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[50px]">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/explore" className="text-gray-600 hover:text-primary text-sm">
+                <Link to="/explore" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[50px]">
                   Explore Projects
                 </Link>
               </li>
               <li>
-                <Link to="/how-it-works" className="text-gray-600 hover:text-primary text-sm">
+                <Link to="/how-it-works" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[50px]">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="text-gray-600 hover:text-primary text-sm">
+                <Link to="/pricing" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[50px]">
                   Pricing
                 </Link>
               </li>
@@ -115,25 +114,25 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Legal</h3>
+            <h3 className="text-lg font-bold mb-4 py-0 px-[45px]">Legal</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/terms" className="text-gray-600 hover:text-primary text-sm">
+                <Link to="/terms" className="text-gray-600 hover:text-primary text-sm px-[45px]">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="text-gray-600 hover:text-primary text-sm">
+                <Link to="/privacy" className="text-gray-600 hover:text-primary text-sm px-[45px]">
                   Privacy Policy
                 </Link>
               </li>
-              <li>
+              <li className="px-[45px]">
                 <Link to="/cookies" className="text-gray-600 hover:text-primary text-sm">
                   Cookie Policy
                 </Link>
               </li>
               <li>
-                <Link to="/gdpr" className="text-gray-600 hover:text-primary text-sm">
+                <Link to="/gdpr" className="text-gray-600 hover:text-primary text-sm px-[45px]">
                   GDPR Compliance
                 </Link>
               </li>
