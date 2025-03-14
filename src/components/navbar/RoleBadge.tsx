@@ -1,13 +1,34 @@
 
 import { Badge } from "@/components/ui/badge";
 import { GraduationCap, Briefcase, Lightbulb } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { useEffect, useState } from "react";
 
 interface RoleBadgeProps {
   userRole: "talent" | "entrepreneur" | "both" | null;
   isLoggedIn: boolean;
 }
 
-export function RoleBadge({ userRole, isLoggedIn }: RoleBadgeProps) {
+export function RoleBadge({ userRole: propUserRole, isLoggedIn }: RoleBadgeProps) {
+  const { userData } = useAuth();
+  const [userRole, setUserRole] = useState<"talent" | "entrepreneur" | "both" | null>(propUserRole);
+  
+  useEffect(() => {
+    // First check if we have the role from Firestore in userData
+    if (userData?.userRole) {
+      setUserRole(userData.userRole);
+    } else if (propUserRole) {
+      // Fall back to the prop if Firestore data isn't available
+      setUserRole(propUserRole);
+    } else if (isLoggedIn) {
+      // Last resort: check localStorage if user is logged in but we don't have the role from props or Firestore
+      const savedRole = localStorage.getItem("userRole") as "talent" | "entrepreneur" | "both" | null;
+      if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
+        setUserRole(savedRole);
+      }
+    }
+  }, [userData, propUserRole, isLoggedIn]);
+  
   if (!isLoggedIn || !userRole) return null;
   
   switch(userRole) {

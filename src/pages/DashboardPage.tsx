@@ -1,14 +1,16 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
 import { DashboardWelcome } from "@/components/DashboardWelcome";
 import { TalentDashboard } from "@/components/dashboard/TalentDashboard";
 import { BuilderDashboard } from "@/components/dashboard/BuilderDashboard";
 import { DualRoleDashboard } from "@/components/dashboard/DualRoleDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
+
 const DashboardPage = () => {
   const {
     isLoggedIn,
@@ -18,6 +20,7 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const [showWelcome, setShowWelcome] = useState(true);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "both">("talent");
+  
   const getUserFirstName = () => {
     if (currentUser?.displayName) {
       return currentUser.displayName.split(' ')[0];
@@ -29,26 +32,61 @@ const DashboardPage = () => {
     }
     return "friend";
   };
+  
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/onboarding");
       return;
     }
-    const savedRole = localStorage.getItem("userRole");
-    if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
-      setActiveRole(savedRole === "entrepreneur" ? "builder" : savedRole);
+    
+    // First check userData from Firestore (from auth context)
+    if (userData?.userRole) {
+      const mappedRole = userData.userRole === "entrepreneur" ? "builder" : userData.userRole;
+      setActiveRole(mappedRole);
+      // Also update localStorage for consistency
+      localStorage.setItem("userRole", userData.userRole);
+    } else {
+      // Fall back to localStorage if Firestore doesn't have the info
+      const savedRole = localStorage.getItem("userRole");
+      if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
+        setActiveRole(savedRole === "entrepreneur" ? "builder" : savedRole);
+      } else if (isLoggedIn && !savedRole) {
+        // User is logged in but has no role set - redirect to onboarding
+        toast.info("Let's set up your profile", {
+          description: "Please select your role to continue.",
+          duration: 6000,
+        });
+        navigate("/onboarding");
+        return;
+      }
     }
+    
     if (userData?.hasCompletedProfile) {
       setShowWelcome(false);
     }
   }, [isLoggedIn, navigate, userData]);
+  
   const handleCompleteOnboarding = () => {
     setShowWelcome(false);
   };
+  
   const handleRoleChange = (role: "talent" | "builder" | "both") => {
     setActiveRole(role);
-    localStorage.setItem("userRole", role === "builder" ? "entrepreneur" : role);
+    // Update localStorage with the mapped value
+    const storageRole = role === "builder" ? "entrepreneur" : role;
+    localStorage.setItem("userRole", storageRole);
+    
+    // If the user is logged in, update the role in Firestore as well
+    if (currentUser) {
+      import("@/services/authService").then(({ updateUserRole }) => {
+        updateUserRole(currentUser, storageRole as "talent" | "entrepreneur" | "both")
+          .catch(error => {
+            console.error("Error updating role:", error);
+          });
+      });
+    }
   };
+  
   return <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">

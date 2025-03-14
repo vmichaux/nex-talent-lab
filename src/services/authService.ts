@@ -17,6 +17,7 @@ export interface UserData {
   hasCompletedProfile?: boolean;
   firstName?: string;
   lastName?: string;
+  userRole?: "talent" | "entrepreneur" | "both";
 }
 
 // Update user data in Firestore
@@ -58,6 +59,26 @@ export const updateProfileCompletion = async (user: User, completed: boolean): P
   
   const userRef = doc(db, "users", user.uid);
   await setDoc(userRef, { hasCompletedProfile: completed }, { merge: true });
+};
+
+// New function to update user role
+export const updateUserRole = async (user: User, role: "talent" | "entrepreneur" | "both"): Promise<void> => {
+  if (!user) return;
+  
+  try {
+    // Update in users collection
+    const userRef = doc(db, "users", user.uid);
+    await setDoc(userRef, { userRole: role }, { merge: true });
+    
+    // Also update in userProfiles collection for consistency
+    const userProfileRef = doc(db, "userProfiles", user.uid);
+    await setDoc(userProfileRef, { userRole: role }, { merge: true });
+    
+    console.log(`User role updated to: ${role}`);
+  } catch (error) {
+    console.error("Error updating user role:", error);
+    throw error;
+  }
 };
 
 // Format Firebase auth error messages

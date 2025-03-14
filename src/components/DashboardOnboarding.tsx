@@ -1,26 +1,64 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Rocket, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SimplifiedHeader } from "./SimplifiedHeader";
+import { auth } from "@/lib/firebase";
+import { updateUserRole } from "@/services/authService";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/use-auth";
+
 export function DashboardOnboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"talent" | "entrepreneur" | "both" | null>(null);
   const totalSteps = 2;
   const navigate = useNavigate();
-  const handleNext = () => {
+  const { currentUser } = useAuth();
+  
+  useEffect(() => {
+    // Check if user is logged in
+    if (currentUser) {
+      // Check if user already has a role set in local storage
+      const savedRole = localStorage.getItem("userRole");
+      if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
+        // If role exists, navigate to dashboard
+        navigate("/dashboard");
+      }
+    }
+  }, [currentUser, navigate]);
+  
+  const handleNext = async () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
     } else {
       // Save the selected role before navigating away
       if (selectedRole) {
-        localStorage.setItem("userRole", selectedRole);
-        // Navigate to signup with role info and fromOnboarding flag
-        navigate(`/signup?role=${selectedRole}&fromOnboarding=true`);
+        try {
+          localStorage.setItem("userRole", selectedRole);
+          
+          // Save role to Firestore if user is authenticated
+          if (currentUser) {
+            await updateUserRole(currentUser, selectedRole);
+            toast.success("Your profile has been updated!", {
+              description: "Your role preferences have been saved.",
+              duration: 6000,
+            });
+          }
+          
+          // Navigate to signup with role info and fromOnboarding flag
+          navigate(`/signup?role=${selectedRole}&fromOnboarding=true`);
+        } catch (error) {
+          console.error("Error saving role:", error);
+          toast.error("Could not save your preferences", {
+            description: "Please try again or contact support.",
+            duration: 6000,
+          });
+        }
       }
     }
   };
+  
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
@@ -28,6 +66,7 @@ export function DashboardOnboarding() {
       navigate("/");
     }
   };
+  
   const getStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -98,6 +137,7 @@ export function DashboardOnboarding() {
         return null;
     }
   };
+  
   return <>
       <SimplifiedHeader currentStep={currentStep} totalSteps={totalSteps} onBackClick={handleBack} />
       <div className="min-h-[calc(100vh-75px)] flex flex-col justify-center items-center p-6 py-16 bg-white">

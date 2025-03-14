@@ -1,13 +1,14 @@
 
 import React, { createContext, useState, useEffect } from 'react';
 import { User, onAuthStateChanged } from "firebase/auth";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { auth } from "@/lib/firebase";
 import { LogoutButton } from "@/components/auth/LogoutButton";
 import { 
   UserData, 
   updateUserData, 
   updateProfileCompletion as updateProfileCompletionService,
+  updateUserRole as updateUserRoleService,
   signup as signupService,
   login as loginService,
   signInWithGoogle as signInWithGoogleService,
@@ -23,6 +24,7 @@ type AuthContextType = {
   signup: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   updateProfileCompletion: (completed: boolean) => Promise<void>;
+  updateUserRole: (role: "talent" | "entrepreneur" | "both") => Promise<void>;
   LogoutButton: React.FC;
 };
 
@@ -157,6 +159,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
   
+  // Add new function to update user role
+  const updateUserRole = async (role: "talent" | "entrepreneur" | "both") => {
+    if (!currentUser) return;
+    
+    try {
+      await updateUserRoleService(currentUser, role);
+      setUserData(userData => userData ? { ...userData, userRole: role } : null);
+      
+      toast({
+        title: "Role updated",
+        description: "Your role has been successfully updated",
+      });
+    } catch (error: any) {
+      const errorMessage = formatAuthError(error);
+      toast({
+        title: "Update error",
+        description: errorMessage,
+        variant: "destructive"
+      });
+      throw error;
+    }
+  };
+  
   const value = {
     currentUser,
     userData,
@@ -166,6 +191,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signup,
     logout,
     updateProfileCompletion,
+    updateUserRole,
     LogoutButton
   };
   
