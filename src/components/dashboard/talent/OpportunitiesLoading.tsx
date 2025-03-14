@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export function OpportunitiesLoading() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {[1, 2, 3, 4].map((_, i) => (
+      {[1, 2].map((_, i) => (
         <Card key={i} className="overflow-hidden">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">

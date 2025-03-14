@@ -46,8 +46,8 @@ export function RecommendedOpportunities({ filter, setFilter }: RecommendedOppor
     return project.location?.toLowerCase() === filter.toLowerCase();
   });
 
-  // Only show 4 items
-  const displayedRecommendations = filteredRecommendations.slice(0, 4);
+  // Only show 2 items instead of 4
+  const displayedRecommendations = filteredRecommendations.slice(0, 2);
 
   return (
     <div className="mb-8">
