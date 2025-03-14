@@ -1,29 +1,15 @@
-
 import { Check, X, Rocket, Building2, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-
 export function PricingSection() {
   const plans = [{
     name: "Talents",
     price: "0",
     description: "Perfect for individuals seeking collaborative opportunities",
     icon: <User className="h-5 w-5 text-primary mb-2" />,
-    features: [
-      "Create a professional profile", 
-      "Apply to unlimited projects", 
-      "Basic AI matching algorithm", 
-      "Portfolio showcase", 
-      "Community support", 
-      "Standard messaging"
-    ],
-    notIncluded: [
-      "Advanced analytics", 
-      "Featured profile placement", 
-      "Priority support", 
-      "Team management tools"
-    ],
+    features: ["Create a professional profile", "Apply to unlimited projects", "Basic AI matching algorithm", "Portfolio showcase", "Community support", "Standard messaging"],
+    notIncluded: ["Advanced analytics", "Featured profile placement", "Priority support", "Team management tools"],
     buttonText: "Get Started",
     buttonVariant: "outline",
     popular: false
@@ -32,16 +18,7 @@ export function PricingSection() {
     price: "Custom",
     description: "For organizations looking to find top talent and scale projects",
     icon: <Building2 className="h-5 w-5 text-primary mb-2" />,
-    features: [
-      "Unlimited project postings", 
-      "Advanced AI talent matching", 
-      "Premium visibility in search", 
-      "Dedicated account manager", 
-      "Team collaboration tools", 
-      "Comprehensive analytics", 
-      "Priority support",
-      "Bulk messaging capabilities"
-    ],
+    features: ["Unlimited project postings", "Advanced AI talent matching", "Premium visibility in search", "Dedicated account manager", "Team collaboration tools", "Comprehensive analytics", "Priority support", "Bulk messaging capabilities"],
     notIncluded: [],
     buttonText: "Contact Sales",
     buttonVariant: "default",
@@ -52,17 +29,7 @@ export function PricingSection() {
     price: "Custom",
     description: "Full-service support for high-potential projects",
     icon: <Rocket className="h-5 w-5 text-purple-500 mb-2" />,
-    features: [
-      "All Business features", 
-      "Strategic growth consulting", 
-      "Funding access and guidance", 
-      "Dedicated PR & communications", 
-      "Strategic partnerships", 
-      "Marketing campaign support", 
-      "Community building strategy", 
-      "Event planning & management",
-      "Mentorship opportunities"
-    ],
+    features: ["All Business features", "Strategic growth consulting", "Funding access and guidance", "Dedicated PR & communications", "Strategic partnerships", "Marketing campaign support", "Community building strategy", "Event planning & management", "Mentorship opportunities"],
     notIncluded: [],
     buttonText: "Apply Now",
     buttonVariant: "outline",
@@ -70,7 +37,6 @@ export function PricingSection() {
     special: true,
     linkTo: "/contact-sales#sales-title"
   }];
-
   return <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -85,7 +51,7 @@ export function PricingSection() {
               <div className="p-6">
                 <div className="flex items-center mb-3">
                   {plan.icon}
-                  <h3 className="text-xl font-bold">{plan.name}</h3>
+                  <h3 className="text-xl font-bold px-[17px]">{plan.name}</h3>
                 </div>
                 <div className="flex items-baseline mb-4">
                   <span className="text-4xl font-bold">{plan.price === "0" ? "€0" : plan.price === "Custom" ? "" : `€${plan.price}`}</span>
