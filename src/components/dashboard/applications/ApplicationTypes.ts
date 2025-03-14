@@ -1,24 +1,23 @@
 
+import { Timestamp } from "firebase/firestore";
+
 export interface ApplicationSummary {
   id: string;
   projectId: string;
   projectTitle: string;
+  userId: string;
   userName: string;
-  userFullName?: string; // Add this field for the full name
   userEmail: string;
-  userId?: string; // Make sure we have userId for fetching profile
-  coverLetter?: string;
-  relevantExperience?: string;
-  availabilityDate?: string;
-  timeCommitment?: string;
+  coverLetter: string;
+  relevantExperience: string;
+  availabilityDate: string;
+  timeCommitment: string;
   portfolioLink?: string;
-  status: 'pending' | 'accepted' | 'declined' | 'rejected';
+  status: 'pending' | 'accepted' | 'declined';
   createdAt: Date;
-  feedback?: string;
 }
 
-export type ApplicationFilter = 'all' | 'pending' | 'reviewed';
-
+// Format timestamp to readable date
 export const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
