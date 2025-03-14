@@ -1,4 +1,5 @@
 
-import { useAuth } from './useAuthHook';
+import { useAuthHook } from './useAuthHook';
 
-export { useAuth };
+// Export the hook directly
+export const useAuth = useAuthHook;
