@@ -8,7 +8,7 @@ export function LearningResources() {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold flex items-center gap-2">
+        <h2 className="text-2xl font-semibold flex items-center gap-2">
           <BookOpen className="h-4 w-4 text-primary" />
           Learning Resources
         </h2>

@@ -47,7 +47,7 @@ export function RecommendedTalents() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold flex items-center gap-2">
+        <h2 className="text-2xl font-semibold flex items-center gap-2">
           <Users className="h-5 w-5 text-primary" />
           Recommended Talent
         </h2>

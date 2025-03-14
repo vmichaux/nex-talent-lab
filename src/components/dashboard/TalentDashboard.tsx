@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
 import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
@@ -27,7 +28,7 @@ export function TalentDashboard() {
       <div className="lg:w-3/5 space-y-20">
         {/* Overview section */}
         <div>
-          <h2 className="mb-4 flex items-center gap-2 text-2xl font-semibold">
+          <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
             <Search className="h-4 w-4 text-primary" />
             Your Overview
           </h2>

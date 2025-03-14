@@ -49,7 +49,7 @@ export function BuilderDashboard() {
       <div className="lg:w-3/5 space-y-20">
         {/* Overview section */}
         <div>
-          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+          <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
             <Search className="h-4 w-4 text-primary" />
             Your Overview
           </h2>

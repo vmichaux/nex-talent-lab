@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ClipboardCheck, Clock, CheckCircle, XCircle, ArrowUpRight } from "lucide-react";
@@ -38,7 +39,7 @@ export function AppliedProjects() {
   if (loading) {
     return <div className="space-y-4">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold flex items-center gap-2">
+          <h2 className="text-2xl font-semibold flex items-center gap-2">
             <ClipboardCheck className="h-4 w-4 text-primary" />
             My Applications
           </h2>
@@ -55,7 +56,7 @@ export function AppliedProjects() {
   if (error) {
     return <div className="space-y-4">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold flex items-center gap-2">
+          <h2 className="text-2xl font-semibold flex items-center gap-2">
             <ClipboardCheck className="h-4 w-4 text-primary" />
             My Applications
           </h2>
@@ -73,7 +74,7 @@ export function AppliedProjects() {
   if (applications.length === 0) {
     return <div className="space-y-4">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold flex items-center gap-2">
+          <h2 className="text-2xl font-semibold flex items-center gap-2">
             <ClipboardCheck className="h-4 w-4 text-primary" />
             My Applications
           </h2>
