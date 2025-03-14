@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin, Phone } from "lucide-react";
-import { subscribeToNewsletter } from "@/lib/newsletterService";
+import { subscribeToNewsletter, checkNewsletterCollection } from "@/lib/newsletterService";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -28,6 +28,18 @@ export function Footer() {
     setIsSubmitting(true);
     
     try {
+      // First check if we can access the collection
+      const collectionAccessible = await checkNewsletterCollection();
+      if (!collectionAccessible) {
+        toast({
+          title: "Service unavailable",
+          description: "Newsletter service is currently unavailable. Please try again later.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+      
       const result = await subscribeToNewsletter(email);
       
       if (result) {
