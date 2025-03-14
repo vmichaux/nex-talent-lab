@@ -1,9 +1,8 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { collection, query, where, getDocs, doc, updateDoc, Timestamp, getDoc } from "firebase/firestore";
 import { db, getUserProfile } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast-sonner";
 import { ApplicationSummary } from "@/components/dashboard/applications/ApplicationTypes";
 
 export function useApplicationsData() {
@@ -172,13 +171,11 @@ export function useApplicationsData() {
       
       if (newStatus === 'accepted') {
         toast.success("Application accepted", {
-          description: "The applicant will be notified.",
-          duration: 6000,
+          description: "The applicant will be notified."
         });
       } else {
         toast.error("Application rejected", {
-          description: "The applicant will be notified.",
-          duration: 6000,
+          description: "The applicant will be notified."
         });
       }
       
@@ -186,8 +183,7 @@ export function useApplicationsData() {
     } catch (error) {
       console.error("Error updating application status:", error);
       toast.error("Failed to update application status", {
-        description: "Please try again.",
-        duration: 6000,
+        description: "Please try again."
       });
       throw error;
     } finally {

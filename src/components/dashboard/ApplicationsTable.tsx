@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs, doc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast-sonner";
 import { 
   Table, 
   TableBody, 
@@ -117,9 +117,8 @@ export function ApplicationsTable() {
         )
       );
       
-      toast({
-        title: `Application ${newStatus}`,
-        description: `You have ${newStatus} the application.`,
+      toast.success(`Application ${newStatus}`, {
+        description: `You have ${newStatus} the application.`
       });
       
       // Close dialog if open
@@ -128,10 +127,8 @@ export function ApplicationsTable() {
       }
     } catch (error) {
       console.error("Error updating application status:", error);
-      toast({
-        title: "Update failed",
-        description: "Failed to update application status. Please try again.",
-        variant: "destructive"
+      toast.error("Update failed", {
+        description: "Failed to update application status. Please try again."
       });
     }
   };

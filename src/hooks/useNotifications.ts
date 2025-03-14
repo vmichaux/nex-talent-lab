@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { 
   collection, 
@@ -13,7 +14,7 @@ import {
 import { db } from '@/lib/firebase';
 import { useAuth } from './use-auth';
 import { Notification } from '@/types/notification';
-import { toast } from 'sonner';
+import { toast } from '@/hooks/use-toast-sonner';
 
 export function useNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -98,14 +99,10 @@ export function useNotifications() {
       });
       
       await batch.commit();
-      toast.success("All notifications marked as read", {
-        duration: 6000
-      });
+      toast.success("All notifications marked as read");
     } catch (error) {
       console.error("Error marking all notifications as read:", error);
-      toast.error("Failed to mark notifications as read", {
-        duration: 6000
-      });
+      toast.error("Failed to mark notifications as read");
     }
   };
 

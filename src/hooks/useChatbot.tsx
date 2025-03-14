@@ -3,14 +3,13 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { getUserProfile } from "@/lib/firebase";
 import { getUserChatHistory, saveMessage, sendMessageToOpenAI, ChatMessage } from "@/lib/chatbotService";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast-sonner";
 
 export const useChatbot = () => {
   const { isLoggedIn, currentUser } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
   // Set this to false to stop saving to database
   const saveToDatabase = false;
 
@@ -54,10 +53,8 @@ export const useChatbot = () => {
         }
       } catch (error) {
         console.error("Failed to load chat history:", error);
-        toast({
-          title: "Error",
-          description: "Failed to load your chat history. Please try again.",
-          variant: "destructive",
+        toast.error("Error", {
+          description: "Failed to load your chat history. Please try again."
         });
       } finally {
         setIsLoading(false);
@@ -118,10 +115,8 @@ export const useChatbot = () => {
       }
     } catch (error) {
       console.error("Error in chat sequence:", error);
-      toast({
-        title: "Error",
-        description: "Failed to get a response. Please try again.",
-        variant: "destructive",
+      toast.error("Error", {
+        description: "Failed to get a response. Please try again."
       });
       
       // Remove loading message if there was an error

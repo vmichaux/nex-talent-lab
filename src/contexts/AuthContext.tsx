@@ -1,7 +1,6 @@
-
 import React, { createContext, useState, useEffect } from 'react';
 import { User, onAuthStateChanged } from "firebase/auth";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast-sonner";
 import { auth } from "@/lib/firebase";
 import { LogoutButton } from "@/components/auth/LogoutButton";
 import { 
@@ -61,16 +60,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = async (email: string, password: string) => {
     try {
       await signupService(email, password);
-      toast({
-        title: "Account created successfully!",
+      toast.success("Account created successfully!", {
         description: "Welcome to NexTalent Lab."
       });
     } catch (error: any) {
       const errorMessage = formatAuthError(error);
-      toast({
-        title: "Signup failed",
-        description: errorMessage,
-        variant: "destructive"
+      toast.error("Signup failed", {
+        description: errorMessage
       });
       throw error;
     }
@@ -80,17 +76,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       console.log(`Attempting to login with email: ${email}`);
       await loginService(email, password);
-      toast({
-        title: "Login successful",
+      toast.success("Login successful", {
         description: "Welcome back to NexTalent Lab!"
       });
     } catch (error: any) {
       console.error("Login error in context:", error);
       const errorMessage = formatAuthError(error);
-      toast({
-        title: "Login failed",
-        description: errorMessage,
-        variant: "destructive"
+      toast.error("Login failed", {
+        description: errorMessage
       });
       throw error;
     }
@@ -100,17 +93,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       console.log("Attempting Google sign-in from context");
       await signInWithGoogleService();
-      toast({
-        title: "Login successful",
+      toast.success("Login successful", {
         description: "Welcome to NexTalent Lab!"
       });
     } catch (error: any) {
       console.error("Google sign-in error in context:", error);
       const errorMessage = formatAuthError(error);
-      toast({
-        title: "Google sign-in failed",
-        description: errorMessage,
-        variant: "destructive"
+      toast.error("Google sign-in failed", {
+        description: errorMessage
       });
       throw error;
     }
@@ -120,16 +110,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await auth.signOut();
       setUserData(null);
-      toast({
-        title: "Logged out successfully",
-        description: "You have been logged out of your account",
+      toast.success("Logged out successfully", {
+        description: "You have been logged out of your account"
       });
     } catch (error: any) {
       const errorMessage = formatAuthError(error);
-      toast({
-        title: "Logout error",
-        description: errorMessage,
-        variant: "destructive"
+      toast.error("Logout error", {
+        description: errorMessage
       });
       throw error;
     }
@@ -143,17 +130,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUserData(userData => userData ? { ...userData, hasCompletedProfile: completed } : null);
       
       if (completed) {
-        toast({
-          title: "Profile completed",
-          description: "Your profile has been successfully updated",
+        toast.success("Profile completed", {
+          description: "Your profile has been successfully updated"
         });
       }
     } catch (error: any) {
       const errorMessage = formatAuthError(error);
-      toast({
-        title: "Update error",
-        description: errorMessage,
-        variant: "destructive"
+      toast.error("Update error", {
+        description: errorMessage
       });
       throw error;
     }
@@ -167,16 +151,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await updateUserRoleService(currentUser, role);
       setUserData(userData => userData ? { ...userData, userRole: role } : null);
       
-      toast({
-        title: "Role updated",
-        description: "Your role has been successfully updated",
+      toast.success("Role updated", {
+        description: "Your role has been successfully updated"
       });
     } catch (error: any) {
       const errorMessage = formatAuthError(error);
-      toast({
-        title: "Update error",
-        description: errorMessage,
-        variant: "destructive"
+      toast.error("Update error", {
+        description: errorMessage
       });
       throw error;
     }
