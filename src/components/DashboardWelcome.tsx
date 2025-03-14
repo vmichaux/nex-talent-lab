@@ -1,43 +1,12 @@
 
-import { ArrowRight, Check, UserPlus, Lightbulb, Users } from "lucide-react";
+import { ArrowRight, UserPlus, Lightbulb, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { useEffect, useState } from "react";
-
-type StepProps = {
-  number: number;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  completed?: boolean;
-  onClick?: () => void;
-};
-
-const Step = ({
-  number,
-  title,
-  description,
-  icon,
-  completed = false,
-  onClick
-}: StepProps) => {
-  const StepComponent = <div className={`flex items-start gap-4 bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 w-full max-w-3xl ${onClick ? 'cursor-pointer' : ''}`} onClick={onClick}>
-      <div className={`flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center ${completed ? 'bg-green-100 text-green-600' : 'bg-primary/10 text-primary'}`}>
-        {completed ? <Check className="h-5 w-5" /> : <span className="font-semibold">{number}</span>}
-      </div>
-      <div className="space-y-1 text-left">
-        <div className="flex items-center gap-2">
-          <h3 className="font-semibold text-lg">{title}</h3>
-          <div className="p-1 bg-primary/10 rounded-full">
-            {icon}
-          </div>
-        </div>
-        <p className="text-gray-600">{description}</p>
-      </div>
-    </div>;
-  return StepComponent;
-};
+import { Step } from "@/components/dashboard/welcome/Step";
+import { ProfileBenefits } from "@/components/dashboard/welcome/ProfileBenefits";
+import { welcomeMessages, descriptions } from "@/components/dashboard/welcome/profileConstants";
 
 export function DashboardWelcome() {
   const navigate = useNavigate();
@@ -58,18 +27,6 @@ export function DashboardWelcome() {
       setProfileType(userRole);
     }
   }, []);
-
-  const welcomeMessages = {
-    talent: "Welcome to Your Talent Journey",
-    builder: "Welcome to Your Builder Journey",
-    both: "Welcome to Your Dual Journey"
-  };
-
-  const descriptions = {
-    talent: "Let's showcase your skills and find the perfect projects",
-    builder: "Let's find the right talent for your projects",
-    both: "Let's connect you with projects and talents"
-  };
 
   const stepsByProfile = {
     talent: [
@@ -150,7 +107,8 @@ export function DashboardWelcome() {
   const welcomeMessage = welcomeMessages[profileType];
   const description = descriptions[profileType];
 
-  return <div className="relative overflow-hidden bg-white">
+  return (
+    <div className="relative overflow-hidden bg-white">
       <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
       
       <div className="container mx-auto px-4 py-12">
@@ -176,51 +134,8 @@ export function DashboardWelcome() {
           </Button>
         </div>
 
-        <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl p-8 shadow-sm border border-gray-100 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4 text-center">Why Complete Your Profile?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-start gap-3">
-              <div className="p-2 bg-primary/10 rounded-full">
-                <Check className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-medium">Get Discovered</h3>
-                <p className="text-sm text-gray-600">Startups and projects actively search for talent with your skills</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="p-2 bg-primary/10 rounded-full">
-                <Check className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-medium">Better Matches</h3>
-                <p className="text-sm text-gray-600">Our AI matches you with projects that fit your experience level</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="p-2 bg-primary/10 rounded-full">
-                <Check className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-medium">Project Recommendations</h3>
-                <p className="text-sm text-gray-600">Receive personalized project suggestions</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="p-2 bg-primary/10 rounded-full">
-                <Check className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-medium">Growth Tracking</h3>
-                <p className="text-sm text-gray-600">Track your skills development over time</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="text-center mt-8">
-            <p>Need help getting started? <Link to="/contact-sales#sales-title" className="text-primary font-medium">Contact our support team</Link></p>
-          </div>
-        </div>
+        <ProfileBenefits />
       </div>
-    </div>;
+    </div>
+  );
 }
