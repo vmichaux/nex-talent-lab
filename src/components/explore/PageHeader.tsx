@@ -12,7 +12,7 @@ export const PageHeader = ({
   return <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
       <div className="mb-6 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">{subtitle}</div>
       
-      <h1 className="mb-6 text-4xl font-bold tracking-tight custom-gradient-text md:text-5xl">
+      <h1 className="mb-6 text-4xl font-bold tracking-tight custom-gradient-text md:text-6xl">
         {title}
       </h1>
       
