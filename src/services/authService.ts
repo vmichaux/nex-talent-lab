@@ -88,7 +88,7 @@ export const formatAuthError = (error: any): string => {
     case 'auth/too-many-requests':
       return "Too many unsuccessful login attempts. Please try again later.";
     case 'auth/unauthorized-domain':
-      return "Google sign-in failed: This website domain is not authorized for Firebase authentication. You can only use Google sign-in on the production site or localhost.";
+      return "Google sign-in failed: This website domain is not authorized for Firebase authentication. Please ensure you're accessing from an authorized domain.";
     default:
       return error.message || "Authentication failed. Please try again.";
   }
@@ -120,6 +120,10 @@ export const login = async (email: string, password: string): Promise<void> => {
 export const signInWithGoogle = async (): Promise<void> => {
   try {
     console.log("Attempting Google sign in");
+    // Add prompt: 'select_account' to force the account selection dialog
+    googleProvider.setCustomParameters({
+      prompt: 'select_account'
+    });
     await signInWithPopup(auth, googleProvider);
     console.log("Google sign in successful");
   } catch (error) {

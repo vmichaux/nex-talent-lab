@@ -1,4 +1,3 @@
-
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore, collection, getDocs, query, where, orderBy, limit, doc, getDoc, Timestamp } from "firebase/firestore";
@@ -19,8 +18,11 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// Configure Google provider without custom client ID
+// Configure Google provider - ensure it is initialized with the correct settings
 export const googleProvider = new GoogleAuthProvider();
+// Add scopes for profile information
+googleProvider.addScope('profile');
+googleProvider.addScope('email');
 
 // Define UserProfile interface
 export interface UserProfile {

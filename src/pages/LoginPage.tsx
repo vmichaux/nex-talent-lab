@@ -53,9 +53,10 @@ export default function LoginPage() {
     } catch (error: any) {
       console.error("Google sign-in error in component:", error);
       if (error.code === "auth/unauthorized-domain") {
-        setAuthError("This website domain is not authorized for Google sign-in. You can only use Google sign-in on the production site or localhost.");
+        setAuthError("This domain is not registered as an authorized domain in Firebase. Please ensure you're using an authorized domain such as localhost or the production domain.");
+      } else {
+        setAuthError(formatAuthError(error));
       }
-      // Toast is already handled in the AuthContext
     } finally {
       setIsLoading(false);
     }
@@ -136,7 +137,7 @@ export default function LoginPage() {
             </div>
             
             <p className="mt-3 text-xs text-center text-gray-500">
-              Note: Google sign-in only works on authorized domains
+              Note: Make sure you're accessing from an authorized domain (e.g., localhost or your production domain)
             </p>
           </div>
 
