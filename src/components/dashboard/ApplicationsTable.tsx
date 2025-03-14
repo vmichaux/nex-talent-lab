@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs, doc, updateDoc, Timestamp } from "firebase/firestore";
@@ -43,7 +44,6 @@ interface ApplicationData {
 export function ApplicationsTable() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [applications, setApplications] = useState<ApplicationData[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedApplication, setSelectedApplication] = useState<ApplicationData | null>(null);
@@ -293,3 +293,4 @@ export function ApplicationsTable() {
     </div>
   );
 }
+
