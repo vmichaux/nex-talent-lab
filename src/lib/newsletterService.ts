@@ -1,6 +1,5 @@
-
 import { addDoc, collection, getDocs, limit, query } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "./firebase-config";
 
 // Interface for newsletter subscription
 export interface NewsletterSubscription {

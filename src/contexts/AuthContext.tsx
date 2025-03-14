@@ -2,7 +2,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { User, onAuthStateChanged } from "firebase/auth";
 import { useToast } from "@/hooks/use-toast";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase-config";
 import { LogoutButton } from "@/components/auth/LogoutButton";
 import { 
   UserData, 

@@ -1,5 +1,5 @@
 
-import { db } from '../lib/firebase';
+import { db } from '../lib/firebase-config';
 import { collection, addDoc } from 'firebase/firestore';
 import { toast } from 'sonner';
 

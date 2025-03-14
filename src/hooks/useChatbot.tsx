@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { getUserProfile } from "@/lib/firebase";
+import { getUserProfile } from "@/lib/user-service";
 import { getUserChatHistory, saveMessage, sendMessageToOpenAI, ChatMessage } from "@/lib/chatbotService";
 import { useToast } from "@/hooks/use-toast";
 

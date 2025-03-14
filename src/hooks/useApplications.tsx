@@ -12,7 +12,8 @@ import {
   addDoc, 
   serverTimestamp 
 } from "firebase/firestore";
-import { db, getUserProfile } from "@/lib/firebase";
+import { db } from "@/lib/firebase-config";
+import { getUserProfile } from "@/lib/user-service";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";

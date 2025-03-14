@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { doc, updateDoc, getDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "@/lib/firebase-config";
 import { Project } from "@/types/project";
 
 export const useProjectMutations = () => {

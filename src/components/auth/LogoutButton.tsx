@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase-config";
 import { signOut } from "firebase/auth";
 
 export const LogoutButton: React.FC = () => {
