@@ -283,10 +283,11 @@ const ProfileEditPage = () => {
   };
 
   const addSkill = () => {
-    setProfile({
-      ...profile,
-      skills: [...profile.skills, { name: "", level: "Intermediate" }]
-    });
+    console.log("Adding skill");
+    setProfile(prev => ({
+      ...prev,
+      skills: [...prev.skills, { name: "", level: "Intermediate" }]
+    }));
   };
 
   const removeSkill = (index: number) => {
@@ -403,10 +404,11 @@ const ProfileEditPage = () => {
     if (!newInterest.trim()) return;
     
     if (!profile.interests.includes(newInterest.trim()) && profile.interests.length < 6) {
-      setProfile({
-        ...profile,
-        interests: [...profile.interests, newInterest.trim()]
-      });
+      console.log("Adding interest:", newInterest);
+      setProfile(prev => ({
+        ...prev,
+        interests: [...prev.interests, newInterest.trim()]
+      }));
       setNewInterest("");
     } else if (profile.interests.length >= 6) {
       toast({
@@ -1198,3 +1200,4 @@ const ProfileEditPage = () => {
 };
 
 export default ProfileEditPage;
+
