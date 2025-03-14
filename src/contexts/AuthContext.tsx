@@ -11,7 +11,6 @@ import {
   signup as signupService,
   login as loginService,
   signInWithGoogle as signInWithGoogleService,
-  signInWithGithub as signInWithGithubService,
   formatAuthError
 } from "@/services/authService";
 
@@ -21,7 +20,6 @@ type AuthContextType = {
   isLoggedIn: boolean;
   login: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
-  signInWithGithub: () => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   updateProfileCompletion: (completed: boolean) => Promise<void>;
@@ -115,24 +113,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw error;
     }
   };
-
-  const signInWithGithub = async () => {
-    try {
-      await signInWithGithubService();
-      toast({
-        title: "Login successful",
-        description: "Welcome to NexTalent Lab!"
-      });
-    } catch (error: any) {
-      const errorMessage = formatAuthError(error);
-      toast({
-        title: "GitHub sign-in failed",
-        description: errorMessage,
-        variant: "destructive"
-      });
-      throw error;
-    }
-  };
   
   const logout = async () => {
     try {
@@ -183,7 +163,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isLoggedIn,
     login,
     signInWithGoogle,
-    signInWithGithub,
     signup,
     logout,
     updateProfileCompletion,

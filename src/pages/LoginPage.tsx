@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, Github, ArrowLeft, LucideIcon } from "lucide-react";
+import { Mail, Lock, ArrowLeft, LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,7 +20,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { login, signInWithGoogle, signInWithGithub } = useAuth();
+  const { login, signInWithGoogle } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,19 +46,6 @@ export default function LoginPage() {
       navigate("/dashboard");
     } catch (error: any) {
       console.error("Google sign-in error in component:", error);
-      // Toast is already handled in the AuthContext
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleGithubSignIn = async () => {
-    setIsLoading(true);
-    try {
-      await signInWithGithub();
-      navigate("/dashboard");
-    } catch (error: any) {
-      console.error("GitHub sign-in error in component:", error);
       // Toast is already handled in the AuthContext
     } finally {
       setIsLoading(false);
@@ -125,12 +112,8 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <Button variant="outline" type="button" className="gap-2" onClick={handleGithubSignIn} disabled={isLoading}>
-                <Github className="h-4 w-4" />
-                <span>GitHub</span>
-              </Button>
-              <Button variant="outline" type="button" className="gap-2" onClick={handleGoogleSignIn} disabled={isLoading}>
+            <div className="mt-6 flex justify-center">
+              <Button variant="outline" type="button" className="gap-2 w-full" onClick={handleGoogleSignIn} disabled={isLoading}>
                 <Google className="h-4 w-4" />
                 <span>Google</span>
               </Button>

@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Mail, Lock, User, Github, Linkedin } from "lucide-react";
+import { Mail, Lock, User, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,7 +20,7 @@ export default function SignupPage() {
   const searchParams = new URLSearchParams(location.search);
   const role = searchParams.get('role');
   const fromOnboarding = searchParams.get('fromOnboarding') === 'true';
-  const { signup, signInWithGoogle, signInWithGithub } = useAuth();
+  const { signup, signInWithGoogle } = useAuth();
 
   const getWelcomeMessage = () => {
     if (!role) return "Create your account";
@@ -86,25 +87,6 @@ export default function SignupPage() {
       navigate("/dashboard");
     } catch (error) {
       console.error("Google sign-in error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleGithubSignIn = async () => {
-    setIsLoading(true);
-    try {
-      await signInWithGithub();
-      if (role) {
-        localStorage.setItem("userRole", role);
-      }
-      toast({
-        title: "Account created successfully!",
-        description: "Welcome to NexTalent Lab. Let's set up your profile.",
-      });
-      navigate("/dashboard");
-    } catch (error) {
-      console.error("GitHub sign-in error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -198,21 +180,11 @@ export default function SignupPage() {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-4">
+        <div className="mt-6 flex justify-center">
           <Button 
             variant="outline" 
             type="button" 
-            className="gap-2"
-            onClick={handleGithubSignIn}
-            disabled={isLoading}
-          >
-            <Github className="h-4 w-4" />
-            <span>GitHub</span>
-          </Button>
-          <Button 
-            variant="outline" 
-            type="button" 
-            className="gap-2"
+            className="gap-2 w-full"
             onClick={handleGoogleSignIn}
             disabled={isLoading}
           >
