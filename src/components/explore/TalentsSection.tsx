@@ -13,6 +13,7 @@ export const TalentsSection = ({ searchQuery = '' }: TalentsSectionProps) => {
   const [activeTab, setActiveTab] = React.useState("all-talents");
   
   const { talents, loading, error } = useTalents({
+    limit: 6, // Limit to 6 talents
     filterFeatured: activeTab === "featured-talents",
     filterDesigners: activeTab === "designers",
     filterDevelopers: activeTab === "developers",
@@ -45,7 +46,8 @@ export const TalentsSection = ({ searchQuery = '' }: TalentsSectionProps) => {
           </TabsList>
           
           <TabsContent value="all-talents" className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[...Array(4)].map((_, index) => (
+            {/* Show 6 placeholders for loading state */}
+            {[...Array(6)].map((_, index) => (
               <div key={index} className="space-y-3">
                 <Skeleton className="h-[200px] w-full rounded-lg" />
                 <Skeleton className="h-4 w-3/4" />
