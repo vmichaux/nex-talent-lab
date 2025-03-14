@@ -1,4 +1,3 @@
-
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,18 +6,16 @@ import { useEffect, useState } from "react";
 import { Step } from "@/components/dashboard/welcome/Step";
 import { ProfileBenefits } from "@/components/dashboard/welcome/ProfileBenefits";
 import { welcomeMessages, descriptions } from "@/components/dashboard/welcome/profileConstants";
-
 export function DashboardWelcome() {
   const navigate = useNavigate();
-  const { userData } = useAuth();
+  const {
+    userData
+  } = useAuth();
   const [profileType, setProfileType] = useState<"talent" | "builder" | "both">("talent");
-  
   const profileCompleted = userData?.hasCompletedProfile || false;
-  
   const navigateToProfileEdit = () => {
     navigate('/profile/edit');
   };
-
   useEffect(() => {
     const userRole = localStorage.getItem("userRole");
     if (userRole === "entrepreneur") {
@@ -27,79 +24,63 @@ export function DashboardWelcome() {
       setProfileType(userRole);
     }
   }, []);
-
   const stepsByProfile = {
-    talent: [
-      {
-        number: 1,
-        title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
-        description: "Add your skills, experience, and portfolio items to showcase your talents.",
-        completed: profileCompleted,
-        onClick: navigateToProfileEdit
-      },
-      {
-        number: 2,
-        title: "Explore Projects",
-        description: "Discover projects that match your skills and interests.",
-        completed: false
-      },
-      {
-        number: 3,
-        title: "Connect and Network",
-        description: "Reach out to project builders, start collaborating and develop your network.",
-        completed: false
-      }
-    ],
-    builder: [
-      {
-        number: 1,
-        title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
-        description: "Add your professional details, project needs and the type of talent you are looking for.",
-        completed: profileCompleted,
-        onClick: navigateToProfileEdit
-      },
-      {
-        number: 2,
-        title: "Explore Talents",
-        description: "Discover talents that match your needs and vision.",
-        completed: false
-      },
-      {
-        number: 3,
-        title: "Connect and Network",
-        description: "Reach out to talents and other project builders, start collaborating and develop your network.",
-        completed: false
-      }
-    ],
-    both: [
-      {
-        number: 1,
-        title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
-        description: "Add your skills, experience, project needs and the type of talent you are looking for.",
-        completed: profileCompleted,
-        onClick: navigateToProfileEdit
-      },
-      {
-        number: 2,
-        title: "Explore Talents & Projects",
-        description: "Discover motivated talents and meaningful projects that match your vision.",
-        completed: false
-      },
-      {
-        number: 3,
-        title: "Connect and Network",
-        description: "Reach out to talents and other project builders, start collaborating and develop your network.",
-        completed: false
-      }
-    ]
+    talent: [{
+      number: 1,
+      title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
+      description: "Add your skills, experience, and portfolio items to showcase your talents.",
+      completed: profileCompleted,
+      onClick: navigateToProfileEdit
+    }, {
+      number: 2,
+      title: "Explore Projects",
+      description: "Discover projects that match your skills and interests.",
+      completed: false
+    }, {
+      number: 3,
+      title: "Connect and Network",
+      description: "Reach out to project builders, start collaborating and develop your network.",
+      completed: false
+    }],
+    builder: [{
+      number: 1,
+      title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
+      description: "Add your professional details, project needs and the type of talent you are looking for.",
+      completed: profileCompleted,
+      onClick: navigateToProfileEdit
+    }, {
+      number: 2,
+      title: "Explore Talents",
+      description: "Discover talents that match your needs and vision.",
+      completed: false
+    }, {
+      number: 3,
+      title: "Connect and Network",
+      description: "Reach out to talents and other project builders, start collaborating and develop your network.",
+      completed: false
+    }],
+    both: [{
+      number: 1,
+      title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
+      description: "Add your skills, experience, project needs and the type of talent you are looking for.",
+      completed: profileCompleted,
+      onClick: navigateToProfileEdit
+    }, {
+      number: 2,
+      title: "Explore Talents & Projects",
+      description: "Discover motivated talents and meaningful projects that match your vision.",
+      completed: false
+    }, {
+      number: 3,
+      title: "Connect and Network",
+      description: "Reach out to talents and other project builders, start collaborating and develop your network.",
+      completed: false
+    }]
   };
-
   const currentSteps = stepsByProfile[profileType];
   const welcomeMessage = welcomeMessages[profileType];
   const description = descriptions[profileType];
-
-  return (
-    <div className="relative overflow-hidden bg-white">
+  return <div className="relative overflow-hidden bg-white">
       <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
       
       <div className="container mx-auto px-4 py-12">
@@ -124,15 +105,10 @@ export function DashboardWelcome() {
             {profileCompleted ? "Modify Account" : "Setup Your Profile"} <ArrowRight className="h-4 w-4" />
           </Button>
           
-          {!profileCompleted && (
-            <p className="mt-4 text-amber-600 font-medium">
-              Complete your profile to unlock all features
-            </p>
-          )}
+          {!profileCompleted}
         </div>
 
         <ProfileBenefits />
       </div>
-    </div>
-  );
+    </div>;
 }
