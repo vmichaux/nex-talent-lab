@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useState } from "react";
 import { DashboardProjects } from "../DashboardProjects";
@@ -28,7 +29,7 @@ export function CombinedView() {
       <div className="lg:w-3/5 space-y-12">
         {/* Overview metrics */}
         <div>
-          <h2 className="text-xl font-bold mb-6">Your Overview</h2>
+          <h2 className="text-lg font-bold mb-4">Your Overview</h2>
           <DashboardOverview role="both" />
         </div>
         
@@ -43,7 +44,7 @@ export function CombinedView() {
         
         {/* Project Metrics section with role activities */}
         <div>
-          <h2 className="text-xl font-bold mb-6">Project Metrics</h2>
+          <h2 className="text-lg font-bold mb-4">Project Metrics</h2>
           <RoleActivityCards />
         </div>
         
@@ -67,7 +68,6 @@ export function CombinedView() {
         
         {/* Manage Applications section */}
         <div>
-          
           <ReviewApplications />
         </div>
         
