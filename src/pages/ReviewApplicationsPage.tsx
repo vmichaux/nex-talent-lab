@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
@@ -31,6 +32,7 @@ const ReviewApplicationsPage = () => {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [messageDialogOpen, setMessageDialogOpen] = useState(false);
 
+  // Check for applicationId in URL on page load
   useEffect(() => {
     if (!currentUser) {
       navigate("/login");

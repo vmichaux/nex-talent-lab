@@ -1,7 +1,7 @@
+
 import { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
-import { db } from '@/lib/firebase-config';
-import { UserProfile } from '@/lib/user-service';
+import { db, getUserProfile, UserProfile } from '@/lib/firebase';
 
 export interface Talent {
   id: string;

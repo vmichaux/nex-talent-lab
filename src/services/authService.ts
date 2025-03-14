@@ -1,3 +1,4 @@
+
 import { 
   User,
   createUserWithEmailAndPassword, 
@@ -7,7 +8,7 @@ import {
   AuthError
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
-import { auth, db, googleProvider } from "@/lib/firebase-config";
+import { auth, db, googleProvider } from "@/lib/firebase";
 
 export interface UserData {
   email: string;
