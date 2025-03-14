@@ -12,9 +12,19 @@ import { ProjectMetrics } from "@/components/dashboard/ProjectMetrics";
 import { ProjectHistory } from "@/components/dashboard/ProjectHistory";
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
+import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export function TalentDashboard() {
   const [filter, setFilter] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Searching for:", searchTerm);
+    // Here you would implement the actual search functionality
+  };
 
   return (
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
@@ -24,6 +34,26 @@ export function TalentDashboard() {
         <div>
           <h2 className="text-xl font-bold mb-6">Your Overview</h2>
           <DashboardOverview role="talent" />
+        </div>
+
+        {/* Search bar section */}
+        <div>
+          <h2 className="text-xl font-bold mb-6">Search</h2>
+          <form onSubmit={handleSearch} className="flex gap-4 w-full">
+            <Button type="submit" variant="default" className="h-10">
+              <Search className="h-4 w-4 mr-2" />
+              Search
+            </Button>
+            <div className="relative flex-1">
+              <Input
+                type="text"
+                placeholder="Search for projects, skills, or opportunities..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full"
+              />
+            </div>
+          </form>
         </div>
 
         {/* Active Projects section */}
