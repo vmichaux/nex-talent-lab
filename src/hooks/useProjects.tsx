@@ -147,10 +147,10 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
       setLoading(true);
       console.log("Fetching projects for user:", userId);
       
+      // Modified query: only filter by userId without orderBy to avoid composite index requirement
       const projectsQuery = query(
         collection(db, "projects"),
-        where("userId", "==", userId),
-        orderBy("createdAt", "desc")
+        where("userId", "==", userId)
       );
       
       const querySnapshot = await getDocs(projectsQuery);
@@ -169,8 +169,13 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
         } as Project;
       });
       
-      console.log("Fetched user projects:", fetchedProjects.length, "projects");
-      return fetchedProjects;
+      // Sort the projects client-side by createdAt (newest first)
+      const sortedProjects = fetchedProjects.sort((a, b) => {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+      
+      console.log("Fetched user projects:", sortedProjects.length, "projects");
+      return sortedProjects;
     } catch (err) {
       console.error("Error fetching user projects:", err);
       setError("Failed to load user projects. Please try again later.");
