@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { MessageSquare, X, Minimize2, Maximize2, Send, Loader, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -138,7 +137,6 @@ export const ChatWidget = () => {
     }
   };
 
-  // Remove the condition that was hiding the chat widget for logged out users
   return <>
       {!isOpen && <Button onClick={() => setIsOpen(true)} className="fixed bottom-4 right-20 z-50 rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all duration-300" size="icon">
           <Bot className="h-6 w-6" />
@@ -149,7 +147,7 @@ export const ChatWidget = () => {
           <div className="flex items-center justify-between bg-primary text-white p-3 sticky top-0 z-10 py-0 px-[11px]">
             <div className="flex items-center gap-2">
               <Bot className="h-5 w-5" />
-              <DialogTitle className="text-white text-lg font-semibold">AI Assistant</DialogTitle>
+              <DialogTitle className="text-white text-lg font-semibold font-century-gothic">AI Assistant</DialogTitle>
             </div>
             <div className="flex items-center gap-1">
               <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary-foreground/20 text-white" onClick={() => setIsMinimized(!isMinimized)}>
