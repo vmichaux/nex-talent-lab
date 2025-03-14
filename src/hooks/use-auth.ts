@@ -33,7 +33,7 @@ export interface UserAuth {
   updateProfileCompletion: (completed: boolean) => Promise<void>;
   updateUserRole: (role: "talent" | "entrepreneur" | "both") => Promise<void>;
   signInWithGoogle: () => Promise<User>;
-  signup: (email: string, password: string) => Promise<User>;
+  signup: (email: string, password: string, displayName: string) => Promise<User>;
 }
 
 export const useAuth = (): UserAuth => {
