@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,12 +20,19 @@ export const ProjectsSection = ({ projects, loading, error, searchQuery }: Proje
   const { isLoggedIn } = useAuth();
   const { toast } = useToast();
 
-  const filteredProjects = projects.filter(project => 
+  let filteredProjects = projects.filter(project => 
     project.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     project.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     project.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     project.skills?.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
   );
+  
+  // Filter out projects with nonsensical titles when the user is logged in
+  if (isLoggedIn) {
+    filteredProjects = filteredProjects.filter(project => 
+      !["new.1", "jhtref", "kujyrhtegez"].includes(project.title)
+    );
+  }
 
   const handleViewProjectDetails = () => {
     navigate("/explore-projects");
