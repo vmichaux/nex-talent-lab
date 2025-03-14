@@ -6,7 +6,6 @@ export type StepProps = {
   number: number;
   title: string;
   description: string;
-  icon: ReactNode;
   completed?: boolean;
   onClick?: () => void;
 };
@@ -15,7 +14,6 @@ export const Step = ({
   number,
   title,
   description,
-  icon,
   completed = false,
   onClick
 }: StepProps) => {
@@ -28,12 +26,7 @@ export const Step = ({
         {completed ? <Check className="h-5 w-5" /> : <span className="font-semibold">{number}</span>}
       </div>
       <div className="space-y-1 text-left">
-        <div className="flex items-center gap-2">
-          <h3 className="font-semibold text-lg">{title}</h3>
-          <div className="p-1 bg-primary/10 rounded-full">
-            {icon}
-          </div>
-        </div>
+        <h3 className="font-semibold text-lg">{title}</h3>
         <p className="text-gray-600">{description}</p>
       </div>
     </div>

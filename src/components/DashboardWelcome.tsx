@@ -1,5 +1,5 @@
 
-import { ArrowRight, UserPlus, Lightbulb, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
@@ -34,7 +34,6 @@ export function DashboardWelcome() {
         number: 1,
         title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
         description: "Add your skills, experience, and portfolio items to showcase your talents.",
-        icon: <UserPlus className="h-4 w-4 text-primary" />,
         completed: profileCompleted,
         onClick: navigateToProfileEdit
       },
@@ -42,14 +41,12 @@ export function DashboardWelcome() {
         number: 2,
         title: "Explore Projects",
         description: "Discover projects that match your skills and interests.",
-        icon: <Lightbulb className="h-4 w-4 text-primary" />,
         completed: false
       },
       {
         number: 3,
         title: "Connect and Network",
         description: "Reach out to project builders, start collaborating and develop your network.",
-        icon: <Users className="h-4 w-4 text-primary" />,
         completed: false
       }
     ],
@@ -58,7 +55,6 @@ export function DashboardWelcome() {
         number: 1,
         title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
         description: "Add your professional details, project needs and the type of talent you are looking for.",
-        icon: <UserPlus className="h-4 w-4 text-primary" />,
         completed: profileCompleted,
         onClick: navigateToProfileEdit
       },
@@ -66,14 +62,12 @@ export function DashboardWelcome() {
         number: 2,
         title: "Explore Talents",
         description: "Discover talents that match your needs and vision.",
-        icon: <Lightbulb className="h-4 w-4 text-primary" />,
         completed: false
       },
       {
         number: 3,
         title: "Connect and Network",
         description: "Reach out to talents and other project builders, start collaborating and develop your network.",
-        icon: <Users className="h-4 w-4 text-primary" />,
         completed: false
       }
     ],
@@ -82,7 +76,6 @@ export function DashboardWelcome() {
         number: 1,
         title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
         description: "Add your skills, experience, project needs and the type of talent you are looking for.",
-        icon: <UserPlus className="h-4 w-4 text-primary" />,
         completed: profileCompleted,
         onClick: navigateToProfileEdit
       },
@@ -90,14 +83,12 @@ export function DashboardWelcome() {
         number: 2,
         title: "Explore Talents & Projects",
         description: "Discover motivated talents and meaningful projects that match your vision.",
-        icon: <Lightbulb className="h-4 w-4 text-primary" />,
         completed: false
       },
       {
         number: 3,
         title: "Connect and Network",
         description: "Reach out to talents and other project builders, start collaborating and develop your network.",
-        icon: <Users className="h-4 w-4 text-primary" />,
         completed: false
       }
     ]
