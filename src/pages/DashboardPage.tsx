@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -10,7 +9,6 @@ import { TalentDashboard } from "@/components/dashboard/TalentDashboard";
 import { BuilderDashboard } from "@/components/dashboard/BuilderDashboard";
 import { DualRoleDashboard } from "@/components/dashboard/DualRoleDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 const DashboardPage = () => {
   const {
     isLoggedIn,
@@ -20,7 +18,6 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const [showWelcome, setShowWelcome] = useState(true);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "both">("talent");
-
   const getUserFirstName = () => {
     if (currentUser?.displayName) {
       return currentUser.displayName.split(' ')[0];
@@ -32,41 +29,33 @@ const DashboardPage = () => {
     }
     return "friend";
   };
-
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/onboarding");
       return;
     }
-
     const savedRole = localStorage.getItem("userRole");
     if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
       setActiveRole(savedRole === "entrepreneur" ? "builder" : savedRole);
     }
-
     if (userData?.hasCompletedProfile) {
       setShowWelcome(false);
     }
   }, [isLoggedIn, navigate, userData]);
-
   const handleCompleteOnboarding = () => {
     setShowWelcome(false);
   };
-
   const handleRoleChange = (role: "talent" | "builder" | "both") => {
     setActiveRole(role);
     localStorage.setItem("userRole", role === "builder" ? "entrepreneur" : role);
   };
-
   return <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
         {showWelcome ? <>
             <DashboardWelcome />
             <div className="text-center mb-10">
-              <Button variant="outline" onClick={handleCompleteOnboarding} className="mx-auto">
-                Go to Dashboard
-              </Button>
+              
             </div>
           </> : <div className="relative overflow-hidden bg-white">
             <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
@@ -120,5 +109,4 @@ const DashboardPage = () => {
       <Footer />
     </div>;
 };
-
 export default DashboardPage;
