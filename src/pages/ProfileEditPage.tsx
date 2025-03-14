@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -444,10 +445,10 @@ const ProfileEditPage = () => {
   };
 
   const handleRemoveInterest = (interest: string) => {
-    setProfile({
-      ...profile,
-      interests: profile.interests.filter(item => item !== interest)
-    });
+    setProfile(prev => ({
+      ...prev,
+      interests: prev.interests.filter(item => item !== interest)
+    }));
   };
 
   const handleSaveProfile = async () => {
