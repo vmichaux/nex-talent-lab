@@ -74,11 +74,11 @@ export function BuilderDashboard() {
         {/* Recommended Talents section */}
         <RecommendedTalents />
         
+        {/* Skills Progress section - Moved above Learning Resources */}
+        <SkillsProgress />
+        
         {/* Learning Resources section */}
         <LearningResources />
-        
-        {/* Skills Progress section - Moved from right column */}
-        <SkillsProgress />
       </div>
       
       {/* Right column (narrower) */}

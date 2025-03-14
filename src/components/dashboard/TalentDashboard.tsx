@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
 import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
@@ -60,11 +61,11 @@ export function TalentDashboard() {
         {/* Recommended Opportunities section */}
         <RecommendedOpportunities filter={filter} setFilter={setFilter} />
         
+        {/* Skills Progress section - Moved above Learning Resources */}
+        <SkillsProgress />
+        
         {/* Learning Resources section */}
         <LearningResources />
-        
-        {/* Skills Progress section - Moved from right column */}
-        <SkillsProgress />
       </div>
       
       {/* Right column (narrower) */}
