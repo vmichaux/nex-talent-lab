@@ -1,3 +1,4 @@
+
 import { ArrowRight, Check, UserPlus, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +10,7 @@ type StepProps = {
   description: string;
   icon: React.ReactNode;
   completed?: boolean;
+  onClick?: () => void;
 };
 
 const Step = ({
@@ -16,33 +18,48 @@ const Step = ({
   title,
   description,
   icon,
-  completed = false
-}: StepProps) => <div className="flex items-start gap-4 bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-    <div className={`flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center ${completed ? 'bg-green-100 text-green-600' : 'bg-primary/10 text-primary'}`}>
-      {completed ? <Check className="h-5 w-5" /> : <span className="font-semibold">{number}</span>}
-    </div>
-    <div className="space-y-1">
-      <div className="flex items-center gap-2">
-        <h3 className="font-semibold text-lg">{title}</h3>
-        <div className="p-1 bg-primary/10 rounded-full">
-          {icon}
-        </div>
+  completed = false,
+  onClick
+}: StepProps) => {
+  const StepComponent = (
+    <div 
+      className={`flex items-start gap-4 bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={onClick}
+    >
+      <div className={`flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center ${completed ? 'bg-green-100 text-green-600' : 'bg-primary/10 text-primary'}`}>
+        {completed ? <Check className="h-5 w-5" /> : <span className="font-semibold">{number}</span>}
       </div>
-      <p className="text-gray-600">{description}</p>
+      <div className="space-y-1">
+        <div className="flex items-center gap-2">
+          <h3 className="font-semibold text-lg">{title}</h3>
+          <div className="p-1 bg-primary/10 rounded-full">
+            {icon}
+          </div>
+        </div>
+        <p className="text-gray-600">{description}</p>
+      </div>
     </div>
-  </div>;
+  );
+
+  return StepComponent;
+};
 
 export function DashboardWelcome() {
   const navigate = useNavigate();
   const { userData } = useAuth();
   const profileCompleted = userData?.hasCompletedProfile || false;
 
+  const navigateToProfileEdit = () => {
+    navigate('/profile/edit');
+  };
+
   const steps = [{
     number: 1,
     title: profileCompleted ? "Update Your Profile" : "Complete Your Profile",
     description: "Add your skills, experience, and portfolio items to showcase your talents.",
     icon: <UserPlus className="h-4 w-4 text-primary" />,
-    completed: profileCompleted
+    completed: profileCompleted,
+    onClick: navigateToProfileEdit
   }, {
     number: 2,
     title: "Explore Projects",
