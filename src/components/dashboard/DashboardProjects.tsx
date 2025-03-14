@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useProjects } from "@/hooks/useProjects";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
 
 export function DashboardProjects() {
   const navigate = useNavigate();
@@ -22,16 +23,12 @@ export function DashboardProjects() {
     excludeCurrentUser: false,
     userId: currentUser?.uid
   });
+  const [showProjectModal, setShowProjectModal] = useState(false);
 
   // Filter projects to only show the current user's projects
   const userProjects = projects.filter(project => project.userId === currentUser?.uid);
   // Limit to 3 projects for display
   const displayedProjects = userProjects.slice(0, 3);
-  
-  const handleCreateFirstProject = () => {
-    // Navigate to the new project page
-    navigate('/dashboard/new-project');
-  };
   
   return <div>
       <div className="flex justify-between items-center mb-4">
@@ -92,13 +89,11 @@ export function DashboardProjects() {
                 </CardFooter>
               </Card>) : <div className="col-span-3 text-center py-8 bg-gray-50 rounded-md">
               <p className="text-gray-600 text-sm mb-3">You haven't created any projects yet.</p>
-              <Button 
-                onClick={handleCreateFirstProject} 
-                size="sm" 
-                className="text-xs"
-              >
-                Create Your First Project
-              </Button>
+              <AddProjectButton
+                open={showProjectModal}
+                setOpen={setShowProjectModal}
+                onClick={() => setShowProjectModal(true)}
+              />
             </div>}
         </div>}
     </div>;
