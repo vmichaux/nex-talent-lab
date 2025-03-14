@@ -15,7 +15,7 @@ import { ProjectHistory } from "../ProjectHistory";
 import { SkillsProgress } from "../talent/SkillsProgress";
 import { LearningResources } from "../talent/LearningResources";
 import { ManageReviewsRecommendations } from "../ManageReviewsRecommendations";
-import { BarChart3, Users } from "lucide-react";
+import { Search, BarChart, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RecommendedTalents } from "../builder/RecommendedTalents";
@@ -32,7 +32,7 @@ export function CombinedView() {
         {/* Overview metrics */}
         <div>
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-            <BarChart3 className="h-4 w-4 text-primary" />
+            <Search className="h-4 w-4 text-primary" />
             Your Overview
           </h2>
           <DashboardOverview role="both" />
@@ -50,7 +50,7 @@ export function CombinedView() {
         {/* Project Metrics section with role activities */}
         <div>
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-            <Users className="h-4 w-4 text-primary" />
+            <BarChart className="h-4 w-4 text-primary" />
             Project Metrics
           </h2>
           <RoleActivityCards />

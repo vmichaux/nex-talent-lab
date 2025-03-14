@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
@@ -17,7 +16,7 @@ import { ProjectActions } from "@/components/dashboard/builder/ProjectActions";
 import { RecommendedTalents } from "@/components/dashboard/builder/RecommendedTalents";
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
-import { BarChart3, LineChart } from "lucide-react";
+import { Search, BarChart } from "lucide-react";
 
 export function BuilderDashboard() {
   const location = useLocation();
@@ -50,7 +49,7 @@ export function BuilderDashboard() {
         {/* Overview section */}
         <div>
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-            <BarChart3 className="h-4 w-4 text-primary" />
+            <Search className="h-4 w-4 text-primary" />
             Your Overview
           </h2>
           <DashboardOverview role="builder" />

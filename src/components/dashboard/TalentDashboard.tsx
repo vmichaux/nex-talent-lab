@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
 import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
@@ -12,7 +11,7 @@ import { ProjectMetrics } from "@/components/dashboard/ProjectMetrics";
 import { ProjectHistory } from "@/components/dashboard/ProjectHistory";
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
-import { Search, LineChart, BarChart3 } from "lucide-react";
+import { Search, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -30,7 +29,7 @@ export function TalentDashboard() {
         {/* Overview section */}
         <div>
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-            <BarChart3 className="h-4 w-4 text-primary" />
+            <Search className="h-4 w-4 text-primary" />
             Your Overview
           </h2>
           <DashboardOverview role="talent" />

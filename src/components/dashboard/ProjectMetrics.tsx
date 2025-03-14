@@ -1,5 +1,5 @@
 
-import { LineChart, Briefcase, UserPlus, FileText, ArrowRight } from "lucide-react";
+import { BarChart, Briefcase, UserPlus, FileText, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -12,7 +12,7 @@ export function ProjectMetrics({ role = "talent" }: ProjectMetricsProps) {
     <div className="mb-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-bold flex items-center gap-2">
-          <LineChart className="h-4 w-4 text-primary" />
+          <BarChart className="h-4 w-4 text-primary" />
           Project Metrics
         </h2>
         <Button variant="outline" size="sm" className="gap-1">
