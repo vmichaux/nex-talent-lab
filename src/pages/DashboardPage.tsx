@@ -80,8 +80,8 @@ const DashboardPage = () => {
             {/* Background Pattern - Purple Gradient */}
             <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
             
-            <div className="container mx-auto px-4 py-12">
-              <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-6 py-[64px]">
+            <div className="w-full px-4 py-16">
+              <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
                 <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Let's go {getUserFirstName()}!</div>
                 
                 <h1 className="mb-4 text-3xl font-bold tracking-tight custom-gradient-text md:text-5xl">
@@ -94,9 +94,9 @@ const DashboardPage = () => {
               </div>
 
               {/* Role switcher tabs */}
-              <div className="flex justify-center mb-8">
-                <Tabs value={activeRole} onValueChange={value => handleRoleChange(value as "talent" | "builder" | "both")} className="w-full max-w-3xl">
-                  <TabsList className="grid grid-cols-3 w-full">
+              <div className="flex justify-center mb-10">
+                <Tabs value={activeRole} onValueChange={value => handleRoleChange(value as "talent" | "builder" | "both")} className="w-full max-w-6xl">
+                  <TabsList className="grid grid-cols-3 w-full max-w-2xl mx-auto">
                     <TabsTrigger value="talent" className="flex items-center gap-2">
                       <span className="hidden md:inline">Talent Dashboard</span>
                       <span className="md:hidden">Talent</span>
@@ -111,15 +111,15 @@ const DashboardPage = () => {
                     </TabsTrigger>
                   </TabsList>
 
-                  <TabsContent value="talent" className="mt-6">
+                  <TabsContent value="talent" className="mt-8 px-4 max-w-7xl mx-auto">
                     <TalentDashboard />
                   </TabsContent>
                   
-                  <TabsContent value="builder" className="mt-6">
+                  <TabsContent value="builder" className="mt-8 px-4 max-w-7xl mx-auto">
                     <BuilderDashboard />
                   </TabsContent>
                   
-                  <TabsContent value="both" className="mt-6">
+                  <TabsContent value="both" className="mt-8 px-4 max-w-7xl mx-auto">
                     <DualRoleDashboard />
                   </TabsContent>
                 </Tabs>

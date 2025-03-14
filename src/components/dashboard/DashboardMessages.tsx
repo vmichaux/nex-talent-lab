@@ -1,3 +1,4 @@
+
 import { MessageSquare, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -48,8 +49,8 @@ export function DashboardMessages() {
   const navigate = useNavigate();
   
   return (
-    <div className="mb-12">
-      <div className="flex justify-between items-center mb-6">
+    <div>
+      <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold flex items-center gap-2">
           <MessageSquare className="h-5 w-5 text-primary" />
           Recent Messages
@@ -61,21 +62,21 @@ export function DashboardMessages() {
       
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         {messages.map((message) => (
-          <div key={message.id} className={`p-4 border-b hover:bg-gray-50 cursor-pointer transition-colors ${message.unread ? 'bg-primary/5' : ''}`}>
-            <div className="flex items-start gap-3">
-              <Avatar className="h-10 w-10">
+          <div key={message.id} className={`p-6 border-b hover:bg-gray-50 cursor-pointer transition-colors ${message.unread ? 'bg-primary/5' : ''}`}>
+            <div className="flex items-start gap-4">
+              <Avatar className="h-12 w-12">
                 <AvatarImage src={message.sender.avatar} alt={message.sender.name} />
                 <AvatarFallback>{message.sender.initials}</AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-center mb-1">
-                  <div className="font-medium flex items-center gap-2">
+                <div className="flex justify-between items-center mb-2">
+                  <div className="font-medium flex items-center gap-2 text-lg">
                     {message.sender.name}
                     {message.unread && <span className="w-2 h-2 bg-primary rounded-full inline-block"></span>}
                   </div>
-                  <span className="text-xs text-gray-500">{message.timestamp}</span>
+                  <span className="text-sm text-gray-500">{message.timestamp}</span>
                 </div>
-                <p className="text-sm text-gray-600 truncate">{message.preview}</p>
+                <p className="text-gray-600 truncate mb-2">{message.preview}</p>
                 {message.project && (
                   <div className="mt-1">
                     <Badge variant="outline" className="text-xs bg-primary/10 text-primary border-primary/20">

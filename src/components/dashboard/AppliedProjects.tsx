@@ -46,13 +46,13 @@ export function AppliedProjects() {
   if (loading) {
     return (
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <ClipboardCheck className="h-5 w-5 text-primary" />
             My Applications
           </h2>
         </div>
-        <div className="text-center py-8">
+        <div className="text-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading your applications...</p>
         </div>
@@ -63,14 +63,14 @@ export function AppliedProjects() {
   if (error) {
     return (
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <ClipboardCheck className="h-5 w-5 text-primary" />
             My Applications
           </h2>
         </div>
         <Card>
-          <CardContent className="py-6">
+          <CardContent className="py-8">
             <p className="text-red-600">Error loading applications: {error}</p>
           </CardContent>
         </Card>
@@ -81,20 +81,20 @@ export function AppliedProjects() {
   if (applications.length === 0) {
     return (
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <ClipboardCheck className="h-5 w-5 text-primary" />
             My Applications
           </h2>
         </div>
         <Card>
-          <CardContent className="py-8 text-center">
-            <ClipboardCheck className="h-10 w-10 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">No Applications Yet</h3>
-            <p className="text-gray-600 mb-4">
+          <CardContent className="py-12 text-center">
+            <ClipboardCheck className="h-14 w-14 text-gray-400 mx-auto mb-6" />
+            <h3 className="text-xl font-medium mb-3">No Applications Yet</h3>
+            <p className="text-gray-600 mb-6 max-w-md mx-auto">
               You haven't applied to any projects yet. Explore available opportunities to get started.
             </p>
-            <Button onClick={() => navigate('/explore-projects')}>
+            <Button onClick={() => navigate('/explore-projects')} size="lg">
               Explore Projects
             </Button>
           </CardContent>
@@ -104,8 +104,8 @@ export function AppliedProjects() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
+    <div>
+      <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-bold flex items-center gap-2">
           <ClipboardCheck className="h-5 w-5 text-primary" />
           My Applications
@@ -114,32 +114,32 @@ export function AppliedProjects() {
       
       <Card>
         <CardHeader className="pb-0">
-          <CardTitle className="text-lg">
+          <CardTitle className="text-xl">
             Applied Projects ({applications.length})
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Project</TableHead>
-                <TableHead>Applied On</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Action</TableHead>
+                <TableHead className="text-base">Project</TableHead>
+                <TableHead className="text-base">Applied On</TableHead>
+                <TableHead className="text-base">Status</TableHead>
+                <TableHead className="text-right text-base">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {applications.map((application) => (
                 <TableRow key={application.id}>
-                  <TableCell className="font-medium">{application.projectTitle}</TableCell>
-                  <TableCell>{format(application.createdAt, 'MMM d, yyyy')}</TableCell>
-                  <TableCell>
+                  <TableCell className="font-medium text-base py-4">{application.projectTitle}</TableCell>
+                  <TableCell className="py-4">{format(application.createdAt, 'MMM d, yyyy')}</TableCell>
+                  <TableCell className="py-4">
                     <div className="flex items-center gap-2">
                       {getStatusIcon(application.status)}
                       {getStatusBadge(application.status)}
                     </div>
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right py-4">
                     <Button 
                       variant="outline" 
                       size="sm"

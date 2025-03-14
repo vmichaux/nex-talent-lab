@@ -1,3 +1,4 @@
+
 import { Users, PlusCircle, Briefcase, LineChart, FileText, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +13,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useProjects } from "@/hooks/useProjects";
 import { Project } from "@/types/project";
 import { useAuth } from "@/hooks/use-auth";
+import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
 
 export function BuilderDashboard() {
   const location = useLocation();
@@ -69,28 +71,7 @@ export function BuilderDashboard() {
   ];
 
   return (
-    <div className="space-y-10">
-      <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
-          <Button 
-            variant="outline" 
-            className="gap-2"
-            onClick={() => navigate('/requests')}
-          >
-            <MessageSquare size={18} />
-            Review Applications
-          </Button>
-        </div>
-        <div className="md:w-1/2 lg:w-1/3">
-          <ProjectSearch />
-        </div>
-      </div>
-
-      <DashboardProjects />
-      
-      <ReviewApplications />
-      
+    <div className="space-y-16">
       <div className="mb-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -99,7 +80,7 @@ export function BuilderDashboard() {
           </h2>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-none shadow-md">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">Active Projects</CardTitle>
@@ -134,6 +115,29 @@ export function BuilderDashboard() {
         </div>
       </div>
 
+      <div className="flex flex-col md:flex-row justify-between gap-6 mb-8">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
+          <Button 
+            variant="outline" 
+            className="gap-2"
+            onClick={() => navigate('/requests')}
+          >
+            <MessageSquare size={18} />
+            Review Applications
+          </Button>
+        </div>
+        <div className="md:w-1/2 lg:w-1/3">
+          <ProjectSearch />
+        </div>
+      </div>
+
+      <DashboardProjects />
+      
+      <ReviewApplications />
+      
+      <DashboardMessages />
+
       <div className="mb-10">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -145,7 +149,7 @@ export function BuilderDashboard() {
           </Button>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {loading ? (
             <p className="col-span-3 text-center py-8">Loading recommended projects...</p>
           ) : recommendedProjects.length > 0 ? (
@@ -180,7 +184,7 @@ export function BuilderDashboard() {
         </div>
       </div>
 
-      <div className="mb-10">
+      <div>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <Users className="h-5 w-5 text-primary" />
@@ -191,7 +195,7 @@ export function BuilderDashboard() {
           </Button>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {recommendedTalents.map(talent => (
             <Card key={talent.id} className="hover:shadow-lg transition-shadow">
               <CardContent className="p-6">

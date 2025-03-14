@@ -22,8 +22,8 @@ export function DashboardProjects() {
   const userProjects = projects.filter(project => project.userId === currentUser?.uid);
   
   return (
-    <div className="mb-12">
-      <div className="flex justify-between items-center mb-6">
+    <div>
+      <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold flex items-center gap-2">
           <Briefcase className="h-5 w-5 text-primary" />
           Active Projects
@@ -34,7 +34,7 @@ export function DashboardProjects() {
       </div>
       
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[1, 2, 3].map((skeleton) => (
             <Card key={skeleton} className="overflow-hidden shadow-md">
               <CardHeader>
@@ -49,16 +49,16 @@ export function DashboardProjects() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {userProjects.length > 0 ? (
             userProjects.map((project) => (
               <Card key={project.id} className="overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-xl">{project.title}</CardTitle>
+                <CardHeader className="p-6">
+                  <CardTitle className="text-xl mb-2">{project.title}</CardTitle>
                   <CardDescription className="line-clamp-2">{project.description}</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
+                <CardContent className="px-6 pb-4 space-y-5">
+                  <div className="space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Progress</span>
                       <span className="font-medium">{project.progress || 0}%</span>
@@ -66,16 +66,16 @@ export function DashboardProjects() {
                     <Progress value={project.progress || 0} className="h-2" />
                   </div>
                   
-                  <div className="flex flex-wrap gap-2 mb-2">
+                  <div className="flex flex-wrap gap-2 mb-3">
                     {project.skills && project.skills.slice(0, 3).map((skill, index) => (
-                      <span key={index} className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">
+                      <span key={index} className="bg-primary/10 text-primary text-xs px-3 py-1.5 rounded-full">
                         {skill}
                       </span>
                     ))}
                   </div>
                   
                   <div className="flex justify-between items-center">
-                    <div className="text-xs text-gray-600">
+                    <div className="text-sm text-gray-600">
                       <Clock className="inline-block h-3 w-3 mr-1" />
                       Deadline: {project.deadline || "Not set"}
                     </div>
@@ -88,7 +88,7 @@ export function DashboardProjects() {
                     </Badge>
                   </div>
                 </CardContent>
-                <CardFooter className="border-t pt-4">
+                <CardFooter className="border-t p-6">
                   <Button variant="default" className="w-full" onClick={() => navigate(`/project/${project.id}`)}>
                     View Details
                   </Button>
@@ -96,7 +96,7 @@ export function DashboardProjects() {
               </Card>
             ))
           ) : (
-            <div className="col-span-3 text-center py-10 bg-gray-50 rounded-md">
+            <div className="col-span-3 text-center py-12 bg-gray-50 rounded-md">
               <p className="text-gray-600 mb-4">You haven't created any projects yet.</p>
               <Button 
                 onClick={() => navigate('/dashboard', { state: { openProjectModal: true } })}
