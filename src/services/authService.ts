@@ -7,7 +7,7 @@ import {
   GoogleAuthProvider,
   AuthError
 } from "firebase/auth";
-import { doc, setDoc, getDoc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db, googleProvider } from "@/lib/firebase";
 
 export interface UserData {
@@ -58,76 +58,6 @@ export const updateProfileCompletion = async (user: User, completed: boolean): P
   
   const userRef = doc(db, "users", user.uid);
   await setDoc(userRef, { hasCompletedProfile: completed }, { merge: true });
-};
-
-// Add or update a rating for a user
-export const addUserRating = async (
-  targetUserId: string, 
-  ratingValue: number, 
-  reviewerId: string,
-  comment?: string
-): Promise<void> => {
-  if (!targetUserId || !reviewerId) return;
-  
-  try {
-    // Reference to the user profile
-    const userProfileRef = doc(db, "userProfiles", targetUserId);
-    
-    // Get current user profile data
-    const profileSnapshot = await getDoc(userProfileRef);
-    
-    if (profileSnapshot.exists()) {
-      const profileData = profileSnapshot.data();
-      
-      // Create ratings array if it doesn't exist
-      const ratings = profileData.ratings || [];
-      
-      // Check if this reviewer has already rated
-      const existingRatingIndex = ratings.findIndex(
-        (r: any) => r.reviewerId === reviewerId
-      );
-      
-      if (existingRatingIndex >= 0) {
-        // Update existing rating
-        ratings[existingRatingIndex] = {
-          ...ratings[existingRatingIndex],
-          value: ratingValue,
-          comment: comment || ratings[existingRatingIndex].comment,
-          updatedAt: new Date()
-        };
-      } else {
-        // Add new rating
-        ratings.push({
-          reviewerId,
-          value: ratingValue,
-          comment: comment || "",
-          createdAt: new Date(),
-          updatedAt: new Date()
-        });
-      }
-      
-      // Calculate average rating
-      const totalRating = ratings.reduce(
-        (sum: number, r: any) => sum + r.value, 
-        0
-      );
-      const averageRating = ratings.length > 0 ? 
-        Number((totalRating / ratings.length).toFixed(1)) : 
-        0;
-      
-      // Update the profile with new ratings and average
-      await updateDoc(userProfileRef, {
-        ratings,
-        rating: averageRating,
-        lastUpdated: new Date()
-      });
-      
-      console.log(`Rating updated for user ${targetUserId}. New average: ${averageRating}`);
-    }
-  } catch (error) {
-    console.error("Error updating user rating:", error);
-    throw error;
-  }
 };
 
 // Format Firebase auth error messages
