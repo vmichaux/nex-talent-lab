@@ -47,7 +47,7 @@ export function AuthButtons({ isLoggedIn, LogoutButton, isMobile = false, onItem
           Login
         </Button>
       </Link>
-      <Link to="/signup" onClick={handleClick}>
+      <Link to="/onboarding" onClick={handleClick}>
         <Button 
           size="sm" 
           className={isMobile ? "w-full gap-2" : "gap-2"}
