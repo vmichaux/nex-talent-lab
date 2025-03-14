@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 export function Footer() {
@@ -116,6 +117,9 @@ export function Footer() {
         <div className="border-t border-gray-200 mt-12 pt-6 text-center">
           <p className="text-gray-500 text-sm">
             © {new Date().getFullYear()} NexTalent Lab. All rights reserved.
+          </p>
+          <p className="text-gray-400 text-xs mt-1 italic">
+            Designed by INSPIRE LIVE
           </p>
         </div>
       </div>
