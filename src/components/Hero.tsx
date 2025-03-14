@@ -49,7 +49,7 @@ export function Hero() {
                   </div>
                   <div>
                     <h3 className="font-medium">Talent Matching</h3>
-                    <p className="text-sm text-gray-500">Our AI finds the perfect talent for your projects based on skills and experience</p>
+                    <p className="text-sm text-gray-500">Our AI finds the perfect talent for your projects based on skills, experience and interests.</p>
                   </div>
                 </div>
                 
