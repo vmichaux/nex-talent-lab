@@ -9,7 +9,7 @@ const ContactPageHeader = () => {
         Contact Our Sales Team
       </h1>
       
-      <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
+      <p className="text-lg text-gray-600 md:text-xl max-w-3xl px-[92px]">
         Have questions about our pricing, features, or need a custom solution? Our sales team is here to help.
       </p>
     </div>;
