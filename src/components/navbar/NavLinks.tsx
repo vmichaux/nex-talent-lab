@@ -9,9 +9,16 @@ interface NavLinksProps {
   handleDashboardClick: (e: React.MouseEvent) => void;
   isMobile?: boolean;
   onItemClick?: () => void;
+  showSimplified?: boolean;
 }
 
-export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, onItemClick }: NavLinksProps) {
+export function NavLinks({ 
+  isLoggedIn, 
+  handleDashboardClick, 
+  isMobile = false, 
+  onItemClick,
+  showSimplified = false
+}: NavLinksProps) {
   const navigate = useNavigate();
   const { userData } = useAuth();
   const { toast } = useToast();
@@ -41,6 +48,11 @@ export function NavLinks({ isLoggedIn, handleDashboardClick, isMobile = false, o
     
     if (onItemClick) onItemClick();
   };
+
+  // For simplified view (only shown for logged-in users who haven't completed their profile on dashboard)
+  if (isLoggedIn && showSimplified) {
+    return null; // Return nothing here as the simplified layout will be handled in Navbar.tsx
+  }
 
   if (isLoggedIn) {
     return (

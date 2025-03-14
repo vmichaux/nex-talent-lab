@@ -16,8 +16,15 @@ export function Navbar() {
   const navigate = useNavigate();
   const {
     isLoggedIn,
-    LogoutButton
+    LogoutButton,
+    userData
   } = useAuth();
+
+  const profileCompleted = userData?.hasCompletedProfile || false;
+  const isDashboardRoute = location.pathname === "/dashboard";
+  
+  // Show simplified navbar only for logged in users who haven't completed their profile on dashboard
+  const showSimplifiedNav = isLoggedIn && !profileCompleted && isDashboardRoute;
 
   useEffect(() => {
     // Get user role from localStorage
@@ -45,35 +52,51 @@ export function Navbar() {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <NavbarBrand userRole={userRole} isLoggedIn={isLoggedIn} />
 
-        {/* Desktop Navigation */}
-        <nav className={`hidden md:flex items-center ${isLoggedIn ? 'space-x-8' : 'space-x-6'}`}>
-          <NavLinks isLoggedIn={isLoggedIn} handleDashboardClick={handleDashboardClick} />
-        </nav>
+        {/* Desktop Navigation - Only show if not in simplified mode */}
+        {!showSimplifiedNav && (
+          <nav className={`hidden md:flex items-center ${isLoggedIn ? 'space-x-8' : 'space-x-6'}`}>
+            <NavLinks 
+              isLoggedIn={isLoggedIn} 
+              handleDashboardClick={handleDashboardClick} 
+              showSimplified={showSimplifiedNav} 
+            />
+          </nav>
+        )}
 
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center space-x-4">
-          {isLoggedIn && <NotificationBell />}
-          <AuthButtons isLoggedIn={isLoggedIn} LogoutButton={LogoutButton} />
+          {isLoggedIn && !showSimplifiedNav && <NotificationBell />}
+          {!showSimplifiedNav ? (
+            <AuthButtons isLoggedIn={isLoggedIn} LogoutButton={LogoutButton} />
+          ) : (
+            <div>
+              <LogoutButton />
+            </div>
+          )}
         </div>
 
-        {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden p-2" 
-          onClick={() => setIsMenuOpen(!isMenuOpen)} 
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        {/* Mobile Menu Button - Hide if simplified */}
+        {!showSimplifiedNav && (
+          <button 
+            className="md:hidden p-2" 
+            onClick={() => setIsMenuOpen(!isMenuOpen)} 
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        )}
       </div>
 
-      {/* Mobile Menu */}
-      <MobileMenu 
-        isMenuOpen={isMenuOpen}
-        isLoggedIn={isLoggedIn}
-        handleDashboardClick={handleDashboardClick}
-        LogoutButton={LogoutButton}
-        setIsMenuOpen={setIsMenuOpen}
-      />
+      {/* Mobile Menu - Only show if not simplified */}
+      {!showSimplifiedNav && (
+        <MobileMenu 
+          isMenuOpen={isMenuOpen}
+          isLoggedIn={isLoggedIn}
+          handleDashboardClick={handleDashboardClick}
+          LogoutButton={LogoutButton}
+          setIsMenuOpen={setIsMenuOpen}
+        />
+      )}
     </header>
   );
 }
