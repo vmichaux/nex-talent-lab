@@ -8,25 +8,46 @@ import { auth } from "@/lib/firebase";
 import { updateUserRole } from "@/services/authService";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
+
 export function DashboardOnboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"talent" | "entrepreneur" | "both" | null>(null);
+  const [initialCheckCompleted, setInitialCheckCompleted] = useState(false);
   const totalSteps = 2;
   const navigate = useNavigate();
-  const {
-    currentUser
-  } = useAuth();
+  const { currentUser, userData } = useAuth();
+  
   useEffect(() => {
     // Check if user is logged in
-    if (currentUser) {
-      // Check if user already has a role set in local storage
+    if (currentUser && userData) {
+      // First check if user has a role set in Firestore
+      if (userData.userRole === "talent" || userData.userRole === "entrepreneur" || userData.userRole === "both") {
+        // If role exists in Firestore, navigate to dashboard
+        navigate("/dashboard");
+        return;
+      }
+      
+      // Fall back to localStorage if Firestore doesn't have the info
       const savedRole = localStorage.getItem("userRole");
       if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
-        // If role exists, navigate to dashboard
+        // If role exists in localStorage, navigate to dashboard
         navigate("/dashboard");
+        return;
       }
+      
+      // If we reach here, user needs to complete onboarding
+      setInitialCheckCompleted(true);
+    } else if (!currentUser) {
+      // If user is not logged in, redirect to login
+      navigate("/login");
+      return;
+    } else {
+      // User is logged in but userData is still loading
+      // We'll wait for it to load
+      setInitialCheckCompleted(false);
     }
-  }, [currentUser, navigate]);
+  }, [currentUser, userData, navigate]);
+
   const handleNext = async () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
@@ -57,6 +78,7 @@ export function DashboardOnboarding() {
       }
     }
   };
+
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
@@ -64,6 +86,7 @@ export function DashboardOnboarding() {
       navigate("/");
     }
   };
+
   const getStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -134,6 +157,11 @@ export function DashboardOnboarding() {
         return null;
     }
   };
+
+  if (!initialCheckCompleted) {
+    return null; // Return null during the check to prevent UI flash
+  }
+
   return <>
       <SimplifiedHeader currentStep={currentStep} totalSteps={totalSteps} onBackClick={handleBack} />
       <div className="min-h-[calc(100vh-75px)] flex flex-col justify-center items-center p-6 py-16 bg-white">

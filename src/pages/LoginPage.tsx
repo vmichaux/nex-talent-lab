@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ArrowLeft, LucideIcon } from "lucide-react";
@@ -24,7 +23,20 @@ export default function LoginPage() {
   const [authError, setAuthError] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { login, signInWithGoogle } = useAuth();
+  const { login, signInWithGoogle, userData } = useAuth();
+
+  const handleRedirectAfterAuth = () => {
+    // Check if user has already completed profile setup
+    if (userData?.hasCompletedProfile) {
+      navigate("/dashboard");
+    } else if (userData?.userRole) {
+      // User has selected a role but hasn't completed profile
+      navigate("/dashboard");
+    } else {
+      // User has not selected a role yet
+      navigate("/onboarding");
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,11 +46,15 @@ export default function LoginPage() {
     try {
       console.log(`Login form submitted with email: ${email}`);
       await login(email, password);
-      navigate("/dashboard");
+      
+      // Delay navigation slightly to ensure userData is loaded
+      setTimeout(() => {
+        handleRedirectAfterAuth();
+        setIsLoading(false);
+      }, 500);
     } catch (error: any) {
       console.error("Login error in component:", error);
       // Toast is already handled in the AuthContext
-    } finally {
       setIsLoading(false);
     }
   };
@@ -50,7 +66,12 @@ export default function LoginPage() {
     try {
       console.log("Google sign-in button clicked");
       await signInWithGoogle();
-      navigate("/dashboard");
+      
+      // Delay navigation slightly to ensure userData is loaded
+      setTimeout(() => {
+        handleRedirectAfterAuth();
+        setIsLoading(false);
+      }, 500);
     } catch (error: any) {
       console.error("Google sign-in error in component:", error);
       if (error.code === "auth/unauthorized-domain") {
@@ -58,7 +79,6 @@ export default function LoginPage() {
       } else {
         setAuthError(formatAuthError(error));
       }
-    } finally {
       setIsLoading(false);
     }
   };
