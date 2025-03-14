@@ -1,10 +1,11 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, CalendarIcon, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,6 +15,14 @@ import { Project } from "@/types/project";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/use-auth";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 const ApplyProjectPage = () => {
   const { id } = useParams();
@@ -28,7 +37,7 @@ const ApplyProjectPage = () => {
   const [application, setApplication] = useState({
     coverLetter: "",
     relevantExperience: "",
-    availabilityDate: "",
+    availabilityDate: null as Date | null,
     timeCommitment: "",
     portfolioLink: ""
   });
@@ -78,6 +87,10 @@ const ApplyProjectPage = () => {
     setApplication(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleDateSelect = (date: Date | undefined) => {
+    setApplication(prev => ({ ...prev, availabilityDate: date || null }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -91,9 +104,22 @@ const ApplyProjectPage = () => {
     }
     
     if (!project) return;
+
+    // Validate availability date
+    if (!application.availabilityDate) {
+      toast({
+        title: "Date required",
+        description: "Please select when you can start.",
+        variant: "destructive"
+      });
+      return;
+    }
     
     try {
       setSubmitting(true);
+      
+      // Format the date for Firestore
+      const formattedDate = format(application.availabilityDate, "yyyy-MM-dd");
       
       // Create application in Firestore
       const applicationRef = await addDoc(collection(db, "applications"), {
@@ -102,7 +128,11 @@ const ApplyProjectPage = () => {
         userId: currentUser.uid,
         userName: currentUser.displayName || "Anonymous User",
         userEmail: currentUser.email || "No email provided",
-        ...application,
+        coverLetter: application.coverLetter,
+        relevantExperience: application.relevantExperience,
+        availabilityDate: formattedDate,
+        timeCommitment: application.timeCommitment,
+        portfolioLink: application.portfolioLink,
         status: "pending",
         createdAt: serverTimestamp()
       });
@@ -226,14 +256,36 @@ const ApplyProjectPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="availabilityDate">When can you start? *</Label>
-                      <Input 
-                        id="availabilityDate"
-                        name="availabilityDate"
-                        placeholder="e.g., Immediately, Next week, After June 1..."
-                        value={application.availabilityDate}
-                        onChange={handleInputChange}
-                        required
-                      />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            id="availabilityDate"
+                            variant="outline"
+                            size="lg"
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !application.availabilityDate && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {application.availabilityDate ? (
+                              format(application.availabilityDate, "PPP")
+                            ) : (
+                              <span>Select availability date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={application.availabilityDate || undefined}
+                            onSelect={handleDateSelect}
+                            initialFocus
+                            disabled={(date) => date < new Date()}
+                            className={cn("p-3 pointer-events-auto")}
+                          />
+                        </PopoverContent>
+                      </Popover>
                     </div>
                     
                     <div className="space-y-2">
