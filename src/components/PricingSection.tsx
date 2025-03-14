@@ -1,50 +1,68 @@
-import { Check, X, Rocket } from "lucide-react";
+
+import { Check, X, Rocket, Building2, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+
 export function PricingSection() {
   const plans = [{
-    name: "Free",
+    name: "Talents",
     price: "0",
-    description: "Perfect for individuals just getting started",
-    features: ["1 active project", "Basic AI matching", "Standard profile", "Community support", "Limited messaging"],
-    notIncluded: ["Advanced project tools", "Priority matching", "Premium support", "Analytics dashboard"],
+    description: "Perfect for individuals seeking collaborative opportunities",
+    icon: <User className="h-5 w-5 text-primary mb-2" />,
+    features: [
+      "Create a professional profile", 
+      "Apply to unlimited projects", 
+      "Basic AI matching algorithm", 
+      "Portfolio showcase", 
+      "Community support", 
+      "Standard messaging"
+    ],
+    notIncluded: [
+      "Advanced analytics", 
+      "Featured profile placement", 
+      "Priority support", 
+      "Team management tools"
+    ],
     buttonText: "Get Started",
     buttonVariant: "outline",
     popular: false
   }, {
-    name: "Basic",
-    price: "10",
-    description: "Great for active individuals seeking more features",
-    features: ["3 active projects", "Enhanced AI matching", "Standard profile", "Email support", "Full messaging access", "Basic analytics"],
-    notIncluded: ["Advanced project tools", "Priority matching", "Team collaboration tools"],
-    buttonText: "Choose Basic",
-    buttonVariant: "outline",
-    popular: false
-  }, {
-    name: "Professional",
-    price: "29",
-    description: "For serious professionals and small teams",
-    features: ["5 active projects", "Advanced AI matching", "Enhanced profile", "Priority support", "Unlimited messaging", "Project analytics", "File storage (10GB)"],
-    notIncluded: ["Team collaboration tools"],
-    buttonText: "Choose Professional",
-    buttonVariant: "default",
-    popular: true
-  }, {
-    name: "Enterprise",
-    price: "99",
-    description: "For teams and organizations with complex needs",
-    features: ["Unlimited projects", "Premium AI matching", "Featured profile", "24/7 dedicated support", "Unlimited messaging", "Advanced analytics", "File storage (100GB)", "Team management tools", "API access"],
+    name: "Business",
+    price: "Custom",
+    description: "For organizations looking to find top talent and scale projects",
+    icon: <Building2 className="h-5 w-5 text-primary mb-2" />,
+    features: [
+      "Unlimited project postings", 
+      "Advanced AI talent matching", 
+      "Premium visibility in search", 
+      "Dedicated account manager", 
+      "Team collaboration tools", 
+      "Comprehensive analytics", 
+      "Priority support",
+      "Bulk messaging capabilities"
+    ],
     notIncluded: [],
     buttonText: "Contact Sales",
-    buttonVariant: "outline",
-    popular: false,
+    buttonVariant: "default",
+    popular: true,
     linkTo: "/contact-sales#sales-title"
   }, {
     name: "Incubator",
     price: "Custom",
     description: "Full-service support for high-potential projects",
-    features: ["All Enterprise features", "Dedicated PR & communications", "Event planning & management", "Strategic partnerships", "Sponsorship acquisition", "Marketing campaign support", "Media outreach & coverage", "Community building", "Growth strategy consulting"],
+    icon: <Rocket className="h-5 w-5 text-purple-500 mb-2" />,
+    features: [
+      "All Business features", 
+      "Strategic growth consulting", 
+      "Funding access and guidance", 
+      "Dedicated PR & communications", 
+      "Strategic partnerships", 
+      "Marketing campaign support", 
+      "Community building strategy", 
+      "Event planning & management",
+      "Mentorship opportunities"
+    ],
     notIncluded: [],
     buttonText: "Apply Now",
     buttonVariant: "outline",
@@ -52,9 +70,10 @@ export function PricingSection() {
     special: true,
     linkTo: "/contact-sales#sales-title"
   }];
+
   return <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {plans.map((plan, index) => <div key={index} className={`bg-white rounded-xl shadow-sm ${plan.popular ? "border-primary border-2" : plan.special ? "border-purple-400 border-2" : "border border-gray-200"} overflow-hidden relative`}>
               {plan.popular && <div className="bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 absolute top-4 right-4 rounded-full">
                   Most Popular
@@ -64,7 +83,10 @@ export function PricingSection() {
                   Incubator Program
                 </Badge>}
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
+                <div className="flex items-center mb-3">
+                  {plan.icon}
+                  <h3 className="text-xl font-bold">{plan.name}</h3>
+                </div>
                 <div className="flex items-baseline mb-4">
                   <span className="text-4xl font-bold">{plan.price === "0" ? "€0" : plan.price === "Custom" ? "" : `€${plan.price}`}</span>
                   <span className="text-gray-500 ml-2">{plan.price === "Custom" ? "Custom Pricing" : "/month"}</span>
