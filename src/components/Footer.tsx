@@ -1,7 +1,56 @@
 
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { subscribeToNewsletter } from "@/lib/newsletterService";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+
 export function Footer() {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Basic email validation
+    if (!email || !email.includes('@')) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      const result = await subscribeToNewsletter(email);
+      
+      if (result) {
+        toast({
+          title: "Subscription successful!",
+          description: "You're now subscribed to our newsletter.",
+        });
+        setEmail(""); // Reset the form
+      } else {
+        throw new Error("Failed to subscribe");
+      }
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      toast({
+        title: "Subscription failed",
+        description: "There was a problem subscribing you to our newsletter. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return <footer className="bg-gray-50 py-12 mt-16">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
@@ -54,7 +103,6 @@ export function Footer() {
                   Pricing
                 </Link>
               </li>
-              {/* Removed the Blog link */}
             </ul>
           </div>
 
@@ -91,12 +139,23 @@ export function Footer() {
             <p className="text-gray-600 text-sm mb-4">
               Subscribe to our newsletter for the latest updates and features.
             </p>
-            <div className="flex flex-col space-y-2">
-              <input type="email" placeholder="Your email address" className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50" />
-              <button className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors">
-                Subscribe
-              </button>
-            </div>
+            <form onSubmit={handleSubscribe} className="flex flex-col space-y-2">
+              <Input 
+                type="email" 
+                placeholder="Your email address" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+              <Button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors"
+              >
+                {isSubmitting ? "Subscribing..." : "Subscribe"}
+              </Button>
+            </form>
             <div className="flex items-center space-x-4 mt-6">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-primary">
                 <Facebook className="h-5 w-5" />
