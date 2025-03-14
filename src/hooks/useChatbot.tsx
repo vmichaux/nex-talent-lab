@@ -11,13 +11,17 @@ export const useChatbot = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  // Set this to false to stop saving to database
+  const saveToDatabase = false;
 
   // Load chat history
   const loadChatHistory = async () => {
     if (isLoggedIn) {
       setIsLoading(true);
       try {
-        const history = await getUserChatHistory();
+        // Only load from database if we want to save to database
+        const history = saveToDatabase ? await getUserChatHistory() : [];
+        
         if (history.length === 0) {
           // Get user profile to personalize welcome message
           let userName = "";
@@ -40,7 +44,11 @@ export const useChatbot = () => {
           };
           
           setMessages([welcomeMessage]);
-          await saveMessage(welcomeMessage.content, welcomeMessage.role);
+          
+          // Only save to database if enabled
+          if (saveToDatabase) {
+            await saveMessage(welcomeMessage.content, welcomeMessage.role, saveToDatabase);
+          }
         } else {
           setMessages(history);
         }
@@ -77,8 +85,10 @@ export const useChatbot = () => {
     setIsLoading(true);
 
     try {
-      // Save user message to Firebase
-      await saveMessage(userMessage.content, userMessage.role);
+      // Save user message to Firebase only if saveToDatabase is true
+      if (saveToDatabase) {
+        await saveMessage(userMessage.content, userMessage.role, saveToDatabase);
+      }
 
       // Set a loading message
       const loadingMessage: ChatMessage = {
@@ -88,8 +98,8 @@ export const useChatbot = () => {
       };
       setMessages(prev => [...prev, loadingMessage]);
 
-      // Get AI response
-      const aiResponse = await sendMessageToOpenAI(userMessage.content);
+      // Get AI response using current conversation context
+      const aiResponse = await sendMessageToOpenAI(userMessage.content, messages);
       
       // Remove loading message and add real response
       setMessages(prev => {
@@ -102,8 +112,10 @@ export const useChatbot = () => {
         return [...filteredMessages, assistantMessage];
       });
 
-      // Save AI response to Firebase
-      await saveMessage(aiResponse, "assistant");
+      // Save AI response to Firebase only if saveToDatabase is true
+      if (saveToDatabase) {
+        await saveMessage(aiResponse, "assistant", saveToDatabase);
+      }
     } catch (error) {
       console.error("Error in chat sequence:", error);
       toast({

@@ -24,6 +24,8 @@ export const ChatWidget = () => {
   const {
     toast
   } = useToast();
+  // Set this to false to stop saving to database
+  const saveToDatabase = false;
 
   useEffect(() => {
     if (isOpen) {
@@ -51,7 +53,8 @@ export const ChatWidget = () => {
     setIsLoading(true);
     setApiError(null);
     try {
-      const history = await getUserChatHistory();
+      // Only load history from database if we want to save to database
+      const history = saveToDatabase ? await getUserChatHistory() : [];
       
       if (history.length === 0) {
         // Get user profile to personalize welcome message
@@ -75,7 +78,11 @@ export const ChatWidget = () => {
         };
         
         setMessages([welcomeMessage]);
-        await saveMessage(welcomeMessage.content, welcomeMessage.role);
+        
+        // Only save welcome message if saveToDatabase is true
+        if (saveToDatabase) {
+          await saveMessage(welcomeMessage.content, welcomeMessage.role, saveToDatabase);
+        }
       } else {
         setMessages(history);
       }
@@ -105,9 +112,9 @@ export const ChatWidget = () => {
     setApiError(null);
     
     try {
-      // Only save messages to database if logged in
-      if (isLoggedIn) {
-        await saveMessage(userMessage.content, userMessage.role);
+      // Only save to database if saveToDatabase is true
+      if (saveToDatabase && isLoggedIn) {
+        await saveMessage(userMessage.content, userMessage.role, saveToDatabase);
       }
 
       const loadingMessage: ChatMessage = {
@@ -117,7 +124,8 @@ export const ChatWidget = () => {
       };
       setMessages(prev => [...prev, loadingMessage]);
 
-      const aiResponse = await sendMessageToOpenAI(userMessage.content);
+      // Send the message with current conversation context
+      const aiResponse = await sendMessageToOpenAI(userMessage.content, messages);
 
       setMessages(prev => {
         const filteredMessages = prev.filter(msg => msg.content !== "...");
@@ -129,9 +137,9 @@ export const ChatWidget = () => {
         return [...filteredMessages, assistantMessage];
       });
 
-      // Only save messages to database if logged in
-      if (isLoggedIn) {
-        await saveMessage(aiResponse, "assistant");
+      // Only save to database if saveToDatabase is true
+      if (saveToDatabase && isLoggedIn) {
+        await saveMessage(aiResponse, "assistant", saveToDatabase);
       }
     } catch (error) {
       console.error("Error in chat sequence:", error);

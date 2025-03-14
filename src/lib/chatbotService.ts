@@ -36,9 +36,18 @@ export const getUserChatHistory = async (): Promise<ChatMessage[]> => {
   }
 };
 
-// Save a message to Firebase
-export const saveMessage = async (content: string, role: "user" | "assistant"): Promise<string | null> => {
+// Save a message to Firebase - now with a parameter to control database saving
+export const saveMessage = async (
+  content: string, 
+  role: "user" | "assistant",
+  saveToDatabase: boolean = true
+): Promise<string | null> => {
   if (!auth.currentUser) return null;
+  
+  // If saveToDatabase is false, don't save to Firestore but return a temporary ID
+  if (!saveToDatabase) {
+    return `temp-${Date.now()}`;
+  }
   
   try {
     const message = {
@@ -57,7 +66,7 @@ export const saveMessage = async (content: string, role: "user" | "assistant"): 
 };
 
 // Send a message to OpenAI API
-export const sendMessageToOpenAI = async (message: string): Promise<string> => {
+export const sendMessageToOpenAI = async (message: string, chatHistory: ChatMessage[] = []): Promise<string> => {
   try {
     // Vérifier si l'utilisateur est authentifié
     if (!auth.currentUser) {
@@ -70,14 +79,16 @@ export const sendMessageToOpenAI = async (message: string): Promise<string> => {
       dangerouslyAllowBrowser: true // Note: Ce paramètre est nécessaire pour l'utilisation côté client, mais n'est pas recommandé en production
     });
 
-    // Obtenir l'historique des messages pour créer un contexte de conversation
-    const chatHistory = await getUserChatHistory();
-    
-    // Préparer les messages pour l'API OpenAI en format approprié
-    const formattedMessages = chatHistory.map(msg => ({
-      role: msg.role,
-      content: msg.content
-    }));
+    // Use provided chat history or fetch from database if not provided
+    const formattedMessages = chatHistory.length > 0 
+      ? chatHistory.map(msg => ({
+          role: msg.role,
+          content: msg.content
+        }))
+      : (await getUserChatHistory()).map(msg => ({
+          role: msg.role,
+          content: msg.content
+        }));
     
     // Ajouter le nouveau message à la liste
     formattedMessages.push({
