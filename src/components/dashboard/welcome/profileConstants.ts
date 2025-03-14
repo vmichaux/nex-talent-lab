@@ -1,8 +1,8 @@
 
 export const getWelcomeMessages = (firstName: string = "") => ({
-  talent: `Let's go ${firstName}! Welcome to Your Talent Journey`,
-  builder: `Let's go ${firstName}! Welcome to Your Builder Journey`,
-  both: `Let's go ${firstName}! Welcome to Your Dual Journey`
+  talent: `Let's go ${firstName ? firstName : ''}! Welcome to Your Talent Journey`,
+  builder: `Let's go ${firstName ? firstName : ''}! Welcome to Your Builder Journey`,
+  both: `Let's go ${firstName ? firstName : ''}! Welcome to Your Dual Journey`
 });
 
 export const descriptions = {

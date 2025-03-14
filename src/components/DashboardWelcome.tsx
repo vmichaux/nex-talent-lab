@@ -33,21 +33,28 @@ export function DashboardWelcome() {
   const getUserFirstName = (): string => {
     // First priority: Check userData from Firestore
     if (userData && userData.firstName) {
+      console.log("Using firstName from userData:", userData.firstName);
       return userData.firstName;
     }
     
     // Second priority: Check displayName from Firebase Auth
     if (currentUser?.displayName) {
-      return currentUser.displayName.split(' ')[0];
+      const displayNameParts = currentUser.displayName.split(' ');
+      console.log("Using displayName:", displayNameParts[0]);
+      return displayNameParts[0];
     }
     
     // Third priority: Extract from email
     if (currentUser?.email) {
       const emailUsername = currentUser.email.split('@')[0];
-      const firstName = emailUsername.split(/[._-]/)[0];
-      return firstName.charAt(0).toUpperCase() + firstName.slice(1);
+      // Improved name extraction logic - get first segment only without any character limitation
+      const nameParts = emailUsername.split(/[._-]/);
+      const firstName = nameParts[0].charAt(0).toUpperCase() + nameParts[0].slice(1);
+      console.log("Extracted from email:", firstName);
+      return firstName;
     }
     
+    console.log("No name found, returning empty string");
     return "";
   };
   
@@ -122,8 +129,9 @@ export function DashboardWelcome() {
   };
   
   const currentSteps = stepsByProfile[profileType];
-  // Pass the firstName to getWelcomeMessages
+  // Make sure firstName is properly passed and used
   const welcomeMessage = getWelcomeMessages(firstName)[profileType];
+  console.log("Welcome message:", welcomeMessage); // Debug to see the final welcome message
   const description = descriptions[profileType];
   
   return (
