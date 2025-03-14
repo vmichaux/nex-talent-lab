@@ -30,7 +30,7 @@ export const ChatWidget = () => {
       } else {
         // Add welcome message for logged out users
         const welcomeMessage: ChatMessage = {
-          content: "Bonjour ! Je suis votre assistant IA. Comment puis-je vous aider aujourd'hui ?",
+          content: "Hello! I'm your AI assistant. How can I help you today?",
           role: "assistant",
           timestamp: new Date()
         };
@@ -52,7 +52,7 @@ export const ChatWidget = () => {
       const history = await getUserChatHistory();
       if (history.length === 0) {
         const welcomeMessage: ChatMessage = {
-          content: "Bonjour ! Je suis votre assistant IA. Comment puis-je vous aider aujourd'hui ?",
+          content: "Hello! I'm your AI assistant. How can I help you today?",
           role: "assistant",
           timestamp: new Date()
         };
@@ -64,8 +64,8 @@ export const ChatWidget = () => {
     } catch (error) {
       console.error("Failed to load chat history:", error);
       toast({
-        title: "Erreur",
-        description: "Impossible de charger votre historique de conversation. Veuillez réessayer.",
+        title: "Error",
+        description: "Unable to load your conversation history. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -118,10 +118,10 @@ export const ChatWidget = () => {
     } catch (error) {
       console.error("Error in chat sequence:", error);
 
-      setApiError("Une erreur est survenue lors de la communication avec l'API. Veuillez réessayer.");
+      setApiError("An error occurred while communicating with the API. Please try again.");
       toast({
-        title: "Erreur",
-        description: "Impossible d'obtenir une réponse. Veuillez réessayer.",
+        title: "Error",
+        description: "Failed to get a response. Please try again.",
         variant: "destructive"
       });
 
@@ -149,7 +149,7 @@ export const ChatWidget = () => {
           <div className="flex items-center justify-between bg-primary text-white p-3 sticky top-0 z-10 py-0 px-[11px]">
             <div className="flex items-center gap-2">
               <Bot className="h-5 w-5" />
-              <DialogTitle className="text-white text-lg font-semibold">Assistant IA</DialogTitle>
+              <DialogTitle className="text-white text-lg font-semibold">AI Assistant</DialogTitle>
             </div>
             <div className="flex items-center gap-1">
               <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary-foreground/20 text-white" onClick={() => setIsMinimized(!isMinimized)}>
@@ -171,7 +171,7 @@ export const ChatWidget = () => {
                     <div className={`max-w-[85%] rounded-lg px-4 py-2 ${message.role === "user" ? "bg-primary text-white" : "bg-gray-100 text-gray-800"}`}>
                       {message.content === "..." ? <div className="flex items-center space-x-2">
                           <Loader className="h-4 w-4 animate-spin" />
-                          <span>Réflexion en cours...</span>
+                          <span>Thinking...</span>
                         </div> : <p className="whitespace-pre-wrap text-sm">{message.content}</p>}
                     </div>
                   </div>)}
@@ -180,7 +180,7 @@ export const ChatWidget = () => {
               
               <div className="border-t pt-3 pb-5 px-3 mb-3">
                 <div className="flex items-start space-x-2">
-                  <Textarea value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="Tapez votre message..." className="flex-1 min-h-[60px] max-h-[120px] resize-none focus:outline-none text-sm p-2 border rounded-md" disabled={isLoading} />
+                  <Textarea value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="Type your message..." className="flex-1 min-h-[60px] max-h-[120px] resize-none focus:outline-none text-sm p-2 border rounded-md" disabled={isLoading} />
                   <Button onClick={handleSendMessage} disabled={!input.trim() || isLoading} size="icon" className="mt-1 h-10 w-10">
                     {isLoading ? <Loader className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                   </Button>
