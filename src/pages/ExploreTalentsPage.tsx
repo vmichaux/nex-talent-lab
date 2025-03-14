@@ -9,7 +9,6 @@ import { Search, Filter } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { TalentCard } from "@/components/explore/TalentCard";
-import { PageHeader } from "@/components/explore/PageHeader";
 
 const ExploreTalentsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -186,11 +185,17 @@ const ExploreTalentsPage = () => {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
-            <PageHeader
-              subtitle="Explore Talents"
-              title="Find Your Next Collaborators"
-              description="Discover skilled professionals ready to collaborate on your next big idea or join your team."
-            />
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
+              <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
+                Explore Talents
+              </div>
+              
+              <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">Find Your Next Collaborators</h1>
+              
+              <p className="text-lg text-gray-600 md:text-xl max-w-3xl px-[17px]">
+                Discover skilled professionals ready to collaborate on your next big idea or join your team.
+              </p>
+            </div>
 
             {/* Search and Filter Section */}
             <div className="mb-10">
