@@ -48,11 +48,13 @@ const ExploreProjectsPage = () => {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
-            <PageHeader 
-              subtitle="Explore Projects"
-              title="Find Your Next Collaborative Adventure"
-              description="Browse through exciting projects seeking your skills and expertise. Connect with like-minded innovators."
-            />
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
+              <PageHeader 
+                subtitle="Explore Projects"
+                title="Find Your Next Collaborative Adventure"
+                description="Browse through exciting projects seeking your skills and expertise. Connect with like-minded innovators."
+              />
+            </div>
 
             {/* Search and Filter Section */}
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
