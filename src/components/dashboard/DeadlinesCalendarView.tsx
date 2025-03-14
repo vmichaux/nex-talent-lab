@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { format, isEqual, isValid, startOfMonth, endOfMonth, eachDayOfInterval } from "date-fns";
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DayContent } from "react-day-picker";
 
 interface Deadline {
   id: number;
@@ -91,12 +92,15 @@ export function DeadlinesCalendarView({ deadlines, filteredDeadlines }: Deadline
   };
   
   // Custom day render function for the calendar
-  const renderDay = (day: Date, selectedDay: Date | undefined, dayProps: any) => {
+  const renderDay = (props: React.ComponentPropsWithRef<typeof DayContent>) => {
+    const date = props.date;
+    if (!date) return null;
+    
     // Check if the day has any deadlines
     const hasDeadlines = daysWithDeadlines.some(deadline => 
       isEqual(
         new Date(deadline.getFullYear(), deadline.getMonth(), deadline.getDate()),
-        new Date(day.getFullYear(), day.getMonth(), day.getDate())
+        new Date(date.getFullYear(), date.getMonth(), date.getDate())
       )
     );
     
@@ -104,7 +108,7 @@ export function DeadlinesCalendarView({ deadlines, filteredDeadlines }: Deadline
     const dayDeadlines = deadlineDates.filter(deadline => 
       isEqual(
         new Date(deadline.dateObj.getFullYear(), deadline.dateObj.getMonth(), deadline.dateObj.getDate()),
-        new Date(day.getFullYear(), day.getMonth(), day.getDate())
+        new Date(date.getFullYear(), date.getMonth(), date.getDate())
       )
     );
     
@@ -122,9 +126,7 @@ export function DeadlinesCalendarView({ deadlines, filteredDeadlines }: Deadline
     
     return (
       <div
-        {...dayProps}
         className={cn(
-          dayProps.className,
           "relative p-0 flex items-center justify-center",
           hasDeadlines && "font-medium"
         )}
@@ -133,14 +135,14 @@ export function DeadlinesCalendarView({ deadlines, filteredDeadlines }: Deadline
           <HoverCard>
             <HoverCardTrigger asChild>
               <div className="w-full h-full flex flex-col items-center justify-center">
-                <span>{format(day, "d")}</span>
+                <span>{format(date, "d")}</span>
                 <div className={cn("w-1.5 h-1.5 rounded-full mt-0.5", dotColor)} />
               </div>
             </HoverCardTrigger>
             <HoverCardContent className="w-72 p-0" align="center">
               <div className="flex flex-col divide-y">
                 <div className="px-3 py-2 bg-muted/50 font-medium">
-                  {format(day, "MMMM d, yyyy")} ({dayDeadlines.length} {dayDeadlines.length === 1 ? 'deadline' : 'deadlines'})
+                  {format(date, "MMMM d, yyyy")} ({dayDeadlines.length} {dayDeadlines.length === 1 ? 'deadline' : 'deadlines'})
                 </div>
                 <div className="max-h-52 overflow-y-auto">
                   {dayDeadlines.map((deadline) => (
@@ -167,7 +169,7 @@ export function DeadlinesCalendarView({ deadlines, filteredDeadlines }: Deadline
           </HoverCard>
         )}
         
-        {!hasDeadlines && <span>{format(day, "d")}</span>}
+        {!hasDeadlines && <span>{format(date, "d")}</span>}
       </div>
     );
   };
@@ -257,7 +259,7 @@ export function DeadlinesCalendarView({ deadlines, filteredDeadlines }: Deadline
               }}
               className="p-3 pointer-events-auto"
               components={{
-                Day: ({ day, selected, ...props }) => renderDay(day, selected, props)
+                DayContent: renderDay
               }}
             />
           </CardContent>
