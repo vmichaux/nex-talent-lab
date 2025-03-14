@@ -51,6 +51,10 @@ export function DashboardWelcome() {
     return "";
   };
   
+  // Get the first name for display
+  const firstName = getUserFirstName();
+  console.log("User's first name:", firstName); // Debug log to check what name is being extracted
+  
   const stepsByProfile = {
     talent: [
       {
@@ -118,7 +122,8 @@ export function DashboardWelcome() {
   };
   
   const currentSteps = stepsByProfile[profileType];
-  const welcomeMessage = getWelcomeMessages(getUserFirstName())[profileType];
+  // Pass the firstName to getWelcomeMessages
+  const welcomeMessage = getWelcomeMessages(firstName)[profileType];
   const description = descriptions[profileType];
   
   return (
