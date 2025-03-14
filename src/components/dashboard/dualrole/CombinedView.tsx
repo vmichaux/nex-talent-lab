@@ -20,14 +20,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RecommendedTalents } from "../builder/RecommendedTalents";
 import { NetworkList } from "../builder/NetworkList";
+import { ProjectActions } from "../builder/ProjectActions";
 
 export function CombinedView() {
   const [filter, setFilter] = useState<string>("all");
+  const [showProjectModal, setShowProjectModal] = useState(false);
 
   return (
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
       {/* Left column (wider) */}
       <div className="lg:w-3/5 space-y-12">
+        {/* Project actions section - moved before Overview */}
+        <ProjectActions 
+          showProjectModal={showProjectModal} 
+          setShowProjectModal={setShowProjectModal} 
+        />
+        
         {/* Overview metrics */}
         <div>
           <h2 className="text-xl font-bold mb-6">Your Overview</h2>
@@ -52,11 +60,11 @@ export function CombinedView() {
         {/* Recommended Talent section */}
         <RecommendedTalents />
         
+        {/* Skills Progress section - moved to left column before Learning Resources */}
+        <SkillsProgress />
+        
         {/* Learning Resources section */}
         <LearningResources />
-        
-        {/* Manage Reviews section */}
-        <ManageReviewsRecommendations role="both" />
       </div>
       
       {/* Right column (narrower) */}
@@ -76,11 +84,11 @@ export function CombinedView() {
         {/* Network section */}
         <NetworkList />
         
-        {/* Skills Progress section */}
-        <SkillsProgress />
-        
         {/* Project History section */}
         <ProjectHistory />
+        
+        {/* Manage Reviews section - moved to right column */}
+        <ManageReviewsRecommendations role="both" />
       </div>
     </div>
   );

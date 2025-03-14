@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
@@ -45,17 +46,17 @@ export function BuilderDashboard() {
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
       {/* Left column (wider) */}
       <div className="lg:w-3/5 space-y-12">
+        {/* Project actions section - moved before Overview */}
+        <ProjectActions 
+          showProjectModal={showProjectModal} 
+          setShowProjectModal={setShowProjectModal} 
+        />
+        
         {/* Overview section */}
         <div>
           <h2 className="text-xl font-bold mb-6">Your Overview</h2>
           <DashboardOverview role="builder" />
         </div>
-
-        {/* Project actions section */}
-        <ProjectActions 
-          showProjectModal={showProjectModal} 
-          setShowProjectModal={setShowProjectModal} 
-        />
 
         {/* Active Projects section */}
         <DashboardProjects />
@@ -69,11 +70,11 @@ export function BuilderDashboard() {
         {/* Recommended Talents section */}
         <RecommendedTalents />
         
+        {/* Skills Progress section - moved to left column before Learning Resources */}
+        <SkillsProgress />
+        
         {/* Learning Resources section */}
         <LearningResources />
-        
-        {/* Manage Reviews section */}
-        <ManageReviewsRecommendations role="builder" />
       </div>
       
       {/* Right column (narrower) */}
@@ -87,11 +88,11 @@ export function BuilderDashboard() {
         {/* Network section */}
         <NetworkList />
         
-        {/* Skills Progress section */}
-        <SkillsProgress />
-        
         {/* Project History section */}
         <ProjectHistory />
+        
+        {/* Manage Reviews section - moved to right column */}
+        <ManageReviewsRecommendations role="builder" />
       </div>
     </div>
   );
