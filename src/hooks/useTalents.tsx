@@ -40,7 +40,7 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
         const snapshot = await getDocs(talentsQuery);
         
         // Process results
-        const fetchedTalents = snapshot.docs
+        const fetchedTalents: Talent[] = snapshot.docs
           .filter(doc => {
             const data = doc.data();
             // Only include profiles that have essential information
@@ -67,7 +67,7 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
               bio: data.bio || "No bio provided",
               image: data.photoURL || "/placeholder.svg",
               featured: data.featured || false
-            };
+            } as Talent;
           });
         
         setTalents(fetchedTalents);

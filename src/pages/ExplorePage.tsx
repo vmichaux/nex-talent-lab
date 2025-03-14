@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -18,57 +19,6 @@ const ExplorePage = () => {
     userId: currentUser?.uid
   });
   
-  // Talent data (could be moved to a hook or API call in the future)
-  const talents = [{
-    id: 1,
-    name: "Emma Wilson",
-    title: "UX/UI Designer",
-    location: "San Francisco, CA",
-    skills: ["UI Design", "User Research", "Figma", "Prototyping"],
-    experience: "5+ years",
-    rating: 4.9,
-    availability: "Available for freelance",
-    bio: "Award-winning UX/UI designer with expertise in creating intuitive and beautiful interfaces for web and mobile applications.",
-    image: "/placeholder.svg",
-    featured: true
-  }, {
-    id: 2,
-    name: "Marcus Rivera",
-    title: "Full Stack Developer",
-    location: "Austin, TX",
-    skills: ["React", "Node.js", "TypeScript", "MongoDB"],
-    experience: "7+ years",
-    rating: 4.8,
-    availability: "Available from June",
-    bio: "Full stack developer with a passion for building scalable applications. Specialized in React and Node.js ecosystems.",
-    image: "/placeholder.svg",
-    featured: false
-  }, {
-    id: 3,
-    name: "Sophia Chen",
-    title: "Product Manager",
-    location: "New York, NY",
-    skills: ["Product Strategy", "Agile", "Data Analysis", "User Stories"],
-    experience: "6+ years",
-    rating: 4.7,
-    availability: "Open to part-time",
-    bio: "Experienced product manager who has led multiple products from conception to launch. Strong focus on user-centered design principles.",
-    image: "/placeholder.svg",
-    featured: true
-  }, {
-    id: 4,
-    name: "David Kumar",
-    title: "AI/ML Engineer",
-    location: "Seattle, WA",
-    skills: ["Python", "TensorFlow", "Data Science", "NLP"],
-    experience: "4+ years",
-    rating: 4.6,
-    availability: "Currently interviewing",
-    bio: "AI/ML engineer specializing in natural language processing and computer vision. Previously worked at major tech companies.",
-    image: "/placeholder.svg",
-    featured: false
-  }];
-  
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -85,7 +35,7 @@ const ExplorePage = () => {
               error={typeof error === 'object' && error !== null ? (error as Error).message : String(error)} 
               searchQuery={searchQuery} 
             />
-            <TalentsSection talents={talents} />
+            <TalentsSection />
 
             <div className="pt-16 py-[16px]">
               <TestimonialSection />

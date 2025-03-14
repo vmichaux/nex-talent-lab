@@ -7,7 +7,7 @@ import { Briefcase, Clock, MapPin, MessageSquare, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export interface Talent {
-  id: number;
+  id: string; // Changed from number to string to match Firebase document IDs
   name: string;
   title: string;
   location: string;
@@ -82,3 +82,5 @@ export const TalentCard = ({ talent }: TalentCardProps) => {
     </Card>
   );
 };
+
+export default TalentCard;
