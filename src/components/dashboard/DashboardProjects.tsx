@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useProjects } from "@/hooks/useProjects";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
+
 export function DashboardProjects() {
   const navigate = useNavigate();
   const {
@@ -26,6 +27,16 @@ export function DashboardProjects() {
   const userProjects = projects.filter(project => project.userId === currentUser?.uid);
   // Limit to 3 projects for display
   const displayedProjects = userProjects.slice(0, 3);
+  
+  const handleCreateFirstProject = () => {
+    // First try to navigate to dashboard with the state
+    navigate('/dashboard', {
+      state: {
+        openProjectModal: true
+      }
+    });
+  };
+  
   return <div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold category-title-gradient text-3xl">
@@ -85,11 +96,11 @@ export function DashboardProjects() {
                 </CardFooter>
               </Card>) : <div className="col-span-3 text-center py-8 bg-gray-50 rounded-md">
               <p className="text-gray-600 text-sm mb-3">You haven't created any projects yet.</p>
-              <Button onClick={() => navigate('/dashboard', {
-          state: {
-            openProjectModal: true
-          }
-        })} size="sm" className="text-xs">
+              <Button 
+                onClick={handleCreateFirstProject} 
+                size="sm" 
+                className="text-xs bg-purple-600 hover:bg-purple-700 text-white"
+              >
                 Create Your First Project
               </Button>
             </div>}
