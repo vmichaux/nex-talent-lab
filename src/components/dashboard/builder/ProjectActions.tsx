@@ -13,7 +13,7 @@ export function ProjectActions({ showProjectModal, setShowProjectModal }: Projec
     <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
       <div className="flex gap-4">
         <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
-        <Button type="submit" variant="purple" className="h-10">Search</Button>
+        <Button type="submit" variant="default" className="h-10">Search</Button>
       </div>
       <div className="flex-1">
         <ProjectSearch hideButton={true} />

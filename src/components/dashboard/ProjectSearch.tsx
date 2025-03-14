@@ -32,7 +32,7 @@ export function ProjectSearch({ hideButton = false }: ProjectSearchProps) {
         />
       </div>
       {!hideButton && (
-        <Button type="submit" variant="purple" className="h-10">Search</Button>
+        <Button type="submit" variant="default" className="h-10">Search</Button>
       )}
     </form>
   );
