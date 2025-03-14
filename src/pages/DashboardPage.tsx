@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -9,6 +10,8 @@ import { TalentDashboard } from "@/components/dashboard/TalentDashboard";
 import { BuilderDashboard } from "@/components/dashboard/BuilderDashboard";
 import { DualRoleDashboard } from "@/components/dashboard/DualRoleDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PageHeader } from "@/components/explore/PageHeader";
+
 const DashboardPage = () => {
   const {
     isLoggedIn,
@@ -18,6 +21,7 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const [showWelcome, setShowWelcome] = useState(true);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "both">("talent");
+  
   const getUserFirstName = () => {
     if (currentUser?.displayName) {
       return currentUser.displayName.split(' ')[0];
@@ -29,6 +33,7 @@ const DashboardPage = () => {
     }
     return "friend";
   };
+  
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/onboarding");
@@ -42,36 +47,37 @@ const DashboardPage = () => {
       setShowWelcome(false);
     }
   }, [isLoggedIn, navigate, userData]);
+  
   const handleCompleteOnboarding = () => {
     setShowWelcome(false);
   };
+  
   const handleRoleChange = (role: "talent" | "builder" | "both") => {
     setActiveRole(role);
     localStorage.setItem("userRole", role === "builder" ? "entrepreneur" : role);
   };
-  return <div className="min-h-screen flex flex-col">
+  
+  return (
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
-        {showWelcome ? <>
+        {showWelcome ? (
+          <>
             <DashboardWelcome />
             <div className="text-center mb-10">
               
             </div>
-          </> : <div className="relative overflow-hidden bg-white">
+          </>
+        ) : (
+          <div className="relative overflow-hidden bg-white">
             <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
             
             <div className="w-full px-4 py-16">
-              <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
-                <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">Let's go {getUserFirstName()}!</div>
-                
-                <h1 className="mb-4 text-3xl font-bold tracking-tight custom-gradient-text md:text-5xl">
-                  My Journey
-                </h1>
-                
-                <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
-                  Track your projects, connections, and activities all in one place.
-                </p>
-              </div>
+              <PageHeader
+                subtitle={`Let's go ${getUserFirstName()}!`}
+                title="My Journey"
+                description="Track your projects, connections, and activities all in one place."
+              />
 
               <div className="flex justify-center mb-10">
                 <Tabs value={activeRole} onValueChange={value => handleRoleChange(value as "talent" | "builder" | "both")} className="w-full max-w-[1800px]">
@@ -104,9 +110,12 @@ const DashboardPage = () => {
                 </Tabs>
               </div>
             </div>
-          </div>}
+          </div>
+        )}
       </main>
       <Footer />
-    </div>;
+    </div>
+  );
 };
+
 export default DashboardPage;

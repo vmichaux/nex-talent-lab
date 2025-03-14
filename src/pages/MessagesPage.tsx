@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -6,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/explore/PageHeader";
 
 // Fake message data
 const fakeMessages = [{
@@ -69,6 +71,7 @@ const archivedMessages = [{
   timestamp: "March 15",
   project: "Website Redesign"
 }];
+
 const MessageItem = ({
   message
 }) => <div className={`p-4 border-b hover:bg-gray-50 cursor-pointer transition-colors ${message.unread ? 'bg-primary/5' : ''}`}>
@@ -94,21 +97,25 @@ const MessageItem = ({
       </div>
     </div>
   </div>;
+
 const EmptyState = ({
   message
 }) => <div className="text-center py-12">
     <p className="text-gray-600">{message}</p>
   </div>;
+
 const MessagesPage = () => {
   const {
     isLoggedIn
   } = useAuth();
   const navigate = useNavigate();
+  
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");
     }
   }, [isLoggedIn, navigate]);
+  
   return <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
@@ -117,19 +124,11 @@ const MessagesPage = () => {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[64px]">
-              <div className="mb-4 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium">
-                Messages
-              </div>
-              
-              <h1 className="mb-4 text-3xl font-bold tracking-tight md:text-5xl custom-gradient-text">
-                Your Conversations
-              </h1>
-              
-              <p className="text-lg text-gray-600 md:text-xl max-w-3xl">
-                Connect with collaborators and project owners through direct messaging.
-              </p>
-            </div>
+            <PageHeader
+              subtitle="Messages"
+              title="Your Conversations"
+              description="Connect with collaborators and project owners through direct messaging."
+            />
 
             {/* Messages content */}
             <div className="bg-white shadow-sm rounded-lg max-w-6xl mx-auto">
@@ -188,4 +187,5 @@ const MessagesPage = () => {
       <Footer />
     </div>;
 };
+
 export default MessagesPage;
