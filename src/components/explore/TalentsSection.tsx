@@ -4,7 +4,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TalentCard } from "./TalentCard";
 import { useTalents, Talent } from "@/hooks/useTalents";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ExploreTalentsHeader } from "./ExploreTalentsHeader";
 
 interface TalentsSectionProps {
   searchQuery?: string;
@@ -33,8 +32,6 @@ export const TalentsSection = ({
   // Loading state
   if (loading) {
     return <div className="mb-16">
-        <ExploreTalentsHeader />
-        
         <Tabs defaultValue="all-talents" className="mb-8">
           <TabsList className="mb-8 mx-auto flex justify-center">
             <TabsTrigger value="all-talents" className="px-6">All Talents</TabsTrigger>
@@ -58,7 +55,6 @@ export const TalentsSection = ({
   // Error state
   if (error) {
     return <div className="mb-16">
-        <ExploreTalentsHeader />
         <div className="p-8 bg-red-50 rounded-lg text-red-600 mb-10">
           <p className="text-lg">Failed to load talents: {error}</p>
           <p className="mt-2">Please try again later or contact support.</p>
@@ -69,8 +65,6 @@ export const TalentsSection = ({
   // Empty state
   if (talents.length === 0) {
     return <div className="mb-16">
-        <ExploreTalentsHeader />
-        
         <Tabs value={activeTab} onValueChange={handleTabChange} className="mb-8">
           <TabsList className="mb-8 mx-auto flex justify-center">
             <TabsTrigger value="all-talents" className="px-6">All Talents</TabsTrigger>
@@ -88,8 +82,6 @@ export const TalentsSection = ({
   }
   
   return <div className="mb-16">
-      <ExploreTalentsHeader />
-
       <Tabs value={activeTab} onValueChange={handleTabChange} className="mb-8">
         <TabsList className="mb-8 mx-auto flex justify-center">
           <TabsTrigger value="all-talents" className="px-6">All Talents</TabsTrigger>
