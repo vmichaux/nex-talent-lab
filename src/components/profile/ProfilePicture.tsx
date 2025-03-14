@@ -4,6 +4,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Camera, ImagePlus } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 import { storage } from "@/lib/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -22,6 +23,7 @@ export const ProfilePicture = ({
   currentUserId,
   onPictureUpdate
 }: ProfilePictureProps) => {
+  const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
 
@@ -34,12 +36,20 @@ export const ProfilePicture = ({
     if (!file || !currentUserId) return;
 
     if (!file.type.startsWith('image/')) {
-      console.error("Invalid file type");
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file.",
+        variant: "destructive"
+      });
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      console.error("File too large");
+      toast({
+        title: "File too large",
+        description: "Please select an image smaller than 5MB.",
+        variant: "destructive"
+      });
       return;
     }
 
@@ -53,9 +63,17 @@ export const ProfilePicture = ({
       
       onPictureUpdate(downloadURL);
       
-      console.log("Image uploaded successfully");
+      toast({
+        title: "Image uploaded",
+        description: "Your profile picture has been uploaded successfully.",
+      });
     } catch (error) {
       console.error("Error uploading image:", error);
+      toast({
+        title: "Upload error",
+        description: "Failed to upload profile picture. Please try again.",
+        variant: "destructive"
+      });
     } finally {
       setUploadingImage(false);
     }
