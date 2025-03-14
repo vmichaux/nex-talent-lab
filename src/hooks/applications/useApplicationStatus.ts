@@ -15,7 +15,7 @@ export function useApplicationStatus() {
     feedback?: string,
     applications?: ApplicationSummary[],
     setApplications?: (apps: ApplicationSummary[]) => void,
-    setFilteredApplications?: (apps: ApplicationSummary[]) => void
+    setFilteredApplications?: React.Dispatch<React.SetStateAction<ApplicationSummary[]>>
   ) => {
     try {
       setIsSubmitting(true);
