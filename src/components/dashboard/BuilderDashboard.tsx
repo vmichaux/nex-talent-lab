@@ -47,7 +47,7 @@ export function BuilderDashboard() {
   return (
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
       {/* Left column (wider) */}
-      <div className="lg:w-3/5 space-y-20">
+      <div className="lg:w-3/5 space-y-16">
         {/* Overview section */}
         <div>
           <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
@@ -83,7 +83,7 @@ export function BuilderDashboard() {
       </div>
       
       {/* Right column (narrower) */}
-      <div className="lg:w-2/5 space-y-20">
+      <div className="lg:w-2/5 space-y-16">
         {/* Notifications section - Added at the top */}
         <DashboardNotifications />
         
