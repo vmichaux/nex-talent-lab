@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
@@ -16,6 +15,7 @@ import { LearningResources } from "@/components/dashboard/talent/LearningResourc
 import { ProjectActions } from "@/components/dashboard/builder/ProjectActions";
 import { RecommendedTalents } from "@/components/dashboard/builder/RecommendedTalents";
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
+import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
 
 export function BuilderDashboard() {
   const location = useLocation();
@@ -42,9 +42,9 @@ export function BuilderDashboard() {
   }, [projects]);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-20 w-full max-w-[2000px] mx-auto">
+    <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
       {/* Left column (wider) */}
-      <div className="lg:w-3/5 space-y-16">
+      <div className="lg:w-3/5 space-y-12">
         {/* Overview section */}
         <div>
           <h2 className="text-xl font-bold mb-6">Your Overview</h2>
@@ -63,23 +63,26 @@ export function BuilderDashboard() {
         {/* Projects Deadlines and Milestones */}
         <ProjectDeadlines />
         
-        {/* Recommended Talents section */}
-        <RecommendedTalents />
-        
         {/* Project Metrics section */}
         <ProjectMetrics role="builder" />
         
+        {/* Recommended Talents section */}
+        <RecommendedTalents />
+        
         {/* Learning Resources section */}
         <LearningResources />
+        
+        {/* Manage Reviews section */}
+        <ManageReviewsRecommendations role="builder" />
       </div>
       
       {/* Right column (narrower) */}
-      <div className="lg:w-2/5 space-y-16">
-        {/* Messages section */}
-        <DashboardMessages />
-        
+      <div className="lg:w-2/5 space-y-12">
         {/* Review Applications */}
         <ReviewApplications />
+        
+        {/* Messages section */}
+        <DashboardMessages />
         
         {/* Network section */}
         <NetworkList />

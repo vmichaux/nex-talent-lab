@@ -11,14 +11,15 @@ import { ProjectDeadlines } from "@/components/dashboard/ProjectDeadlines";
 import { ProjectMetrics } from "@/components/dashboard/ProjectMetrics";
 import { ProjectHistory } from "@/components/dashboard/ProjectHistory";
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
+import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
 
 export function TalentDashboard() {
   const [filter, setFilter] = useState<string>("all");
 
   return (
-    <div className="flex flex-col lg:flex-row gap-20 w-full max-w-[2000px] mx-auto">
+    <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
       {/* Left column (wider) */}
-      <div className="lg:w-3/5 space-y-16">
+      <div className="lg:w-3/5 space-y-12">
         {/* Overview section */}
         <div>
           <h2 className="text-xl font-bold mb-6">Your Overview</h2>
@@ -31,23 +32,26 @@ export function TalentDashboard() {
         {/* Projects Deadlines and Milestones */}
         <ProjectDeadlines />
         
-        {/* Recommended Opportunities section */}
-        <RecommendedOpportunities filter={filter} setFilter={setFilter} />
-        
         {/* Project Metrics section */}
         <ProjectMetrics role="talent" />
         
+        {/* Recommended Opportunities section */}
+        <RecommendedOpportunities filter={filter} setFilter={setFilter} />
+        
         {/* Learning Resources section */}
         <LearningResources />
+        
+        {/* Manage Reviews section */}
+        <ManageReviewsRecommendations role="talent" />
       </div>
       
       {/* Right column (narrower) */}
-      <div className="lg:w-2/5 space-y-16">
-        {/* Messages section */}
-        <DashboardMessages />
-        
+      <div className="lg:w-2/5 space-y-12">
         {/* Applied Projects section */}
         <AppliedProjects />
+        
+        {/* Messages section */}
+        <DashboardMessages />
         
         {/* Network section */}
         <NetworkList />

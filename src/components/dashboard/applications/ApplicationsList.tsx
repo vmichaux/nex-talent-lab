@@ -32,10 +32,13 @@ export function ApplicationsList({
     return <EmptyState />;
   }
   
+  // Only display 4 applications at most
+  const displayedApplications = applications.slice(0, 4);
+  
   return (
     <div className="space-y-3 bg-white rounded-lg border shadow-sm p-4">
       <div className="grid grid-cols-1 divide-y">
-        {applications.map((app) => (
+        {displayedApplications.map((app) => (
           <ApplicationItem 
             key={app.id} 
             application={app} 
