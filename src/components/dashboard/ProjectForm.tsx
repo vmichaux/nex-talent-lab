@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+
+import { useProjectFormState } from "@/hooks/useProjectFormState";
 import { ProjectFormData } from "./AddProjectButton";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ProjectFormNavigation } from "./project-form/ProjectFormNavigation";
 import { BasicInfoTab } from "./project-form/BasicInfoTab";
 import { RequirementsTab } from "./project-form/RequirementsTab";
 import { CompensationTab } from "./project-form/CompensationTab";
@@ -20,252 +20,82 @@ export function ProjectForm({
   initialData,
   submitLabel = "Create Project" 
 }: ProjectFormProps) {
-  const [activeTab, setActiveTab] = useState("basicInfo");
+  const formState = useProjectFormState(initialData);
   
-  // Basic Info
-  const [projectName, setProjectName] = useState("");
-  const [projectDescription, setProjectDescription] = useState("");
-  const [projectCategory, setProjectCategory] = useState("Technology");
-  const [projectType, setProjectType] = useState("Short-term");
-  const [projectStatus, setProjectStatus] = useState<"Open" | "Urgent" | "Closed">("Open");
-
-  // Skills with level
-  const [skillsWithLevel, setSkillsWithLevel] = useState<Array<{skill: string, level: "Beginner" | "Intermediate" | "Advanced" | "Expert"}>>([
-    { skill: "React", level: "Intermediate" },
-    { skill: "UI/UX Design", level: "Beginner" }
-  ]);
-
-  // Requirements
-  const [deliverables, setDeliverables] = useState<string[]>([]);
-  const [projectDuration, setProjectDuration] = useState("3 months");
-  const [projectDeadline, setProjectDeadline] = useState("");
-  const [collaboratorsNeeded, setCollaboratorsNeeded] = useState(2);
-
-  // Compensation & Benefits
-  const [compensation, setCompensation] = useState("Volunteer");
-  const [compensationDetails, setCompensationDetails] = useState("");
-  const [perks, setPerks] = useState<string[]>(["Mentorship", "Networking"]);
-  const [tools, setTools] = useState<string[]>(["React", "Figma"]);
-
-  // Additional Details
-  const [projectGoal, setProjectGoal] = useState("");
-  const [targetAudience, setTargetAudience] = useState("");
-  const [location, setLocation] = useState<"Remote" | "In-person" | "Hybrid">("Remote");
-  const [legalConstraints, setLegalConstraints] = useState("");
-  const [budget, setBudget] = useState("");
-  const [desiredProfiles, setDesiredProfiles] = useState<string[]>(["Student", "Freelancer"]);
-
-  // Initialize form with initial data if provided (editing mode)
-  useEffect(() => {
-    if (initialData) {
-      // Basic Info
-      setProjectName(initialData.projectName);
-      setProjectDescription(initialData.projectDescription);
-      setProjectCategory(initialData.projectCategory);
-      setProjectType(initialData.projectType);
-      setProjectStatus(initialData.projectStatus);
-      
-      // Skills with level
-      if (initialData.skillsWithLevel && initialData.skillsWithLevel.length > 0) {
-        setSkillsWithLevel(initialData.skillsWithLevel);
-      }
-      
-      // Requirements
-      if (initialData.deliverables && initialData.deliverables.length > 0) {
-        setDeliverables(initialData.deliverables);
-      }
-      setProjectDuration(initialData.projectDuration);
-      setProjectDeadline(initialData.projectDeadline);
-      setCollaboratorsNeeded(initialData.collaboratorsNeeded);
-      
-      // Compensation & Benefits
-      setCompensation(initialData.compensation);
-      setCompensationDetails(initialData.compensationDetails);
-      if (initialData.perks && initialData.perks.length > 0) {
-        setPerks(initialData.perks);
-      }
-      if (initialData.tools && initialData.tools.length > 0) {
-        setTools(initialData.tools);
-      }
-      
-      // Additional Details
-      setProjectGoal(initialData.projectGoal);
-      setTargetAudience(initialData.targetAudience);
-      setLocation(initialData.location);
-      setLegalConstraints(initialData.legalConstraints);
-      setBudget(initialData.budget);
-      if (initialData.desiredProfiles && initialData.desiredProfiles.length > 0) {
-        setDesiredProfiles(initialData.desiredProfiles);
-      }
-    }
-  }, [initialData]);
-
-  // Set default deadline to 3 months from now if not editing
-  useEffect(() => {
-    if (!initialData && !projectDeadline) {
-      const date = new Date();
-      date.setMonth(date.getMonth() + 3);
-      setProjectDeadline(date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
-    }
-  }, [initialData, projectDeadline]);
-
-  const isFormValid = () => {
-    return (
-      projectName.trim() !== "" &&
-      projectDescription.trim() !== "" &&
-      skillsWithLevel.length > 0 &&
-      projectGoal.trim() !== ""
-    );
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!isFormValid()) {
+    if (!formState.isFormValid()) {
       return;
     }
     
-    const formData: ProjectFormData = {
-      projectName,
-      projectDescription,
-      projectCategory,
-      projectType,
-      skillsWithLevel,
-      deliverables,
-      projectDuration,
-      projectDeadline,
-      collaboratorsNeeded,
-      compensation,
-      compensationDetails,
-      perks,
-      tools,
-      projectGoal,
-      targetAudience,
-      location,
-      legalConstraints,
-      budget,
-      desiredProfiles,
-      projectStatus
-    };
-    
-    await onSubmit(formData);
-  };
-
-  const goToNextTab = () => {
-    if (activeTab === "basicInfo") setActiveTab("requirements");
-    else if (activeTab === "requirements") setActiveTab("compensation");
-    else if (activeTab === "compensation") setActiveTab("additionalDetails");
-  };
-
-  const goToPreviousTab = () => {
-    if (activeTab === "additionalDetails") setActiveTab("compensation");
-    else if (activeTab === "compensation") setActiveTab("requirements");
-    else if (activeTab === "requirements") setActiveTab("basicInfo");
+    await onSubmit(formState.getFormData());
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-4 mb-6">
-          <TabsTrigger value="basicInfo">Basic Info</TabsTrigger>
-          <TabsTrigger value="requirements">Requirements</TabsTrigger>
-          <TabsTrigger value="compensation">Compensation</TabsTrigger>
-          <TabsTrigger value="additionalDetails">Additional Details</TabsTrigger>
-        </TabsList>
-        
+      <ProjectFormNavigation 
+        onSubmit={handleSubmit}
+        loading={loading}
+        isValid={formState.isFormValid()}
+        submitLabel={submitLabel}
+      >
         {/* Basic Info Tab */}
-        <TabsContent value="basicInfo" className="space-y-4">
-          <BasicInfoTab 
-            projectName={projectName}
-            setProjectName={setProjectName}
-            projectDescription={projectDescription}
-            setProjectDescription={setProjectDescription}
-            projectCategory={projectCategory}
-            setProjectCategory={setProjectCategory}
-            projectType={projectType}
-            setProjectType={setProjectType}
-            projectStatus={projectStatus}
-            setProjectStatus={setProjectStatus}
-          />
-          <div className="flex justify-end mt-4">
-            <Button type="button" onClick={goToNextTab}>
-              Next: Requirements
-            </Button>
-          </div>
-        </TabsContent>
+        <BasicInfoTab 
+          projectName={formState.projectName}
+          setProjectName={formState.setProjectName}
+          projectDescription={formState.projectDescription}
+          setProjectDescription={formState.setProjectDescription}
+          projectCategory={formState.projectCategory}
+          setProjectCategory={formState.setProjectCategory}
+          projectType={formState.projectType}
+          setProjectType={formState.setProjectType}
+          projectStatus={formState.projectStatus}
+          setProjectStatus={formState.setProjectStatus}
+        />
         
         {/* Requirements Tab */}
-        <TabsContent value="requirements" className="space-y-4">
-          <RequirementsTab 
-            skillsWithLevel={skillsWithLevel}
-            setSkillsWithLevel={setSkillsWithLevel}
-            deliverables={deliverables}
-            setDeliverables={setDeliverables}
-            projectDuration={projectDuration}
-            setProjectDuration={setProjectDuration}
-            projectDeadline={projectDeadline}
-            setProjectDeadline={setProjectDeadline}
-            collaboratorsNeeded={collaboratorsNeeded}
-            setCollaboratorsNeeded={setCollaboratorsNeeded}
-          />
-          <div className="flex justify-between mt-4">
-            <Button type="button" variant="outline" onClick={goToPreviousTab}>
-              Back
-            </Button>
-            <Button type="button" onClick={goToNextTab}>
-              Next: Compensation
-            </Button>
-          </div>
-        </TabsContent>
+        <RequirementsTab 
+          skillsWithLevel={formState.skillsWithLevel}
+          setSkillsWithLevel={formState.setSkillsWithLevel}
+          deliverables={formState.deliverables}
+          setDeliverables={formState.setDeliverables}
+          projectDuration={formState.projectDuration}
+          setProjectDuration={formState.setProjectDuration}
+          projectDeadline={formState.projectDeadline}
+          setProjectDeadline={formState.setProjectDeadline}
+          collaboratorsNeeded={formState.collaboratorsNeeded}
+          setCollaboratorsNeeded={formState.setCollaboratorsNeeded}
+        />
         
         {/* Compensation Tab */}
-        <TabsContent value="compensation" className="space-y-4">
-          <CompensationTab 
-            compensation={compensation}
-            setCompensation={setCompensation}
-            compensationDetails={compensationDetails}
-            setCompensationDetails={setCompensationDetails}
-            budget={budget}
-            setBudget={setBudget}
-            perks={perks}
-            setPerks={setPerks}
-            tools={tools}
-            setTools={setTools}
-          />
-          <div className="flex justify-between mt-4">
-            <Button type="button" variant="outline" onClick={goToPreviousTab}>
-              Back
-            </Button>
-            <Button type="button" onClick={goToNextTab}>
-              Next: Additional Details
-            </Button>
-          </div>
-        </TabsContent>
+        <CompensationTab 
+          compensation={formState.compensation}
+          setCompensation={formState.setCompensation}
+          compensationDetails={formState.compensationDetails}
+          setCompensationDetails={formState.setCompensationDetails}
+          budget={formState.budget}
+          setBudget={formState.setBudget}
+          perks={formState.perks}
+          setPerks={formState.setPerks}
+          tools={formState.tools}
+          setTools={formState.setTools}
+        />
         
         {/* Additional Details Tab */}
-        <TabsContent value="additionalDetails" className="space-y-4">
-          <AdditionalDetailsTab 
-            projectGoal={projectGoal}
-            setProjectGoal={setProjectGoal}
-            targetAudience={targetAudience}
-            setTargetAudience={setTargetAudience}
-            location={location}
-            setLocation={setLocation}
-            legalConstraints={legalConstraints}
-            setLegalConstraints={setLegalConstraints}
-            desiredProfiles={desiredProfiles}
-            setDesiredProfiles={setDesiredProfiles}
-          />
-          <div className="flex justify-between mt-4">
-            <Button type="button" variant="outline" onClick={goToPreviousTab}>
-              Back
-            </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? "Saving..." : submitLabel}
-            </Button>
-          </div>
-        </TabsContent>
-      </Tabs>
+        <AdditionalDetailsTab 
+          projectGoal={formState.projectGoal}
+          setProjectGoal={formState.setProjectGoal}
+          targetAudience={formState.targetAudience}
+          setTargetAudience={formState.setTargetAudience}
+          location={formState.location}
+          setLocation={formState.setLocation}
+          legalConstraints={formState.legalConstraints}
+          setLegalConstraints={formState.setLegalConstraints}
+          desiredProfiles={formState.desiredProfiles}
+          setDesiredProfiles={formState.setDesiredProfiles}
+        />
+      </ProjectFormNavigation>
     </form>
   );
 }
