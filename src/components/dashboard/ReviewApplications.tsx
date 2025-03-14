@@ -133,7 +133,7 @@ export function ReviewApplications() {
   return (
     <div className="mb-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold flex items-center gap-2">
+        <h2 className="text-2xl font-semibold flex items-center gap-2">
           <FileText className="h-4 w-4 text-primary" />
           Review Applications
         </h2>
