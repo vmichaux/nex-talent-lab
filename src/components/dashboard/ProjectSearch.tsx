@@ -27,7 +27,7 @@ export function ProjectSearch() {
           className="pl-9 w-full"
         />
       </div>
-      <Button type="submit" className="h-10 bg-purple-600 hover:bg-purple-700">Search</Button>
+      <Button type="submit" className="h-10">Search</Button>
     </form>
   );
 }
