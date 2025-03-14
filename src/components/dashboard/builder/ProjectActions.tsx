@@ -1,5 +1,4 @@
 
-import { MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
 import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
@@ -17,14 +16,6 @@ export function ProjectActions({ showProjectModal, setShowProjectModal }: Projec
     <div className="flex flex-col md:flex-row justify-between gap-6 mb-8">
       <div className="flex flex-col sm:flex-row gap-3">
         <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
-        <Button 
-          variant="outline" 
-          className="gap-2"
-          onClick={() => navigate('/requests')}
-        >
-          <MessageSquare size={18} />
-          Review Applications
-        </Button>
       </div>
       <div className="md:w-1/2 lg:w-1/3">
         <ProjectSearch />

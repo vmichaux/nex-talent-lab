@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
@@ -16,6 +17,8 @@ import { ProjectActions } from "@/components/dashboard/builder/ProjectActions";
 import { RecommendedTalents } from "@/components/dashboard/builder/RecommendedTalents";
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
+import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
+import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
 
 export function BuilderDashboard() {
   const location = useLocation();
@@ -43,6 +46,18 @@ export function BuilderDashboard() {
 
   return (
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
+      {/* Top action bar with Add Project and Search */}
+      <div className="w-full mb-8">
+        <div className="flex flex-col md:flex-row justify-between gap-6">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
+          </div>
+          <div className="md:w-1/2 lg:w-1/3">
+            <ProjectSearch />
+          </div>
+        </div>
+      </div>
+
       {/* Left column (wider) */}
       <div className="lg:w-3/5 space-y-12">
         {/* Overview section */}
@@ -50,12 +65,6 @@ export function BuilderDashboard() {
           <h2 className="text-xl font-bold mb-6">Your Overview</h2>
           <DashboardOverview role="builder" />
         </div>
-
-        {/* Project actions section */}
-        <ProjectActions 
-          showProjectModal={showProjectModal} 
-          setShowProjectModal={setShowProjectModal} 
-        />
 
         {/* Active Projects section */}
         <DashboardProjects />
@@ -66,14 +75,14 @@ export function BuilderDashboard() {
         {/* Project Metrics section */}
         <ProjectMetrics role="builder" />
         
-        {/* Recommended Talents section */}
-        <RecommendedTalents />
+        {/* Skills Progress section - moved from right column */}
+        <SkillsProgress />
         
         {/* Learning Resources section */}
         <LearningResources />
         
-        {/* Manage Reviews section */}
-        <ManageReviewsRecommendations role="builder" />
+        {/* Recommended Talents section */}
+        <RecommendedTalents />
       </div>
       
       {/* Right column (narrower) */}
@@ -87,8 +96,8 @@ export function BuilderDashboard() {
         {/* Network section */}
         <NetworkList />
         
-        {/* Skills Progress section */}
-        <SkillsProgress />
+        {/* Manage Reviews section - moved from left column */}
+        <ManageReviewsRecommendations role="builder" />
         
         {/* Project History section */}
         <ProjectHistory />

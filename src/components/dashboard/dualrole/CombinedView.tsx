@@ -20,12 +20,27 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RecommendedTalents } from "../builder/RecommendedTalents";
 import { NetworkList } from "../builder/NetworkList";
+import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
+import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
 
 export function CombinedView() {
   const [filter, setFilter] = useState<string>("all");
+  const [showProjectModal, setShowProjectModal] = useState(false);
 
   return (
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
+      {/* Top action bar with Add Project and Search */}
+      <div className="w-full mb-8">
+        <div className="flex flex-col md:flex-row justify-between gap-6">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
+          </div>
+          <div className="md:w-1/2 lg:w-1/3">
+            <ProjectSearch />
+          </div>
+        </div>
+      </div>
+      
       {/* Left column (wider) */}
       <div className="lg:w-3/5 space-y-12">
         {/* Overview metrics */}
@@ -46,17 +61,17 @@ export function CombinedView() {
           <RoleActivityCards />
         </div>
         
+        {/* Skills Progress section - moved from right column */}
+        <SkillsProgress />
+        
+        {/* Learning Resources section */}
+        <LearningResources />
+        
         {/* Recommended Opportunities */}
         <RecommendedOpportunities filter={filter} setFilter={setFilter} />
         
         {/* Recommended Talent section */}
         <RecommendedTalents />
-        
-        {/* Learning Resources section */}
-        <LearningResources />
-        
-        {/* Manage Reviews section */}
-        <ManageReviewsRecommendations role="both" />
       </div>
       
       {/* Right column (narrower) */}
@@ -76,8 +91,8 @@ export function CombinedView() {
         {/* Network section */}
         <NetworkList />
         
-        {/* Skills Progress section */}
-        <SkillsProgress />
+        {/* Manage Reviews section - moved from left column */}
+        <ManageReviewsRecommendations role="both" />
         
         {/* Project History section */}
         <ProjectHistory />
