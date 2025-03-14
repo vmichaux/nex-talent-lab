@@ -50,7 +50,7 @@ export function ApplicationDetailsDialog({
             <ApplicationStatus status={application.status} />
           </div>
           
-          {application.status === "pending" && (
+          {(application.status === "pending") && (
             <ApplicationActions 
               applicationId={application.id}
               onOpenFeedback={onOpenFeedback}

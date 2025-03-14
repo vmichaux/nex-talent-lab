@@ -98,7 +98,7 @@ export function useApplicationsData() {
               userFullName: fullName,
               // Only replace userName if it's the default "Anonymous User"
               userName: app.userName === "Anonymous User" ? fullName : app.userName
-            };
+            } as ApplicationSummary;
           }
           return app;
         })
@@ -157,7 +157,7 @@ export function useApplicationsData() {
       setApplications(prev => 
         prev.map(app => 
           app.id === applicationId 
-            ? { ...app, status: newStatus, feedback: feedback || app.feedback } 
+            ? { ...app, status: newStatus, feedback: feedback || app.feedback } as ApplicationSummary
             : app
         )
       );
@@ -165,7 +165,7 @@ export function useApplicationsData() {
       setFilteredApplications(prev => 
         prev.map(app => 
           app.id === applicationId 
-            ? { ...app, status: newStatus, feedback: feedback || app.feedback } 
+            ? { ...app, status: newStatus, feedback: feedback || app.feedback } as ApplicationSummary
             : app
         )
       );

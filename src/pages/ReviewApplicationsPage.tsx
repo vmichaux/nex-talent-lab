@@ -100,8 +100,8 @@ const ReviewApplicationsPage = () => {
         setOpen={setDetailsOpen}
         application={selectedApplication}
         onOpenFeedback={() => setMessageDialogOpen(true)}
-        onAccept={handleAccept}
-        onReject={handleReject}
+        onAccept={(applicationId) => handleAccept(applicationId)}
+        onReject={(applicationId) => handleReject(applicationId)}
         isSubmitting={isSubmitting}
       />
       
