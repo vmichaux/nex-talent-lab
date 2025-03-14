@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ArrowLeft, LucideIcon } from "lucide-react";
@@ -21,7 +20,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isNavigating, setIsNavigating] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -29,17 +27,11 @@ export default function LoginPage() {
 
   // Monitor user data loading to handle navigation
   useEffect(() => {
-    if (isNavigating && currentUser && userData) {
+    if (isLoading && currentUser && userData) {
       console.log("Navigation triggered with user data:", userData);
       handleRedirectAfterAuth();
-      
-      // Reset navigation state after successful redirect
-      setTimeout(() => {
-        setIsNavigating(false);
-        setIsLoading(false);
-      }, 100);
     }
-  }, [userData, currentUser, isNavigating]);
+  }, [userData, currentUser, isLoading]);
 
   const handleRedirectAfterAuth = () => {
     // Check if user has already completed profile setup
@@ -55,6 +47,11 @@ export default function LoginPage() {
       console.log("User has not selected a role, navigating to onboarding");
       navigate("/onboarding");
     }
+    
+    // Reset loading state after successful redirect
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -66,15 +63,10 @@ export default function LoginPage() {
       console.log(`Login form submitted with email: ${email}`);
       await login(email, password);
       
-      // Set navigating state to trigger the useEffect
-      setIsNavigating(true);
-      
-      // Don't navigate immediately - let the useEffect handle it
-      // after userData is available
+      // The useEffect will handle the navigation when userData is available
     } catch (error: any) {
       console.error("Login error in component:", error);
       setIsLoading(false);
-      setIsNavigating(false);
     }
   };
 
@@ -86,11 +78,7 @@ export default function LoginPage() {
       console.log("Google sign-in button clicked");
       await signInWithGoogle();
       
-      // Set navigating state to trigger the useEffect
-      setIsNavigating(true);
-      
-      // Don't navigate immediately - let the useEffect handle it
-      // after userData is available
+      // The useEffect will handle the navigation when userData is available
     } catch (error: any) {
       console.error("Google sign-in error in component:", error);
       if (error.code === "auth/unauthorized-domain") {
@@ -99,12 +87,11 @@ export default function LoginPage() {
         setAuthError(formatAuthError(error));
       }
       setIsLoading(false);
-      setIsNavigating(false);
     }
   };
 
-  // Full page loading overlay when navigating
-  if (isNavigating) {
+  // Show loading indicator during login process but only after authentication has started
+  if (isLoading && currentUser) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
         <div className="text-center">

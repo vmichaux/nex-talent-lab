@@ -55,7 +55,7 @@ export function DashboardOnboarding() {
     
     const timer = setTimeout(() => {
       checkUserStatus();
-    }, 1000);
+    }, 500);
     
     return () => clearTimeout(timer);
   }, [currentUser, userData, navigate]);
