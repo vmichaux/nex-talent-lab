@@ -4,7 +4,11 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export function ProjectSearch() {
+interface ProjectSearchProps {
+  hideButton?: boolean;
+}
+
+export function ProjectSearch({ hideButton = false }: ProjectSearchProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (e: React.FormEvent) => {
@@ -27,7 +31,9 @@ export function ProjectSearch() {
           className="pl-9 w-full"
         />
       </div>
-      <Button type="submit" className="h-10">Search</Button>
+      {!hideButton && (
+        <Button type="submit" variant="purple" className="h-10">Search</Button>
+      )}
     </form>
   );
 }

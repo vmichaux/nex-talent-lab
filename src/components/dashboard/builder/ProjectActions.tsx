@@ -10,12 +10,13 @@ interface ProjectActionsProps {
 
 export function ProjectActions({ showProjectModal, setShowProjectModal }: ProjectActionsProps) {
   return (
-    <div className="flex flex-col md:flex-row justify-between gap-6 mb-8">
-      <div>
+    <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
+      <div className="flex gap-4">
         <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
+        <Button type="submit" variant="purple" className="h-10">Search</Button>
       </div>
       <div className="flex-1">
-        <ProjectSearch />
+        <ProjectSearch hideButton={true} />
       </div>
     </div>
   );
