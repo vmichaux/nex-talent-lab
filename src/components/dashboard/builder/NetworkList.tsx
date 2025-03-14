@@ -41,7 +41,7 @@ export function NetworkList() {
           My Network
         </h2>
         <Button variant="outline" className="gap-1">
-          Expand Network
+          View All
         </Button>
       </div>
       

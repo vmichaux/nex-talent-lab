@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -84,7 +85,7 @@ const DashboardPage = () => {
               </div>
 
               <div className="flex justify-center mb-10">
-                <Tabs value={activeRole} onValueChange={value => handleRoleChange(value as "talent" | "builder" | "both")} className="w-full max-w-6xl">
+                <Tabs value={activeRole} onValueChange={value => handleRoleChange(value as "talent" | "builder" | "both")} className="w-full max-w-[1800px]">
                   <TabsList className="grid grid-cols-3 w-full max-w-2xl mx-auto">
                     <TabsTrigger value="talent" className="flex items-center gap-2">
                       <span className="hidden md:inline">Talent Dashboard</span>
@@ -100,15 +101,15 @@ const DashboardPage = () => {
                     </TabsTrigger>
                   </TabsList>
 
-                  <TabsContent value="talent" className="mt-8 px-4 max-w-7xl mx-auto">
+                  <TabsContent value="talent" className="mt-8 px-4 max-w-[1800px] mx-auto">
                     <TalentDashboard />
                   </TabsContent>
                   
-                  <TabsContent value="builder" className="mt-8 px-4 max-w-7xl mx-auto">
+                  <TabsContent value="builder" className="mt-8 px-4 max-w-[1800px] mx-auto">
                     <BuilderDashboard />
                   </TabsContent>
                   
-                  <TabsContent value="both" className="mt-8 px-4 max-w-7xl mx-auto">
+                  <TabsContent value="both" className="mt-8 px-4 max-w-[1800px] mx-auto">
                     <DualRoleDashboard />
                   </TabsContent>
                 </Tabs>

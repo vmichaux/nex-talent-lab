@@ -1,5 +1,5 @@
 
-import { Users } from "lucide-react";
+import { Network } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -37,8 +37,8 @@ export function ContactsList() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold flex items-center gap-2">
-          <Users className="h-5 w-5 text-primary" />
-          Contacts
+          <Network className="h-5 w-5 text-primary" />
+          My Network
         </h2>
         <Button variant="outline" className="gap-1">
           View All

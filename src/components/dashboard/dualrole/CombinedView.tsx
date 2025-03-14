@@ -24,9 +24,9 @@ export function CombinedView() {
   const [filter, setFilter] = useState<string>("all");
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8">
+    <div className="flex flex-col lg:flex-row gap-12 w-full max-w-[1800px] mx-auto">
       {/* Left column (wider) */}
-      <div className="lg:w-2/3 space-y-16">
+      <div className="lg:w-2/3 space-y-20">
         {/* Overview metrics */}
         <div>
           <h2 className="text-2xl font-bold mb-8">Your Overview</h2>
@@ -39,41 +39,41 @@ export function CombinedView() {
         {/* Projects Deadlines and Milestones */}
         <ProjectDeadlines />
         
-        {/* Project Metrics section with role activities */}
-        <div>
-          <h2 className="text-2xl font-bold mb-8">Project Metrics</h2>
-          <RoleActivityCards />
-        </div>
-        
-        {/* Messages */}
-        <DashboardMessages />
-        
-        {/* Project History section */}
-        <ProjectHistory />
-      </div>
-      
-      {/* Right column (narrower) */}
-      <div className="lg:w-1/3 space-y-16">
-        {/* Manage Applications section */}
-        <div>
-          <h2 className="text-2xl font-bold mb-8">Manage Applications</h2>
-          <ReviewApplications />
-        </div>
-        
         {/* Recommended Opportunities */}
         <RecommendedOpportunities filter={filter} setFilter={setFilter} />
         
         {/* Recommended Talent section */}
         <RecommendedTalents />
         
+        {/* Project Metrics section with role activities */}
+        <div>
+          <h2 className="text-2xl font-bold mb-8">Project Metrics</h2>
+          <RoleActivityCards />
+        </div>
+        
+        {/* Learning Resources section */}
+        <LearningResources />
+        
+        {/* Project History section */}
+        <ProjectHistory />
+      </div>
+      
+      {/* Right column (narrower) */}
+      <div className="lg:w-1/3 space-y-20">
+        {/* Manage Applications section */}
+        <div>
+          <h2 className="text-2xl font-bold mb-8">Manage Applications</h2>
+          <ReviewApplications />
+        </div>
+        
+        {/* Messages */}
+        <DashboardMessages />
+        
         {/* Network section */}
         <NetworkList />
         
         {/* Skills Progress section */}
         <SkillsProgress />
-        
-        {/* Learning Resources section */}
-        <LearningResources />
       </div>
     </div>
   );

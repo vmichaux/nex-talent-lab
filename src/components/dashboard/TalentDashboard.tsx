@@ -10,15 +10,15 @@ import { DashboardProjects } from "@/components/dashboard/DashboardProjects";
 import { ProjectDeadlines } from "@/components/dashboard/ProjectDeadlines";
 import { ProjectMetrics } from "@/components/dashboard/ProjectMetrics";
 import { ProjectHistory } from "@/components/dashboard/ProjectHistory";
-import { ContactsList } from "@/components/dashboard/talent/ContactsList";
+import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 
 export function TalentDashboard() {
   const [filter, setFilter] = useState<string>("all");
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8">
+    <div className="flex flex-col lg:flex-row gap-12 w-full max-w-[1800px] mx-auto">
       {/* Left column (wider) */}
-      <div className="lg:w-2/3 space-y-16">
+      <div className="lg:w-2/3 space-y-20">
         {/* Overview section */}
         <div>
           <h2 className="text-2xl font-bold mb-8">Your Overview</h2>
@@ -30,33 +30,33 @@ export function TalentDashboard() {
 
         {/* Projects Deadlines and Milestones */}
         <ProjectDeadlines />
+        
+        {/* Recommended Opportunities section */}
+        <RecommendedOpportunities filter={filter} setFilter={setFilter} />
 
         {/* Project Metrics section */}
         <ProjectMetrics role="talent" />
-
-        {/* Messages section */}
-        <DashboardMessages />
         
+        {/* Learning Resources section */}
+        <LearningResources />
+
         {/* Project History section */}
         <ProjectHistory />
       </div>
       
       {/* Right column (narrower) */}
-      <div className="lg:w-1/3 space-y-16">
+      <div className="lg:w-1/3 space-y-20">
         {/* Applied Projects section */}
         <AppliedProjects />
         
-        {/* Recommended Opportunities section */}
-        <RecommendedOpportunities filter={filter} setFilter={setFilter} />
+        {/* Messages section */}
+        <DashboardMessages />
         
-        {/* Contacts section */}
-        <ContactsList />
+        {/* Network section */}
+        <NetworkList />
         
         {/* Skills Progress section */}
         <SkillsProgress />
-        
-        {/* Learning Resources section */}
-        <LearningResources />
       </div>
     </div>
   );

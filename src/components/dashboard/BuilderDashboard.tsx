@@ -42,9 +42,9 @@ export function BuilderDashboard() {
   }, [projects]);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8">
+    <div className="flex flex-col lg:flex-row gap-12 w-full max-w-[1800px] mx-auto">
       {/* Left column (wider) */}
-      <div className="lg:w-2/3 space-y-16">
+      <div className="lg:w-2/3 space-y-20">
         {/* Overview section */}
         <div>
           <h2 className="text-2xl font-bold mb-8">Your Overview</h2>
@@ -63,32 +63,32 @@ export function BuilderDashboard() {
         {/* Projects Deadlines and Milestones */}
         <ProjectDeadlines />
         
+        {/* Recommended Talents section */}
+        <RecommendedTalents />
+        
         {/* Project Metrics section */}
         <ProjectMetrics role="builder" />
         
-        {/* Messages section */}
-        <DashboardMessages />
+        {/* Learning Resources section */}
+        <LearningResources />
         
         {/* Project History section */}
         <ProjectHistory />
       </div>
       
       {/* Right column (narrower) */}
-      <div className="lg:w-1/3 space-y-16">
+      <div className="lg:w-1/3 space-y-20">
         {/* Review Applications */}
         <ReviewApplications />
         
-        {/* Recommended Talent section */}
-        <RecommendedTalents />
+        {/* Messages section */}
+        <DashboardMessages />
         
         {/* Network section */}
         <NetworkList />
         
         {/* Skills Progress section */}
         <SkillsProgress />
-        
-        {/* Learning Resources section */}
-        <LearningResources />
       </div>
     </div>
   );
