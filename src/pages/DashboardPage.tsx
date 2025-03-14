@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -49,35 +50,21 @@ const DashboardPage = () => {
       const savedRole = localStorage.getItem("userRole");
       if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
         setActiveRole(savedRole === "entrepreneur" ? "builder" : savedRole);
-        
-        // Update role in Firestore if missing there but present in localStorage
-        if (currentUser) {
-          import("@/services/authService").then(({ updateUserRole }) => {
-            updateUserRole(currentUser, savedRole as "talent" | "entrepreneur" | "both")
-              .catch(error => {
-                console.error("Error updating role:", error);
-              });
-          });
-        }
-      } else if (isLoggedIn && !savedRole && !userData?.hasCompletedProfile) {
-        // Only redirect to onboarding if user has no role AND hasn't completed their profile
+      } else if (isLoggedIn && !savedRole) {
+        // User is logged in but has no role set - redirect to onboarding
         toast.info("Let's set up your profile", {
           description: "Please select your role to continue.",
           duration: 6000,
         });
         navigate("/onboarding");
         return;
-      } else if (isLoggedIn && !savedRole && userData?.hasCompletedProfile) {
-        // If they've completed their profile but somehow don't have a role, default to talent
-        setActiveRole("talent");
-        localStorage.setItem("userRole", "talent");
       }
     }
     
     if (userData?.hasCompletedProfile) {
       setShowWelcome(false);
     }
-  }, [isLoggedIn, navigate, userData, currentUser]);
+  }, [isLoggedIn, navigate, userData]);
   
   const handleCompleteOnboarding = () => {
     setShowWelcome(false);

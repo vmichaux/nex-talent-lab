@@ -21,39 +21,26 @@ export interface UserData {
 }
 
 // Update user data in Firestore
-export const updateUserData = async (user: User, firstName?: string, lastName?: string): Promise<UserData> => {
+export const updateUserData = async (user: User): Promise<UserData> => {
   const userRef = doc(db, "users", user.uid);
-  const userData: UserData = {
-    email: user.email || '',
+  const userData = {
+    email: user.email,
     lastLogin: new Date(),
     createdAt: new Date(),
     hasCompletedProfile: false,
   };
-  
-  // Add first name and last name if provided
-  if (firstName) userData.firstName = firstName;
-  if (lastName) userData.lastName = lastName;
 
   try {
     const docSnap = await getDoc(userRef);
     if (docSnap.exists()) {
-      const existingData = docSnap.data() as UserData;
-      const updateData: Partial<UserData> = { lastLogin: new Date() };
-      
-      // Only update first/last name if they are provided and not already set
-      if (firstName && !existingData.firstName) updateData.firstName = firstName;
-      if (lastName && !existingData.lastName) updateData.lastName = lastName;
-      
-      await setDoc(userRef, updateData, { merge: true });
-      return { ...existingData, ...updateData };
+      await setDoc(userRef, { lastLogin: new Date() }, { merge: true });
+      return { ...docSnap.data() as UserData, lastLogin: new Date() };
     } else {
       await setDoc(userRef, userData);
       
       const userProfileRef = doc(db, "userProfiles", user.uid);
       await setDoc(userProfileRef, {
         email: user.email,
-        firstName,
-        lastName,
         createdAt: new Date(),
         lastUpdated: new Date()
       }, { merge: true });
@@ -131,10 +118,10 @@ export const formatAuthError = (error: any): string => {
 };
 
 // Sign up with email and password
-export const signup = async (email: string, password: string, firstName?: string, lastName?: string): Promise<User> => {
+export const signup = async (email: string, password: string): Promise<User> => {
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);
-    await updateUserData(result.user, firstName, lastName);
+    await updateUserData(result.user);
     return result.user;
   } catch (error) {
     console.error("Signup error:", error);

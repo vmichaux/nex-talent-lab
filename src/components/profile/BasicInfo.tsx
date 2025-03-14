@@ -1,5 +1,5 @@
 
-import React, { useEffect } from "react";
+import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,7 +11,6 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { ProfilePicture } from "./ProfilePicture";
-import { useAuth } from "@/hooks/use-auth";
 
 interface BasicInfoProps {
   profile: {
@@ -31,23 +30,6 @@ interface BasicInfoProps {
 }
 
 export const BasicInfo = ({ profile, currentUserId, onInputChange }: BasicInfoProps) => {
-  const { userData } = useAuth();
-  
-  // Populate from Firestore data when userData changes
-  useEffect(() => {
-    if (userData) {
-      if (userData.firstName && !profile.firstName) {
-        onInputChange("firstName", userData.firstName);
-      }
-      if (userData.lastName && !profile.lastName) {
-        onInputChange("lastName", userData.lastName);
-      }
-      if (userData.email && !profile.email) {
-        onInputChange("email", userData.email);
-      }
-    }
-  }, [userData, profile, onInputChange]);
-
   const handlePictureUpdate = (url: string) => {
     onInputChange("profilePicture", url);
   };
