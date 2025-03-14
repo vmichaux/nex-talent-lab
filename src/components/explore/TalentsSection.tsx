@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TalentCard from "./TalentCard";
 import { useTalents } from "@/hooks/useTalents";
@@ -18,6 +18,12 @@ export const TalentsSection = () => {
   console.log("Designer talents:", designerTalents);
   console.log("Developer talents:", developerTalents);
 
+  // Fix for the blank screen issue - ensure the component doesn't crash on render
+  useEffect(() => {
+    console.log("TalentsSection mounted with activeTab:", activeTab);
+    return () => console.log("TalentsSection unmounted");
+  }, []);
+
   // Combine loading states based on active tab
   const isLoading = 
     (activeTab === "all-talents" && allLoading) ||
@@ -33,6 +39,7 @@ export const TalentsSection = () => {
     (activeTab === "developers" && developersError);
 
   const handleTabChange = (value: string) => {
+    console.log("Changing tab to:", value);
     setActiveTab(value);
   };
 
@@ -68,43 +75,59 @@ export const TalentsSection = () => {
           <TalentsError message={error} onRetry={handleRetry} />
         ) : (
           <>
-            <TabsContent value="all-talents" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <TabsContent value="all-talents">
               {allTalents.length === 0 ? (
                 <div className="col-span-full text-center py-10 text-gray-500">
                   No talent profiles found. Check back soon!
                 </div>
               ) : (
-                allTalents.map(talent => <TalentCard key={talent.id} talent={talent} />)
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {allTalents.map(talent => (
+                    <TalentCard key={talent.id} talent={talent} />
+                  ))}
+                </div>
               )}
             </TabsContent>
             
-            <TabsContent value="featured-talents" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <TabsContent value="featured-talents">
               {featuredTalents.length === 0 ? (
                 <div className="col-span-full text-center py-10 text-gray-500">
                   No featured talent profiles found. Check back soon!
                 </div>
               ) : (
-                featuredTalents.map(talent => <TalentCard key={talent.id} talent={talent} />)
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {featuredTalents.map(talent => (
+                    <TalentCard key={talent.id} talent={talent} />
+                  ))}
+                </div>
               )}
             </TabsContent>
             
-            <TabsContent value="designers" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <TabsContent value="designers">
               {designerTalents.length === 0 ? (
                 <div className="col-span-full text-center py-10 text-gray-500">
                   No designer profiles found. Check back soon!
                 </div>
               ) : (
-                designerTalents.map(talent => <TalentCard key={talent.id} talent={talent} />)
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {designerTalents.map(talent => (
+                    <TalentCard key={talent.id} talent={talent} />
+                  ))}
+                </div>
               )}
             </TabsContent>
             
-            <TabsContent value="developers" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <TabsContent value="developers">
               {developerTalents.length === 0 ? (
                 <div className="col-span-full text-center py-10 text-gray-500">
                   No developer profiles found. Check back soon!
                 </div>
               ) : (
-                developerTalents.map(talent => <TalentCard key={talent.id} talent={talent} />)
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {developerTalents.map(talent => (
+                    <TalentCard key={talent.id} talent={talent} />
+                  ))}
+                </div>
               )}
             </TabsContent>
           </>

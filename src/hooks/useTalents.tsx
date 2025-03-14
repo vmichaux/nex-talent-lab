@@ -24,6 +24,7 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
         // Add additional query constraints based on options
         if (options.category) {
           console.log("Filtering by category:", options.category);
+          // Handle both array and string title fields
           talentsQuery = query(
             talentsQuery, 
             where("title", "==", options.category)
@@ -44,7 +45,7 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
         console.log("Query returned", snapshot.docs.length, "documents");
         
         // Process results
-        const fetchedTalents: Talent[] = snapshot.docs
+        const fetchedTalents = snapshot.docs
           .filter(doc => {
             const data = doc.data();
             // Only include profiles that have essential information
@@ -71,9 +72,9 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
               availability: data.availability || "Available now",
               bio: data.bio || "No bio provided",
               image: data.photoURL || "/placeholder.svg",
-              featured: data.featured || false
-            } as Talent;
-          });
+              featured: Boolean(data.featured) || false
+            };
+          }) as Talent[];
         
         console.log("Processed talents:", fetchedTalents);
         setTalents(fetchedTalents);
