@@ -27,6 +27,7 @@ import ContactSalesPage from "./pages/ContactSalesPage";
 import { DashboardOnboarding } from "./components/DashboardOnboarding";
 import { ChatWidget } from "./components/ChatWidget";
 import { ScrollToTopButton } from "./components/ScrollToTopButton";
+import { ProjectForm } from "./components/dashboard/ProjectForm";
 
 // Scroll to top component that will be used inside the Router
 function ScrollToTop() {
@@ -61,6 +62,7 @@ function AppContent() {
           <Route path="/about" element={<OurStoryPage />} />
           <Route path="/contact-sales" element={<ContactSalesPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard/new-project" element={<DashboardPage newProject={true} />} />
           <Route path="/requests" element={<ReviewApplicationsPage />} />
           {/* Special route for onboarding without Navbar */}
           <Route path="/onboarding" element={<DashboardOnboarding />} />

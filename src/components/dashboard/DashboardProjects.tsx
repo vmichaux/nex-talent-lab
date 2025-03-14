@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,12 +29,8 @@ export function DashboardProjects() {
   const displayedProjects = userProjects.slice(0, 3);
   
   const handleCreateFirstProject = () => {
-    // First try to navigate to dashboard with the state
-    navigate('/dashboard', {
-      state: {
-        openProjectModal: true
-      }
-    });
+    // Navigate to the new project page
+    navigate('/dashboard/new-project');
   };
   
   return <div>
