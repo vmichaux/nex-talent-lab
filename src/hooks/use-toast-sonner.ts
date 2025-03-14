@@ -52,14 +52,13 @@ export const toast = {
 
 // For backward compatibility with code that uses useToast
 export const useToast = () => {
+  // Create a toast function that mimics the Shadcn API
+  const toastFunction = (options: { title: string, description?: string, variant?: 'default' | 'destructive' }) => {
+    return toast.custom(options);
+  };
+  
+  // Combine the function with the helper methods
   return {
-    toast: {
-      // Standard toast function (mimicking the Shadcn API)
-      (options: { title: string, description?: string, variant?: 'default' | 'destructive' }) {
-        return toast.custom(options);
-      },
-      // Helper methods
-      ...toast
-    }
+    toast: Object.assign(toastFunction, toast)
   };
 };
