@@ -1,10 +1,11 @@
 
 import React from "react";
-import { Calendar, Clock, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+
 export function ProjectDeadlines() {
   // Sample data - in a real app, this would come from a data source
   const deadlines = [{
@@ -29,10 +30,10 @@ export function ProjectDeadlines() {
     progress: 90,
     status: "On Track"
   }];
+  
   return <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl">
-          <Calendar className="h-4 w-4 text-primary" />
+        <h2 className="font-semibold category-title-gradient text-3xl">
           Projects Deadlines and Milestones
         </h2>
         <Button variant="outline" size="sm" className="gap-1">
@@ -49,7 +50,6 @@ export function ProjectDeadlines() {
             <CardContent className="space-y-3 px-4 pb-4">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-1 text-xs text-gray-600">
-                  <Clock className="h-3 w-3" />
                   {item.deadline}
                 </div>
                 <Badge className={item.status === "On Track" ? "bg-green-100 text-green-800 hover:bg-green-100 text-xs px-2 py-0.5" : item.status === "At Risk" ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-100 text-xs px-2 py-0.5" : "bg-red-100 text-red-800 hover:bg-red-100 text-xs px-2 py-0.5"}>

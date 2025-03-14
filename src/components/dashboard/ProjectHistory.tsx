@@ -1,8 +1,10 @@
+
 import React from "react";
-import { History, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+
 export function ProjectHistory() {
   // Sample history data
   const projectHistory = [{
@@ -27,10 +29,10 @@ export function ProjectHistory() {
     status: "Completed",
     contribution: "Developed data visualization components and API integration"
   }];
+  
   return <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl">
-          <History className="h-4 w-4 text-primary" />
+        <h2 className="font-semibold category-title-gradient text-3xl">
           My Project History
         </h2>
         <Button variant="outline" size="sm" className="gap-1">

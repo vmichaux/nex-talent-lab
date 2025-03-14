@@ -1,11 +1,12 @@
 
 import React from "react";
-import { MessageSquare, ArrowRight } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+
 export function DashboardMessages() {
   const navigate = useNavigate();
 
@@ -47,10 +48,10 @@ export function DashboardMessages() {
     unread: false,
     projectName: "Legal Consultation"
   }];
+  
   return <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl">
-          <MessageSquare className="h-4 w-4 text-primary" />
+        <h2 className="font-semibold category-title-gradient text-3xl">
           Recent Messages
         </h2>
         <Button variant="outline" size="sm" className="gap-1" onClick={() => navigate('/messages')}>

@@ -1,12 +1,14 @@
 
 import React from "react";
-import { ThumbsUp, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+
 interface ManageReviewsRecommendationsProps {
   role?: "talent" | "builder" | "both";
 }
+
 export function ManageReviewsRecommendations({
   role = "talent"
 }: ManageReviewsRecommendationsProps) {
@@ -35,10 +37,10 @@ export function ManageReviewsRecommendations({
     rating: 4,
     date: "2 weeks ago"
   }];
+  
   return <div>
       <div className="flex justify-between items-center mb-4 rounded-2xl">
-        <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl">
-          <ThumbsUp className="h-4 w-4 text-primary" />
+        <h2 className="font-semibold category-title-gradient text-3xl">
           Manage Reviews & Recommendations
         </h2>
         <Button variant="outline" size="sm" className="gap-1" onClick={() => navigate('/reviews')}>

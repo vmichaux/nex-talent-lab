@@ -1,6 +1,5 @@
 
 import React from "react";
-import { BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -8,8 +7,7 @@ export function LearningResources() {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl">
-          <BookOpen className="h-4 w-4 text-primary" />
+        <h2 className="font-semibold category-title-gradient text-3xl">
           Learning Resources
         </h2>
       </div>

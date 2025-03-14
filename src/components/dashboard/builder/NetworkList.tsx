@@ -1,5 +1,5 @@
 
-import { Network, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,8 +36,7 @@ export function NetworkList() {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl">
-          <Network className="h-4 w-4 text-primary" />
+        <h2 className="font-semibold category-title-gradient text-3xl">
           My Network
         </h2>
         <Button variant="outline" size="sm" className="gap-1">

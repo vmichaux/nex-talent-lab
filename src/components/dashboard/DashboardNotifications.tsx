@@ -1,7 +1,7 @@
 
 import { useState } from "react";
-import { Bell, ArrowRight } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from "@/hooks/useNotifications";
@@ -31,8 +31,7 @@ export function DashboardNotifications() {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl">
-          <Bell className="h-4 w-4 text-primary" />
+        <h2 className="font-semibold category-title-gradient text-3xl">
           Recent Notifications
         </h2>
         <Button variant="outline" size="sm" className="gap-1" onClick={() => navigate('/dashboard/notifications')}>
@@ -60,7 +59,6 @@ export function DashboardNotifications() {
                   </Avatar>
                 ) : (
                   <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                    <Bell className="h-4 w-4" />
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
