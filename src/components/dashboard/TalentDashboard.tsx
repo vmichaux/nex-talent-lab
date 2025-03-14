@@ -12,27 +12,12 @@ import { ProjectMetrics } from "@/components/dashboard/ProjectMetrics";
 import { ProjectHistory } from "@/components/dashboard/ProjectHistory";
 import { NetworkList } from "@/components/dashboard/builder/NetworkList";
 import { ManageReviewsRecommendations } from "@/components/dashboard/ManageReviewsRecommendations";
-import { AddProjectButton } from "@/components/dashboard/AddProjectButton";
-import { ProjectSearch } from "@/components/dashboard/ProjectSearch";
 
 export function TalentDashboard() {
   const [filter, setFilter] = useState<string>("all");
-  const [showProjectModal, setShowProjectModal] = useState(false);
 
   return (
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
-      {/* Top action bar with Add Project and Search */}
-      <div className="w-full mb-8">
-        <div className="flex flex-col md:flex-row justify-between gap-6">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <AddProjectButton open={showProjectModal} setOpen={setShowProjectModal} />
-          </div>
-          <div className="md:w-1/2 lg:w-1/3">
-            <ProjectSearch />
-          </div>
-        </div>
-      </div>
-      
       {/* Left column (wider) */}
       <div className="lg:w-3/5 space-y-12">
         {/* Overview section */}
@@ -50,14 +35,14 @@ export function TalentDashboard() {
         {/* Project Metrics section */}
         <ProjectMetrics role="talent" />
         
-        {/* Skills Progress section - moved from right column */}
-        <SkillsProgress />
+        {/* Recommended Opportunities section */}
+        <RecommendedOpportunities filter={filter} setFilter={setFilter} />
         
         {/* Learning Resources section */}
         <LearningResources />
         
-        {/* Recommended Opportunities section */}
-        <RecommendedOpportunities filter={filter} setFilter={setFilter} />
+        {/* Manage Reviews section */}
+        <ManageReviewsRecommendations role="talent" />
       </div>
       
       {/* Right column (narrower) */}
@@ -71,8 +56,8 @@ export function TalentDashboard() {
         {/* Network section */}
         <NetworkList />
         
-        {/* Manage Reviews section - moved from left column */}
-        <ManageReviewsRecommendations role="talent" />
+        {/* Skills Progress section */}
+        <SkillsProgress />
         
         {/* Project History section */}
         <ProjectHistory />
