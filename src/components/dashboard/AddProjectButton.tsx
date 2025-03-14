@@ -58,7 +58,7 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
   const handleSubmit = async (formData: ProjectFormData) => {
     if (!currentUser) {
       toast.error("Authentication required. You must be logged in to create a project.", {
-        duration: 6000,  // Changed from 10000 to 6000
+        duration: 6000,
       });
       return;
     }
@@ -68,13 +68,14 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
       
       const userFullName = await getUserFullName(currentUser.uid);
       
+      // Extract skills from skillsWithLevel for the skills array
       const skills = formData.skillsWithLevel.map(item => item.skill);
       
       const newProject: Omit<Project, 'id' | 'createdAt'> = {
         title: formData.projectName,
         description: formData.projectDescription,
         category: formData.projectCategory,
-        skills: skills,
+        skills: skills, // This ensures skills and skillsWithLevel are in sync
         deadline: formData.projectDeadline,
         duration: formData.projectDuration,
         owner: userFullName || currentUser.displayName || currentUser.email || "Anonymous",
@@ -90,7 +91,7 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
         compensation: formData.compensation,
         compensationDetails: formData.compensationDetails,
         perks: formData.perks,
-        tools: formData.tools,
+        tools: formData.tools, // These are tools, not skills
         collaboratorsNeeded: formData.collaboratorsNeeded,
         projectGoal: formData.projectGoal,
         targetAudience: formData.targetAudience,
@@ -108,7 +109,7 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
         console.log("Project added with ID: ", result.projectId);
         
         toast.success("Project created. Your new project has been successfully added to your dashboard.", {
-          duration: 6000,  // Changed from 10000 to 6000
+          duration: 6000,
         });
         
         setIsOpen(false);
@@ -119,7 +120,7 @@ export function AddProjectButton({ open, setOpen: setOpenProp }: AddProjectButto
     } catch (error) {
       console.error("Error creating project:", error);
       toast.error("Failed to create project. Please try again.", {
-        duration: 6000,  // Changed from 10000 to 6000
+        duration: 6000,
       });
     } finally {
       setLoading(false);

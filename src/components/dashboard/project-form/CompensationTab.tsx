@@ -1,8 +1,10 @@
 
+import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 
 interface CompensationTabProps {
   compensation: string;
@@ -29,12 +31,25 @@ export function CompensationTab({
   tools,
   setTools
 }: CompensationTabProps) {
+  const [toolInput, setToolInput] = useState("");
+  
   const handleTogglePerk = (perk: string) => {
     if (perks.includes(perk)) {
       setPerks(perks.filter(p => p !== perk));
     } else {
       setPerks([...perks, perk]);
     }
+  };
+
+  const handleAddTool = () => {
+    if (toolInput.trim() && !tools.includes(toolInput.trim())) {
+      setTools([...tools, toolInput.trim()]);
+      setToolInput("");
+    }
+  };
+
+  const handleRemoveTool = (indexToRemove: number) => {
+    setTools(tools.filter((_, index) => index !== indexToRemove));
   };
 
   return (
@@ -95,6 +110,41 @@ export function CompensationTab({
               </label>
             </div>
           ))}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label>Tools Used</Label>
+        <div className="flex flex-wrap gap-2 p-3 border rounded-md mb-2">
+          {tools.map((tool, index) => (
+            <div key={index} className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full">
+              <span>{tool}</span>
+              <button 
+                type="button" 
+                onClick={() => handleRemoveTool(index)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+          {tools.length === 0 && (
+            <div className="text-muted-foreground text-sm py-1">
+              No tools added yet
+            </div>
+          )}
+        </div>
+        
+        <div className="flex gap-2">
+          <Input
+            value={toolInput}
+            onChange={(e) => setToolInput(e.target.value)}
+            placeholder="Add a tool (e.g., React, Figma)..."
+            className="flex-1"
+          />
+          <Button type="button" onClick={handleAddTool}>
+            Add
+          </Button>
         </div>
       </div>
     </div>

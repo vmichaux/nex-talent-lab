@@ -22,8 +22,8 @@ export function useProjectFormState(initialData?: ProjectFormData) {
   // Compensation & Benefits
   const [compensation, setCompensation] = useState("Volunteer");
   const [compensationDetails, setCompensationDetails] = useState("");
-  const [perks, setPerks] = useState<string[]>(["Mentorship", "Networking"]);
-  const [tools, setTools] = useState<string[]>(["React", "Figma"]);
+  const [perks, setPerks] = useState<string[]>([]);
+  const [tools, setTools] = useState<string[]>([]);
 
   // Additional Details
   const [projectGoal, setProjectGoal] = useState("");
@@ -31,7 +31,7 @@ export function useProjectFormState(initialData?: ProjectFormData) {
   const [location, setLocation] = useState<"Remote" | "In-person" | "Hybrid">("Remote");
   const [legalConstraints, setLegalConstraints] = useState("");
   const [budget, setBudget] = useState("");
-  const [desiredProfiles, setDesiredProfiles] = useState<string[]>(["Student", "Freelancer"]);
+  const [desiredProfiles, setDesiredProfiles] = useState<string[]>([]);
 
   // Initialize form with initial data if provided (editing mode)
   useEffect(() => {

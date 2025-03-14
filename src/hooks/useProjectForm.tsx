@@ -39,6 +39,9 @@ export function useProjectForm(project?: Project) {
     try {
       setLoading(true);
       
+      // Extract skills from skillsWithLevel for the skills array
+      const skills = formData.skillsWithLevel.map(item => item.skill);
+      
       // Map the form data back to Project type for updating
       const updatedProjectData: Partial<Project> = {
         title: formData.projectName,
@@ -47,6 +50,7 @@ export function useProjectForm(project?: Project) {
         projectType: formData.projectType,
         status: formData.projectStatus,
         skillsWithLevel: formData.skillsWithLevel,
+        skills: skills, // Ensure skills are updated based on skillsWithLevel
         deliverables: formData.deliverables,
         duration: formData.projectDuration,
         deadline: formData.projectDeadline,

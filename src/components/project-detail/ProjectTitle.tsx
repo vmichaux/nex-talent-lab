@@ -66,9 +66,9 @@ export function ProjectTitle({
               <span>{project.category}</span>
             </div>
             <div className="flex flex-wrap gap-2">
-              {project.skills && project.skills.map((skill, index) => (
+              {project.skillsWithLevel && project.skillsWithLevel.map((skill, index) => (
                 <Badge key={index} variant="outline" className="bg-gray-50">
-                  {skill}
+                  {skill.skill}
                 </Badge>
               ))}
             </div>

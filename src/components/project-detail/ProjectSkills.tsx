@@ -11,7 +11,10 @@ interface ProjectSkillsProps {
 }
 
 export function ProjectSkills({ project, isEditing }: ProjectSkillsProps) {
-  if (isEditing || (!project.skills && !project.desiredProfiles)) {
+  // Don't show if in editing mode or if there are no skills to display
+  if (isEditing || 
+     (!project.skillsWithLevel || project.skillsWithLevel.length === 0) && 
+     (!project.desiredProfiles || project.desiredProfiles.length === 0)) {
     return null;
   }
 
@@ -21,19 +24,7 @@ export function ProjectSkills({ project, isEditing }: ProjectSkillsProps) {
         <CardTitle>Skills and Requirements</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {project.skills && project.skills.length > 0 && (
-          <div>
-            <h3 className="font-semibold mb-3">Required Skills</h3>
-            <div className="flex flex-wrap gap-2">
-              {project.skills.map((skill, index) => (
-                <Badge key={index} variant="outline" className="bg-gray-50 px-3 py-1">
-                  {skill}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}
-        
+        {/* Only show skills from skillsWithLevel instead of both arrays */}
         {project.skillsWithLevel && project.skillsWithLevel.length > 0 && (
           <div>
             <h3 className="font-semibold mb-3">Skills with Proficiency</h3>
@@ -56,6 +47,21 @@ export function ProjectSkills({ project, isEditing }: ProjectSkillsProps) {
           </div>
         )}
         
+        {/* Tools section */}
+        {project.tools && project.tools.length > 0 && (
+          <div>
+            <h3 className="font-semibold mb-3">Tools Used</h3>
+            <div className="flex flex-wrap gap-2">
+              {project.tools.map((tool, index) => (
+                <Badge key={index} variant="outline" className="bg-gray-50 px-3 py-1">
+                  {tool}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {/* Desired profiles */}
         {project.desiredProfiles && project.desiredProfiles.length > 0 && (
           <div>
             <h3 className="font-semibold mb-3">Desired Profiles</h3>
