@@ -65,7 +65,7 @@ const ExploreTalentsPage = () => {
             </div>
 
             {/* Talent Section with Real Data */}
-            <TalentsSection />
+            <TalentsSection searchQuery={searchQuery} />
           </div>
         </div>
       </main>
