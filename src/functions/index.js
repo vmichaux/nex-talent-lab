@@ -1,4 +1,3 @@
-
 const contactNotifications = require('./sendEmailNotification');
 
 // Export all functions
