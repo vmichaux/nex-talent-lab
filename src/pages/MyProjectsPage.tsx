@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useNavigate } from "react-router-dom";
@@ -7,11 +7,12 @@ import { useAuth } from "@/hooks/use-auth";
 import { useProjects } from "@/hooks/useProjects";
 import { toast } from "sonner";
 import { SearchBar } from "@/components/explore/SearchBar";
-import { Project } from "@/types/project";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Briefcase, ArrowLeft } from "lucide-react";
 import { ProjectCard } from "@/components/explore/ProjectCard";
+import { useState } from "react";
+import { Project } from "@/types/project";
 
 const MyProjectsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,12 +23,11 @@ const MyProjectsPage = () => {
   } = useAuth();
   const navigate = useNavigate();
   const {
-    getUserProjects,
-    loading
+    userProjects,
+    userProjectsLoading,
+    userProjectsError,
+    getUserProjects
   } = useProjects();
-
-  const [userProjects, setUserProjects] = useState<Project[]>([]);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Redirect to login if not logged in
@@ -43,14 +43,7 @@ const MyProjectsPage = () => {
     // Fetch only the current user's projects
     const fetchUserProjects = async () => {
       if (!currentUser?.uid) return;
-      
-      try {
-        const projects = await getUserProjects(currentUser.uid);
-        setUserProjects(projects);
-      } catch (err) {
-        console.error("Error fetching user projects:", err);
-        setError("Failed to load your projects. Please try again.");
-      }
+      await getUserProjects(currentUser.uid);
     };
 
     fetchUserProjects();
@@ -101,7 +94,7 @@ const MyProjectsPage = () => {
             <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
             {/* Loading state */}
-            {loading && (
+            {userProjectsLoading && (
               <div className="flex justify-center items-center py-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
                 <span className="ml-3 text-gray-600">Loading your projects...</span>
@@ -109,15 +102,15 @@ const MyProjectsPage = () => {
             )}
 
             {/* Error state */}
-            {error && (
+            {userProjectsError && (
               <div className="text-center py-20">
-                <p className="text-red-500 mb-4">{error}</p>
-                <Button onClick={() => window.location.reload()} className="px-4 py-2 bg-primary text-white rounded">Try Again</Button>
+                <p className="text-red-500 mb-4">{userProjectsError}</p>
+                <Button onClick={() => getUserProjects(currentUser?.uid || '')} className="px-4 py-2 bg-primary text-white rounded">Try Again</Button>
               </div>
             )}
 
             {/* Projects grid */}
-            {!loading && !error && (
+            {!userProjectsLoading && !userProjectsError && (
               <div className="mt-8">
                 {filteredProjects.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

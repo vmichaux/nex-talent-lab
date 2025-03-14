@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect } from "react";
 import { Briefcase, ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -12,19 +12,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function DashboardProjects() {
   const navigate = useNavigate();
-  const {
-    currentUser
-  } = useAuth();
-  const {
-    projects,
-    loading
-  } = useProjects({
-    excludeCurrentUser: false,
-    userId: currentUser?.uid
-  });
-
-  // Filter projects to only show the current user's projects
-  const userProjects = projects.filter(project => project.userId === currentUser?.uid);
+  const { currentUser } = useAuth();
+  const { userProjects, userProjectsLoading, getUserProjects } = useProjects();
+  
+  useEffect(() => {
+    if (currentUser?.uid) {
+      getUserProjects(currentUser.uid);
+    }
+  }, [currentUser, getUserProjects]);
+  
   // Limit to 3 projects for display
   const displayedProjects = userProjects.slice(0, 3);
 
@@ -45,7 +41,7 @@ export function DashboardProjects() {
         </Button>
       </div>
       
-      {loading ? (
+      {userProjectsLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[1, 2, 3].map(skeleton => (
             <Card key={skeleton} className="overflow-hidden shadow-sm">

@@ -11,8 +11,11 @@ interface UseProjectsOptions {
 
 export const useProjects = (options: UseProjectsOptions = {}) => {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [userProjects, setUserProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userProjectsLoading, setUserProjectsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userProjectsError, setUserProjectsError] = useState<string | null>(null);
   const { excludeCurrentUser = false, userId = null } = options;
 
   const fetchProjects = async () => {
@@ -68,6 +71,10 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
   // Function to add a new project to the local state
   const addProjectToState = (project: Project) => {
     setProjects(prev => [project, ...prev]);
+    // Also add to userProjects if it belongs to the current user
+    if (project.userId === userId) {
+      setUserProjects(prev => [project, ...prev]);
+    }
   };
 
   // Function to update a project in Firestore
@@ -89,8 +96,16 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
       await updateDoc(projectRef, updatedData);
       console.log("Project updated successfully in Firestore");
       
-      // Update the local state
+      // Update the local state for both projects and userProjects
       setProjects(prevProjects => 
+        prevProjects.map(project => 
+          project.id === projectId 
+            ? { ...project, ...updatedData } 
+            : project
+        )
+      );
+      
+      setUserProjects(prevProjects => 
         prevProjects.map(project => 
           project.id === projectId 
             ? { ...project, ...updatedData } 
@@ -129,7 +144,7 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
         createdAt: new Date()
       };
       
-      // Add the new project to the local state
+      // Add the new project to the local states
       addProjectToState(newProject);
       
       return { success: true, projectId: projectRef.id, project: newProject };
@@ -143,8 +158,13 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
   };
 
   const getUserProjects = async (userId: string) => {
+    if (!userId) {
+      console.error("getUserProjects called without userId");
+      return [];
+    }
+    
     try {
-      setLoading(true);
+      setUserProjectsLoading(true);
       console.log("Fetching projects for user:", userId);
       
       // Modified query: only filter by userId without orderBy to avoid composite index requirement
@@ -174,14 +194,18 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
       
+      // Update the user projects state
+      setUserProjects(sortedProjects);
+      setUserProjectsError(null);
+      
       console.log("Fetched user projects:", sortedProjects.length, "projects");
       return sortedProjects;
     } catch (err) {
       console.error("Error fetching user projects:", err);
-      setError("Failed to load user projects. Please try again later.");
+      setUserProjectsError("Failed to load user projects. Please try again later.");
       return [];
     } finally {
-      setLoading(false);
+      setUserProjectsLoading(false);
     }
   };
 
@@ -191,8 +215,11 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
 
   return { 
     projects, 
+    userProjects, 
     loading, 
+    userProjectsLoading,
     error, 
+    userProjectsError,
     refetchProjects: fetchProjects,
     updateProject,
     getUserProjects,
