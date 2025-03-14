@@ -13,6 +13,7 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
     const fetchTalents = async () => {
       try {
         setLoading(true);
+        console.log("Fetching talents with options:", options);
         
         // Create a reference to the userProfiles collection
         const userProfilesRef = collection(db, "userProfiles");
@@ -22,6 +23,7 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
         
         // Add additional query constraints based on options
         if (options.category) {
+          console.log("Filtering by category:", options.category);
           talentsQuery = query(
             talentsQuery, 
             where("title", "array-contains", options.category)
@@ -30,6 +32,7 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
         
         // If featured is specified, query for featured profiles
         if (options.featured) {
+          console.log("Filtering by featured:", options.featured);
           talentsQuery = query(
             talentsQuery,
             where("featured", "==", true)
@@ -38,6 +41,7 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
         
         // Execute the query
         const snapshot = await getDocs(talentsQuery);
+        console.log("Query returned", snapshot.docs.length, "documents");
         
         // Process results
         const fetchedTalents: Talent[] = snapshot.docs
@@ -48,6 +52,7 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
           })
           .map(doc => {
             const data = doc.data();
+            console.log("Processing document:", doc.id, data);
             
             // Calculate a rating (either from data or generate a placeholder)
             const rating = data.rating || generateRandomRating();
@@ -70,9 +75,9 @@ export const useTalents = (options: { featured?: boolean, category?: string } = 
             } as Talent;
           });
         
+        console.log("Processed talents:", fetchedTalents);
         setTalents(fetchedTalents);
         setError(null);
-        console.log("Fetched talents:", fetchedTalents.length);
       } catch (err) {
         console.error("Error fetching talents:", err);
         setError("Failed to load talents. Please try again later.");

@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TalentCard } from "./TalentCard";
+import TalentCard from "./TalentCard";
 import { useTalents } from "@/hooks/useTalents";
 import { TalentsLoading } from "./TalentsLoading";
 import { TalentsError } from "./TalentsError";
