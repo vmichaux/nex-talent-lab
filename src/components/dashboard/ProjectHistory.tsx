@@ -1,4 +1,3 @@
-
 import React from "react";
 import { History, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,7 +29,7 @@ export function ProjectHistory() {
   }];
   return <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="flex items-center gap-2 font-semibold text-2xl category-title-gradient">
+        <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl">
           <History className="h-4 w-4 text-primary" />
           My Project History
         </h2>
