@@ -32,8 +32,7 @@ export function TalentDashboard() {
       <div className="lg:w-3/5 space-y-16">
         {/* Overview section */}
         <div>
-          <h2 className="flex items-center gap-2 font-semibold category-title-gradient text-3xl mb-4">
-            <Search className="h-4 w-4 text-primary" />
+          <h2 className="font-semibold category-title-gradient text-3xl mb-4">
             Your Overview
           </h2>
           <DashboardOverview role="talent" />
