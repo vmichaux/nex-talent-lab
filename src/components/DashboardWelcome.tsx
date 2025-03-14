@@ -123,6 +123,12 @@ export function DashboardWelcome() {
           <Button size="lg" onClick={() => navigate('/profile/edit')} className="gap-2">
             {profileCompleted ? "Modify Account" : "Setup Your Profile"} <ArrowRight className="h-4 w-4" />
           </Button>
+          
+          {!profileCompleted && (
+            <p className="mt-4 text-amber-600 font-medium">
+              Complete your profile to unlock all features
+            </p>
+          )}
         </div>
 
         <ProfileBenefits />
