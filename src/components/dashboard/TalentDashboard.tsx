@@ -41,8 +41,8 @@ export function TalentDashboard() {
         {/* Learning Resources section */}
         <LearningResources />
         
-        {/* Manage Reviews section */}
-        <ManageReviewsRecommendations role="talent" />
+        {/* Skills Progress section - Moved from right column */}
+        <SkillsProgress />
       </div>
       
       {/* Right column (narrower) */}
@@ -56,8 +56,8 @@ export function TalentDashboard() {
         {/* Network section */}
         <NetworkList />
         
-        {/* Skills Progress section */}
-        <SkillsProgress />
+        {/* Manage Reviews section - Moved from left column */}
+        <ManageReviewsRecommendations role="talent" />
         
         {/* Project History section */}
         <ProjectHistory />

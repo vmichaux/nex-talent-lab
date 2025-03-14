@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
@@ -72,8 +73,8 @@ export function BuilderDashboard() {
         {/* Learning Resources section */}
         <LearningResources />
         
-        {/* Manage Reviews section */}
-        <ManageReviewsRecommendations role="builder" />
+        {/* Skills Progress section - Moved from right column */}
+        <SkillsProgress />
       </div>
       
       {/* Right column (narrower) */}
@@ -87,8 +88,8 @@ export function BuilderDashboard() {
         {/* Network section */}
         <NetworkList />
         
-        {/* Skills Progress section */}
-        <SkillsProgress />
+        {/* Manage Reviews section - Moved from left column */}
+        <ManageReviewsRecommendations role="builder" />
         
         {/* Project History section */}
         <ProjectHistory />

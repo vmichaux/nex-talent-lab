@@ -55,8 +55,8 @@ export function CombinedView() {
         {/* Learning Resources section */}
         <LearningResources />
         
-        {/* Manage Reviews section */}
-        <ManageReviewsRecommendations role="both" />
+        {/* Skills Progress section - Moved from right column */}
+        <SkillsProgress />
       </div>
       
       {/* Right column (narrower) */}
@@ -76,8 +76,8 @@ export function CombinedView() {
         {/* Network section */}
         <NetworkList />
         
-        {/* Skills Progress section */}
-        <SkillsProgress />
+        {/* Manage Reviews section - Moved from left column */}
+        <ManageReviewsRecommendations role="both" />
         
         {/* Project History section */}
         <ProjectHistory />
