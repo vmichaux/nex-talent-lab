@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useCallback } from "react";
-import { collection, query, where, getDocs, doc, updateDoc, Timestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { collection, query, where, getDocs, doc, updateDoc, Timestamp, getDoc } from "firebase/firestore";
+import { db, getUserProfile } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { ApplicationSummary } from "@/components/dashboard/applications/ApplicationTypes";
@@ -14,6 +14,27 @@ export function useApplicationsData() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Helper function to get user's full name from their profile
+  const getUserFullName = async (userId: string): Promise<string> => {
+    try {
+      if (!userId) return "Anonymous User";
+      
+      const userProfile = await getUserProfile(userId);
+      
+      if (userProfile && userProfile.firstName && userProfile.lastName) {
+        return `${userProfile.firstName} ${userProfile.lastName}`;
+      } else if (userProfile && userProfile.displayName) {
+        return userProfile.displayName;
+      }
+      
+      // If no profile data is found, return the default value
+      return "Anonymous User";
+    } catch (error) {
+      console.error("Error fetching user full name:", error);
+      return "Anonymous User";
+    }
+  };
 
   // Fetch applications for the current user's projects
   const fetchApplications = useCallback(async () => {
@@ -66,13 +87,30 @@ export function useApplicationsData() {
         allApplications = [...allApplications, ...chunkApplications];
       }
       
+      // Fetch user full names for each application
+      const applicationsWithFullNames = await Promise.all(
+        allApplications.map(async (app) => {
+          // Only fetch if we have a userId and the userName is "Anonymous User" or similar
+          if (app.userId && (app.userName === "Anonymous User" || !app.userFullName)) {
+            const fullName = await getUserFullName(app.userId);
+            return {
+              ...app,
+              userFullName: fullName,
+              // Only replace userName if it's the default "Anonymous User"
+              userName: app.userName === "Anonymous User" ? fullName : app.userName
+            };
+          }
+          return app;
+        })
+      );
+      
       // Sort by creation date (newest first)
-      allApplications.sort((a, b) => {
+      applicationsWithFullNames.sort((a, b) => {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
       
-      setApplications(allApplications);
-      setFilteredApplications(allApplications);
+      setApplications(applicationsWithFullNames);
+      setFilteredApplications(applicationsWithFullNames);
     } catch (error) {
       console.error("Error fetching applications:", error);
       setError("Failed to load applications. Please try again later.");
@@ -89,7 +127,7 @@ export function useApplicationsData() {
     }
     
     const filtered = applications.filter(app => 
-      app.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (app.userFullName || app.userName).toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.projectTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.userEmail.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -135,12 +173,12 @@ export function useApplicationsData() {
       if (newStatus === 'accepted') {
         toast.success("Application accepted", {
           description: "The applicant will be notified.",
-          duration: 6000,  // Changed from 4000 to 6000
+          duration: 6000,
         });
       } else {
         toast.error("Application rejected", {
           description: "The applicant will be notified.",
-          duration: 6000,  // Changed from 4000 to 6000
+          duration: 6000,
         });
       }
       
@@ -149,7 +187,7 @@ export function useApplicationsData() {
       console.error("Error updating application status:", error);
       toast.error("Failed to update application status", {
         description: "Please try again.",
-        duration: 6000,  // Changed from 4000 to 6000
+        duration: 6000,
       });
       throw error;
     } finally {

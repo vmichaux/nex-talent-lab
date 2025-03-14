@@ -70,6 +70,7 @@ export function ReviewApplications() {
             projectTitle: data.projectTitle || "Untitled Project",
             userName: data.userName || "Anonymous User",
             userEmail: data.userEmail || "No email provided",
+            userId: data.userId, // Make sure we have userId
             status: data.status || "pending",
             coverLetter: data.coverLetter,
             relevantExperience: data.relevantExperience,
@@ -94,18 +95,56 @@ export function ReviewApplications() {
         allApplications = [...allApplications, ...chunkApplications];
       }
       
-      console.log("All fetched applications:", allApplications);
+      // Fetch user full names for each application
+      // We'll import getUserProfile from firebase lib to get user's full name
+      const { getUserProfile } = await import("@/lib/firebase");
+      
+      const getUserFullName = async (userId: string): Promise<string> => {
+        try {
+          if (!userId) return "Anonymous User";
+          
+          const userProfile = await getUserProfile(userId);
+          
+          if (userProfile && userProfile.firstName && userProfile.lastName) {
+            return `${userProfile.firstName} ${userProfile.lastName}`;
+          } else if (userProfile && userProfile.displayName) {
+            return userProfile.displayName;
+          }
+          
+          // If no profile data is found, return the default value
+          return "Anonymous User";
+        } catch (error) {
+          console.error("Error fetching user full name:", error);
+          return "Anonymous User";
+        }
+      };
+      
+      const applicationsWithFullNames = await Promise.all(
+        allApplications.map(async (app) => {
+          // Only fetch if we have a userId and the userName is "Anonymous User" or similar
+          if (app.userId && (app.userName === "Anonymous User" || app.userName === "No email provided")) {
+            const fullName = await getUserFullName(app.userId);
+            return {
+              ...app,
+              userName: fullName
+            };
+          }
+          return app;
+        })
+      );
+      
+      console.log("All fetched applications:", applicationsWithFullNames);
       
       // Sort by creation date (newest first) and take only the most recent ones
-      allApplications.sort((a, b) => 
+      applicationsWithFullNames.sort((a, b) => 
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-      setApplications(allApplications.slice(0, 4)); // Only show 4 items
+      setApplications(applicationsWithFullNames.slice(0, 4)); // Only show 4 items
       
-      if (allApplications.length > 0) {
+      if (applicationsWithFullNames.length > 0) {
         toast.success("Applications Loaded", {
-          description: `Found ${allApplications.length} application(s) for your projects`,
-          duration: 6000,  // Changed from 10000 to 6000
+          description: `Found ${applicationsWithFullNames.length} application(s) for your projects`,
+          duration: 6000,
         });
       }
     } catch (error) {

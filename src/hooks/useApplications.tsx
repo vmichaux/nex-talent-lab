@@ -12,7 +12,7 @@ import {
   addDoc, 
   serverTimestamp 
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db, getUserProfile } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -76,8 +76,34 @@ export const useApplications = () => {
         } as Application;
       });
       
+      // Get full names for applications if needed
+      const applicationsWithNames = await Promise.all(
+        fetchedApplications.map(async (app) => {
+          // Only try to get full name if userName is default/empty
+          if (app.userId && (app.userName === "Anonymous User" || !app.userName)) {
+            try {
+              const userProfile = await getUserProfile(app.userId);
+              if (userProfile && userProfile.firstName && userProfile.lastName) {
+                return {
+                  ...app,
+                  userName: `${userProfile.firstName} ${userProfile.lastName}`
+                };
+              } else if (userProfile && userProfile.displayName) {
+                return {
+                  ...app,
+                  userName: userProfile.displayName
+                };
+              }
+            } catch (err) {
+              console.error("Error fetching user profile for name:", err);
+            }
+          }
+          return app;
+        })
+      );
+      
       // Sort applications manually (newest first)
-      const sortedApplications = fetchedApplications.sort((a, b) => 
+      const sortedApplications = applicationsWithNames.sort((a, b) => 
         b.createdAt.getTime() - a.createdAt.getTime()
       );
       

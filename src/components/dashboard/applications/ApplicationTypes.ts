@@ -4,7 +4,9 @@ export interface ApplicationSummary {
   projectId: string;
   projectTitle: string;
   userName: string;
+  userFullName?: string; // Add this field for the full name
   userEmail: string;
+  userId?: string; // Make sure we have userId for fetching profile
   coverLetter?: string;
   relevantExperience?: string;
   availabilityDate?: string;
@@ -13,7 +15,6 @@ export interface ApplicationSummary {
   status: 'pending' | 'accepted' | 'declined' | 'rejected';
   createdAt: Date;
   feedback?: string;
-  userId?: string;
 }
 
 export type ApplicationFilter = 'all' | 'pending' | 'reviewed';
