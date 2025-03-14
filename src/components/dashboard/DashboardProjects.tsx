@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -99,7 +98,7 @@ export function DashboardProjects() {
               <Button 
                 onClick={handleCreateFirstProject} 
                 size="sm" 
-                className="text-xs bg-purple-600 hover:bg-purple-700 text-white"
+                className="text-xs"
               >
                 Create Your First Project
               </Button>
