@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useState } from "react";
 import { DashboardProjects } from "../DashboardProjects";
@@ -21,13 +20,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RecommendedTalents } from "../builder/RecommendedTalents";
 import { NetworkList } from "../builder/NetworkList";
 import { ProjectActions } from "../builder/ProjectActions";
-
 export function CombinedView() {
   const [filter, setFilter] = useState<string>("all");
   const [showProjectModal, setShowProjectModal] = useState(false);
-
-  return (
-    <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
+  return <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
       {/* Left column (wider) */}
       <div className="lg:w-3/5 space-y-12">
         {/* Overview metrics */}
@@ -37,10 +33,7 @@ export function CombinedView() {
         </div>
         
         {/* Project actions section */}
-        <ProjectActions 
-          showProjectModal={showProjectModal} 
-          setShowProjectModal={setShowProjectModal} 
-        />
+        <ProjectActions showProjectModal={showProjectModal} setShowProjectModal={setShowProjectModal} />
         
         {/* Active Projects section */}
         <DashboardProjects />
@@ -74,7 +67,7 @@ export function CombinedView() {
         
         {/* Manage Applications section */}
         <div>
-          <h2 className="text-xl font-bold mb-6">Manage Applications</h2>
+          
           <ReviewApplications />
         </div>
         
@@ -90,6 +83,5 @@ export function CombinedView() {
         {/* Project History section */}
         <ProjectHistory />
       </div>
-    </div>
-  );
+    </div>;
 }
