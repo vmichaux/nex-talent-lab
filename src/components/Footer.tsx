@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin, Phone } from "lucide-react";
@@ -6,27 +5,25 @@ import { subscribeToNewsletter, checkNewsletterCollection } from "@/lib/newslett
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-
 export function Footer() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Basic email validation
     if (!email || !email.includes('@')) {
       toast({
         title: "Invalid email",
         description: "Please enter a valid email address.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
-    
     setIsSubmitting(true);
-    
     try {
       // First check if we can access the collection
       const collectionAccessible = await checkNewsletterCollection();
@@ -34,18 +31,16 @@ export function Footer() {
         toast({
           title: "Service unavailable",
           description: "Newsletter service is currently unavailable. Please try again later.",
-          variant: "destructive",
+          variant: "destructive"
         });
         setIsSubmitting(false);
         return;
       }
-      
       const result = await subscribeToNewsletter(email);
-      
       if (result) {
         toast({
           title: "Subscription successful!",
-          description: "You're now subscribed to our newsletter.",
+          description: "You're now subscribed to our newsletter."
         });
         setEmail(""); // Reset the form
       } else {
@@ -56,13 +51,12 @@ export function Footer() {
       toast({
         title: "Subscription failed",
         description: "There was a problem subscribing you to our newsletter. Please try again later.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
     }
   };
-
   return <footer className="bg-gray-50 py-12 mt-16">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
@@ -93,7 +87,7 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold mb-4 mx-[50px] px-[50px]">Quick Links</h3>
+            <h3 className="text-lg font-bold mb-4 mx-0 px-0">Quick Links</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/about" className="text-gray-600 hover:text-primary text-sm mx-[50px] px-[50px]">
@@ -152,19 +146,8 @@ export function Footer() {
               Subscribe to our newsletter for the latest updates and features.
             </p>
             <form onSubmit={handleSubscribe} className="flex flex-col space-y-2">
-              <Input 
-                type="email" 
-                placeholder="Your email address" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              <Button 
-                type="submit" 
-                disabled={isSubmitting}
-                className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors"
-              >
+              <Input type="email" placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} required className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50" />
+              <Button type="submit" disabled={isSubmitting} className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors">
                 {isSubmitting ? "Subscribing..." : "Subscribe"}
               </Button>
             </form>
