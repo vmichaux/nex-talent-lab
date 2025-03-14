@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, ArrowLeft, LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Loader } from "lucide-react";
 import { formatAuthError } from "@/services/authService";
 
 const Google = (props: React.ComponentProps<LucideIcon>) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -20,20 +21,38 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { login, signInWithGoogle, userData } = useAuth();
+  const { login, signInWithGoogle, userData, currentUser } = useAuth();
+
+  // Monitor user data loading to handle navigation
+  useEffect(() => {
+    if (isNavigating && currentUser && userData) {
+      console.log("Navigation triggered with user data:", userData);
+      handleRedirectAfterAuth();
+      
+      // Reset navigation state after successful redirect
+      setTimeout(() => {
+        setIsNavigating(false);
+        setIsLoading(false);
+      }, 100);
+    }
+  }, [userData, currentUser, isNavigating]);
 
   const handleRedirectAfterAuth = () => {
     // Check if user has already completed profile setup
     if (userData?.hasCompletedProfile) {
+      console.log("User has completed profile, navigating to dashboard");
       navigate("/dashboard");
     } else if (userData?.userRole) {
       // User has selected a role but hasn't completed profile
+      console.log("User has selected role but not completed profile");
       navigate("/dashboard");
     } else {
       // User has not selected a role yet
+      console.log("User has not selected a role, navigating to onboarding");
       navigate("/onboarding");
     }
   };
@@ -47,15 +66,15 @@ export default function LoginPage() {
       console.log(`Login form submitted with email: ${email}`);
       await login(email, password);
       
-      // Delay navigation slightly to ensure userData is loaded
-      setTimeout(() => {
-        handleRedirectAfterAuth();
-        setIsLoading(false);
-      }, 500);
+      // Set navigating state to trigger the useEffect
+      setIsNavigating(true);
+      
+      // Don't navigate immediately - let the useEffect handle it
+      // after userData is available
     } catch (error: any) {
       console.error("Login error in component:", error);
-      // Toast is already handled in the AuthContext
       setIsLoading(false);
+      setIsNavigating(false);
     }
   };
 
@@ -67,11 +86,11 @@ export default function LoginPage() {
       console.log("Google sign-in button clicked");
       await signInWithGoogle();
       
-      // Delay navigation slightly to ensure userData is loaded
-      setTimeout(() => {
-        handleRedirectAfterAuth();
-        setIsLoading(false);
-      }, 500);
+      // Set navigating state to trigger the useEffect
+      setIsNavigating(true);
+      
+      // Don't navigate immediately - let the useEffect handle it
+      // after userData is available
     } catch (error: any) {
       console.error("Google sign-in error in component:", error);
       if (error.code === "auth/unauthorized-domain") {
@@ -80,8 +99,21 @@ export default function LoginPage() {
         setAuthError(formatAuthError(error));
       }
       setIsLoading(false);
+      setIsNavigating(false);
     }
   };
+
+  // Full page loading overlay when navigating
+  if (isNavigating) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+        <div className="text-center">
+          <Loader className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+          <p className="text-lg font-medium text-gray-700">Preparing your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return <div className="min-h-screen flex flex-col bg-gray-50">
       <header className="w-full bg-white border-b border-gray-100 py-4 px-6">
@@ -136,7 +168,12 @@ export default function LoginPage() {
             </div>
 
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Logging in..." : "Log in"}
+              {isLoading ? (
+                <span className="flex items-center justify-center">
+                  <Loader className="h-4 w-4 mr-2 animate-spin" />
+                  Logging in...
+                </span>
+              ) : "Log in"}
             </Button>
           </form>
 
@@ -152,8 +189,17 @@ export default function LoginPage() {
 
             <div className="mt-6 flex justify-center">
               <Button variant="outline" type="button" className="gap-2 w-full" onClick={handleGoogleSignIn} disabled={isLoading}>
-                <Google className="h-4 w-4" />
-                <span>Google</span>
+                {isLoading ? (
+                  <span className="flex items-center justify-center">
+                    <Loader className="h-4 w-4 mr-2 animate-spin" />
+                    Connecting...
+                  </span>
+                ) : (
+                  <>
+                    <Google className="h-4 w-4" />
+                    <span>Google</span>
+                  </>
+                )}
               </Button>
             </div>
             

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { GraduationCap, Rocket, Lightbulb } from "lucide-react";
+import { GraduationCap, Rocket, Lightbulb, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SimplifiedHeader } from "./SimplifiedHeader";
@@ -13,51 +13,61 @@ export function DashboardOnboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedRole, setSelectedRole] = useState<"talent" | "entrepreneur" | "both" | null>(null);
   const [initialCheckCompleted, setInitialCheckCompleted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const totalSteps = 2;
   const navigate = useNavigate();
   const { currentUser, userData } = useAuth();
   
   useEffect(() => {
-    // Check if user is logged in
-    if (currentUser && userData) {
-      // First check if user has a role set in Firestore
-      if (userData.userRole === "talent" || userData.userRole === "entrepreneur" || userData.userRole === "both") {
-        // If role exists in Firestore, navigate to dashboard
-        navigate("/dashboard");
-        return;
+    const checkUserStatus = async () => {
+      setIsLoading(true);
+      try {
+        if (currentUser && userData) {
+          console.log("DashboardOnboarding: User data loaded", userData);
+          
+          if (userData.userRole === "talent" || userData.userRole === "entrepreneur" || userData.userRole === "both") {
+            console.log("DashboardOnboarding: User has role, redirecting to dashboard");
+            navigate("/dashboard");
+            return;
+          }
+          
+          const savedRole = localStorage.getItem("userRole");
+          if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
+            console.log("DashboardOnboarding: Found role in localStorage, redirecting to dashboard");
+            navigate("/dashboard");
+            return;
+          }
+          
+          console.log("DashboardOnboarding: User needs to complete onboarding");
+          setInitialCheckCompleted(true);
+        } else if (!currentUser) {
+          console.log("DashboardOnboarding: No user, redirecting to login");
+          navigate("/login");
+          return;
+        } else {
+          console.log("DashboardOnboarding: User logged in, but userData not loaded yet");
+          setInitialCheckCompleted(false);
+        }
+      } finally {
+        setIsLoading(false);
       }
-      
-      // Fall back to localStorage if Firestore doesn't have the info
-      const savedRole = localStorage.getItem("userRole");
-      if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
-        // If role exists in localStorage, navigate to dashboard
-        navigate("/dashboard");
-        return;
-      }
-      
-      // If we reach here, user needs to complete onboarding
-      setInitialCheckCompleted(true);
-    } else if (!currentUser) {
-      // If user is not logged in, redirect to login
-      navigate("/login");
-      return;
-    } else {
-      // User is logged in but userData is still loading
-      // We'll wait for it to load
-      setInitialCheckCompleted(false);
-    }
+    };
+    
+    const timer = setTimeout(() => {
+      checkUserStatus();
+    }, 1000);
+    
+    return () => clearTimeout(timer);
   }, [currentUser, userData, navigate]);
 
   const handleNext = async () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
     } else {
-      // Save the selected role before navigating away
       if (selectedRole) {
         try {
           localStorage.setItem("userRole", selectedRole);
 
-          // Save role to Firestore if user is authenticated
           if (currentUser) {
             await updateUserRole(currentUser, selectedRole);
             toast.success("Your profile has been updated!", {
@@ -66,7 +76,6 @@ export function DashboardOnboarding() {
             });
           }
 
-          // Navigate to signup with role info and fromOnboarding flag
           navigate(`/signup?role=${selectedRole}&fromOnboarding=true`);
         } catch (error) {
           console.error("Error saving role:", error);
@@ -109,7 +118,6 @@ export function DashboardOnboarding() {
             <p className="text-lg mb-8 text-zinc-900 my-0 py-[16px]">Are you a talent looking for opportunities or an entrepreneur? Why not both?</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-10">
-              {/* Talent Card */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'talent' ? 'ring-2 ring-primary' : ''}`} onClick={() => setSelectedRole('talent')}>
                 <CardContent className="flex flex-col items-center p-4 bg-[#EAE5FA] h-[180px] py-[9px]">
                   <div className="flex justify-start w-full mb-4 mt-2">
@@ -122,7 +130,6 @@ export function DashboardOnboarding() {
                 </CardContent>
               </Card>
               
-              {/* Entrepreneur Card */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'entrepreneur' ? 'ring-2 ring-secondary' : ''}`} onClick={() => setSelectedRole('entrepreneur')}>
                 <CardContent className="flex flex-col items-center p-4 bg-[#D9F7E8] h-[180px] py-[9px]">
                   <div className="flex justify-start w-full mb-4 mt-2">
@@ -135,7 +142,6 @@ export function DashboardOnboarding() {
                 </CardContent>
               </Card>
               
-              {/* Talent & Builder Card */}
               <Card className={`cursor-pointer transition-all hover:shadow-md ${selectedRole === 'both' ? 'ring-2 ring-[#7C6ED9]' : ''}`} onClick={() => setSelectedRole('both')}>
                 <CardContent className="flex flex-col items-center p-4 bg-[#E9E6FF] h-[180px] py-[9px]">
                   <div className="flex justify-start w-full mb-4 mt-2">
@@ -157,6 +163,17 @@ export function DashboardOnboarding() {
         return null;
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+        <div className="text-center">
+          <Loader className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+          <p className="text-lg font-medium text-gray-700">Loading your profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!initialCheckCompleted) {
     return null; // Return null during the check to prevent UI flash
