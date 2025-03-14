@@ -69,7 +69,7 @@ export function DashboardOnboarding() {
       case 1:
         return <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
             <h1 className="font-bold mb-6 custom-gradient-text text-5xl py-[17px]">Welcome to NexTalent Lab</h1>
-            <p className="text-lg mb-8 text-zinc-800">Let's get you started on your collaboration journey</p>
+            <p className="text-lg mb-8 text-zinc-800">Let's get you started on your collaborative journey</p>
             
             <div className="mb-10 text-center max-w-prose">
               <p className="mb-6 py-0 px-[36px]">NexTalent Lab is a platform that connects emerging talents with project builders. Whether you're looking to build your portfolio or find the perfect collaborator for your project, we're here to help.</p>
