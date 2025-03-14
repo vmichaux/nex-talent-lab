@@ -51,13 +51,15 @@ export function BasicInfoTab({
           required
         >
           <option value="Technology">Technology</option>
-          <option value="Design">Design</option>
-          <option value="Marketing">Marketing</option>
-          <option value="Writing">Writing</option>
-          <option value="Music">Music</option>
-          <option value="Video">Video</option>
-          <option value="Education">Education</option>
-          <option value="Health">Health</option>
+          <option value="Design & Creative">Design & Creative</option>
+          <option value="Marketing & Advertising">Marketing & Advertising</option>
+          <option value="Writing & Publishing">Writing & Publishing</option>
+          <option value="Music & Entertainment">Music & Entertainment</option>
+          <option value="Video & Film Production">Video & Film Production</option>
+          <option value="Education & E-learning">Education & E-learning</option>
+          <option value="Health & Wellness">Health & Wellness</option>
+          <option value="Finance & Consulting">Finance & Consulting</option>
+          <option value="Events & Hospitality">Events & Hospitality</option>
           <option value="Other">Other</option>
         </select>
       </div>

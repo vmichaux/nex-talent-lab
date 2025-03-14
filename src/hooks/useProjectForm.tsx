@@ -71,7 +71,7 @@ export function useProjectForm(project?: Project) {
       if (result.success) {
         toast.success("Project updated", {
           description: "Your project has been successfully updated.",
-          duration: 6000,  // Changed from 10000 to 6000
+          duration: 6000,
         });
         return { success: true, project: { ...project, ...updatedProjectData } };
       } else {
@@ -81,7 +81,7 @@ export function useProjectForm(project?: Project) {
       console.error("Error updating project:", error);
       toast.error("Failed to update the project", {
         description: "Please try again.",
-        duration: 6000,  // Changed from 10000 to 6000
+        duration: 6000,
       });
       return { success: false, error };
     } finally {

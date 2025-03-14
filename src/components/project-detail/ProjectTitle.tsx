@@ -45,13 +45,15 @@ export function ProjectTitle({
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
               >
                 <option value="Technology">Technology</option>
-                <option value="Design">Design</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Writing">Writing</option>
-                <option value="Music">Music</option>
-                <option value="Video">Video</option>
-                <option value="Education">Education</option>
-                <option value="Health">Health</option>
+                <option value="Design & Creative">Design & Creative</option>
+                <option value="Marketing & Advertising">Marketing & Advertising</option>
+                <option value="Writing & Publishing">Writing & Publishing</option>
+                <option value="Music & Entertainment">Music & Entertainment</option>
+                <option value="Video & Film Production">Video & Film Production</option>
+                <option value="Education & E-learning">Education & E-learning</option>
+                <option value="Health & Wellness">Health & Wellness</option>
+                <option value="Finance & Consulting">Finance & Consulting</option>
+                <option value="Events & Hospitality">Events & Hospitality</option>
                 <option value="Other">Other</option>
               </select>
             </div>
