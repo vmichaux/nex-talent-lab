@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ProjectFormNavigationProps {
   children: React.ReactNode;
-  onSubmit: () => void;
+  onSubmit: (e?: React.FormEvent) => void;
   loading: boolean;
   isValid: boolean;
   submitLabel?: string;
@@ -88,7 +88,11 @@ export function ProjectFormNavigation({
           <Button type="button" variant="outline" onClick={goToPreviousTab}>
             Back
           </Button>
-          <Button type="submit" disabled={loading || !isValid} onClick={onSubmit}>
+          <Button 
+            type="submit" 
+            disabled={loading || !isValid} 
+            onClick={(e) => onSubmit(e)}
+          >
             {loading ? "Saving..." : submitLabel}
           </Button>
         </div>
