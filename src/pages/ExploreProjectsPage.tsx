@@ -30,7 +30,7 @@ const ExploreProjectsPage = () => {
           <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
           
           <div className="container mx-auto px-4 py-12">
-            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-10 py-[62px] px-[44px] my-0">
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-6 py-[32px] px-[44px] my-0">
               <PageHeader 
                 subtitle="Explore Projects" 
                 title="Find Your Next Collaborative Adventure" 
