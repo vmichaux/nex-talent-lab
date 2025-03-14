@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, Rocket, Lightbulb, Loader } from "lucide-react";
@@ -41,9 +42,8 @@ export function DashboardOnboarding() {
           console.log("DashboardOnboarding: User needs to complete onboarding");
           setInitialCheckCompleted(true);
         } else if (!currentUser) {
-          console.log("DashboardOnboarding: No user, redirecting to login");
-          navigate("/login");
-          return;
+          console.log("DashboardOnboarding: No user, but allowing onboarding");
+          setInitialCheckCompleted(true);
         } else {
           console.log("DashboardOnboarding: User logged in, but userData not loaded yet");
           setInitialCheckCompleted(false);
@@ -74,9 +74,11 @@ export function DashboardOnboarding() {
               description: "Your role preferences have been saved.",
               duration: 6000
             });
+            navigate("/dashboard");
+          } else {
+            // Si l'utilisateur n'est pas connecté, dirigez-le vers l'inscription avec le rôle sélectionné
+            navigate(`/signup?role=${selectedRole}&fromOnboarding=true`);
           }
-
-          navigate(`/signup?role=${selectedRole}&fromOnboarding=true`);
         } catch (error) {
           console.error("Error saving role:", error);
           toast.error("Could not save your preferences", {
@@ -169,7 +171,7 @@ export function DashboardOnboarding() {
       <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
         <div className="text-center">
           <Loader className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-lg font-medium text-gray-700">Loading your profile...</p>
+          <p className="text-lg font-medium text-gray-700">Loading...</p>
         </div>
       </div>
     );

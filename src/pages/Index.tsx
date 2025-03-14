@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { FeatureSection } from "@/components/FeatureSection";
@@ -10,18 +9,10 @@ import { PricingSection } from "@/components/PricingSection";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
 import { useAuth } from "@/hooks/use-auth";
-const Index = () => {
-  const {
-    isLoggedIn
-  } = useAuth();
-  const navigate = useNavigate();
 
-  // If user is already logged in, redirect to dashboard
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/dashboard");
-    }
-  }, [isLoggedIn, navigate]);
+const Index = () => {
+  const { isLoggedIn } = useAuth();
+
   return <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
