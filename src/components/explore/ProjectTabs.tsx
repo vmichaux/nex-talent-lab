@@ -15,10 +15,10 @@ export const ProjectTabs = ({ projects, filteredProjects, currentUserId }: Proje
   const validProjects = Array.isArray(projects) ? projects : [];
   const validFilteredProjects = Array.isArray(filteredProjects) ? filteredProjects : [];
   
-  // Filter out projects with nonsensical titles when the user is logged in
-  const projectsToShow = currentUserId 
-    ? validFilteredProjects.filter(p => !["new.1", "jhtref", "kujyrhtegez"].includes(p.title))
-    : validFilteredProjects;
+  // Filter out projects with nonsensical titles for all users
+  const projectsToShow = validFilteredProjects.filter(p => 
+    !["new.1", "jhtref", "kujyrhtegez"].includes(p.title)
+  );
   
   // Calculate counts for the tab labels
   const featuredCount = projectsToShow.filter(p => p.featured).length;

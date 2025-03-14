@@ -27,12 +27,10 @@ export const ProjectsSection = ({ projects, loading, error, searchQuery }: Proje
     project.skills?.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
   );
   
-  // Filter out projects with nonsensical titles when the user is logged in
-  if (isLoggedIn) {
-    filteredProjects = filteredProjects.filter(project => 
-      !["new.1", "jhtref", "kujyrhtegez"].includes(project.title)
-    );
-  }
+  // Filter out projects with nonsensical titles for all users
+  filteredProjects = filteredProjects.filter(project => 
+    !["new.1", "jhtref", "kujyrhtegez"].includes(project.title)
+  );
 
   const handleViewProjectDetails = () => {
     navigate("/explore-projects");
