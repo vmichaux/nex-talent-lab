@@ -340,11 +340,16 @@ const ProfileEditPage = () => {
       
       await updateProfileCompletion(true);
       
+      // Ensure user role is saved to localStorage
+      const roleToSave = activeRole === "builder" ? "entrepreneur" : activeRole === "dual" ? "both" : "talent";
+      localStorage.setItem("userRole", roleToSave);
+      
       toast({
         title: "Profile saved",
         description: "Your profile has been updated successfully.",
       });
       
+      // Direct navigation to dashboard after profile is saved
       navigate("/dashboard");
     } catch (error) {
       console.error("Error saving profile:", error);
