@@ -41,6 +41,16 @@ export function DashboardMessages() {
       time: "Aug 12",
       unread: false,
       projectName: "Brand Identity"
+    },
+    {
+      id: 4,
+      sender: "David Lee",
+      avatar: "/placeholder.svg",
+      initials: "DL",
+      preview: "Just sent over the contract. Let me know if you have any questions...",
+      time: "Aug 10",
+      unread: false,
+      projectName: "Legal Consultation"
     }
   ];
 
