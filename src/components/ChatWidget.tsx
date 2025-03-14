@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { MessageSquare, X, Minimize2, Maximize2, Send, Loader, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,10 +7,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { getUserChatHistory, saveMessage, sendMessageToOpenAI, ChatMessage } from "@/lib/chatbotService";
+import { getUserProfile } from "@/lib/firebase";
 
 export const ChatWidget = () => {
   const {
-    isLoggedIn
+    isLoggedIn,
+    currentUser
   } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -49,12 +52,28 @@ export const ChatWidget = () => {
     setApiError(null);
     try {
       const history = await getUserChatHistory();
+      
       if (history.length === 0) {
+        // Get user profile to personalize welcome message
+        let userName = "";
+        if (currentUser) {
+          const userProfile = await getUserProfile(currentUser.uid);
+          if (userProfile && userProfile.firstName) {
+            userName = userProfile.firstName;
+          }
+        }
+        
+        // Create personalized or default welcome message
+        const welcomeContent = userName 
+          ? `Hello ${userName}! I'm your AI assistant. How can I help you today?`
+          : "Hello! I'm your AI assistant. How can I help you today?";
+        
         const welcomeMessage: ChatMessage = {
-          content: "Hello! I'm your AI assistant. How can I help you today?",
+          content: welcomeContent,
           role: "assistant",
           timestamp: new Date()
         };
+        
         setMessages([welcomeMessage]);
         await saveMessage(welcomeMessage.content, welcomeMessage.role);
       } else {

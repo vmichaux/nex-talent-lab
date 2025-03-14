@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Send, Loader } from "lucide-react";
@@ -9,9 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/use-auth";
 import { getUserChatHistory, saveMessage, sendMessageToOpenAI, ChatMessage } from "@/lib/chatbotService";
 import { useToast } from "@/hooks/use-toast";
+import { getUserProfile } from "@/lib/firebase";
 
 const ChatbotPage = () => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, currentUser } = useAuth();
   const navigate = useNavigate();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -34,12 +34,26 @@ const ChatbotPage = () => {
         try {
           const history = await getUserChatHistory();
           if (history.length === 0) {
-            // Add welcome message if no history exists
+            // Get user profile to personalize welcome message
+            let userName = "";
+            if (currentUser) {
+              const userProfile = await getUserProfile(currentUser.uid);
+              if (userProfile && userProfile.firstName) {
+                userName = userProfile.firstName;
+              }
+            }
+            
+            // Create personalized or default welcome message
+            const welcomeContent = userName 
+              ? `Hello ${userName}! I'm your AI assistant. How can I help you today?`
+              : "Hello! I'm your AI assistant. How can I help you today?";
+            
             const welcomeMessage: ChatMessage = {
-              content: "Hello! I'm your AI assistant. How can I help you today?",
+              content: welcomeContent,
               role: "assistant",
               timestamp: new Date(),
             };
+            
             setMessages([welcomeMessage]);
             await saveMessage(welcomeMessage.content, welcomeMessage.role);
           } else {
@@ -59,7 +73,7 @@ const ChatbotPage = () => {
     };
 
     loadChatHistory();
-  }, [isLoggedIn, toast]);
+  }, [isLoggedIn, toast, currentUser]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
