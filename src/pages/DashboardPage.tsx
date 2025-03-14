@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
@@ -10,7 +9,6 @@ import { TalentDashboard } from "@/components/dashboard/TalentDashboard";
 import { BuilderDashboard } from "@/components/dashboard/BuilderDashboard";
 import { DualRoleDashboard } from "@/components/dashboard/DualRoleDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 const DashboardPage = () => {
   const {
     isLoggedIn,
@@ -20,9 +18,6 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const [showWelcome, setShowWelcome] = useState(true);
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "both">("talent");
-  
-  const profileCompleted = userData?.hasCompletedProfile || false;
-  
   const getUserFirstName = () => {
     if (currentUser?.displayName) {
       return currentUser.displayName.split(' ')[0];
@@ -34,46 +29,35 @@ const DashboardPage = () => {
     }
     return "friend";
   };
-  
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/onboarding");
       return;
     }
-    
     const savedRole = localStorage.getItem("userRole");
     if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
       setActiveRole(savedRole === "entrepreneur" ? "builder" : savedRole);
     }
-    
-    // Always show welcome screen if profile is not completed
-    if (profileCompleted) {
+    if (userData?.hasCompletedProfile) {
       setShowWelcome(false);
-    } else {
-      setShowWelcome(true);
     }
-  }, [isLoggedIn, navigate, userData, profileCompleted]);
-  
+  }, [isLoggedIn, navigate, userData]);
+  const handleCompleteOnboarding = () => {
+    setShowWelcome(false);
+  };
   const handleRoleChange = (role: "talent" | "builder" | "both") => {
-    if (!profileCompleted) {
-      navigate('/profile/edit');
-      return;
-    }
-    
     setActiveRole(role);
     localStorage.setItem("userRole", role === "builder" ? "entrepreneur" : role);
   };
-  
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
-        {showWelcome ? (
-          <>
+        {showWelcome ? <>
             <DashboardWelcome />
-          </>
-        ) : (
-          <div className="relative overflow-hidden bg-white">
+            <div className="text-center mb-10">
+              
+            </div>
+          </> : <div className="relative overflow-hidden bg-white">
             <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-gradient-to-br from-primary/30 to-primary/5 blur-3xl" />
             
             <div className="w-full px-4 py-16">
@@ -120,12 +104,9 @@ const DashboardPage = () => {
                 </Tabs>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
       </main>
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default DashboardPage;
