@@ -43,19 +43,21 @@ export function BuilderDashboard() {
 
   return (
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
-      {/* Left column (wider) */}
+      {/* Project actions section at the top */}
+      <div className="w-full mb-4">
+        <ProjectActions 
+          showProjectModal={showProjectModal} 
+          setShowProjectModal={setShowProjectModal} 
+        />
+      </div>
+      
+      {/* Main content below */}
       <div className="lg:w-3/5 space-y-12">
         {/* Overview section */}
         <div>
           <h2 className="text-xl font-bold mb-6">Your Overview</h2>
           <DashboardOverview role="builder" />
         </div>
-
-        {/* Project actions section */}
-        <ProjectActions 
-          showProjectModal={showProjectModal} 
-          setShowProjectModal={setShowProjectModal} 
-        />
 
         {/* Active Projects section */}
         <DashboardProjects />
@@ -66,14 +68,14 @@ export function BuilderDashboard() {
         {/* Project Metrics section */}
         <ProjectMetrics role="builder" />
         
+        {/* Skills Progress section - moved from right to left */}
+        <SkillsProgress />
+        
         {/* Recommended Talents section */}
         <RecommendedTalents />
         
         {/* Learning Resources section */}
         <LearningResources />
-        
-        {/* Manage Reviews section */}
-        <ManageReviewsRecommendations role="builder" />
       </div>
       
       {/* Right column (narrower) */}
@@ -87,8 +89,8 @@ export function BuilderDashboard() {
         {/* Network section */}
         <NetworkList />
         
-        {/* Skills Progress section */}
-        <SkillsProgress />
+        {/* Manage Reviews section - moved from left to right */}
+        <ManageReviewsRecommendations role="builder" />
         
         {/* Project History section */}
         <ProjectHistory />

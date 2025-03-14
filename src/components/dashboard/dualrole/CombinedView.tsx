@@ -15,17 +15,25 @@ import { ProjectHistory } from "../ProjectHistory";
 import { SkillsProgress } from "../talent/SkillsProgress";
 import { LearningResources } from "../talent/LearningResources";
 import { ManageReviewsRecommendations } from "../ManageReviewsRecommendations";
-import { Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RecommendedTalents } from "../builder/RecommendedTalents";
 import { NetworkList } from "../builder/NetworkList";
+import { ProjectActions } from "../builder/ProjectActions";
 
 export function CombinedView() {
   const [filter, setFilter] = useState<string>("all");
+  const [showProjectModal, setShowProjectModal] = useState(false);
 
   return (
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
+      {/* Project actions section at the top */}
+      <div className="w-full mb-4">
+        <ProjectActions 
+          showProjectModal={showProjectModal} 
+          setShowProjectModal={setShowProjectModal} 
+        />
+      </div>
+      
       {/* Left column (wider) */}
       <div className="lg:w-3/5 space-y-12">
         {/* Overview metrics */}
@@ -46,6 +54,9 @@ export function CombinedView() {
           <RoleActivityCards />
         </div>
         
+        {/* Skills Progress section - moved from right to left */}
+        <SkillsProgress />
+        
         {/* Recommended Opportunities */}
         <RecommendedOpportunities filter={filter} setFilter={setFilter} />
         
@@ -54,9 +65,6 @@ export function CombinedView() {
         
         {/* Learning Resources section */}
         <LearningResources />
-        
-        {/* Manage Reviews section */}
-        <ManageReviewsRecommendations role="both" />
       </div>
       
       {/* Right column (narrower) */}
@@ -76,8 +84,8 @@ export function CombinedView() {
         {/* Network section */}
         <NetworkList />
         
-        {/* Skills Progress section */}
-        <SkillsProgress />
+        {/* Manage Reviews section - moved from left to right */}
+        <ManageReviewsRecommendations role="both" />
         
         {/* Project History section */}
         <ProjectHistory />
