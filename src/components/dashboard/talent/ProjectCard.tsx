@@ -19,7 +19,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <p className="text-gray-600 mb-3">{project.owner} • {project.location || "Location not specified"}</p>
             
             <div className="flex flex-wrap gap-2 mb-4">
-              {project.skills?.slice(0, 3).map((skill, index) => (
+              {project.skills?.slice(0, 2).map((skill, index) => (
                 <span key={index} className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">
                   {skill}
                 </span>

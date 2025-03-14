@@ -66,7 +66,7 @@ export function RecommendedTalents() {
                   <p className="text-gray-600 mb-2">{talent.role}</p>
                   
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {talent.skills.map(skill => (
+                    {talent.skills.slice(0, 2).map(skill => (
                       <span key={skill} className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">
                         {skill}
                       </span>

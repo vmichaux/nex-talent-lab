@@ -51,7 +51,7 @@ export const TalentCard = ({ talent }: TalentCardProps) => {
       <CardContent className="py-4 flex-1 space-y-5">
         <p className="text-sm text-gray-700">{talent.bio}</p>
         <div className="flex flex-wrap gap-2">
-          {talent.skills.map((skill: string, index: number) => (
+          {talent.skills.slice(0, 2).map((skill: string, index: number) => (
             <Badge key={index} variant="outline" className="bg-gray-50">
               {skill}
             </Badge>
