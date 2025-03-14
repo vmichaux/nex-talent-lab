@@ -401,22 +401,46 @@ const ProfileEditPage = () => {
   };
 
   const handleAddInterest = () => {
-    if (!newInterest.trim()) return;
+    if (!newInterest.trim()) {
+      toast({
+        title: "Invalid interest",
+        description: "Please enter a valid interest name",
+        variant: "destructive"
+      });
+      return;
+    }
     
-    if (!profile.interests.includes(newInterest.trim()) && profile.interests.length < 6) {
-      console.log("Adding interest:", newInterest);
-      setProfile(prev => ({
-        ...prev,
-        interests: [...prev.interests, newInterest.trim()]
-      }));
+    if (profile.interests.includes(newInterest.trim())) {
+      toast({
+        title: "Duplicate interest",
+        description: "This interest is already in your list",
+        variant: "destructive"
+      });
       setNewInterest("");
-    } else if (profile.interests.length >= 6) {
+      return;
+    }
+    
+    if (profile.interests.length >= 6) {
       toast({
         title: "Maximum interests reached",
         description: "You can only add up to 6 interests",
         variant: "destructive"
       });
+      return;
     }
+    
+    setProfile(prev => ({
+      ...prev,
+      interests: [...prev.interests, newInterest.trim()]
+    }));
+    
+    console.log("Added interest:", newInterest.trim());
+    toast({
+      title: "Interest added",
+      description: `"${newInterest.trim()}" has been added to your interests`,
+    });
+    
+    setNewInterest("");
   };
 
   const handleRemoveInterest = (interest: string) => {
@@ -1200,4 +1224,3 @@ const ProfileEditPage = () => {
 };
 
 export default ProfileEditPage;
-
