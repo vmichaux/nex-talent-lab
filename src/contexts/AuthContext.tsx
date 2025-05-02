@@ -48,6 +48,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUserData(data);
         } catch (error) {
           console.error("Error updating user data after auth state change:", error);
+          // Set basic user data even if database operations fail
+          setUserData({
+            email: user.email || "",
+            lastLogin: new Date(),
+            createdAt: new Date(),
+            hasCompletedProfile: false
+          });
         }
       } else {
         setUserData(null);

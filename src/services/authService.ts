@@ -49,7 +49,14 @@ export const updateUserData = async (user: User): Promise<UserData> => {
     }
   } catch (error) {
     console.error("Error updating user data:", error);
-    throw error;
+    // Return basic user data even if database write fails
+    // This prevents the authentication flow from breaking
+    return {
+      email: user.email || "",
+      lastLogin: new Date(),
+      createdAt: new Date(),
+      hasCompletedProfile: false,
+    };
   }
 };
 
@@ -57,8 +64,13 @@ export const updateUserData = async (user: User): Promise<UserData> => {
 export const updateProfileCompletion = async (user: User, completed: boolean): Promise<void> => {
   if (!user) return;
   
-  const userRef = doc(db, "users", user.uid);
-  await setDoc(userRef, { hasCompletedProfile: completed }, { merge: true });
+  try {
+    const userRef = doc(db, "users", user.uid);
+    await setDoc(userRef, { hasCompletedProfile: completed }, { merge: true });
+  } catch (error) {
+    console.error("Error updating profile completion status:", error);
+    // Silently fail but log the error
+  }
 };
 
 // New function to update user role
@@ -77,7 +89,7 @@ export const updateUserRole = async (user: User, role: "talent" | "entrepreneur"
     console.log(`User role updated to: ${role}`);
   } catch (error) {
     console.error("Error updating user role:", error);
-    throw error;
+    // Silently fail but log the error
   }
 };
 
@@ -112,6 +124,8 @@ export const formatAuthError = (error: any): string => {
       return "Too many unsuccessful login attempts. Please try again later.";
     case 'auth/unauthorized-domain':
       return "Google sign-in failed: This website domain is not authorized for Firebase authentication. Please ensure you're accessing from an authorized domain.";
+    case 'permission-denied':
+      return "Missing or insufficient permissions. Please contact support.";
     default:
       return error.message || "Authentication failed. Please try again.";
   }
@@ -121,7 +135,12 @@ export const formatAuthError = (error: any): string => {
 export const signup = async (email: string, password: string): Promise<User> => {
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);
-    await updateUserData(result.user);
+    try {
+      await updateUserData(result.user);
+    } catch (dbError) {
+      console.error("Failed to update user data, but authentication successful:", dbError);
+      // Continue with authentication even if database operations fail
+    }
     return result.user;
   } catch (error) {
     console.error("Signup error:", error);
