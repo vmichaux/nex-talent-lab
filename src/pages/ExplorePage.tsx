@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { TestimonialSection } from "@/components/TestimonialSection";
 import { ExploreCTA } from "@/components/ExploreCTA";
 import { useProjects } from "@/hooks/useProjects";
 import { useAuth } from "@/hooks/use-auth";
@@ -35,6 +36,10 @@ const ExplorePage = () => {
               searchQuery={searchQuery} 
             />
             <TalentsSection searchQuery={searchQuery} />
+
+            <div className="pt-16 py-[16px]">
+              <TestimonialSection />
+            </div>
 
             <div className="pt-16">
               <ExploreCTA />
