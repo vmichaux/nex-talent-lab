@@ -12,6 +12,10 @@ import { PageHeader } from "@/components/explore/PageHeader";
 import { toast } from "sonner";
 import { ProjectForm } from "@/components/dashboard/ProjectForm";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useProjects } from "@/hooks/useProjects";
+import { ProjectFormData } from "@/components/dashboard/AddProjectButton";
+import { Project } from "@/types/project";
+import { getUserFullName } from "@/lib/firebase";
 
 interface DashboardPageProps {
   newProject?: boolean;
@@ -29,6 +33,7 @@ const DashboardPage = ({ newProject = false }: DashboardPageProps) => {
   const [activeRole, setActiveRole] = useState<"talent" | "builder" | "both">("talent");
   const [showProjectModal, setShowProjectModal] = useState(newProject);
   const [loading, setLoading] = useState(false);
+  const { createProject } = useProjects();
   
   const getUserFirstName = () => {
     if (currentUser?.displayName) {
@@ -100,35 +105,67 @@ const DashboardPage = ({ newProject = false }: DashboardPageProps) => {
     }
   };
   
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: ProjectFormData) => {
+    if (!currentUser) {
+      toast.error("Authentication required. You must be logged in to create a project.", {
+        duration: 6000,
+      });
+      return;
+    }
+
     try {
       setLoading(true);
-      import("@/hooks/useProjects").then(({ useProjects }) => {
-        const { createProject } = useProjects();
-        createProject(formData as any)
-          .then(result => {
-            if (result.success) {
-              toast.success("Project created successfully", {
-                duration: 6000,
-              });
-              setShowProjectModal(false);
-              navigate("/dashboard");
-            } else {
-              throw new Error("Failed to create project");
-            }
-          })
-          .catch(error => {
-            console.error("Error creating project:", error);
-            toast.error("Failed to create project. Please try again.", {
-              duration: 6000,
-            });
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      });
+
+      const userFullName = await getUserFullName(currentUser.uid);
+      const skills = formData.skillsWithLevel.map(item => item.skill);
+
+      const newProject: Omit<Project, 'id' | 'createdAt'> = {
+        title: formData.projectName,
+        description: formData.projectDescription,
+        category: formData.projectCategory,
+        skills,
+        deadline: formData.projectDeadline,
+        duration: formData.projectDuration,
+        owner: userFullName || currentUser.displayName || currentUser.email || "Anonymous",
+        featured: false,
+        status: formData.projectStatus,
+        applicants: 0,
+        progress: 0,
+        projectType: formData.projectType,
+        skillsWithLevel: formData.skillsWithLevel,
+        deliverables: formData.deliverables,
+        timeline: formData.projectDuration,
+        compensation: formData.compensation,
+        compensationDetails: formData.compensationDetails,
+        perks: formData.perks,
+        tools: formData.tools,
+        collaboratorsNeeded: formData.collaboratorsNeeded,
+        projectGoal: formData.projectGoal,
+        targetAudience: formData.targetAudience,
+        location: formData.location,
+        legalConstraints: formData.legalConstraints,
+        budget: formData.budget,
+        desiredProfiles: formData.desiredProfiles,
+        userId: currentUser.uid,
+      };
+
+      const result = await createProject(newProject);
+
+      if (result.success) {
+        toast.success("Project created successfully", {
+          duration: 6000,
+        });
+        setShowProjectModal(false);
+        navigate("/dashboard");
+      } else {
+        throw new Error("Failed to create project");
+      }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error creating project:", error);
+      toast.error("Failed to create project. Please try again.", {
+        duration: 6000,
+      });
+    } finally {
       setLoading(false);
     }
   };
