@@ -15,6 +15,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { notifyApplicationStatus } from "@/lib/notificationService";
 
 interface ApplicationModalProps {
   application: {
@@ -23,6 +24,7 @@ interface ApplicationModalProps {
     projectTitle: string;
     userName: string;
     userEmail: string;
+    userId?: string;
     coverLetter?: string;
     relevantExperience?: string;
     availabilityDate?: string;
@@ -61,9 +63,21 @@ export function ApplicationModal({ application, isOpen, onClose, onRefresh }: Ap
       }
       
       await updateDoc(applicationRef, updateData);
-      
+
+      // Notify the applicant of the decision (best-effort).
+      if (application?.userId) {
+        await notifyApplicationStatus({
+          applicantId: application.userId,
+          applicationId,
+          projectId: application.projectId,
+          projectTitle: application.projectTitle,
+          status: newStatus,
+          feedback,
+        });
+      }
+
       toast(
-        newStatus === 'accepted' 
+        newStatus === 'accepted'
           ? "Application accepted" 
           : "Application rejected", 
         {

@@ -5,6 +5,7 @@ import { db, getUserProfile } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { ApplicationSummary } from "@/components/dashboard/applications/ApplicationTypes";
+import { notifyApplicationStatus } from "@/lib/notificationService";
 
 export function useApplicationsData() {
   const { currentUser } = useAuth();
@@ -152,9 +153,22 @@ export function useApplicationsData() {
       }
       
       await updateDoc(applicationRef, updateData);
-      
+
+      // Notify the applicant of the decision (best-effort).
+      const target = applications.find(app => app.id === applicationId);
+      if (target?.userId) {
+        await notifyApplicationStatus({
+          applicantId: target.userId,
+          applicationId,
+          projectId: target.projectId,
+          projectTitle: target.projectTitle,
+          status: newStatus,
+          feedback,
+        });
+      }
+
       // Update local state
-      setApplications(prev => 
+      setApplications(prev =>
         prev.map(app => 
           app.id === applicationId 
             ? { ...app, status: newStatus, feedback: feedback || app.feedback } as ApplicationSummary

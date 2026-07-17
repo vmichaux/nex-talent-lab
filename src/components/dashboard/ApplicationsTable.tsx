@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs, doc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { notifyApplicationStatus } from "@/lib/notificationService";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -107,9 +108,21 @@ export function ApplicationsTable() {
     try {
       const applicationRef = doc(db, "applications", applicationId);
       await updateDoc(applicationRef, { status: newStatus });
-      
+
+      // Notify the applicant of the decision (best-effort).
+      const target = applications.find(app => app.id === applicationId);
+      if (target?.userId) {
+        await notifyApplicationStatus({
+          applicantId: target.userId,
+          applicationId,
+          projectId: target.projectId,
+          projectTitle: target.projectTitle,
+          status: newStatus === "accepted" ? "accepted" : "rejected",
+        });
+      }
+
       // Update local state
-      setApplications(prev => 
+      setApplications(prev =>
         prev.map(app => 
           app.id === applicationId 
             ? { ...app, status: newStatus } 
