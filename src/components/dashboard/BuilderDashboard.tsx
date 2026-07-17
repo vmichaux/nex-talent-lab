@@ -1,9 +1,6 @@
 
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useAuth } from "@/hooks/use-auth";
-import { useProjects } from "@/hooks/useProjects";
-import { Project } from "@/types/project";
 import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
 import { DashboardMessages } from "@/components/dashboard/DashboardMessages";
 import { DashboardProjects } from "@/components/dashboard/DashboardProjects";
@@ -30,13 +27,7 @@ export function BuilderDashboard({
 }: BuilderDashboardProps) {
   const location = useLocation();
   const [internalShowProjectModal, setInternalShowProjectModal] = useState(false);
-  const { currentUser } = useAuth();
-  const { projects, loading } = useProjects({
-    excludeCurrentUser: true,
-    userId: currentUser?.uid
-  });
-  const [recommendedProjects, setRecommendedProjects] = useState<Project[]>([]);
-  
+
   // Use either the props or internal state
   const modalOpen = showProjectModal || internalShowProjectModal;
   const setModalOpen = (show: boolean) => {
@@ -50,13 +41,6 @@ export function BuilderDashboard({
       window.history.replaceState({}, document.title);
     }
   }, [location]);
-
-  useEffect(() => {
-    if (projects.length > 0) {
-      const shuffled = [...projects].sort(() => 0.5 - Math.random());
-      setRecommendedProjects(shuffled.slice(0, 3));
-    }
-  }, [projects]);
 
   return (
     <div className="flex flex-col lg:flex-row gap-24 w-full max-w-[2000px] mx-auto">
