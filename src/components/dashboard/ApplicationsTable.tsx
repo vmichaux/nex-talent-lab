@@ -37,7 +37,7 @@ interface ApplicationData {
   availabilityDate: string;
   timeCommitment: string;
   portfolioLink?: string;
-  status: 'pending' | 'accepted' | 'declined';
+  status: 'pending' | 'accepted' | 'rejected';
   createdAt: Timestamp;
 }
 
@@ -114,7 +114,7 @@ export function ApplicationsTable() {
   }, [currentUser]);
 
   // Handle application status update
-  const updateApplicationStatus = async (applicationId: string, newStatus: 'accepted' | 'declined') => {
+  const updateApplicationStatus = async (applicationId: string, newStatus: 'accepted' | 'rejected') => {
     try {
       const applicationRef = doc(db, "applications", applicationId);
       await updateDoc(applicationRef, { status: newStatus });
@@ -127,7 +127,7 @@ export function ApplicationsTable() {
           applicationId,
           projectId: target.projectId,
           projectTitle: target.projectTitle,
-          status: newStatus === "accepted" ? "accepted" : "rejected",
+          status: newStatus,
         });
       }
 
@@ -207,7 +207,7 @@ export function ApplicationsTable() {
                   <TableCell>
                     <Badge className={
                       application.status === "accepted" ? "bg-green-100 text-green-800 hover:bg-green-100" :
-                      application.status === "declined" ? "bg-red-100 text-red-800 hover:bg-red-100" :
+                      application.status === "rejected" ? "bg-red-100 text-red-800 hover:bg-red-100" :
                       "bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
                     }>
                       {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
@@ -290,7 +290,7 @@ export function ApplicationsTable() {
               <div className="hidden sm:block">
                 <Badge className={
                   selectedApplication.status === "accepted" ? "bg-green-100 text-green-800" :
-                  selectedApplication.status === "declined" ? "bg-red-100 text-red-800" :
+                  selectedApplication.status === "rejected" ? "bg-red-100 text-red-800" :
                   "bg-yellow-100 text-yellow-800"
                 }>
                   Status: {selectedApplication.status.charAt(0).toUpperCase() + selectedApplication.status.slice(1)}
@@ -301,7 +301,7 @@ export function ApplicationsTable() {
                 <div className="flex gap-2 w-full sm:w-auto justify-end">
                   <Button 
                     variant="outline" 
-                    onClick={() => updateApplicationStatus(selectedApplication.id, "declined")}
+                    onClick={() => updateApplicationStatus(selectedApplication.id, "rejected")}
                   >
                     Decline
                   </Button>

@@ -12,7 +12,7 @@ export interface ApplicationSummary {
   availabilityDate?: string;
   timeCommitment?: string;
   portfolioLink?: string;
-  status: 'pending' | 'accepted' | 'declined' | 'rejected'; // Add 'rejected' to the status types
+  status: 'pending' | 'accepted' | 'rejected';
   createdAt: Date;
   feedback?: string; // Add feedback field
 }

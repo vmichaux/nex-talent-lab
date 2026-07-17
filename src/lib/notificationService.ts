@@ -38,11 +38,11 @@ export async function notifyApplicationStatus({
     await addDoc(collection(db, "notifications"), {
       userId: applicantId,
       type: "application",
-      title: status === "accepted" ? "Application Accepted" : "Application Declined",
+      title: status === "accepted" ? "Application Accepted" : "Application Rejected",
       content:
         status === "accepted"
           ? `Your application for "${projectTitle}" has been accepted${feedback ? ": " + feedback : ""}`
-          : `Your application for "${projectTitle}" has been declined${feedback ? ": " + feedback : ""}`,
+          : `Your application for "${projectTitle}" has been rejected${feedback ? ": " + feedback : ""}`,
       read: false,
       createdAt: serverTimestamp(),
       link: `/project/${projectId}`,

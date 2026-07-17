@@ -127,10 +127,10 @@ export const useApplications = () => {
       await addDoc(collection(db, "notifications"), {
         userId: application.userId,
         type: "application",
-        title: `Application ${status === "accepted" ? "Accepted" : "Declined"}`,
+        title: `Application ${status === "accepted" ? "Accepted" : "Rejected"}`,
         content: status === "accepted" 
           ? `Your application for "${application.projectTitle}" has been accepted${feedback ? ": " + feedback : ""}` 
-          : `Your application for "${application.projectTitle}" has been declined${feedback ? ": " + feedback : ""}`,
+          : `Your application for "${application.projectTitle}" has been rejected${feedback ? ": " + feedback : ""}`,
         read: false,
         createdAt: serverTimestamp(),
         link: `/project/${application.projectId}`,
