@@ -65,7 +65,10 @@ export const saveMessage = async (
   }
 };
 
-// Send a message to OpenAI API
+// Send a message to OpenAI API.
+// The API key is never hardcoded. It is read from VITE_OPENAI_API_KEY and, when
+// that variable is absent (the default — no key is shipped in the bundle), the
+// client-side call is skipped entirely so no visitor can consume paid quota.
 export const sendMessageToOpenAI = async (message: string, chatHistory: ChatMessage[] = []): Promise<string> => {
   try {
     // Vérifier si l'utilisateur est authentifié
@@ -73,14 +76,21 @@ export const sendMessageToOpenAI = async (message: string, chatHistory: ChatMess
       throw new Error("User not authenticated");
     }
 
-    // Créer une instance du client OpenAI avec la clé API fournie
+    // La clé provient exclusivement de l'environnement, jamais du code source.
+    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    if (!apiKey) {
+      console.warn("VITE_OPENAI_API_KEY is not configured; skipping OpenAI call.");
+      return "L'assistant IA n'est pas configuré pour le moment. Veuillez réessayer plus tard.";
+    }
+
+    // Créer une instance du client OpenAI avec la clé fournie via l'environnement.
     const openai = new OpenAI({
-      apiKey: "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",
-      dangerouslyAllowBrowser: true // Note: Ce paramètre est nécessaire pour l'utilisation côté client, mais n'est pas recommandé en production
+      apiKey,
+      dangerouslyAllowBrowser: true // Note: nécessaire côté client; à remplacer par un proxy serveur en production.
     });
 
     // Use provided chat history or fetch from database if not provided
-    const formattedMessages = chatHistory.length > 0 
+    const formattedMessages = chatHistory.length > 0
       ? chatHistory.map(msg => ({
           role: msg.role,
           content: msg.content
@@ -89,18 +99,11 @@ export const sendMessageToOpenAI = async (message: string, chatHistory: ChatMess
           role: msg.role,
           content: msg.content
         }));
-    
+
     // Ajouter le nouveau message à la liste
     formattedMessages.push({
       role: "user",
       content: message
-    });
-
-    // Vérifier si la configuration OpenAI est valide
-    console.log("OpenAI config:", { 
-      apiKeyDefined: !!openai.apiKey, 
-      apiKeyLength: openai.apiKey ? openai.apiKey.length : 0,
-      messagesCount: formattedMessages.length
     });
 
     // Appeler l'API OpenAI avec les types corrects
@@ -112,8 +115,6 @@ export const sendMessageToOpenAI = async (message: string, chatHistory: ChatMess
       })),
       max_tokens: 1000
     });
-
-    console.log("OpenAI response:", completion.choices[0]);
 
     // Extraire et retourner la réponse
     return completion.choices[0].message.content || "Désolé, je n'ai pas pu générer une réponse.";
