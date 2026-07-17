@@ -41,14 +41,12 @@ export const useTalents = ({
     const fetchTalents = async () => {
       try {
         setLoading(true);
-        console.log('Fetching talents from Firestore');
         
         // Fetch user profiles from Firestore
         const userProfilesCollection = collection(db, 'userProfiles');
         const userProfilesQuery = query(userProfilesCollection);
         const userProfilesSnapshot = await getDocs(userProfilesQuery);
         
-        console.log(`Found ${userProfilesSnapshot.size} user profiles`);
         
         // Map user profiles to talents
         const fetchedTalents: Talent[] = [];
@@ -123,7 +121,6 @@ export const useTalents = ({
           fetchedTalents.push(talent);
         }
         
-        console.log(`Processed ${fetchedTalents.length} valid talent profiles`);
         setTalents(fetchedTalents.slice(0, queryLimit));
         setError(null);
       } catch (err) {

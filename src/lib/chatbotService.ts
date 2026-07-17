@@ -79,7 +79,6 @@ export const sendMessageToOpenAI = async (message: string, chatHistory: ChatMess
     // La clé provient exclusivement de l'environnement, jamais du code source.
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
     if (!apiKey) {
-      console.warn("VITE_OPENAI_API_KEY is not configured; skipping OpenAI call.");
       return "L'assistant IA n'est pas configuré pour le moment. Veuillez réessayer plus tard.";
     }
 

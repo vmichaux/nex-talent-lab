@@ -33,14 +33,12 @@ export function DashboardWelcome() {
   const getUserFirstName = (): string => {
     // First priority: Check userData from Firestore
     if (userData && userData.firstName) {
-      console.log("Using firstName from userData:", userData.firstName);
       return userData.firstName;
     }
     
     // Second priority: Check displayName from Firebase Auth
     if (currentUser?.displayName) {
       const displayNameParts = currentUser.displayName.split(' ');
-      console.log("Using displayName:", displayNameParts[0]);
       return displayNameParts[0];
     }
     
@@ -50,17 +48,14 @@ export function DashboardWelcome() {
       // Improved name extraction logic - get first segment only without any character limitation
       const nameParts = emailUsername.split(/[._-]/);
       const firstName = nameParts[0].charAt(0).toUpperCase() + nameParts[0].slice(1);
-      console.log("Extracted from email:", firstName);
       return firstName;
     }
     
-    console.log("No name found, returning empty string");
     return "";
   };
   
   // Get the first name for display
   const firstName = getUserFirstName();
-  console.log("User's first name:", firstName); // Debug log to check what name is being extracted
   
   const stepsByProfile = {
     talent: [
@@ -131,7 +126,6 @@ export function DashboardWelcome() {
   const currentSteps = stepsByProfile[profileType];
   // Make sure firstName is properly passed and used
   const welcomeMessage = getWelcomeMessages(firstName)[profileType];
-  console.log("Welcome message:", welcomeMessage); // Debug to see the final welcome message
   const description = descriptions[profileType];
   
   return (

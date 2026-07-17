@@ -137,7 +137,6 @@ const ApplyProjectPage = () => {
         createdAt: serverTimestamp()
       });
       
-      console.log("Application submitted successfully with ID:", applicationRef.id);
       
       // Show success toast with more descriptive message
       toast({

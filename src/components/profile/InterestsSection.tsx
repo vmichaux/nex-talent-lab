@@ -52,7 +52,6 @@ export const InterestsSection = ({
     }
     
     onAddInterest(newInterest.trim());
-    console.log("Added interest:", newInterest.trim());
     toast({
       title: "Interest added",
       description: `"${newInterest.trim()}" has been added to your interests`,

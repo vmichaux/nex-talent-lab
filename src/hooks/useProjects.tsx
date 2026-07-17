@@ -19,7 +19,6 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      console.log("Fetching projects with options:", { excludeCurrentUser, userId, limitCount });
       
       // Start building the query
       let projectsQuery = query(
@@ -32,9 +31,7 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
         projectsQuery = query(projectsQuery, limit(limitCount));
       }
       
-      console.log("Executing Firestore query...");
       const querySnapshot = await getDocs(projectsQuery);
-      console.log(`Raw query returned ${querySnapshot.size} documents`);
       
       const fetchedProjects = querySnapshot.docs.map((doc) => {
         const data = doc.data();
@@ -64,11 +61,6 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
       
       setProjects(filteredProjects);
       setError(null);
-      console.log("Fetched projects:", filteredProjects.length, "projects");
-      
-      if (excludeCurrentUser && userId) {
-        console.log("Excluding projects from user:", userId);
-      }
     } catch (err) {
       console.error("Error fetching projects:", err);
       setError("Failed to load projects. Please try again later.");
@@ -86,8 +78,6 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
   const updateProject = async (projectId: string, updatedData: Partial<Project>) => {
     try {
       setLoading(true);
-      console.log("Updating project with ID:", projectId);
-      console.log("Update data:", updatedData);
       
       const projectRef = doc(db, "projects", projectId);
       
@@ -99,7 +89,6 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
       
       // Update the document in Firestore
       await updateDoc(projectRef, updatedData);
-      console.log("Project updated successfully in Firestore");
       
       // Update the local state
       setProjects(prevProjects => 
@@ -124,7 +113,6 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
   const createProject = async (projectData: Omit<Project, 'id' | 'createdAt'>) => {
     try {
       setLoading(true);
-      console.log("Creating new project:", projectData);
       
       // Add the document to Firestore
       const projectRef = await addDoc(collection(db, "projects"), {
@@ -132,7 +120,6 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
         createdAt: serverTimestamp()
       });
       
-      console.log("Project created successfully with ID:", projectRef.id);
       
       // Create a complete project object with the new ID
       const newProject: Project = {
@@ -157,7 +144,6 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
   const getUserProjects = async (userId: string) => {
     try {
       setLoading(true);
-      console.log("Fetching projects for user:", userId);
       
       const projectsQuery = query(
         collection(db, "projects"),
@@ -181,7 +167,6 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
         } as Project;
       });
       
-      console.log("Fetched user projects:", fetchedProjects.length, "projects");
       return fetchedProjects;
     } catch (err) {
       console.error("Error fetching user projects:", err);

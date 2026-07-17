@@ -46,7 +46,6 @@ export function ReviewApplications() {
       // Get all projects created by this user
       const projectIds = projectsSnapshot.docs.map(doc => doc.id);
       
-      console.log("Fetching applications for projects:", projectIds);
       
       if (projectIds.length === 0) {
         setLoading(false);
@@ -133,7 +132,6 @@ export function ReviewApplications() {
         })
       );
       
-      console.log("All fetched applications:", applicationsWithFullNames);
       
       // Sort by creation date (newest first) and take only the most recent ones
       applicationsWithFullNames.sort((a, b) => 

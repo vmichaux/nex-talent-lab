@@ -43,7 +43,6 @@ export const useApplications = () => {
 
   const fetchUserApplications = async (userId?: string) => {
     if (!userId && !currentUser?.uid) {
-      console.log("No user ID provided for fetching applications");
       setLoading(false);
       return [];
     }
@@ -52,7 +51,6 @@ export const useApplications = () => {
     
     try {
       setLoading(true);
-      console.log("Fetching applications for user:", targetUserId);
       
       // Simple query without ordering to avoid index requirements
       const applicationsQuery = query(
@@ -107,7 +105,6 @@ export const useApplications = () => {
         b.createdAt.getTime() - a.createdAt.getTime()
       );
       
-      console.log("Fetched and sorted user applications:", sortedApplications);
       setApplications(sortedApplications);
       setError(null);
       return sortedApplications;
@@ -137,7 +134,6 @@ export const useApplications = () => {
         relatedId: application.id
       });
       
-      console.log(`Notification created for application status change to ${status}`);
     } catch (error) {
       console.error("Error creating notification:", error);
     }

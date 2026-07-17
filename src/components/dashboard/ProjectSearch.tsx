@@ -14,7 +14,6 @@ export function ProjectSearch({ hideButton = false }: ProjectSearchProps) {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically search for projects in Firebase
-    console.log("Searching for:", searchTerm);
     
     // In a real application, this would navigate to search results or filter the current view
   };

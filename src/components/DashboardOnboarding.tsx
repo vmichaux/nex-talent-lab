@@ -24,28 +24,22 @@ export function DashboardOnboarding() {
       setIsLoading(true);
       try {
         if (currentUser && userData) {
-          console.log("DashboardOnboarding: User data loaded", userData);
           
           if (userData.userRole === "talent" || userData.userRole === "entrepreneur" || userData.userRole === "both") {
-            console.log("DashboardOnboarding: User has role, redirecting to dashboard");
             navigate("/dashboard");
             return;
           }
           
           const savedRole = localStorage.getItem("userRole");
           if (savedRole === "talent" || savedRole === "entrepreneur" || savedRole === "both") {
-            console.log("DashboardOnboarding: Found role in localStorage, redirecting to dashboard");
             navigate("/dashboard");
             return;
           }
           
-          console.log("DashboardOnboarding: User needs to complete onboarding");
           setInitialCheckCompleted(true);
         } else if (!currentUser) {
-          console.log("DashboardOnboarding: No user, but allowing onboarding");
           setInitialCheckCompleted(true);
         } else {
-          console.log("DashboardOnboarding: User logged in, but userData not loaded yet");
           setInitialCheckCompleted(false);
         }
       } finally {

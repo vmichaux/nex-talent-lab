@@ -86,7 +86,6 @@ export const updateUserRole = async (user: User, role: "talent" | "entrepreneur"
     const userProfileRef = doc(db, "userProfiles", user.uid);
     await setDoc(userProfileRef, { userRole: role }, { merge: true });
     
-    console.log(`User role updated to: ${role}`);
   } catch (error) {
     console.error("Error updating user role:", error);
     // Silently fail but log the error
@@ -161,13 +160,11 @@ export const login = async (email: string, password: string): Promise<void> => {
 // Sign in with Google
 export const signInWithGoogle = async (): Promise<void> => {
   try {
-    console.log("Attempting Google sign in");
     // Add prompt: 'select_account' to force the account selection dialog
     googleProvider.setCustomParameters({
       prompt: 'select_account'
     });
     await signInWithPopup(auth, googleProvider);
-    console.log("Google sign in successful");
   } catch (error) {
     console.error("Google sign-in error:", error);
     throw error;

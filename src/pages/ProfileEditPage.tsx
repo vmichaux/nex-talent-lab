@@ -65,15 +65,12 @@ const ProfileEditPage = () => {
     const fetchUserProfile = async () => {
       if (currentUser?.uid) {
         setLoading(true);
-        console.log("Fetching profile for user:", currentUser.uid);
         const userProfileRef = doc(db, "userProfiles", currentUser.uid);
         try {
           const docSnap = await getDoc(userProfileRef);
-          console.log("Document exists:", docSnap.exists());
           
           if (docSnap.exists()) {
             const profileData = docSnap.data();
-            console.log("Raw profile data:", profileData);
             
             let firstName = "";
             let lastName = "";
@@ -150,7 +147,6 @@ const ProfileEditPage = () => {
                 : [{ company: "", position: "", duration: "" }]
             };
             
-            console.log("Structured profile data:", loadedProfile);
             setProfile(loadedProfile);
             
             const savedRole = localStorage.getItem("userRole");
@@ -177,7 +173,6 @@ const ProfileEditPage = () => {
               }));
             }
             
-            console.log("No profile data found, using empty profile");
             toast({
               title: "No profile found",
               description: "No previous profile data was found. You can create your profile now.",
@@ -248,7 +243,6 @@ const ProfileEditPage = () => {
   };
 
   const addSkill = () => {
-    console.log("Adding skill");
     setProfile(prev => ({
       ...prev,
       skills: [...prev.skills, { name: "", level: "Intermediate" }]
@@ -330,7 +324,6 @@ const ProfileEditPage = () => {
         const fullName = `${profile.firstName} ${profile.lastName}`.trim();
         
         const userProfileRef = doc(db, "userProfiles", currentUser.uid);
-        console.log("Saving profile data:", { ...profile, fullName });
         await setDoc(userProfileRef, {
           ...profile,
           fullName,

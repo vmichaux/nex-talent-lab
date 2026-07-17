@@ -23,7 +23,6 @@ export function TalentDashboard() {
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Searching for:", searchTerm);
     // Here you would implement the actual search functionality
   };
   

@@ -67,7 +67,6 @@ export function useProjectForm(project?: Project) {
         desiredProfiles: formData.desiredProfiles
       };
       
-      console.log("Submitting updated project data:", updatedProjectData);
       
       // Use the updateProject function from useProjects hook
       const result = await updateProject(project.id, updatedProjectData);

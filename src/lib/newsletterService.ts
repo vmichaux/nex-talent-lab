@@ -11,11 +11,9 @@ export interface NewsletterSubscription {
 // Check if the collection exists and is accessible
 export const checkNewsletterCollection = async (): Promise<boolean> => {
   try {
-    console.log("Checking newsletterSubscriptions collection access...");
     const collectionRef = collection(db, "newsletterSubscriptions");
     const testQuery = query(collectionRef, limit(1));
     const snapshot = await getDocs(testQuery);
-    console.log(`Collection check result: ${snapshot.empty ? 'Empty collection' : 'Collection has data'}`);
     return true;
   } catch (error) {
     console.error("Error accessing newsletterSubscriptions collection:", error);
@@ -26,7 +24,6 @@ export const checkNewsletterCollection = async (): Promise<boolean> => {
 // Add a new email subscription to Firestore
 export const subscribeToNewsletter = async (email: string): Promise<string | null> => {
   try {
-    console.log(`Attempting to subscribe email: ${email}`);
     
     // First check if collection is accessible
     const collectionAccessible = await checkNewsletterCollection();
@@ -40,9 +37,7 @@ export const subscribeToNewsletter = async (email: string): Promise<string | nul
       subscriptionDate: new Date(),
     };
     
-    console.log("Adding document to newsletterSubscriptions collection...");
     const docRef = await addDoc(collection(db, "newsletterSubscriptions"), subscription);
-    console.log("Newsletter subscription successful with ID:", docRef.id);
     return docRef.id;
   } catch (error) {
     console.error("Error subscribing to newsletter:", error);

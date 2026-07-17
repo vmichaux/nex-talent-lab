@@ -115,7 +115,6 @@ export function AddProjectButton({ open, setOpen: setOpenProp, onClick }: AddPro
       const result = await createProject(newProject);
       
       if (result.success) {
-        console.log("Project added with ID: ", result.projectId);
         
         toast.success("Project created. Your new project has been successfully added to your dashboard.", {
           duration: 6000,

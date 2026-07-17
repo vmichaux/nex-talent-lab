@@ -102,7 +102,6 @@ export function ApplicationsTable() {
         });
         
         setApplications(fetchedApplications);
-        console.log("Fetched applications:", fetchedApplications);
       } catch (error) {
         console.error("Error fetching applications:", error);
       } finally {
