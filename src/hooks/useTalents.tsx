@@ -9,6 +9,7 @@ export interface Talent {
   title?: string;
   location?: string;
   skills: string[];
+  interests?: string[];
   experience?: string;
   rating?: number;
   availability?: string;
@@ -105,6 +106,11 @@ export const useTalents = ({
             title: title,
             location: profile.location || 'Remote',
             skills: skillNames,
+            // Carried through so the builder side can score a talent on the
+            // same tags (skills + interests) the talent side uses for itself:
+            // the same talent/project pair yields the same score on both
+            // dashboards (VISION.md:53-55).
+            interests: profile.interests ?? [],
             experience: experienceLevel,
             // No rating is fabricated: there is no ratings source yet, so the
             // field is left undefined and the UI shows "New" (VISION.md:56).

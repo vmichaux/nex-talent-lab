@@ -29,3 +29,24 @@ export function computeMatchPercentage(
   const covered = required.filter((tag) => talent.has(tag)).length;
   return Math.round((covered / required.length) * 100);
 }
+
+/**
+ * Compute how well a talent matches a set of projects: the best
+ * `computeMatchPercentage` across them. Used by the builder side, where one
+ * builder may own several projects and the useful signal is "this talent fits
+ * at least one of them well".
+ *
+ * Returns `undefined` when no project yields a score (none of them list
+ * required skills), so the UI can omit a score rather than invent one.
+ */
+export function computeBestMatchPercentage(
+  talentTags: string[],
+  projectsRequiredTags: string[][]
+): number | undefined {
+  const scores = projectsRequiredTags
+    .map((required) => computeMatchPercentage(talentTags, required))
+    .filter((score): score is number => score !== undefined);
+
+  if (scores.length === 0) return undefined;
+  return Math.max(...scores);
+}
