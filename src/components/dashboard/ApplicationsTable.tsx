@@ -72,17 +72,27 @@ export function ApplicationsTable() {
           return;
         }
         
-        // Then, get all applications for these projects
-        const applicationsQuery = query(
-          collection(db, "applications"),
-          where("projectId", "in", projectIds)
-        );
-        
-        const applicationsSnapshot = await getDocs(applicationsQuery);
-        const fetchedApplications = applicationsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        })) as ApplicationData[];
+        // Fetch applications in chunks — Firestore caps "in" queries at 30 ids,
+        // so a builder with more projects than the cap would otherwise error out
+        // and see nothing. Chunk by 10 to match the other application views.
+        const fetchApplicationsChunk = async (idsChunk: string[]) => {
+          const applicationsQuery = query(
+            collection(db, "applications"),
+            where("projectId", "in", idsChunk)
+          );
+          const applicationsSnapshot = await getDocs(applicationsQuery);
+          return applicationsSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          })) as ApplicationData[];
+        };
+
+        let fetchedApplications: ApplicationData[] = [];
+        for (let i = 0; i < projectIds.length; i += 10) {
+          const chunk = projectIds.slice(i, i + 10);
+          const chunkApplications = await fetchApplicationsChunk(chunk);
+          fetchedApplications = [...fetchedApplications, ...chunkApplications];
+        }
         
         // Sort by creation date (newest first)
         fetchedApplications.sort((a, b) => {
