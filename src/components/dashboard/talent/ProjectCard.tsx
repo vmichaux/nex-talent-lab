@@ -42,9 +42,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
           
           <div className="flex flex-col items-center">
-            <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium mb-3">
-              {project.matchPercentage || 85}% Match
-            </div>
+            {typeof project.matchPercentage === "number" && (
+              <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium mb-3">
+                {project.matchPercentage}% Match
+              </div>
+            )}
             <Button 
               className="w-full text-xs"
               onClick={() => window.location.href = `/project/${project.id}`}

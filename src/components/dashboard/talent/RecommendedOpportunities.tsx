@@ -11,6 +11,8 @@ import { OpportunitiesError } from "./OpportunitiesError";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { getUserProfile } from "@/lib/firebase";
+import { computeMatchPercentage } from "@/lib/matching";
 
 interface RecommendedOpportunitiesProps {
   filter: string;
@@ -25,21 +27,41 @@ export function RecommendedOpportunities({ filter, setFilter }: RecommendedOppor
     userId: currentUser?.uid
   });
   const [recommendations, setRecommendations] = useState<Project[]>([]);
-  
+  const [talentTags, setTalentTags] = useState<string[]>([]);
+
+  // Load the current user's own tags (skills + interests) so match scores are
+  // real, not random. See VISION.md:53-55.
+  useEffect(() => {
+    if (!currentUser?.uid) {
+      setTalentTags([]);
+      return;
+    }
+    let cancelled = false;
+    getUserProfile(currentUser.uid).then((profile) => {
+      if (cancelled) return;
+      const skillNames = (profile?.skills ?? []).map((s) => s.name);
+      const interests = profile?.interests ?? [];
+      setTalentTags([...skillNames, ...interests]);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [currentUser?.uid]);
+
   useEffect(() => {
     if (projects.length > 0) {
       const openProjects = projects
         .filter(project => project.status === "Open")
         .map(project => ({
           ...project,
-          matchPercentage: Math.floor(Math.random() * (99 - 70) + 70)
+          matchPercentage: computeMatchPercentage(talentTags, project.skills ?? [])
         }))
-        .sort((a, b) => ((b.matchPercentage || 0) - (a.matchPercentage || 0)))
+        .sort((a, b) => ((b.matchPercentage ?? -1) - (a.matchPercentage ?? -1)))
         .slice(0, 6);
-        
+
       setRecommendations(openProjects);
     }
-  }, [projects]);
+  }, [projects, talentTags]);
 
   const filteredRecommendations = recommendations.filter(project => {
     if (filter === "all") return true;
