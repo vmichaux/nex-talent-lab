@@ -106,7 +106,8 @@ export const useTalents = ({
             location: profile.location || 'Remote',
             skills: skillNames,
             experience: experienceLevel,
-            rating: 4.5 + (Math.random() * 0.5), // Random rating between 4.5-5.0
+            // No rating is fabricated: there is no ratings source yet, so the
+            // field is left undefined and the UI shows "New" (VISION.md:56).
             availability: 'Available for work',
             bio: profile.bio || `Experienced ${title} looking for opportunities.`,
             image: profile.photoURL || '/placeholder.svg',
